@@ -138,8 +138,10 @@ ApplicationWindow {
     }
 
     function showCustomControlView() {
-        mainWindow.showTool("控制面板", "qrc:/qml/CustomControlView.qml", "/qmlimages/Control.svg", { "vehicle": QGroundControl.multiVehicleManager.activeVehicle })
-
+        mainWindow.showTool("控制面板",
+            "qrc:/qml/CustomControlView.qml",
+            "/qmlimages/Control.svg",
+            { "vehicle": QGroundControl.multiVehicleManager.activeVehicle })
     }
 
     function showVehicleConfig() {

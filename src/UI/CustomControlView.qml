@@ -1,54 +1,64 @@
+// CustomControlView.qml
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QGroundControl 1.0
+import QtLocation 5.15
+import QtPositioning 5.15
+import QGroundControl
 
 Item {
-    id: root
-    width: parent.width
-    height: parent.height
-    property var vehicle
+    anchors.fill: parent
+    property var vehicle: QGroundControl.multiVehicleManager.activeVehicle
 
-    Rectangle {
-        color: "#282c34"
-        width: 800
-        height: 600
-
-        Text {
-            anchors.centerIn: parent
-            text: qsTr("欢迎来到庆军科技")
-            font.pointSize: 24
-            color: "white"
-        }
-    }
     Column {
+        anchors.centerIn: parent
         spacing: 20
 
-        Text {
-            text: "舵机控制（通道1）"
-            font.pixelSize: 20
+        Button {
+            text: "起飞"
+            enabled: vehicle && vehicle.armed && vehicle.guidedMode
+            onClicked: {
+                vehicle.guidedTakeoff(10)
+            }
         }
 
-        Slider {
-
-            id: pwmSlider
-            from: 1000
-            to: 2000
-            stepSize: 10
-            value: 1500
-            width: 200
-            onValueChanged: {
-                // 具体实现信号槽
-                vehicle = QGroundControl.multiVehicleManager.activeVehicle
-                if (vehicle) {
-                    // 继承车辆对象发送指令控制pwm
-                    vehicle.sendCommand(183, true, 1, value) // 通道1，PWM值
-                }
+        Button {
+            text: "降落"
+            enabled: vehicle
+            onClicked: {
+                vehicle.sendMavCommand(
+                    0, 0,
+                    MAV_CMD_NAV_LAND,
+                    false, 0, 0, 0, 0, 0, 0, 0
+                )
             }
         }
 
         Text {
-            text: "PWM值: " + Math.round(pwmSlider.value)
+            text: vehicle ? ("电压: " + vehicle.battery.voltage.valueString + " V") : "未连接"
+            font.pixelSize: 18
         }
     }
-}
 
+    // // 地图（可选）
+    // Map {
+    //     id: simpleMap
+    //     anchors.left: parent.left
+    //     anchors.right: parent.right
+    //     anchors.bottom: parent.bottom
+    //     height: parent.height / 2
+    //
+    //     plugin: Plugin { name: "osm" }
+    //     center: QtPositioning.coordinate(39.9, 116.4)
+    //     zoomLevel: 15
+    //
+    //     MapQuickItem {
+    //         coordinate: vehicle ? vehicle.coordinate : QtPositioning.coordinate(0, 0)
+    //         anchorPoint.x: 16
+    //         anchorPoint.y: 16
+    //         sourceItem: Rectangle {
+    //             width: 16; height: 16
+    //             color: "red"; radius: 8
+    //         }
+    //     }
+    // }
+}
