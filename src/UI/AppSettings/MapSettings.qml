@@ -160,165 +160,168 @@ Item {
             }
         }
 
-        SettingsGroupLayout {
-            Layout.fillWidth:   true
-            heading:            qsTr("Tokens")
-            headingDescription: qsTr("Allows access to additional providers")
-
-            LabelledFactTextField {
-                textFieldPreferredWidth:    _largeTextFieldWidth
-                label:                      qsTr("Mapbox")
-                fact:                       _appSettings.mapboxToken
-            }
-
-            LabelledFactTextField {
-                textFieldPreferredWidth:    _largeTextFieldWidth
-                label:                      qsTr("Esri")
-                fact:                       _appSettings.esriToken
-            }
-
-            LabelledFactTextField {
-                textFieldPreferredWidth:    _largeTextFieldWidth
-                label:                      qsTr("VWorld")
-                fact:                       _appSettings.vworldToken
-            }
-        }
-
-        SettingsGroupLayout {
-            Layout.fillWidth:   true
-            heading:            qsTr("Mapbox Login")
-
-            LabelledFactTextField {
-                textFieldPreferredWidth:    _largeTextFieldWidth
-                label:                      qsTr("Account")
-                fact:                       _appSettings.mapboxAccount
-            }
-
-            LabelledFactTextField {
-                textFieldPreferredWidth:    _largeTextFieldWidth
-                label:                      qsTr("Map Style")
-                fact:                       _appSettings.mapboxStyle
-            }
-        }
-
-        SettingsGroupLayout {
-            Layout.fillWidth:   true
-            heading:            qsTr("Custom Map URL")
-            headingDescription: qsTr("URL with {x} {y} {z} or {zoom} substitutions")
-
-            LabelledFactTextField {
-                textFieldPreferredWidth:    _largeTextFieldWidth
-                label:                      qsTr("Server URL")
-                fact:                       _appSettings.customURL
-            }
-        }
-
-        SettingsGroupLayout {
-            Layout.fillWidth:   true
-            heading:            qsTr("Tile Cache")
-
-            LabelledFactTextField {
-                fact: _mapsSettings.maxCacheDiskSize
-            }
-
-            LabelledFactTextField {
-                fact: _mapsSettings.maxCacheMemorySize
-            }    
-        }
-
-        QGCFileDialog {
-            id:             fileDialog
-            folder:         _appSettings.missionSavePath
-            nameFilters:    [ qsTr("Tile Sets (*.%1)").arg(defaultSuffix) ]
-            defaultSuffix:  _appSettings.tilesetFileExtension
-
-            onAcceptedForSave: (file) => {
-                close()
-                _mapEngineManager.exportSets(file)
-            }
-
-            onAcceptedForLoad: (file) => {
-                close()
-                _mapEngineManager.importSets(file)
-            }
-        }
-
-        Component {
-            id: exportDialogComponent
-
-            QGCPopupDialog {
-                title:      qsTr("Export Selected Tile Sets")
-                buttons:    Dialog.Ok | Dialog.Cancel
-
-                onAccepted: {
-                    close()
-                    fileDialog.title = qsTr("Export Tiles")
-                    fileDialog.openForSave()
-                }
-
-                ColumnLayout {
-                    spacing: ScreenTools.defaultFontPixelWidth / 2
-
-                    Repeater {
-                        model: _mapEngineManager.tileSets
-
-                        QGCCheckBox {
-                            text:       object.name
-                            checked:    object.selected
-                            onClicked:  object.selected = checked
-                        }
-                    }
-                }
-            }
-        }
-
-        Component {
-            id: importDialogComponent
-
-            QGCPopupDialog {
-                title:      qsTr("Import TileSets")
-                buttons:    Dialog.Ok | Dialog.Cancel
-
-                onAccepted: {
-                    close()
-                    fileDialog.title = qsTr("Import Tiles")
-                    fileDialog.openForLoad()
-                }
-
-                ColumnLayout {
-                    spacing: ScreenTools.defaultFontPixelWidth / 2
-
-                    QGCRadioButton {
-                        text:           qsTr("Append to existing sets")
-                        checked:        !_mapEngineManager.importReplace
-                        onClicked:      _mapEngineManager.importReplace = !checked
-                    }
-                    QGCRadioButton {
-                        text:           qsTr("Replace existing sets")
-                        checked:        _mapEngineManager.importReplace
-                        onClicked:      _mapEngineManager.importReplace = checked
-                    }
-                }
-            }
-        }
-
-        Component {
-            id: errorDialogComponent
-
-            QGCSimpleMessageDialog {
-                title:      qsTr("Error Message")
-                text:       _mapEngineManager.errorMessage
-                buttons:    Dialog.Close
-            }
-        }
-    }
-
-    Component {
-        id: offlineMapEditorComponent
-
-        OfflineMapEditor {
-            id:             offlineMapEditor
-            anchors.fill:   parent
-        }
+    //     SettingsGroupLayout {
+    //         Layout.fillWidth:   true
+    //         heading:            qsTr("Tokens")
+    //         headingDescription: qsTr("Allows access to additional providers")
+    //
+    //
+    //         LabelledFactTextField {
+    //             textFieldPreferredWidth:    _largeTextFieldWidth
+    //             label:                      qsTr("Mapbox")
+    //             fact:                       _appSettings.mapboxToken
+    //         }
+    //
+    //         LabelledFactTextField {
+    //             textFieldPreferredWidth:    _largeTextFieldWidth
+    //             label:                      qsTr("Esri")
+    //             fact:                       _appSettings.esriToken
+    //         }
+    //
+    //         LabelledFactTextField {
+    //             textFieldPreferredWidth:    _largeTextFieldWidth
+    //             label:                      qsTr("VWorld")
+    //             fact:                       _appSettings.vworldToken
+    //         }
+    //     }
+    //
+    //     SettingsGroupLayout {
+    //         Layout.fillWidth:   true
+    //         heading:            qsTr("Mapbox Login")
+    //
+    //         LabelledFactTextField {
+    //             textFieldPreferredWidth:    _largeTextFieldWidth
+    //             label:                      qsTr("Account")
+    //             fact:                       _appSettings.mapboxAccount
+    //         }
+    //
+    //         LabelledFactTextField {
+    //             textFieldPreferredWidth:    _largeTextFieldWidth
+    //             label:                      qsTr("Map Style")
+    //             fact:                       _appSettings.mapboxStyle
+    //         }
+    //     }
+    //
+    //     SettingsGroupLayout {
+    //         Layout.fillWidth:   true
+    //         heading:            qsTr("Custom Map URL")
+    //
+    //         headingDescription: qsTr("URL with {x} {y} {z} or {zoom} substitutions")
+    //
+    //         LabelledFactTextField {
+    //             textFieldPreferredWidth:    _largeTextFieldWidth
+    //             label:                      qsTr("Server URL")
+    //             fact:                       _appSettings.customURL
+    //         }
+    //     }
+    //
+    //     SettingsGroupLayout {
+    //         Layout.fillWidth:   true
+    //         heading:            qsTr("Tile Cache")
+    //
+    //         LabelledFactTextField {
+    //             fact: _mapsSettings.maxCacheDiskSize
+    //         }
+    //
+    //         LabelledFactTextField {
+    //             fact: _mapsSettings.maxCacheMemorySize
+    //         }
+    //     }
+    //
+    //     QGCFileDialog {
+    //         id:             fileDialog
+    //         folder:         _appSettings.missionSavePath
+    //         nameFilters:    [ qsTr("Tile Sets (*.%1)").arg(defaultSuffix) ]
+    //         defaultSuffix:  _appSettings.tilesetFileExtension
+    //
+    //         onAcceptedForSave: (file) => {
+    //             close()
+    //             _mapEngineManager.exportSets(file)
+    //         }
+    //
+    //         onAcceptedForLoad: (file) => {
+    //             close()
+    //             _mapEngineManager.importSets(file)
+    //         }
+    //     }
+    //
+    //     Component {
+    //         id: exportDialogComponent
+    //
+    //         QGCPopupDialog {
+    //             title:      qsTr("Export Selected Tile Sets")
+    //             buttons:    Dialog.Ok | Dialog.Cancel
+    //
+    //             onAccepted: {
+    //                 close()
+    //                 fileDialog.title = qsTr("Export Tiles")
+    //                 fileDialog.openForSave()
+    //             }
+    //
+    //             ColumnLayout {
+    //                 spacing: ScreenTools.defaultFontPixelWidth / 2
+    //
+    //                 Repeater {
+    //                     model: _mapEngineManager.tileSets
+    //
+    //                     QGCCheckBox {
+    //                         text:       object.name
+    //                         checked:    object.selected
+    //                         onClicked:  object.selected = checked
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //
+    //     Component {
+    //         id: importDialogComponent
+    //
+    //         QGCPopupDialog {
+    //             title:      qsTr("Import TileSets")
+    //             buttons:    Dialog.Ok | Dialog.Cancel
+    //
+    //             onAccepted: {
+    //                 close()
+    //                 fileDialog.title = qsTr("Import Tiles")
+    //                 fileDialog.openForLoad()
+    //             }
+    //
+    //             ColumnLayout {
+    //                 spacing: ScreenTools.defaultFontPixelWidth / 2
+    //
+    //                 QGCRadioButton {
+    //                     text:           qsTr("Append to existing sets")
+    //                     checked:        !_mapEngineManager.importReplace
+    //                     onClicked:      _mapEngineManager.importReplace = !checked
+    //                 }
+    //                 QGCRadioButton {
+    //                     text:           qsTr("Replace existing sets")
+    //                     checked:        _mapEngineManager.importReplace
+    //                     onClicked:      _mapEngineManager.importReplace = checked
+    //                 }
+    //             }
+    //         }
+    //     }
+    //
+    //     Component {
+    //         id: errorDialogComponent
+    //
+    //         QGCSimpleMessageDialog {
+    //
+    //             title:      qsTr("Error Message")
+    //             text:       _mapEngineManager.errorMessage
+    //             buttons:    Dialog.Close
+    //         }
+    //     }
+    // }
+    //
+    // Component {
+    //     id: offlineMapEditorComponent
+    //
+    //     OfflineMapEditor {
+    //         id:             offlineMapEditor
+    //         anchors.fill:   parent
+    //     }
     }
 }

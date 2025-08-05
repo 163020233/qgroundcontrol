@@ -211,49 +211,85 @@ QGCApplication::QGCApplication(int &argc, char *argv[], bool unitTesting, bool s
 
 void QGCApplication::setLanguage()
 {
-    _locale = QLocale::system();
-    qCDebug(QGCApplicationLog) << "System reported locale:" << _locale << "; Name" << _locale.name() << "; Preffered (used in maps): " << (QLocale::system().uiLanguages().length() > 0 ? QLocale::system().uiLanguages()[0] : "None");
+    // 强制设置为简体中文（可改为繁体中文：QLocale::TraditionalChinese）
+    _locale = QLocale(QLocale::Chinese);
 
-    QLocale::Language possibleLocale = AppSettings::_qLocaleLanguageEarlyAccess();
-    if (possibleLocale != QLocale::AnyLanguage) {
-        _locale = QLocale(possibleLocale);
-    }
-    //-- We have specific fonts for Korean
-    if (_locale == QLocale::Korean) {
-        qCDebug(QGCApplicationLog) << "Loading Korean fonts" << _locale.name();
-        if(QFontDatabase::addApplicationFont(":/fonts/NanumGothic-Regular") < 0) {
-            qCWarning(QGCApplicationLog) << "Could not load /fonts/NanumGothic-Regular font";
-        }
-        if(QFontDatabase::addApplicationFont(":/fonts/NanumGothic-Bold") < 0) {
-            qCWarning(QGCApplicationLog) << "Could not load /fonts/NanumGothic-Bold font";
-        }
-    }
-    qCDebug(QGCApplicationLog) << "Loading localizations for" << _locale.name();
+    //_locale = QLocale::system();
+    qCDebug(QGCApplicationLog) << "设置语言为中文：" << _locale.name();
+
     removeTranslator(JsonHelper::translator());
     removeTranslator(&_qgcTranslatorSourceCode);
     removeTranslator(&_qgcTranslatorQtLibs);
-    if (_locale.name() != "en_US") {
-        QLocale::setDefault(_locale);
-        if (_qgcTranslatorQtLibs.load("qt_" + _locale.name(), QLibraryInfo::path(QLibraryInfo::TranslationsPath))) {
-            installTranslator(&_qgcTranslatorQtLibs);
-        } else {
-            qCWarning(QGCApplicationLog) << "Qt lib localization for" << _locale.name() << "is not present";
-        }
-        if (_qgcTranslatorSourceCode.load(_locale, QLatin1String("qgc_source_"), "", ":/i18n")) {
-            installTranslator(&_qgcTranslatorSourceCode);
-        } else {
-            qCWarning(QGCApplicationLog) << "Error loading source localization for" << _locale.name();
-        }
-        if (JsonHelper::translator()->load(_locale, QLatin1String("qgc_json_"), "", ":/i18n")) {
-            installTranslator(JsonHelper::translator());
-        } else {
-            qCWarning(QGCApplicationLog) << "Error loading json localization for" << _locale.name();
-        }
+
+    QLocale::setDefault(_locale);
+
+    // 加载 Qt 库翻译
+    if (_qgcTranslatorQtLibs.load("qt_" + _locale.name(), QLibraryInfo::path(QLibraryInfo::TranslationsPath))) {
+        installTranslator(&_qgcTranslatorQtLibs);
+    } else {
+        qCWarning(QGCApplicationLog) << "未找到 Qt 库中文翻译：" << _locale.name();
     }
 
+    // 加载 QGC 源码翻译
+    if (_qgcTranslatorSourceCode.load(_locale, QLatin1String("qgc_source_"), "", ":/i18n")) {
+        installTranslator(&_qgcTranslatorSourceCode);
+    } else {
+        qCWarning(QGCApplicationLog) << "未找到 QGC 中文翻译：" << _locale.name();
+    }
+
+    // 加载 JSON 参数翻译（如参数说明）
+    if (JsonHelper::translator()->load(_locale, QLatin1String("qgc_json_"), "", ":/i18n")) {
+        installTranslator(JsonHelper::translator());
+    } else {
+        qCWarning(QGCApplicationLog) << "未找到 JSON 中文翻译：" << _locale.name();
+    }
+
+    // 通知 QML 重新加载翻译内容
     if (_qmlAppEngine) {
         _qmlAppEngine->retranslate();
     }
+    // qCDebug(QGCApplicationLog) << "System reported locale:" << _locale << "; Name" << _locale.name() << "; Preffered (used in maps): " << (QLocale::system().uiLanguages().length() > 0 ? QLocale::system().uiLanguages()[0] : "None");
+    //
+    // QLocale::Language possibleLocale = AppSettings::_qLocaleLanguageEarlyAccess();
+    // if (possibleLocale != QLocale::AnyLanguage) {
+    //     _locale = QLocale(possibleLocale);
+    // }
+    // //-- We have specific fonts for Korean
+    // if (_locale == QLocale::Korean) {
+    //     qCDebug(QGCApplicationLog) << "Loading Korean fonts" << _locale.name();
+    //     if(QFontDatabase::addApplicationFont(":/fonts/NanumGothic-Regular") < 0) {
+    //         qCWarning(QGCApplicationLog) << "Could not load /fonts/NanumGothic-Regular font";
+    //     }
+    //     if(QFontDatabase::addApplicationFont(":/fonts/NanumGothic-Bold") < 0) {
+    //         qCWarning(QGCApplicationLog) << "Could not load /fonts/NanumGothic-Bold font";
+    //     }
+    // }
+    // qCDebug(QGCApplicationLog) << "Loading localizations for" << _locale.name();
+    // removeTranslator(JsonHelper::translator());
+    // removeTranslator(&_qgcTranslatorSourceCode);
+    // removeTranslator(&_qgcTranslatorQtLibs);
+    // if (_locale.name() != "en_US") {
+    //     QLocale::setDefault(_locale);
+    //     if (_qgcTranslatorQtLibs.load("qt_" + _locale.name(), QLibraryInfo::path(QLibraryInfo::TranslationsPath))) {
+    //         installTranslator(&_qgcTranslatorQtLibs);
+    //     } else {
+    //         qCWarning(QGCApplicationLog) << "Qt lib localization for" << _locale.name() << "is not present";
+    //     }
+    //     if (_qgcTranslatorSourceCode.load(_locale, QLatin1String("qgc_source_"), "", ":/i18n")) {
+    //         installTranslator(&_qgcTranslatorSourceCode);
+    //     } else {
+    //         qCWarning(QGCApplicationLog) << "Error loading source localization for" << _locale.name();
+    //     }
+    //     if (JsonHelper::translator()->load(_locale, QLatin1String("qgc_json_"), "", ":/i18n")) {
+    //         installTranslator(JsonHelper::translator());
+    //     } else {
+    //         qCWarning(QGCApplicationLog) << "Error loading json localization for" << _locale.name();
+    //     }
+    // }
+    //
+    // if (_qmlAppEngine) {
+    //     _qmlAppEngine->retranslate();
+    // }
 
     emit languageChanged(_locale);
 }
@@ -447,8 +483,9 @@ void QGCApplication::_missingParamsDisplay()
 
     }
     _missingParams.clear();
-
-    showAppMessage(tr("Parameters are missing from firmware. You may be running a version of firmware which is not fully supported or your firmware has a bug in it. Missing params: %1").arg(params));
+    // 将原来的弹窗提示改为日志输出
+    qDebug() << QStringLiteral("Missing firmware parameters: %1").arg(params);
+    //showAppMessage(tr("Parameters are missing from firmware. You may be running a version of firmware which is not fully supported or your firmware has a bug in it. Missing params: %1").arg(params));
 }
 
 QObject *QGCApplication::_rootQmlObject()

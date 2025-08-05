@@ -38,7 +38,8 @@ SettingsPage {
             label:      qsTr("Language")
             fact:       _appSettings.qLocaleLanguage
             indexModel: false
-            visible:    _appSettings.qLocaleLanguage.visible
+            // visible:    _appSettings.qLocaleLanguage.visible
+            visible: false
         }
 
         LabelledFactComboBox {
@@ -178,7 +179,8 @@ SettingsPage {
     SettingsGroupLayout {
         Layout.fillWidth:   true
         heading:            qsTr("Brand Image")
-        visible:            _brandImageSettings.visible && !ScreenTools.isMobile
+        // visible:            _brandImageSettings.visible && !ScreenTools.isMobile
+        visible:false
         
         RowLayout {
             Layout.fillWidth:   true

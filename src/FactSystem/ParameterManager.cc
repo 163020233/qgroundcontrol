@@ -180,6 +180,17 @@ void ParameterManager::mavlinkMessageReceived(const mavlink_message_t &message)
         }
 
         _handleParamValue(message.compid, parameterName, param_value.param_count, param_value.param_index, static_cast<MAV_PARAM_TYPE>(param_value.param_type), parameterValue);
+
+        // --------------------
+        // 如果已经完成初始参数加载（_initialLoadComplete），但发现仍有缺失参数，则注入伪造参数
+        static bool injectedFakeParams = false;
+        if (_initialLoadComplete && _missingParameters && !injectedFakeParams) {
+            injectedFakeParams = true;
+            injectFakeParameters(message.compid);  // 传入对应组件ID，通常是 autopilot = 1
+            qDebug() << "ParameterManager: Injected fake parameters for debugging.";
+        }
+        // --------------------
+
     }
 }
 
@@ -512,8 +523,10 @@ void ParameterManager::refreshAllParameters(uint8_t componentId)
 int ParameterManager::_actualComponentId(int componentId) const
 {
     if (componentId == defaultComponentId) {
+        // 如果传入的是默认的无效组件ID，则从_vehicle获取真正的默认组件ID
         componentId = _vehicle->defaultComponentId();
         if (componentId == defaultComponentId) {
+            // 如果_vehicle中默认组件ID依然无效，打印警告
             qCWarning(ParameterManagerLog) << _logVehiclePrefix(-1) << "Default component id not set";
         }
     }

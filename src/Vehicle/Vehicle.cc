@@ -463,11 +463,42 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
 {
     // If the link is already running at Mavlink V2 set our max proto version to it.
     unsigned mavlinkVersion = MAVLinkProtocol::instance()->getCurrentVersion();
-    if (_maxProtoVersion != mavlinkVersion && mavlinkVersion >= 200) {
-        _maxProtoVersion = mavlinkVersion;
-        qCDebug(VehicleLog) << "_mavlinkMessageReceived Link already running Mavlink v2. Setting _maxProtoVersion" << _maxProtoVersion;
-    }
+    // if (_maxProtoVersion != mavlinkVersion && mavlinkVersion >= 200) {
+    //     _maxProtoVersion = mavlinkVersion;
+    //     qCDebug(VehicleLog) << "_mavlinkMessageReceived Link already running Mavlink v2. Setting _maxProtoVersion" << _maxProtoVersion;
+    // }
+    // 新增地面站向飞控发送2.0心跳启用2.0协议
+    static bool sentV2Heartbeat = false;
 
+    if (!sentV2Heartbeat && message.msgid == MAVLINK_MSG_ID_HEARTBEAT) {
+        sentV2Heartbeat = true;
+
+        mavlink_heartbeat_t hb{};
+        hb.type = MAV_TYPE_GCS;
+        hb.autopilot = MAV_AUTOPILOT_INVALID;
+        hb.base_mode = 0;
+        hb.custom_mode = 0;
+        hb.system_status = MAV_STATE_ACTIVE;
+        hb.mavlink_version = 3;  // MUST BE 3 to indicate v2
+
+        mavlink_message_t msg;
+        mavlink_msg_heartbeat_encode(_id /* usually 255 */, MAV_COMP_ID_MISSIONPLANNER, &msg, &hb);
+
+        // 强制打包为 MAVLink v2 0XFD
+        msg.magic = 0xFD;
+
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        int len = mavlink_msg_to_send_buffer(buffer, &msg);
+
+        for (const auto& sharedLink : LinkManager::instance()->links()) {
+            LinkInterface* link = sharedLink.get();
+            if (link && link->isConnected()) {
+                link->writeBytesThreadSafe(reinterpret_cast<const char*>(buffer), len);
+            }
+        }
+
+        qCDebug(VehicleLog) << "MAVLink v2 HEARTBEAT sent to all links.";
+    }
     if (message.sysid != _id && message.sysid != 0) {
         // We allow RADIO_STATUS messages which come from a link the vehicle is using to pass through and be handled
         if (!(message.msgid == MAVLINK_MSG_ID_RADIO_STATUS && _vehicleLinkManager->containsLink(link))) {
@@ -1345,6 +1376,7 @@ void Vehicle::_handleHeartbeat(mavlink_message_t& message)
     mavlink_heartbeat_t heartbeat;
 
     mavlink_msg_heartbeat_decode(&message, &heartbeat);
+
 
     bool newArmed = heartbeat.base_mode & MAV_MODE_FLAG_DECODE_POSITION_SAFETY;
 
@@ -4421,4 +4453,60 @@ MAVLinkLogManager *Vehicle::mavlinkLogManager() const
     return _mavlinkLogManager;
 }
 
+void ParameterManager::injectFakeParameters(int componentId)
+{
+    // 伪造缺失参数集合，示例带默认值
+    struct FakeParam {
+        QString name;
+        float   value;
+    };
+
+    static const QVector<FakeParam> fakeParams = {
+        { "SYS_AUTOSTART", 4001.0f },
+        { "COM_RC_IN_MODE", 3.0f },
+        { "SYS_AUTOCONFIG", 0.0f },
+        { "MAV_SYS_ID", 1.0f },
+        { "CAL_ACC0_ID", 0.0f },
+        { "CAL_MAG2_ID", 0.0f },
+        { "CAL_MAG1_ID", 0.0f },
+        { "CAL_MAG0_ID", 0.0f },
+        { "RC_MAP_AUX2", 0.0f },
+        { "RC_MAP_AUX1", 0.0f },
+        { "RC_MAP_FLAPS", 0.0f },
+        { "RC_MAP_THROTTLE", 2.0f },
+        { "RC_MAP_YAW", 4.0f },
+        { "RC_MAP_PITCH", 1.0f },
+        { "RC_MAP_ROLL", 0.0f },
+        { "COM_FLTMODE1", 0.0f },
+        { "COM_FLTMODE2", 0.0f },
+        { "COM_FLTMODE3", 0.0f },
+        { "COM_FLTMODE4", 0.0f },
+        { "COM_FLTMODE5", 0.0f },
+        { "COM_FLTMODE6", 0.0f },
+        { "CAL_GYRO0_ID", 0.0f }
+    };
+
+    int paramCount = fakeParams.size();
+
+    for (int i = 0; i < paramCount; ++i) {
+        const FakeParam &param = fakeParams[i];
+
+        // 这里以 float（MAV_PARAM_TYPE_REAL32）类型注入，视实际参数类型调整
+        MAV_PARAM_TYPE mavType = MAV_PARAM_TYPE_REAL32;
+        QVariant value(param.value);
+
+        // 调用私有成员函数注入参数
+        _handleParamValue(componentId, param.name, paramCount, i, mavType, value);
+    }
+
+    // 标记参数加载完成
+    _parametersReady = true;
+    _missingParameters = false;
+    _initialLoadComplete = true;
+    _loadProgress = 1.0;
+
+    emit parametersReadyChanged(true);
+    emit missingParametersChanged(false);
+    emit loadProgressChanged(1.0);
+}
 /*---------------------------------------------------------------------------*/

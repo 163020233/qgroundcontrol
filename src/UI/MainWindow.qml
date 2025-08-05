@@ -133,26 +133,26 @@ ApplicationWindow {
         toolDrawer.visible      = true
     }
 
-    function showAnalyzeTool() {
-        showTool(qsTr("Analyze Tools"), "qrc:/qml/QGroundControl/AnalyzeView/AnalyzeView.qml", "/qmlimages/Analyze.svg")
-    }
+    // function showAnalyzeTool() {
+    //     showTool(qsTr("Analyze Tools"), "qrc:/qml/QGroundControl/AnalyzeView/AnalyzeView.qml", "/qmlimages/Analyze.svg")
+    // }
 
-    function showCustomControlView() {
-        mainWindow.showTool("控制面板", "qrc:/qml/CustomControlView.qml", "/qmlimages/Control.svg", { "vehicle": QGroundControl.multiVehicleManager.activeVehicle })
+    // function showCustomControlView() {
+    //     mainWindow.showTool("控制面板", "qrc:/qml/CustomControlView.qml", "/qmlimages/Control.svg", { "vehicle": QGroundControl.multiVehicleManager.activeVehicle })
+    //
+    // }
 
-    }
+    // function showVehicleConfig() {
+    //     showTool(qsTr("Vehicle Configuration"), "qrc:/qml/QGroundControl/VehicleSetup/SetupView.qml", "/qmlimages/Gears.svg")
+    // }
 
-    function showVehicleConfig() {
-        showTool(qsTr("Vehicle Configuration"), "qrc:/qml/QGroundControl/VehicleSetup/SetupView.qml", "/qmlimages/Gears.svg")
-    }
-
-    function showVehicleConfigParametersPage() {
-        showVehicleConfig()
-        toolDrawerLoader.item.showParametersPanel()
-    }
+    // function showVehicleConfigParametersPage() {
+    //     showVehicleConfig()
+    //     toolDrawerLoader.item.showParametersPanel()
+    // }
 
     function showKnownVehicleComponentConfigPage(knownVehicleComponent) {
-        showVehicleConfig()
+        // showVehicleConfig()
         let vehicleComponent = globals.activeVehicle.autopilotPlugin.findKnownVehicleComponent(knownVehicleComponent)
         if (vehicleComponent) {
             toolDrawerLoader.item.showVehicleComponentPanel(vehicleComponent)
@@ -356,34 +356,34 @@ ApplicationWindow {
                             }
                         }
 
-                        SubMenuButton {
-                            id:                 analyzeButton
-                            height:             toolSelectDialog._toolButtonHeight
-                            Layout.fillWidth:   true
-                            text:               qsTr("Analyze Tools")
-                            imageResource:      "/qmlimages/Analyze.svg"
-                            visible:            QGroundControl.corePlugin.showAdvancedUI
-                            onClicked: {
-                                if (mainWindow.allowViewSwitch()) {
-                                    mainWindow.closeIndicatorDrawer()
-                                    mainWindow.showAnalyzeTool()
-                                }
-                            }
-                        }
+                        // SubMenuButton {
+                        //     id:                 analyzeButton
+                        //     height:             toolSelectDialog._toolButtonHeight
+                        //     Layout.fillWidth:   true
+                        //     text:               qsTr("Analyze Tools")
+                        //     imageResource:      "/qmlimages/Analyze.svg"
+                        //     visible:            QGroundControl.corePlugin.showAdvancedUI
+                        //     onClicked: {
+                        //         if (mainWindow.allowViewSwitch()) {
+                        //             mainWindow.closeIndicatorDrawer()
+                        //             mainWindow.showAnalyzeTool()
+                        //         }
+                        //     }
+                        // }
 
-                        SubMenuButton {
-                            id:                 setupButton
-                            height:             toolSelectDialog._toolButtonHeight
-                            Layout.fillWidth:   true
-                            text:               qsTr("Vehicle Configuration")
-                            imageResource:      "/qmlimages/Gears.svg"
-                            onClicked: {
-                                if (mainWindow.allowViewSwitch()) {
-                                    mainWindow.closeIndicatorDrawer()
-                                    mainWindow.showVehicleConfig()
-                                }
-                            }
-                        }
+                        // SubMenuButton {
+                        //     id:                 setupButton
+                        //     height:             toolSelectDialog._toolButtonHeight
+                        //     Layout.fillWidth:   true
+                        //     text:               qsTr("Vehicle Configuration")
+                        //     imageResource:      "/qmlimages/Gears.svg"
+                        //     onClicked: {
+                        //         if (mainWindow.allowViewSwitch()) {
+                        //             mainWindow.closeIndicatorDrawer()
+                        //             mainWindow.showVehicleConfig()
+                        //         }
+                        //     }
+                        // }
 
                         SubMenuButton {
                             id:                 settingsButton
@@ -401,17 +401,17 @@ ApplicationWindow {
                             }
                         }
 
-                        SubMenuButton {
-                            id:                 control_Button
-                            height:             toolSelectDialog._toolButtonHeight
-                            Layout.fillWidth:   true
-                            text: qsTr("control panel")
-                            imageResource:      "/qmlimages/Gears.svg"
-                            onClicked: {
-                                mainWindow.closeIndicatorDrawer()
-                                mainWindow.showCustomControlView()
-                            }
-                        }
+                        // SubMenuButton {
+                        //     id:                 portSelector
+                        //     height:             toolSelectDialog._toolButtonHeight
+                        //     Layout.fillWidth:   true
+                        //     text: qsTr("control panel")
+                        //     imageResource:      "/qmlimages/Gears.svg"
+                        //     onClicked: {
+                        //         mainWindow.closeIndicatorDrawer()
+                        //         mainWindow.showCustomControlView()
+                        //     }
+                        // }
 
                         SubMenuButton {
                             id:                 closeButton
