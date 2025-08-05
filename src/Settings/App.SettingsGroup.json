@@ -146,12 +146,12 @@
     "units":                "pt",
     "min":                  6,
     "max":                  48,
-    "default":         0
+    "default":         7.9
 },
 {
     "name":             "indoorPalette",
     "shortDesc": "Application color scheme",
-    "longDesc":  "The color scheme for the user interface.",
+    "longDesc":  "The color scheme for the user inter_setBasePointSizeface.",
     "type":             "uint32",
     "enumStrings":      "Indoor,Outdoor",
     "enumValues":       "1,0",

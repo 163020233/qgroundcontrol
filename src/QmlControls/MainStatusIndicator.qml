@@ -36,6 +36,7 @@ RowLayout {
 
     QGCLabel {
         id:                 mainStatusLabel
+        // 主菜单栏
         Layout.fillHeight:  true
         Layout.preferredWidth: contentWidth + vehicleMessagesIcon.width + control.spacing
         verticalAlignment:  Text.AlignVCenter
