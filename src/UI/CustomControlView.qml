@@ -3,52 +3,61 @@ import QtQuick.Controls 2.15
 import QGroundControl 1.0
 
 Item {
-    id: root
-    width: parent.width
-    height: parent.height
-    property var vehicle
+    width: 300
+    height: 200
 
-    Rectangle {
-        color: "#282c34"
-        width: 800
-        height: 600
+    property string selectedPort: ""
 
-        Text {
-            anchors.centerIn: parent
-            text: qsTr("欢迎来到庆军科技")
-            font.pointSize: 24
-            color: "white"
-        }
-    }
     Column {
-        spacing: 20
+        spacing: 16
+        anchors.centerIn: parent
 
         Text {
-            text: "舵机控制（通道1）"
-            font.pixelSize: 20
+            text: "串口选择"
+            font.bold: true
+            font.pointSize: 14
         }
 
-        Slider {
+        ComboBox {
+            id: portSelector
+            width: parent.width
+            model: QGroundControl.linkManager.serialPorts
+            textRole: "portName"
+            onCurrentIndexChanged: {
+                if (model.length > 0) {
+                    selectedPort = model[currentIndex].portName
+                }
+            }
+        }
 
-            id: pwmSlider
-            from: 1000
-            to: 2000
-            stepSize: 10
-            value: 1500
-            width: 200
-            onValueChanged: {
-                // 具体实现信号槽
-                vehicle = QGroundControl.multiVehicleManager.activeVehicle
-                if (vehicle) {
-                    // 继承车辆对象发送指令控制pwm
-                    vehicle.sendCommand(183, true, 1, value) // 通道1，PWM值
+        Button {
+            text: "连接串口"
+            width: parent.width
+            onClicked: {
+                if (!selectedPort || selectedPort === "") {
+                    console.warn("未选择串口")
+                    return
+                }
+
+                let config = QGroundControl.linkManager.createConfiguration(LinkConfiguration.TypeSerial, "MySerialLink")
+                config.portName = selectedPort
+                config.baud = 57600
+
+                let link = QGroundControl.linkManager.addLink(config)
+                if (link) {
+                    QGroundControl.linkManager.connectLink(link)
+                    console.log("已尝试连接到串口: " + selectedPort)
+                } else {
+                    console.warn("创建链接失败")
                 }
             }
         }
 
         Text {
-            text: "PWM值: " + Math.round(pwmSlider.value)
+            text: "当前选中: " + selectedPort
+            font.pointSize: 12
         }
     }
 }
+
 
