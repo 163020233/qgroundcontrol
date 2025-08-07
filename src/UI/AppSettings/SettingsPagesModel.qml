@@ -34,13 +34,12 @@ ListModel {
         pageVisible: function() { return true }
     }
 
-    // ListElement {
-    //     name: qsTr("Video")
-    //     url: "qrc:/qml/QGroundControl/AppSettings/VideoSettings.qml"
-    //     iconUrl: "qrc:/InstrumentValueIcons/camera.svg"
-    //     pageVisible: function() { return QGroundControl.settingsManager.videoSettings.visible }
-    // }
-
+    ListElement {
+        name: qsTr("Video")
+        url: "qrc:/qml/QGroundControl/AppSettings/VideoSettings.qml"
+        iconUrl: "qrc:/InstrumentValueIcons/camera.svg"
+        pageVisible: function() { return QGroundControl.settingsManager.videoSettings.visible }
+    }
     // ListElement {
     //     name: qsTr("Telemetry")
     //     url: "qrc:/qml/QGroundControl/AppSettings/TelemetrySettings.qml"
@@ -102,12 +101,12 @@ ListModel {
     //     pageVisible: function() { return true }
     // }
 
-    // ListElement {
-    //     name: qsTr("Mock Link")
-    //     url: "qrc:/qml/QGroundControl/AppSettings/MockLink.qml"
-    //     iconUrl: "qrc:/InstrumentValueIcons/drone.svg"
-    //     pageVisible: function() { return ScreenTools.isDebug }
-    // }
+    ListElement {
+        name: qsTr("Mock Link")
+        url: "qrc:/qml/QGroundControl/AppSettings/MockLink.qml"
+        iconUrl: "qrc:/InstrumentValueIcons/drone.svg"
+        pageVisible: function() { return ScreenTools.isDebug }
+    }
 
     // ListElement {
     //     name: qsTr("Debug")
