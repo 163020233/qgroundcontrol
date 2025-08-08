@@ -20,7 +20,7 @@ import QGroundControl.ScreenTools
 AnalyzePage {
     id: logDownloadPage
     pageComponent: pageComponent
-    pageDescription: qsTr("Log Download allows you to download binary log files from your vehicle. Click Refresh to get list of available logs.")
+    pageDescription: qsTr("日志下载允许您从您的设备中下载二进制日志文件。点击刷新以获取可用日志的列表。")
 
     Component {
         id: pageComponent
@@ -68,7 +68,7 @@ AnalyzePage {
                         QGCLabel { text: object.id }
                     }
 
-                    QGCLabel { text: qsTr("Date") }
+                    QGCLabel { text: qsTr("日期") }
 
                     Repeater {
                         model: logDownloadController.model
@@ -80,7 +80,7 @@ AnalyzePage {
                                 }
 
                                 if (object.time.getUTCFullYear() < 2010) {
-                                    return qsTr("Date Unknown")
+                                    return qsTr("未知日期")
                                 }
 
                                 return object.time.toLocaleString(undefined)
@@ -88,7 +88,7 @@ AnalyzePage {
                         }
                     }
 
-                    QGCLabel { text: qsTr("Size") }
+                    QGCLabel { text: qsTr("尺寸") }
 
                     Repeater {
                         model: logDownloadController.model
@@ -96,7 +96,7 @@ AnalyzePage {
                         QGCLabel { text: object.sizeStr }
                     }
 
-                    QGCLabel { text: qsTr("Status") }
+                    QGCLabel { text: qsTr("状态") }
 
                     Repeater {
                         model: logDownloadController.model
@@ -114,11 +114,11 @@ AnalyzePage {
                 QGCButton {
                     Layout.fillWidth: true
                     enabled: !logDownloadController.requestingList && !logDownloadController.downloadingLogs
-                    text: qsTr("Refresh")
+                    text: qsTr("刷新")
 
                     onClicked: {
                         if (!QGroundControl.multiVehicleManager.activeVehicle || QGroundControl.multiVehicleManager.activeVehicle.isOfflineEditingVehicle) {
-                            mainWindow.showMessageDialog(qsTr("Log Refresh"), qsTr("You must be connected to a vehicle in order to download logs."))
+                            mainWindow.showMessageDialog(qsTr("日志刷新"), qsTr("您必须连接到设备才能下载日志。"))
                             return
                         }
 
@@ -129,7 +129,7 @@ AnalyzePage {
                 QGCButton {
                     Layout.fillWidth: true
                     enabled: !logDownloadController.requestingList && !logDownloadController.downloadingLogs
-                    text: qsTr("Download")
+                    text: qsTr("下载")
 
                     onClicked: {
                         var logsSelected = false
@@ -141,7 +141,7 @@ AnalyzePage {
                         }
 
                         if (!logsSelected) {
-                            mainWindow.showMessageDialog(qsTr("Log Download"), qsTr("You must select at least one log file to download."))
+                            mainWindow.showMessageDialog(qsTr("日志下载"), qsTr("您必须选择至少一个日志文件才能下载。"))
                             return
                         }
 
@@ -150,7 +150,7 @@ AnalyzePage {
                             return
                         }
 
-                        fileDialog.title = qsTr("Select save directory")
+                        fileDialog.title = qsTr("选择保存目录")
                         fileDialog.folder = QGroundControl.settingsManager.appSettings.logSavePath
                         fileDialog.selectFolder = true
                         fileDialog.openForLoad()
@@ -168,10 +168,10 @@ AnalyzePage {
                 QGCButton {
                     Layout.fillWidth: true
                     enabled: !logDownloadController.requestingList && !logDownloadController.downloadingLogs && (logDownloadController.model.count > 0)
-                    text: qsTr("Erase All")
+                    text: qsTr("删除所有")
                     onClicked: mainWindow.showMessageDialog(
-                        qsTr("Delete All Log Files"),
-                        qsTr("All log files will be erased permanently. Is this really what you want?"),
+                        qsTr("删除所有日志文件"),
+                        qsTr("所有日志文件将被永久删除。是否确定？"),
                         Dialog.Yes | Dialog.No,
                         function() { logDownloadController.eraseAll() }
                     )
@@ -179,7 +179,7 @@ AnalyzePage {
 
                 QGCButton {
                     Layout.fillWidth: true
-                    text: qsTr("Cancel")
+                    text: qsTr("取消下载")
                     enabled: logDownloadController.requestingList || logDownloadController.downloadingLogs
                     onClicked: logDownloadController.cancel()
                 }

@@ -76,7 +76,7 @@ AnalyzePage {
             anchors.left:       parent.left
             anchors.right:      parent.right
             QGCLabel {
-                text:           qsTr("Inspect real time MAVLink messages.")
+                text:           qsTr("检查实时的MAVLink消息")
             }
             RowLayout {
                 Layout.alignment:   Qt.AlignRight
@@ -173,7 +173,7 @@ AnalyzePage {
                         columnSpacing:  ScreenTools.defaultFontPixelWidth
                         rowSpacing:     ScreenTools.defaultFontPixelHeight * 0.25
                         QGCLabel {
-                            text: qsTr("Message:")
+                            text: qsTr("消息:")
                             Layout.minimumWidth: ScreenTools.defaultFontPixelWidth * 20
                         }
                         QGCLabel {
@@ -181,23 +181,25 @@ AnalyzePage {
                             text: curMessage ? curMessage.name + ' (' + curMessage.id + ')' : ""
                         }
 
-                        QGCLabel { text: qsTr("Component:") }
-                        QGCLabel { text: curMessage ? curMessage.compId : "" }
+                        QGCLabel { text: qsTr("组件:") }
+                        QGCLabel { text: curMessage ? controller.systemNames[curMessage.sysId] + ' (' + curMessage.sysId + ')' : "" }
 
-                        QGCLabel { text: qsTr("Count:") }
+                        QGCLabel { text: qsTr("次数:") }
                         QGCLabel { text: curMessage ? curMessage.count : "" }
 
-                        QGCLabel { text: qsTr("Actual Rate:") }
+                        QGCLabel { text: qsTr("实际速率:") }
                         QGCLabel { text: curMessage ? curMessage.actualRateHz.toFixed(1) + qsTr("Hz") : "" }
 
-                        QGCLabel { text: qsTr("Set Rate:") }
+                        QGCLabel { text: qsTr("设置速率:") }  
+                        QGCLabel { text: qsTr("Hz") }
+
                         QGCComboBox {
                             id: msgRateCombo
                             textRole: "text"
                             valueRole: "value"
                             model: [
-                                { value: -1, text: qsTr("Disabled") },
-                                { value: 0, text: qsTr("Default") },
+                                { value: -1, text: qsTr("禁用") },
+                                { value: 0, text: qsTr("默认") },
                                 { value: 1, text: qsTr("1Hz") },
                                 { value: 2, text: qsTr("2Hz") },
                                 { value: 3, text: qsTr("3Hz") },

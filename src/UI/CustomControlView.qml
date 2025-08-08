@@ -40,25 +40,25 @@ Item {
     }
 
     // // 地图（可选）
-    // Map {
-    //     id: simpleMap
-    //     anchors.left: parent.left
-    //     anchors.right: parent.right
-    //     anchors.bottom: parent.bottom
-    //     height: parent.height / 2
-    //
-    //     plugin: Plugin { name: "osm" }
-    //     center: QtPositioning.coordinate(39.9, 116.4)
-    //     zoomLevel: 15
-    //
-    //     MapQuickItem {
-    //         coordinate: vehicle ? vehicle.coordinate : QtPositioning.coordinate(0, 0)
-    //         anchorPoint.x: 16
-    //         anchorPoint.y: 16
-    //         sourceItem: Rectangle {
-    //             width: 16; height: 16
-    //             color: "red"; radius: 8
-    //         }
-    //     }
-    // }
+    Map {
+        id: simpleMap
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        height: parent.height / 2
+    
+        plugin: Plugin { name: "osm" }
+        center: QtPositioning.coordinate(39.9, 116.4)
+        zoomLevel: 15
+    
+        MapQuickItem {
+            coordinate: vehicle ? vehicle.coordinate : QtPositioning.coordinate(0, 0)
+            anchorPoint.x: 16
+            anchorPoint.y: 16
+            sourceItem: Rectangle {
+                width: 16; height: 16
+                color: "red"; radius: 8
+            }
+        }
+    }
 }

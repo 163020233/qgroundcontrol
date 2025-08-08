@@ -19,7 +19,7 @@ import QGroundControl.Controllers
 
 AnalyzePage {
     pageComponent: pageComponent
-    pageDescription: qsTr("Used to tag a set of images from a survey mission with gps coordinates. You must provide the binary log from the flight as well as the directory which contains the images to tag.")
+    pageDescription: qsTr("用于标记一组来自勘测任务的图像，并附带 GPS 坐标。您必须提供飞行中的二进制日志以及包含待标记图像的目录。")
 
     readonly property real _margin: ScreenTools.defaultFontPixelWidth * 2
     readonly property real _minWidth: ScreenTools.defaultFontPixelWidth * 20
@@ -61,7 +61,7 @@ AnalyzePage {
             }
 
             QGCButton {
-                text: qsTr("Select log file")
+                text: qsTr("选择日志文件")
                 Layout.minimumWidth: _minWidth
                 Layout.maximumWidth: _maxWidth
                 Layout.fillWidth: true
@@ -70,8 +70,8 @@ AnalyzePage {
 
                 QGCFileDialog {
                     id: openLogFile
-                    title: qsTr("Select log file")
-                    nameFilters: [qsTr("ULog file (*.ulg)"), qsTr("PX4 log file (*.px4log)"), qsTr("All Files (*)")]
+                    title: qsTr("选择日志文件")
+                    nameFilters: [qsTr("ULog 日志文件 (*.ulg)"), qsTr("PX4 日志文件 (*.px4log)"), qsTr("所有文件 (*)")]
                     defaultSuffix: "ulg"
                     onAcceptedForLoad: (file) => {
                         geoController.logFile = file
@@ -88,7 +88,7 @@ AnalyzePage {
             }
 
             QGCButton {
-                text: qsTr("Select image directory")
+                text: qsTr("选择图像目录")
                 Layout.minimumWidth: _minWidth
                 Layout.maximumWidth: _maxWidth
                 Layout.fillWidth: true
@@ -97,7 +97,7 @@ AnalyzePage {
 
                 QGCFileDialog {
                     id: selectImageDir
-                    title: qsTr("Select image directory")
+                    title: qsTr("选择图像目录")
                     selectFolder: true
                     onAcceptedForLoad: (file) => {
                         geoController.imageDirectory = file
@@ -114,7 +114,7 @@ AnalyzePage {
             }
 
             QGCButton {
-                text: qsTr("(Optionally) Select save directory")
+                text: qsTr("(可选) 选择保存目录")
                 Layout.minimumWidth: _minWidth
                 Layout.maximumWidth: _maxWidth
                 Layout.fillWidth: true
@@ -123,7 +123,7 @@ AnalyzePage {
 
                 QGCFileDialog {
                     id: selectDestDir
-                    title: qsTr("Select save directory")
+                    title: qsTr("选择保存目录")
                     selectFolder: true
                     onAcceptedForLoad: (file) => {
                         geoController.saveDirectory = file
@@ -137,9 +137,9 @@ AnalyzePage {
                     if (geoController.saveDirectory) {
                         return geoController.saveDirectory;
                     } else if (geoController.imageDirectory) {
-                        return geoController.imageDirectory + qsTr("/TAGGED");
+                        return geoController.imageDirectory + qsTr("/标记后的图像");
                     } else {
-                        return qsTr("/TAGGED folder in your image folder");
+                        return qsTr("/标记后的图像文件夹在您的图像文件夹中");
                     }
                 }
                 elide: Text.ElideLeft
@@ -148,7 +148,7 @@ AnalyzePage {
             }
 
             QGCButton {
-                text: geoController.inProgress ? qsTr("Cancel Tagging") : qsTr("Start Tagging")
+                text: geoController.inProgress ? qsTr("取消标记") : qsTr("开始标记")
                 enabled: (geoController.imageDirectory && geoController.logFile) || geoController.inProgress
                 Layout.minimumWidth: _minWidth
                 Layout.maximumWidth: _maxWidth

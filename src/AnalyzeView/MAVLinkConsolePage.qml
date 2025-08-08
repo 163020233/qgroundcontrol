@@ -19,7 +19,7 @@ import QGroundControl.Controllers
 AnalyzePage {
     id: root
     pageComponent: pageComponent
-    pageDescription: qsTr("Provides a connection to the vehicle's system shell.")
+    pageDescription: qsTr("提供与设备系统 shell 的连接。")
     allowPopout: true
 
     property bool isLoaded: false
@@ -244,7 +244,7 @@ AnalyzePage {
                 QGCTextField {
                     id: commandInput
                     Layout.fillWidth: true
-                    placeholderText:  qsTr("Enter Commands here...")
+                    placeholderText:  qsTr("输入命令...")
                     inputMethodHints: Qt.ImhNoAutoUppercase
                     onAccepted: sendCommand()
 
@@ -257,7 +257,7 @@ AnalyzePage {
                 }
 
                 QGCButton {
-                    text: qsTr("Send")
+                    text: qsTr("发送")
                     onClicked: commandInput.sendCommand()
                 }
             }
