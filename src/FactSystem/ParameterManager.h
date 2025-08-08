@@ -30,6 +30,10 @@ class Vehicle;
 
 class ParameterManager : public QObject
 {
+    // ParameterManager.h 中添加公有函数声明
+public:
+    void injectFakeParameters(int componentId);
+
     Q_OBJECT
     Q_PROPERTY(bool     parametersReady     READ parametersReady    NOTIFY parametersReadyChanged)      ///< true: Parameters are ready for use
     Q_PROPERTY(bool     missingParameters   READ missingParameters  NOTIFY missingParametersChanged)    ///< true: Parameters are missing from firmware response, false: all parameters received from firmware

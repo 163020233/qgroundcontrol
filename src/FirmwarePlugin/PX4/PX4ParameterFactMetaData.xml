@@ -10523,15 +10523,15 @@
       <decimal>1</decimal>
       <increment>0.1</increment>
     </parameter>
-    <parameter name="COM_DL_LOSS_T" default="10" type="INT32">
-      <short_desc>GCS connection loss time threshold</short_desc>
-      <long_desc>After this amount of seconds without datalink, the GCS connection lost mode triggers</long_desc>
-      <min>5</min>
-      <max>300</max>
-      <unit>s</unit>
-      <decimal>1</decimal>
-      <increment>1</increment>
-    </parameter>
+<!--    <parameter name="COM_DL_LOSS_T" default="10" type="INT32">-->
+<!--      <short_desc>GCS connection loss time threshold</short_desc>-->
+<!--      <long_desc>After this amount of seconds without datalink, the GCS connection lost mode triggers</long_desc>-->
+<!--      <min>5</min>-->
+<!--      <max>300</max>-->
+<!--      <unit>s</unit>-->
+<!--      <decimal>1</decimal>-->
+<!--      <increment>1</increment>-->
+<!--    </parameter>-->
     <parameter name="COM_FAIL_ACT_T" default="5." type="FLOAT">
       <short_desc>Delay between failsafe condition triggered and failsafe reaction</short_desc>
       <long_desc>Before entering failsafe (RTL, Land, Hold), wait COM_FAIL_ACT_T seconds in Hold mode for the user to realize. During that time the user cannot take over control via the stick override feature (see COM_RC_OVERRIDE). Afterwards the configured failsafe action is triggered and the user may use stick override. A zero value disables the delay and the user cannot take over via stick movements (switching modes is still allowed).</long_desc>
@@ -10545,180 +10545,180 @@
       <long_desc>This number is incremented automatically after every flight on disarming in order to remember the next flight UUID. The first flight is 0.</long_desc>
       <min>0</min>
     </parameter>
-    <parameter name="COM_FLTMODE1" default="-1" type="INT32">
-      <short_desc>Mode slot 1</short_desc>
-      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
-      <values>
-        <value code="-1">Unassigned</value>
-        <value code="0">Manual</value>
-        <value code="1">Altitude</value>
-        <value code="2">Position</value>
-        <value code="3">Mission</value>
-        <value code="4">Hold</value>
-        <value code="5">Return</value>
-        <value code="6">Acro</value>
-        <value code="7">Offboard</value>
-        <value code="8">Stabilized</value>
-        <value code="9">Position Slow</value>
-        <value code="10">Takeoff</value>
-        <value code="11">Land</value>
-        <value code="12">Follow Me</value>
-        <value code="13">Precision Land</value>
-        <value code="100">External Mode 1</value>
-        <value code="101">External Mode 2</value>
-        <value code="102">External Mode 3</value>
-        <value code="103">External Mode 4</value>
-        <value code="104">External Mode 5</value>
-        <value code="105">External Mode 6</value>
-        <value code="106">External Mode 7</value>
-        <value code="107">External Mode 8</value>
-      </values>
-    </parameter>
-    <parameter name="COM_FLTMODE2" default="-1" type="INT32">
-      <short_desc>Mode slot 2</short_desc>
-      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
-      <values>
-        <value code="-1">Unassigned</value>
-        <value code="0">Manual</value>
-        <value code="1">Altitude</value>
-        <value code="2">Position</value>
-        <value code="3">Mission</value>
-        <value code="4">Hold</value>
-        <value code="5">Return</value>
-        <value code="6">Acro</value>
-        <value code="7">Offboard</value>
-        <value code="8">Stabilized</value>
-        <value code="9">Position Slow</value>
-        <value code="10">Takeoff</value>
-        <value code="11">Land</value>
-        <value code="12">Follow Me</value>
-        <value code="13">Precision Land</value>
-        <value code="100">External Mode 1</value>
-        <value code="101">External Mode 2</value>
-        <value code="102">External Mode 3</value>
-        <value code="103">External Mode 4</value>
-        <value code="104">External Mode 5</value>
-        <value code="105">External Mode 6</value>
-        <value code="106">External Mode 7</value>
-        <value code="107">External Mode 8</value>
-      </values>
-    </parameter>
-    <parameter name="COM_FLTMODE3" default="-1" type="INT32">
-      <short_desc>Mode slot 3</short_desc>
-      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
-      <values>
-        <value code="-1">Unassigned</value>
-        <value code="0">Manual</value>
-        <value code="1">Altitude</value>
-        <value code="2">Position</value>
-        <value code="3">Mission</value>
-        <value code="4">Hold</value>
-        <value code="5">Return</value>
-        <value code="6">Acro</value>
-        <value code="7">Offboard</value>
-        <value code="8">Stabilized</value>
-        <value code="9">Position Slow</value>
-        <value code="10">Takeoff</value>
-        <value code="11">Land</value>
-        <value code="12">Follow Me</value>
-        <value code="13">Precision Land</value>
-        <value code="100">External Mode 1</value>
-        <value code="101">External Mode 2</value>
-        <value code="102">External Mode 3</value>
-        <value code="103">External Mode 4</value>
-        <value code="104">External Mode 5</value>
-        <value code="105">External Mode 6</value>
-        <value code="106">External Mode 7</value>
-        <value code="107">External Mode 8</value>
-      </values>
-    </parameter>
-    <parameter name="COM_FLTMODE4" default="-1" type="INT32">
-      <short_desc>Mode slot 4</short_desc>
-      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
-      <values>
-        <value code="-1">Unassigned</value>
-        <value code="0">Manual</value>
-        <value code="1">Altitude</value>
-        <value code="2">Position</value>
-        <value code="3">Mission</value>
-        <value code="4">Hold</value>
-        <value code="5">Return</value>
-        <value code="6">Acro</value>
-        <value code="7">Offboard</value>
-        <value code="8">Stabilized</value>
-        <value code="9">Position Slow</value>
-        <value code="10">Takeoff</value>
-        <value code="11">Land</value>
-        <value code="12">Follow Me</value>
-        <value code="13">Precision Land</value>
-        <value code="100">External Mode 1</value>
-        <value code="101">External Mode 2</value>
-        <value code="102">External Mode 3</value>
-        <value code="103">External Mode 4</value>
-        <value code="104">External Mode 5</value>
-        <value code="105">External Mode 6</value>
-        <value code="106">External Mode 7</value>
-        <value code="107">External Mode 8</value>
-      </values>
-    </parameter>
-    <parameter name="COM_FLTMODE5" default="-1" type="INT32">
-      <short_desc>Mode slot 5</short_desc>
-      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
-      <values>
-        <value code="-1">Unassigned</value>
-        <value code="0">Manual</value>
-        <value code="1">Altitude</value>
-        <value code="2">Position</value>
-        <value code="3">Mission</value>
-        <value code="4">Hold</value>
-        <value code="5">Return</value>
-        <value code="6">Acro</value>
-        <value code="7">Offboard</value>
-        <value code="8">Stabilized</value>
-        <value code="9">Position Slow</value>
-        <value code="10">Takeoff</value>
-        <value code="11">Land</value>
-        <value code="12">Follow Me</value>
-        <value code="13">Precision Land</value>
-        <value code="100">External Mode 1</value>
-        <value code="101">External Mode 2</value>
-        <value code="102">External Mode 3</value>
-        <value code="103">External Mode 4</value>
-        <value code="104">External Mode 5</value>
-        <value code="105">External Mode 6</value>
-        <value code="106">External Mode 7</value>
-        <value code="107">External Mode 8</value>
-      </values>
-    </parameter>
-    <parameter name="COM_FLTMODE6" default="-1" type="INT32">
-      <short_desc>Mode slot 6</short_desc>
-      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
-      <values>
-        <value code="-1">Unassigned</value>
-        <value code="0">Manual</value>
-        <value code="1">Altitude</value>
-        <value code="2">Position</value>
-        <value code="3">Mission</value>
-        <value code="4">Hold</value>
-        <value code="5">Return</value>
-        <value code="6">Acro</value>
-        <value code="7">Offboard</value>
-        <value code="8">Stabilized</value>
-        <value code="9">Position Slow</value>
-        <value code="10">Takeoff</value>
-        <value code="11">Land</value>
-        <value code="12">Follow Me</value>
-        <value code="13">Precision Land</value>
-        <value code="100">External Mode 1</value>
-        <value code="101">External Mode 2</value>
-        <value code="102">External Mode 3</value>
-        <value code="103">External Mode 4</value>
-        <value code="104">External Mode 5</value>
-        <value code="105">External Mode 6</value>
-        <value code="106">External Mode 7</value>
-        <value code="107">External Mode 8</value>
-      </values>
-    </parameter>
+<!--    <parameter name="COM_FLTMODE1" default="-1" type="INT32">-->
+<!--      <short_desc>Mode slot 1</short_desc>-->
+<!--      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>-->
+<!--      <values>-->
+<!--        <value code="-1">Unassigned</value>-->
+<!--        <value code="0">Manual</value>-->
+<!--        <value code="1">Altitude</value>-->
+<!--        <value code="2">Position</value>-->
+<!--        <value code="3">Mission</value>-->
+<!--        <value code="4">Hold</value>-->
+<!--        <value code="5">Return</value>-->
+<!--        <value code="6">Acro</value>-->
+<!--        <value code="7">Offboard</value>-->
+<!--        <value code="8">Stabilized</value>-->
+<!--        <value code="9">Position Slow</value>-->
+<!--        <value code="10">Takeoff</value>-->
+<!--        <value code="11">Land</value>-->
+<!--        <value code="12">Follow Me</value>-->
+<!--        <value code="13">Precision Land</value>-->
+<!--        <value code="100">External Mode 1</value>-->
+<!--        <value code="101">External Mode 2</value>-->
+<!--        <value code="102">External Mode 3</value>-->
+<!--        <value code="103">External Mode 4</value>-->
+<!--        <value code="104">External Mode 5</value>-->
+<!--        <value code="105">External Mode 6</value>-->
+<!--        <value code="106">External Mode 7</value>-->
+<!--        <value code="107">External Mode 8</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
+<!--    <parameter name="COM_FLTMODE2" default="-1" type="INT32">-->
+<!--      <short_desc>Mode slot 2</short_desc>-->
+<!--      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>-->
+<!--      <values>-->
+<!--        <value code="-1">Unassigned</value>-->
+<!--        <value code="0">Manual</value>-->
+<!--        <value code="1">Altitude</value>-->
+<!--        <value code="2">Position</value>-->
+<!--        <value code="3">Mission</value>-->
+<!--        <value code="4">Hold</value>-->
+<!--        <value code="5">Return</value>-->
+<!--        <value code="6">Acro</value>-->
+<!--        <value code="7">Offboard</value>-->
+<!--        <value code="8">Stabilized</value>-->
+<!--        <value code="9">Position Slow</value>-->
+<!--        <value code="10">Takeoff</value>-->
+<!--        <value code="11">Land</value>-->
+<!--        <value code="12">Follow Me</value>-->
+<!--        <value code="13">Precision Land</value>-->
+<!--        <value code="100">External Mode 1</value>-->
+<!--        <value code="101">External Mode 2</value>-->
+<!--        <value code="102">External Mode 3</value>-->
+<!--        <value code="103">External Mode 4</value>-->
+<!--        <value code="104">External Mode 5</value>-->
+<!--        <value code="105">External Mode 6</value>-->
+<!--        <value code="106">External Mode 7</value>-->
+<!--        <value code="107">External Mode 8</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
+<!--    <parameter name="COM_FLTMODE3" default="-1" type="INT32">-->
+<!--      <short_desc>Mode slot 3</short_desc>-->
+<!--      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>-->
+<!--      <values>-->
+<!--        <value code="-1">Unassigned</value>-->
+<!--        <value code="0">Manual</value>-->
+<!--        <value code="1">Altitude</value>-->
+<!--        <value code="2">Position</value>-->
+<!--        <value code="3">Mission</value>-->
+<!--        <value code="4">Hold</value>-->
+<!--        <value code="5">Return</value>-->
+<!--        <value code="6">Acro</value>-->
+<!--        <value code="7">Offboard</value>-->
+<!--        <value code="8">Stabilized</value>-->
+<!--        <value code="9">Position Slow</value>-->
+<!--        <value code="10">Takeoff</value>-->
+<!--        <value code="11">Land</value>-->
+<!--        <value code="12">Follow Me</value>-->
+<!--        <value code="13">Precision Land</value>-->
+<!--        <value code="100">External Mode 1</value>-->
+<!--        <value code="101">External Mode 2</value>-->
+<!--        <value code="102">External Mode 3</value>-->
+<!--        <value code="103">External Mode 4</value>-->
+<!--        <value code="104">External Mode 5</value>-->
+<!--        <value code="105">External Mode 6</value>-->
+<!--        <value code="106">External Mode 7</value>-->
+<!--        <value code="107">External Mode 8</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
+<!--    <parameter name="COM_FLTMODE4" default="-1" type="INT32">-->
+<!--      <short_desc>Mode slot 4</short_desc>-->
+<!--      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>-->
+<!--      <values>-->
+<!--        <value code="-1">Unassigned</value>-->
+<!--        <value code="0">Manual</value>-->
+<!--        <value code="1">Altitude</value>-->
+<!--        <value code="2">Position</value>-->
+<!--        <value code="3">Mission</value>-->
+<!--        <value code="4">Hold</value>-->
+<!--        <value code="5">Return</value>-->
+<!--        <value code="6">Acro</value>-->
+<!--        <value code="7">Offboard</value>-->
+<!--        <value code="8">Stabilized</value>-->
+<!--        <value code="9">Position Slow</value>-->
+<!--        <value code="10">Takeoff</value>-->
+<!--        <value code="11">Land</value>-->
+<!--        <value code="12">Follow Me</value>-->
+<!--        <value code="13">Precision Land</value>-->
+<!--        <value code="100">External Mode 1</value>-->
+<!--        <value code="101">External Mode 2</value>-->
+<!--        <value code="102">External Mode 3</value>-->
+<!--        <value code="103">External Mode 4</value>-->
+<!--        <value code="104">External Mode 5</value>-->
+<!--        <value code="105">External Mode 6</value>-->
+<!--        <value code="106">External Mode 7</value>-->
+<!--        <value code="107">External Mode 8</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
+<!--    <parameter name="COM_FLTMODE5" default="-1" type="INT32">-->
+<!--      <short_desc>Mode slot 5</short_desc>-->
+<!--      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>-->
+<!--      <values>-->
+<!--        <value code="-1">Unassigned</value>-->
+<!--        <value code="0">Manual</value>-->
+<!--        <value code="1">Altitude</value>-->
+<!--        <value code="2">Position</value>-->
+<!--        <value code="3">Mission</value>-->
+<!--        <value code="4">Hold</value>-->
+<!--        <value code="5">Return</value>-->
+<!--        <value code="6">Acro</value>-->
+<!--        <value code="7">Offboard</value>-->
+<!--        <value code="8">Stabilized</value>-->
+<!--        <value code="9">Position Slow</value>-->
+<!--        <value code="10">Takeoff</value>-->
+<!--        <value code="11">Land</value>-->
+<!--        <value code="12">Follow Me</value>-->
+<!--        <value code="13">Precision Land</value>-->
+<!--        <value code="100">External Mode 1</value>-->
+<!--        <value code="101">External Mode 2</value>-->
+<!--        <value code="102">External Mode 3</value>-->
+<!--        <value code="103">External Mode 4</value>-->
+<!--        <value code="104">External Mode 5</value>-->
+<!--        <value code="105">External Mode 6</value>-->
+<!--        <value code="106">External Mode 7</value>-->
+<!--        <value code="107">External Mode 8</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
+<!--    <parameter name="COM_FLTMODE6" default="-1" type="INT32">-->
+<!--      <short_desc>Mode slot 6</short_desc>-->
+<!--      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>-->
+<!--      <values>-->
+<!--        <value code="-1">Unassigned</value>-->
+<!--        <value code="0">Manual</value>-->
+<!--        <value code="1">Altitude</value>-->
+<!--        <value code="2">Position</value>-->
+<!--        <value code="3">Mission</value>-->
+<!--        <value code="4">Hold</value>-->
+<!--        <value code="5">Return</value>-->
+<!--        <value code="6">Acro</value>-->
+<!--        <value code="7">Offboard</value>-->
+<!--        <value code="8">Stabilized</value>-->
+<!--        <value code="9">Position Slow</value>-->
+<!--        <value code="10">Takeoff</value>-->
+<!--        <value code="11">Land</value>-->
+<!--        <value code="12">Follow Me</value>-->
+<!--        <value code="13">Precision Land</value>-->
+<!--        <value code="100">External Mode 1</value>-->
+<!--        <value code="101">External Mode 2</value>-->
+<!--        <value code="102">External Mode 3</value>-->
+<!--        <value code="103">External Mode 4</value>-->
+<!--        <value code="104">External Mode 5</value>-->
+<!--        <value code="105">External Mode 6</value>-->
+<!--        <value code="106">External Mode 7</value>-->
+<!--        <value code="107">External Mode 8</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
     <parameter name="COM_FLTT_LOW_ACT" default="3" type="INT32">
       <short_desc>Remaining flight time low failsafe</short_desc>
       <long_desc>Action the system takes when the remaining flight time is below the estimated time it takes to reach the RTL destination.</long_desc>
@@ -10964,19 +10964,19 @@
       <max>1500</max>
       <unit>ms</unit>
     </parameter>
-    <parameter name="COM_RC_IN_MODE" default="3" type="INT32">
-      <short_desc>RC control input mode</short_desc>
-      <long_desc>A value of 0 enables RC transmitter control (only). A valid RC transmitter calibration is required. A value of 1 allows joystick control only. RC input handling and the associated checks are disabled. A value of 2 allows either RC Transmitter or Joystick input. The first valid input is used, will fallback to other sources if the input stream becomes invalid. A value of 3 allows either input from RC or joystick. The first available source is selected and used until reboot. A value of 4 ignores any stick input.</long_desc>
-      <min>0</min>
-      <max>4</max>
-      <values>
-        <value code="0">RC Transmitter only</value>
-        <value code="1">Joystick only</value>
-        <value code="2">RC and Joystick with fallback</value>
-        <value code="3">RC or Joystick keep first</value>
-        <value code="4">Stick input disabled</value>
-      </values>
-    </parameter>
+<!--    <parameter name="COM_RC_IN_MODE" default="3" type="INT32">-->
+<!--      <short_desc>RC control input mode</short_desc>-->
+<!--      <long_desc>A value of 0 enables RC transmitter control (only). A valid RC transmitter calibration is required. A value of 1 allows joystick control only. RC input handling and the associated checks are disabled. A value of 2 allows either RC Transmitter or Joystick input. The first valid input is used, will fallback to other sources if the input stream becomes invalid. A value of 3 allows either input from RC or joystick. The first available source is selected and used until reboot. A value of 4 ignores any stick input.</long_desc>-->
+<!--      <min>0</min>-->
+<!--      <max>4</max>-->
+<!--      <values>-->
+<!--        <value code="0">RC Transmitter only</value>-->
+<!--        <value code="1">Joystick only</value>-->
+<!--        <value code="2">RC and Joystick with fallback</value>-->
+<!--        <value code="3">RC or Joystick keep first</value>-->
+<!--        <value code="4">Stick input disabled</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
     <parameter name="COM_RC_LOSS_T" default="0.5" type="FLOAT">
       <short_desc>Manual control loss timeout</short_desc>
       <long_desc>The time in seconds without a new setpoint from RC or Joystick, after which the connection is considered lost. This must be kept short as the vehicle will use the last supplied setpoint until the timeout triggers.</long_desc>
@@ -11070,20 +11070,20 @@
       <decimal>1</decimal>
       <increment>0.1</increment>
     </parameter>
-    <parameter name="NAV_DLL_ACT" default="0" type="INT32">
-      <short_desc>Set GCS connection loss failsafe mode</short_desc>
-      <long_desc>The GCS connection loss failsafe will only be entered after a timeout, set by COM_DL_LOSS_T in seconds. Once the timeout occurs the selected action will be executed.</long_desc>
-      <min>0</min>
-      <max>6</max>
-      <values>
-        <value code="0">Disabled</value>
-        <value code="1">Hold mode</value>
-        <value code="2">Return mode</value>
-        <value code="3">Land mode</value>
-        <value code="5">Terminate</value>
-        <value code="6">Disarm</value>
-      </values>
-    </parameter>
+<!--    <parameter name="NAV_DLL_ACT" default="0" type="INT32">-->
+<!--      <short_desc>Set GCS connection loss failsafe mode</short_desc>-->
+<!--      <long_desc>The GCS connection loss failsafe will only be entered after a timeout, set by COM_DL_LOSS_T in seconds. Once the timeout occurs the selected action will be executed.</long_desc>-->
+<!--      <min>0</min>-->
+<!--      <max>6</max>-->
+<!--      <values>-->
+<!--        <value code="0">Disabled</value>-->
+<!--        <value code="1">Hold mode</value>-->
+<!--        <value code="2">Return mode</value>-->
+<!--        <value code="3">Land mode</value>-->
+<!--        <value code="5">Terminate</value>-->
+<!--        <value code="6">Disarm</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
     <parameter name="NAV_RCL_ACT" default="2" type="INT32">
       <short_desc>Set RC loss failsafe mode</short_desc>
       <long_desc>The RC loss failsafe will only be entered after a timeout, set by COM_RC_LOSS_T in seconds. If RC input checks have been disabled by setting the COM_RC_IN_MODE param it will not be triggered.</long_desc>
@@ -13669,36 +13669,36 @@
     </parameter>
   </group>
   <group name="Geofence">
-    <parameter name="GF_ACTION" default="2" type="INT32">
-      <short_desc>Geofence violation action</short_desc>
-      <long_desc>Note: Setting this value to 4 enables flight termination, which will kill the vehicle on violation of the fence.</long_desc>
-      <min>0</min>
-      <max>5</max>
-      <values>
-        <value code="0">None</value>
-        <value code="1">Warning</value>
-        <value code="2">Hold mode</value>
-        <value code="3">Return mode</value>
-        <value code="4">Terminate</value>
-        <value code="5">Land mode</value>
-      </values>
-    </parameter>
-    <parameter name="GF_MAX_HOR_DIST" default="0.0" type="FLOAT">
-      <short_desc>Max horizontal distance from Home</short_desc>
-      <long_desc>Maximum horizontal distance in meters the vehicle can be from Home before triggering a geofence action. Disabled if 0.</long_desc>
-      <min>0</min>
-      <max>10000</max>
-      <unit>m</unit>
-      <increment>1</increment>
-    </parameter>
-    <parameter name="GF_MAX_VER_DIST" default="0.0" type="FLOAT">
-      <short_desc>Max vertical distance from Home</short_desc>
-      <long_desc>Maximum vertical distance in meters the vehicle can be from Home before triggering a geofence action. Disabled if 0.</long_desc>
-      <min>0</min>
-      <max>10000</max>
-      <unit>m</unit>
-      <increment>1</increment>
-    </parameter>
+<!--    <parameter name="GF_ACTION" default="2" type="INT32">-->
+<!--      <short_desc>Geofence violation action</short_desc>-->
+<!--      <long_desc>Note: Setting this value to 4 enables flight termination, which will kill the vehicle on violation of the fence.</long_desc>-->
+<!--      <min>0</min>-->
+<!--      <max>5</max>-->
+<!--      <values>-->
+<!--        <value code="0">None</value>-->
+<!--        <value code="1">Warning</value>-->
+<!--        <value code="2">Hold mode</value>-->
+<!--        <value code="3">Return mode</value>-->
+<!--        <value code="4">Terminate</value>-->
+<!--        <value code="5">Land mode</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
+<!--    <parameter name="GF_MAX_HOR_DIST" default="0.0" type="FLOAT">-->
+<!--      <short_desc>Max horizontal distance from Home</short_desc>-->
+<!--      <long_desc>Maximum horizontal distance in meters the vehicle can be from Home before triggering a geofence action. Disabled if 0.</long_desc>-->
+<!--      <min>0</min>-->
+<!--      <max>10000</max>-->
+<!--      <unit>m</unit>-->
+<!--      <increment>1</increment>-->
+<!--    </parameter>-->
+<!--    <parameter name="GF_MAX_VER_DIST" default="0.0" type="FLOAT">-->
+<!--      <short_desc>Max vertical distance from Home</short_desc>-->
+<!--      <long_desc>Maximum vertical distance in meters the vehicle can be from Home before triggering a geofence action. Disabled if 0.</long_desc>-->
+<!--      <min>0</min>-->
+<!--      <max>10000</max>-->
+<!--      <unit>m</unit>-->
+<!--      <increment>1</increment>-->
+<!--    </parameter>-->
     <parameter name="GF_PREDICT" default="0" type="INT32" boolean="true">
       <short_desc>[EXPERIMENTAL] Use Pre-emptive geofence triggering</short_desc>
       <long_desc>WARNING: This experimental feature may cause flyaways. Use at your own risk. Predict the motion of the vehicle and trigger the breach if it is determined that the current trajectory would result in a breach happening before the vehicle can make evasive maneuvers. The vehicle is then re-routed to a safe hold position (stop for multirotor, loiter for fixed wing).</long_desc>
@@ -16518,12 +16518,12 @@
       <min>-1</min>
       <max>240</max>
     </parameter>
-    <parameter name="MAV_SYS_ID" default="1" type="INT32">
-      <short_desc>MAVLink system ID</short_desc>
-      <min>1</min>
-      <max>250</max>
-      <reboot_required>true</reboot_required>
-    </parameter>
+<!--    <parameter name="MAV_SYS_ID" default="1" type="INT32">-->
+<!--      <short_desc>MAVLink system ID</short_desc>-->
+<!--      <min>1</min>-->
+<!--      <max>250</max>-->
+<!--      <reboot_required>true</reboot_required>-->
+<!--    </parameter>-->
     <parameter name="MAV_TYPE" default="0" type="INT32">
       <short_desc>MAVLink airframe type</short_desc>
       <min>0</min>
@@ -18828,60 +18828,60 @@
       <max>2200</max>
       <unit>us</unit>
     </parameter>
-    <parameter name="RC_MAP_AUX1" default="0" type="INT32">
-      <short_desc>AUX1 Passthrough RC channel</short_desc>
-      <long_desc>Default function: Camera pitch</long_desc>
-      <min>0</min>
-      <max>18</max>
-      <values>
-        <value code="0">Unassigned</value>
-        <value code="1">Channel 1</value>
-        <value code="2">Channel 2</value>
-        <value code="3">Channel 3</value>
-        <value code="4">Channel 4</value>
-        <value code="5">Channel 5</value>
-        <value code="6">Channel 6</value>
-        <value code="7">Channel 7</value>
-        <value code="8">Channel 8</value>
-        <value code="9">Channel 9</value>
-        <value code="10">Channel 10</value>
-        <value code="11">Channel 11</value>
-        <value code="12">Channel 12</value>
-        <value code="13">Channel 13</value>
-        <value code="14">Channel 14</value>
-        <value code="15">Channel 15</value>
-        <value code="16">Channel 16</value>
-        <value code="17">Channel 17</value>
-        <value code="18">Channel 18</value>
-      </values>
-    </parameter>
-    <parameter name="RC_MAP_AUX2" default="0" type="INT32">
-      <short_desc>AUX2 Passthrough RC channel</short_desc>
-      <long_desc>Default function: Camera roll</long_desc>
-      <min>0</min>
-      <max>18</max>
-      <values>
-        <value code="0">Unassigned</value>
-        <value code="1">Channel 1</value>
-        <value code="2">Channel 2</value>
-        <value code="3">Channel 3</value>
-        <value code="4">Channel 4</value>
-        <value code="5">Channel 5</value>
-        <value code="6">Channel 6</value>
-        <value code="7">Channel 7</value>
-        <value code="8">Channel 8</value>
-        <value code="9">Channel 9</value>
-        <value code="10">Channel 10</value>
-        <value code="11">Channel 11</value>
-        <value code="12">Channel 12</value>
-        <value code="13">Channel 13</value>
-        <value code="14">Channel 14</value>
-        <value code="15">Channel 15</value>
-        <value code="16">Channel 16</value>
-        <value code="17">Channel 17</value>
-        <value code="18">Channel 18</value>
-      </values>
-    </parameter>
+<!--    <parameter name="RC_MAP_AUX1" default="0" type="INT32">-->
+<!--      <short_desc>AUX1 Passthrough RC channel</short_desc>-->
+<!--      <long_desc>Default function: Camera pitch</long_desc>-->
+<!--      <min>0</min>-->
+<!--      <max>18</max>-->
+<!--      <values>-->
+<!--        <value code="0">Unassigned</value>-->
+<!--        <value code="1">Channel 1</value>-->
+<!--        <value code="2">Channel 2</value>-->
+<!--        <value code="3">Channel 3</value>-->
+<!--        <value code="4">Channel 4</value>-->
+<!--        <value code="5">Channel 5</value>-->
+<!--        <value code="6">Channel 6</value>-->
+<!--        <value code="7">Channel 7</value>-->
+<!--        <value code="8">Channel 8</value>-->
+<!--        <value code="9">Channel 9</value>-->
+<!--        <value code="10">Channel 10</value>-->
+<!--        <value code="11">Channel 11</value>-->
+<!--        <value code="12">Channel 12</value>-->
+<!--        <value code="13">Channel 13</value>-->
+<!--        <value code="14">Channel 14</value>-->
+<!--        <value code="15">Channel 15</value>-->
+<!--        <value code="16">Channel 16</value>-->
+<!--        <value code="17">Channel 17</value>-->
+<!--        <value code="18">Channel 18</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
+<!--    <parameter name="RC_MAP_AUX2" default="0" type="INT32">-->
+<!--      <short_desc>AUX2 Passthrough RC channel</short_desc>-->
+<!--      <long_desc>Default function: Camera roll</long_desc>-->
+<!--      <min>0</min>-->
+<!--      <max>18</max>-->
+<!--      <values>-->
+<!--        <value code="0">Unassigned</value>-->
+<!--        <value code="1">Channel 1</value>-->
+<!--        <value code="2">Channel 2</value>-->
+<!--        <value code="3">Channel 3</value>-->
+<!--        <value code="4">Channel 4</value>-->
+<!--        <value code="5">Channel 5</value>-->
+<!--        <value code="6">Channel 6</value>-->
+<!--        <value code="7">Channel 7</value>-->
+<!--        <value code="8">Channel 8</value>-->
+<!--        <value code="9">Channel 9</value>-->
+<!--        <value code="10">Channel 10</value>-->
+<!--        <value code="11">Channel 11</value>-->
+<!--        <value code="12">Channel 12</value>-->
+<!--        <value code="13">Channel 13</value>-->
+<!--        <value code="14">Channel 14</value>-->
+<!--        <value code="15">Channel 15</value>-->
+<!--        <value code="16">Channel 16</value>-->
+<!--        <value code="17">Channel 17</value>-->
+<!--        <value code="18">Channel 18</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
     <parameter name="RC_MAP_AUX3" default="0" type="INT32">
       <short_desc>AUX3 Passthrough RC channel</short_desc>
       <long_desc>Default function: Camera azimuth / yaw</long_desc>
@@ -19121,114 +19121,114 @@
         <value code="18">Channel 18</value>
       </values>
     </parameter>
-    <parameter name="RC_MAP_PITCH" default="0" type="INT32">
-      <short_desc>Pitch control channel mapping</short_desc>
-      <long_desc>The channel index (starting from 1 for channel 1) indicates which channel should be used for reading pitch inputs from. A value of zero indicates the switch is not assigned.</long_desc>
-      <min>0</min>
-      <max>18</max>
-      <values>
-        <value code="0">Unassigned</value>
-        <value code="1">Channel 1</value>
-        <value code="2">Channel 2</value>
-        <value code="3">Channel 3</value>
-        <value code="4">Channel 4</value>
-        <value code="5">Channel 5</value>
-        <value code="6">Channel 6</value>
-        <value code="7">Channel 7</value>
-        <value code="8">Channel 8</value>
-        <value code="9">Channel 9</value>
-        <value code="10">Channel 10</value>
-        <value code="11">Channel 11</value>
-        <value code="12">Channel 12</value>
-        <value code="13">Channel 13</value>
-        <value code="14">Channel 14</value>
-        <value code="15">Channel 15</value>
-        <value code="16">Channel 16</value>
-        <value code="17">Channel 17</value>
-        <value code="18">Channel 18</value>
-      </values>
-    </parameter>
-    <parameter name="RC_MAP_ROLL" default="0" type="INT32">
-      <short_desc>Roll control channel mapping</short_desc>
-      <long_desc>The channel index (starting from 1 for channel 1) indicates which channel should be used for reading roll inputs from. A value of zero indicates the switch is not assigned.</long_desc>
-      <min>0</min>
-      <max>18</max>
-      <values>
-        <value code="0">Unassigned</value>
-        <value code="1">Channel 1</value>
-        <value code="2">Channel 2</value>
-        <value code="3">Channel 3</value>
-        <value code="4">Channel 4</value>
-        <value code="5">Channel 5</value>
-        <value code="6">Channel 6</value>
-        <value code="7">Channel 7</value>
-        <value code="8">Channel 8</value>
-        <value code="9">Channel 9</value>
-        <value code="10">Channel 10</value>
-        <value code="11">Channel 11</value>
-        <value code="12">Channel 12</value>
-        <value code="13">Channel 13</value>
-        <value code="14">Channel 14</value>
-        <value code="15">Channel 15</value>
-        <value code="16">Channel 16</value>
-        <value code="17">Channel 17</value>
-        <value code="18">Channel 18</value>
-      </values>
-    </parameter>
-    <parameter name="RC_MAP_THROTTLE" default="0" type="INT32">
-      <short_desc>Throttle control channel mapping</short_desc>
-      <long_desc>The channel index (starting from 1 for channel 1) indicates which channel should be used for reading throttle inputs from. A value of zero indicates the switch is not assigned.</long_desc>
-      <min>0</min>
-      <max>18</max>
-      <values>
-        <value code="0">Unassigned</value>
-        <value code="1">Channel 1</value>
-        <value code="2">Channel 2</value>
-        <value code="3">Channel 3</value>
-        <value code="4">Channel 4</value>
-        <value code="5">Channel 5</value>
-        <value code="6">Channel 6</value>
-        <value code="7">Channel 7</value>
-        <value code="8">Channel 8</value>
-        <value code="9">Channel 9</value>
-        <value code="10">Channel 10</value>
-        <value code="11">Channel 11</value>
-        <value code="12">Channel 12</value>
-        <value code="13">Channel 13</value>
-        <value code="14">Channel 14</value>
-        <value code="15">Channel 15</value>
-        <value code="16">Channel 16</value>
-        <value code="17">Channel 17</value>
-        <value code="18">Channel 18</value>
-      </values>
-    </parameter>
-    <parameter name="RC_MAP_YAW" default="0" type="INT32">
-      <short_desc>Yaw control channel mapping</short_desc>
-      <long_desc>The channel index (starting from 1 for channel 1) indicates which channel should be used for reading yaw inputs from. A value of zero indicates the switch is not assigned.</long_desc>
-      <min>0</min>
-      <max>18</max>
-      <values>
-        <value code="0">Unassigned</value>
-        <value code="1">Channel 1</value>
-        <value code="2">Channel 2</value>
-        <value code="3">Channel 3</value>
-        <value code="4">Channel 4</value>
-        <value code="5">Channel 5</value>
-        <value code="6">Channel 6</value>
-        <value code="7">Channel 7</value>
-        <value code="8">Channel 8</value>
-        <value code="9">Channel 9</value>
-        <value code="10">Channel 10</value>
-        <value code="11">Channel 11</value>
-        <value code="12">Channel 12</value>
-        <value code="13">Channel 13</value>
-        <value code="14">Channel 14</value>
-        <value code="15">Channel 15</value>
-        <value code="16">Channel 16</value>
-        <value code="17">Channel 17</value>
-        <value code="18">Channel 18</value>
-      </values>
-    </parameter>
+<!--    <parameter name="RC_MAP_PITCH" default="0" type="INT32">-->
+<!--      <short_desc>Pitch control channel mapping</short_desc>-->
+<!--      <long_desc>The channel index (starting from 1 for channel 1) indicates which channel should be used for reading pitch inputs from. A value of zero indicates the switch is not assigned.</long_desc>-->
+<!--      <min>0</min>-->
+<!--      <max>18</max>-->
+<!--      <values>-->
+<!--        <value code="0">Unassigned</value>-->
+<!--        <value code="1">Channel 1</value>-->
+<!--        <value code="2">Channel 2</value>-->
+<!--        <value code="3">Channel 3</value>-->
+<!--        <value code="4">Channel 4</value>-->
+<!--        <value code="5">Channel 5</value>-->
+<!--        <value code="6">Channel 6</value>-->
+<!--        <value code="7">Channel 7</value>-->
+<!--        <value code="8">Channel 8</value>-->
+<!--        <value code="9">Channel 9</value>-->
+<!--        <value code="10">Channel 10</value>-->
+<!--        <value code="11">Channel 11</value>-->
+<!--        <value code="12">Channel 12</value>-->
+<!--        <value code="13">Channel 13</value>-->
+<!--        <value code="14">Channel 14</value>-->
+<!--        <value code="15">Channel 15</value>-->
+<!--        <value code="16">Channel 16</value>-->
+<!--        <value code="17">Channel 17</value>-->
+<!--        <value code="18">Channel 18</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
+<!--    <parameter name="RC_MAP_ROLL" default="0" type="INT32">-->
+<!--      <short_desc>Roll control channel mapping</short_desc>-->
+<!--      <long_desc>The channel index (starting from 1 for channel 1) indicates which channel should be used for reading roll inputs from. A value of zero indicates the switch is not assigned.</long_desc>-->
+<!--      <min>0</min>-->
+<!--      <max>18</max>-->
+<!--      <values>-->
+<!--        <value code="0">Unassigned</value>-->
+<!--        <value code="1">Channel 1</value>-->
+<!--        <value code="2">Channel 2</value>-->
+<!--        <value code="3">Channel 3</value>-->
+<!--        <value code="4">Channel 4</value>-->
+<!--        <value code="5">Channel 5</value>-->
+<!--        <value code="6">Channel 6</value>-->
+<!--        <value code="7">Channel 7</value>-->
+<!--        <value code="8">Channel 8</value>-->
+<!--        <value code="9">Channel 9</value>-->
+<!--        <value code="10">Channel 10</value>-->
+<!--        <value code="11">Channel 11</value>-->
+<!--        <value code="12">Channel 12</value>-->
+<!--        <value code="13">Channel 13</value>-->
+<!--        <value code="14">Channel 14</value>-->
+<!--        <value code="15">Channel 15</value>-->
+<!--        <value code="16">Channel 16</value>-->
+<!--        <value code="17">Channel 17</value>-->
+<!--        <value code="18">Channel 18</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
+<!--    <parameter name="RC_MAP_THROTTLE" default="0" type="INT32">-->
+<!--      <short_desc>Throttle control channel mapping</short_desc>-->
+<!--      <long_desc>The channel index (starting from 1 for channel 1) indicates which channel should be used for reading throttle inputs from. A value of zero indicates the switch is not assigned.</long_desc>-->
+<!--      <min>0</min>-->
+<!--      <max>18</max>-->
+<!--      <values>-->
+<!--        <value code="0">Unassigned</value>-->
+<!--        <value code="1">Channel 1</value>-->
+<!--        <value code="2">Channel 2</value>-->
+<!--        <value code="3">Channel 3</value>-->
+<!--        <value code="4">Channel 4</value>-->
+<!--        <value code="5">Channel 5</value>-->
+<!--        <value code="6">Channel 6</value>-->
+<!--        <value code="7">Channel 7</value>-->
+<!--        <value code="8">Channel 8</value>-->
+<!--        <value code="9">Channel 9</value>-->
+<!--        <value code="10">Channel 10</value>-->
+<!--        <value code="11">Channel 11</value>-->
+<!--        <value code="12">Channel 12</value>-->
+<!--        <value code="13">Channel 13</value>-->
+<!--        <value code="14">Channel 14</value>-->
+<!--        <value code="15">Channel 15</value>-->
+<!--        <value code="16">Channel 16</value>-->
+<!--        <value code="17">Channel 17</value>-->
+<!--        <value code="18">Channel 18</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
+<!--    <parameter name="RC_MAP_YAW" default="0" type="INT32">-->
+<!--      <short_desc>Yaw control channel mapping</short_desc>-->
+<!--      <long_desc>The channel index (starting from 1 for channel 1) indicates which channel should be used for reading yaw inputs from. A value of zero indicates the switch is not assigned.</long_desc>-->
+<!--      <min>0</min>-->
+<!--      <max>18</max>-->
+<!--      <values>-->
+<!--        <value code="0">Unassigned</value>-->
+<!--        <value code="1">Channel 1</value>-->
+<!--        <value code="2">Channel 2</value>-->
+<!--        <value code="3">Channel 3</value>-->
+<!--        <value code="4">Channel 4</value>-->
+<!--        <value code="5">Channel 5</value>-->
+<!--        <value code="6">Channel 6</value>-->
+<!--        <value code="7">Channel 7</value>-->
+<!--        <value code="8">Channel 8</value>-->
+<!--        <value code="9">Channel 9</value>-->
+<!--        <value code="10">Channel 10</value>-->
+<!--        <value code="11">Channel 11</value>-->
+<!--        <value code="12">Channel 12</value>-->
+<!--        <value code="13">Channel 13</value>-->
+<!--        <value code="14">Channel 14</value>-->
+<!--        <value code="15">Channel 15</value>-->
+<!--        <value code="16">Channel 16</value>-->
+<!--        <value code="17">Channel 17</value>-->
+<!--        <value code="18">Channel 18</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
     <parameter name="RC_RSSI_PWM_CHAN" default="0" type="INT32">
       <short_desc>PWM input channel that provides RSSI</short_desc>
       <long_desc>0: do not read RSSI from input channel 1-18: read RSSI from specified input channel Specify the range for RSSI input with RC_RSSI_PWM_MIN and RC_RSSI_PWM_MAX parameters.</long_desc>
@@ -19351,32 +19351,32 @@
         <value code="18">Channel 18</value>
       </values>
     </parameter>
-    <parameter name="RC_MAP_FLAPS" default="0" type="INT32">
-      <short_desc>Flaps channel</short_desc>
-      <min>0</min>
-      <max>18</max>
-      <values>
-        <value code="0">Unassigned</value>
-        <value code="1">Channel 1</value>
-        <value code="2">Channel 2</value>
-        <value code="3">Channel 3</value>
-        <value code="4">Channel 4</value>
-        <value code="5">Channel 5</value>
-        <value code="6">Channel 6</value>
-        <value code="7">Channel 7</value>
-        <value code="8">Channel 8</value>
-        <value code="9">Channel 9</value>
-        <value code="10">Channel 10</value>
-        <value code="11">Channel 11</value>
-        <value code="12">Channel 12</value>
-        <value code="13">Channel 13</value>
-        <value code="14">Channel 14</value>
-        <value code="15">Channel 15</value>
-        <value code="16">Channel 16</value>
-        <value code="17">Channel 17</value>
-        <value code="18">Channel 18</value>
-      </values>
-    </parameter>
+<!--    <parameter name="RC_MAP_FLAPS" default="0" type="INT32">-->
+<!--      <short_desc>Flaps channel</short_desc>-->
+<!--      <min>0</min>-->
+<!--      <max>18</max>-->
+<!--      <values>-->
+<!--        <value code="0">Unassigned</value>-->
+<!--        <value code="1">Channel 1</value>-->
+<!--        <value code="2">Channel 2</value>-->
+<!--        <value code="3">Channel 3</value>-->
+<!--        <value code="4">Channel 4</value>-->
+<!--        <value code="5">Channel 5</value>-->
+<!--        <value code="6">Channel 6</value>-->
+<!--        <value code="7">Channel 7</value>-->
+<!--        <value code="8">Channel 8</value>-->
+<!--        <value code="9">Channel 9</value>-->
+<!--        <value code="10">Channel 10</value>-->
+<!--        <value code="11">Channel 11</value>-->
+<!--        <value code="12">Channel 12</value>-->
+<!--        <value code="13">Channel 13</value>-->
+<!--        <value code="14">Channel 14</value>-->
+<!--        <value code="15">Channel 15</value>-->
+<!--        <value code="16">Channel 16</value>-->
+<!--        <value code="17">Channel 17</value>-->
+<!--        <value code="18">Channel 18</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
     <parameter name="RC_MAP_FLTMODE" default="0" type="INT32">
       <short_desc>Single channel flight mode selection</short_desc>
       <long_desc>If this parameter is non-zero, flight modes are only selected by this channel and are assigned to six slots.</long_desc>
@@ -19721,14 +19721,14 @@
         <value code="2">Required precision landing</value>
       </values>
     </parameter>
-    <parameter name="RTL_RETURN_ALT" default="60." type="FLOAT">
-      <short_desc>Return mode return altitude</short_desc>
-      <long_desc>Default minimum altitude above destination (e.g. home, safe point, landing pattern) for return flight. The vehicle will climb to this altitude when Return mode is enganged, unless it currently is flying higher already. This is affected by RTL_MIN_DIST and RTL_CONE_ANG.</long_desc>
-      <min>0</min>
-      <unit>m</unit>
-      <decimal>1</decimal>
-      <increment>0.5</increment>
-    </parameter>
+<!--    <parameter name="RTL_RETURN_ALT" default="60." type="FLOAT">-->
+<!--      <short_desc>Return mode return altitude</short_desc>-->
+<!--      <long_desc>Default minimum altitude above destination (e.g. home, safe point, landing pattern) for return flight. The vehicle will climb to this altitude when Return mode is enganged, unless it currently is flying higher already. This is affected by RTL_MIN_DIST and RTL_CONE_ANG.</long_desc>-->
+<!--      <min>0</min>-->
+<!--      <unit>m</unit>-->
+<!--      <decimal>1</decimal>-->
+<!--      <increment>0.5</increment>-->
+<!--    </parameter>-->
     <parameter name="RTL_TYPE" default="0" type="INT32">
       <short_desc>Return type</short_desc>
       <long_desc>Return mode destination and flight path (home location, rally point, mission landing pattern, reverse mission)</long_desc>
@@ -20544,24 +20544,24 @@
     </parameter>
   </group>
   <group name="Sensor Calibration">
-    <parameter name="CAL_ACC0_ID" default="0" type="INT32" category="System">
-      <short_desc>Accelerometer 0 calibration device ID</short_desc>
-      <long_desc>Device ID of the accelerometer this calibration applies to.</long_desc>
-      <decimal>3</decimal>
-    </parameter>
-    <parameter name="CAL_ACC0_PRIO" default="-1" type="INT32" category="System">
-      <short_desc>Accelerometer 0 priority</short_desc>
-      <decimal>3</decimal>
-      <values>
-        <value code="-1">Uninitialized</value>
-        <value code="0">Disabled</value>
-        <value code="1">Min</value>
-        <value code="25">Low</value>
-        <value code="50">Medium (Default)</value>
-        <value code="75">High</value>
-        <value code="100">Max</value>
-      </values>
-    </parameter>
+<!--    <parameter name="CAL_ACC0_ID" default="0" type="INT32" category="System">-->
+<!--      <short_desc>Accelerometer 0 calibration device ID</short_desc>-->
+<!--      <long_desc>Device ID of the accelerometer this calibration applies to.</long_desc>-->
+<!--      <decimal>3</decimal>-->
+<!--    </parameter>-->
+<!--    <parameter name="CAL_ACC0_PRIO" default="-1" type="INT32" category="System">-->
+<!--      <short_desc>Accelerometer 0 priority</short_desc>-->
+<!--      <decimal>3</decimal>-->
+<!--      <values>-->
+<!--        <value code="-1">Uninitialized</value>-->
+<!--        <value code="0">Disabled</value>-->
+<!--        <value code="1">Min</value>-->
+<!--        <value code="25">Low</value>-->
+<!--        <value code="50">Medium (Default)</value>-->
+<!--        <value code="75">High</value>-->
+<!--        <value code="100">Max</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
     <parameter name="CAL_ACC0_ROT" default="-1" type="INT32" category="System">
       <short_desc>Accelerometer 0 rotation relative to airframe</short_desc>
       <long_desc>An internal sensor will force a value of -1, so a GCS should only attempt to configure the rotation if the value is greater than or equal to zero.</long_desc>
@@ -21028,22 +21028,22 @@
         <value code="100">Max</value>
       </values>
     </parameter>
-    <parameter name="CAL_GYRO0_ID" default="0" type="INT32" category="System">
-      <short_desc>Gyroscope 0 calibration device ID</short_desc>
-      <long_desc>Device ID of the gyroscope this calibration applies to.</long_desc>
-    </parameter>
-    <parameter name="CAL_GYRO0_PRIO" default="-1" type="INT32" category="System">
-      <short_desc>Gyroscope 0 priority</short_desc>
-      <values>
-        <value code="-1">Uninitialized</value>
-        <value code="0">Disabled</value>
-        <value code="1">Min</value>
-        <value code="25">Low</value>
-        <value code="50">Medium (Default)</value>
-        <value code="75">High</value>
-        <value code="100">Max</value>
-      </values>
-    </parameter>
+<!--    <parameter name="CAL_GYRO0_ID" default="0" type="INT32" category="System">-->
+<!--      <short_desc>Gyroscope 0 calibration device ID</short_desc>-->
+<!--      <long_desc>Device ID of the gyroscope this calibration applies to.</long_desc>-->
+<!--    </parameter>-->
+<!--    <parameter name="CAL_GYRO0_PRIO" default="-1" type="INT32" category="System">-->
+<!--      <short_desc>Gyroscope 0 priority</short_desc>-->
+<!--      <values>-->
+<!--        <value code="-1">Uninitialized</value>-->
+<!--        <value code="0">Disabled</value>-->
+<!--        <value code="1">Min</value>-->
+<!--        <value code="25">Low</value>-->
+<!--        <value code="50">Medium (Default)</value>-->
+<!--        <value code="75">High</value>-->
+<!--        <value code="100">Max</value>-->
+<!--      </values>-->
+<!--    </parameter>-->
     <parameter name="CAL_GYRO0_ROT" default="-1" type="INT32" category="System">
       <short_desc>Gyroscope 0 rotation relative to airframe</short_desc>
       <long_desc>An internal sensor will force a value of -1, so a GCS should only attempt to configure the rotation if the value is greater than or equal to zero.</long_desc>
@@ -21352,10 +21352,10 @@
       <unit>rad/s</unit>
       <decimal>3</decimal>
     </parameter>
-    <parameter name="CAL_MAG0_ID" default="0" type="INT32" category="System">
-      <short_desc>Magnetometer 0 calibration device ID</short_desc>
-      <long_desc>Device ID of the magnetometer this calibration applies to.</long_desc>
-    </parameter>
+<!--    <parameter name="CAL_MAG0_ID" default="0" type="INT32" category="System">-->
+<!--      <short_desc>Magnetometer 0 calibration device ID</short_desc>-->
+<!--      <long_desc>Device ID of the magnetometer this calibration applies to.</long_desc>-->
+<!--    </parameter>-->
     <parameter name="CAL_MAG0_PITCH" default="0.0" type="FLOAT" category="System">
       <short_desc>Magnetometer 0 Custom Euler Pitch Angle</short_desc>
       <long_desc>Setting this parameter changes CAL_MAG0_ROT to "Custom Euler Angle"</long_desc>
@@ -21499,10 +21499,10 @@
       <max>3.0</max>
       <decimal>3</decimal>
     </parameter>
-    <parameter name="CAL_MAG1_ID" default="0" type="INT32" category="System">
-      <short_desc>Magnetometer 1 calibration device ID</short_desc>
-      <long_desc>Device ID of the magnetometer this calibration applies to.</long_desc>
-    </parameter>
+<!--    <parameter name="CAL_MAG1_ID" default="0" type="INT32" category="System">-->
+<!--      <short_desc>Magnetometer 1 calibration device ID</short_desc>-->
+<!--      <long_desc>Device ID of the magnetometer this calibration applies to.</long_desc>-->
+<!--    </parameter>-->
     <parameter name="CAL_MAG1_PITCH" default="0.0" type="FLOAT" category="System">
       <short_desc>Magnetometer 1 Custom Euler Pitch Angle</short_desc>
       <long_desc>Setting this parameter changes CAL_MAG1_ROT to "Custom Euler Angle"</long_desc>
@@ -21646,10 +21646,10 @@
       <max>3.0</max>
       <decimal>3</decimal>
     </parameter>
-    <parameter name="CAL_MAG2_ID" default="0" type="INT32" category="System">
-      <short_desc>Magnetometer 2 calibration device ID</short_desc>
-      <long_desc>Device ID of the magnetometer this calibration applies to.</long_desc>
-    </parameter>
+<!--    <parameter name="CAL_MAG2_ID" default="0" type="INT32" category="System">-->
+<!--      <short_desc>Magnetometer 2 calibration device ID</short_desc>-->
+<!--      <long_desc>Device ID of the magnetometer this calibration applies to.</long_desc>-->
+<!--    </parameter>-->
     <parameter name="CAL_MAG2_PITCH" default="0.0" type="FLOAT" category="System">
       <short_desc>Magnetometer 2 Custom Euler Pitch Angle</short_desc>
       <long_desc>Setting this parameter changes CAL_MAG2_ROT to "Custom Euler Angle"</long_desc>
@@ -24372,13 +24372,13 @@
         <value code="1">Reset parameters to airframe defaults</value>
       </values>
     </parameter>
-    <parameter name="SYS_AUTOSTART" default="0" type="INT32">
-      <short_desc>Auto-start script index</short_desc>
-      <long_desc>CHANGING THIS VALUE REQUIRES A RESTART. Defines the auto-start script used to bootstrap the system.</long_desc>
-      <min>0</min>
-      <max>9999999</max>
-      <reboot_required>true</reboot_required>
-    </parameter>
+<!--    <parameter name="SYS_AUTOSTART" default="0" type="INT32">-->
+<!--      <short_desc>Auto-start script index</short_desc>-->
+<!--      <long_desc>CHANGING THIS VALUE REQUIRES A RESTART. Defines the auto-start script used to bootstrap the system.</long_desc>-->
+<!--      <min>0</min>-->
+<!--      <max>9999999</max>-->
+<!--      <reboot_required>true</reboot_required>-->
+<!--    </parameter>-->
     <parameter name="SYS_BL_UPDATE" default="0" type="INT32" boolean="true">
       <short_desc>Bootloader update</short_desc>
       <long_desc>If enabled, update the bootloader on the next boot. WARNING: do not cut the power during an update process, otherwise you will have to recover using some alternative method (e.g. JTAG). Instructions: - Insert an SD card - Enable this parameter - Reboot the board (plug the power or send a reboot command) - Wait until the board comes back up (or at least 2 minutes) - If it does not come back, check the file bootlog.txt on the SD card</long_desc>
