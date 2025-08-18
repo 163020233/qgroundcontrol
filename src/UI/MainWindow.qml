@@ -519,11 +519,11 @@ ApplicationWindow {
                     text:           "<"
                 }
 
-                // QGCLabel {
-                //     id:             toolbarDrawerText
-                //     text:           qsTr("退出") + " " + toolDrawer.toolTitle
-                //     font.pointSize: ScreenTools.largeFontPointSize
-                // }
+                QGCLabel {
+                    id:             toolbarDrawerText
+                    text:           qsTr("退出") + " " + toolDrawer.toolTitle
+                    font.pointSize: ScreenTools.largeFontPointSize
+                }
             }
 
             QGCMouseArea {

@@ -32,7 +32,7 @@ SettingsPage {
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
-        heading:            qsTr("一般")
+        heading:            qsTr("通用")
 
         LabelledFactComboBox {
             label:      qsTr("语言")

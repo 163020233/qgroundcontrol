@@ -89,7 +89,7 @@ ColumnLayout {
                 }
                 var index = baudCombo.find(baud)
                 if (index === -1) {
-                    console.warn(qsTr("波特率名称不在组合框中"), baud)
+                    console.warn(qsTr("波特率不在组合框中"), baud)
                 } else {
                     baudCombo.currentIndex = index
                 }
