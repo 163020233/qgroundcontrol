@@ -626,6 +626,8 @@ void VideoManager::_startReceiver(VideoReceiver *receiver)
         return;
     }
 
+    qCDebug(VideoManagerLog) << "Starting video receiver" << receiver->name() << "with URI:" << receiver->uri();
+
     if (receiver->uri().isEmpty()) {
         qCDebug(VideoManagerLog) << "VideoUri is NULL" << receiver->name();
         return;

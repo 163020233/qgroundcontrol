@@ -48,6 +48,7 @@ GstVideoReceiver::~GstVideoReceiver()
     // qCDebug(GstVideoReceiverLog) << this;
 }
 
+
 void GstVideoReceiver::start(uint32_t timeout)
 {
     if (_needDispatch()) {
@@ -140,51 +141,41 @@ void GstVideoReceiver::start(uint32_t timeout)
                      "message-forward", TRUE,
                      nullptr);
 
+        // --- 关键：创建 _source，只创建一次
         _source = _makeSource(_uri);
         if (!_source) {
             qCCritical(GstVideoReceiverLog) << "_makeSource() failed";
             break;
         }
 
+        // 绑定动态 pad 监听，不手动获取 pad
+        g_signal_connect(_source, "pad-added", G_CALLBACK(_onNewPad), this);
+
+        // 添加所有元素进 pipeline
         gst_bin_add_many(GST_BIN(_pipeline), _source, _tee, decoderQueue, _decoderValve, recorderQueue, _recorderValve, nullptr);
+
+        // 先把 _source 设置为 PLAYING，触发 pad-added 信号
+        GstStateChangeReturn srcRet = gst_element_set_state(_source, GST_STATE_PLAYING);
+        if (srcRet == GST_STATE_CHANGE_FAILURE) {
+            qCCritical(GstVideoReceiverLog) << "Failed to set _source to PLAYING";
+            break;
+        }
 
         pipelineUp = true;
 
-        GstPad *srcPad = nullptr;
-        GstIterator *it = gst_element_iterate_src_pads(_source);
-        GValue vpad = G_VALUE_INIT;
-        switch (gst_iterator_next(it, &vpad)) {
-            case GST_ITERATOR_OK:
-                srcPad = GST_PAD(g_value_get_object(&vpad));
-                (void) gst_object_ref(srcPad);
-                (void) g_value_reset(&vpad);
-                break;
-            case GST_ITERATOR_RESYNC:
-                gst_iterator_resync(it);
-                break;
-            default:
-                break;
-        }
-        g_value_unset(&vpad);
-        gst_iterator_free(it);
-
-        if (srcPad) {
-            _onNewSourcePad(srcPad);
-            gst_clear_object(&srcPad);
-        } else {
-            (void) g_signal_connect(_source, "pad-added", G_CALLBACK(_onNewPad), this);
-        }
-
+        // 链接 tee -> decoderQueue -> decoderValve
         if (!gst_element_link_many(_tee, decoderQueue, _decoderValve, nullptr)) {
             qCCritical(GstVideoReceiverLog) << "Unable to link decoder queue";
             break;
         }
 
+        // 链接 tee -> recorderQueue -> recorderValve
         if (!gst_element_link_many(_tee, recorderQueue, _recorderValve, nullptr)) {
             qCCritical(GstVideoReceiverLog) << "Unable to link recorder queue";
             break;
         }
 
+        // 监听 bus 消息
         GstBus *bus = gst_pipeline_get_bus(GST_PIPELINE(_pipeline));
         if (bus) {
             gst_bus_enable_sync_message_emission(bus);
@@ -193,7 +184,10 @@ void GstVideoReceiver::start(uint32_t timeout)
         }
 
         GST_DEBUG_BIN_TO_DOT_FILE(GST_BIN(_pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "pipeline-initial");
+
+        // 设置整体 pipeline 状态为 PLAYING
         running = (gst_element_set_state(_pipeline, GST_STATE_PLAYING) != GST_STATE_CHANGE_FAILURE);
+
     } while(0);
 
     if (!running) {
@@ -223,6 +217,183 @@ void GstVideoReceiver::start(uint32_t timeout)
         _dispatchSignal([this]() { emit onStartComplete(STATUS_OK); });
     }
 }
+
+
+// void GstVideoReceiver::start(uint32_t timeout)
+// {
+//     if (_needDispatch()) {
+//         _worker->dispatch([this, timeout]() { start(timeout); });
+//         return;
+//     }
+//
+//     if (_pipeline) {
+//         qCDebug(GstVideoReceiverLog) << "Already running!" << _uri;
+//         _dispatchSignal([this]() { emit onStartComplete(STATUS_INVALID_STATE); });
+//         return;
+//     }
+//
+//     if (_uri.isEmpty()) {
+//         qCDebug(GstVideoReceiverLog) << "Failed because URI is not specified";
+//         _dispatchSignal([this]() { emit onStartComplete(STATUS_INVALID_URL); });
+//         return;
+//     }
+//
+//     _timeout = timeout;
+//     _buffer = lowLatency() ? -1 : 0;
+//
+//     qCDebug(GstVideoReceiverLog) << "Starting" << _uri << ", lowLatency" << lowLatency() << ", timeout" << _timeout;
+//
+//     _endOfStream = false;
+//
+//     bool running = false;
+//     bool pipelineUp = false;
+//
+//     GstElement *decoderQueue = nullptr;
+//     GstElement *recorderQueue = nullptr;
+//
+//     do {
+//         _tee = gst_element_factory_make("tee", nullptr);
+//         if (!_tee)  {
+//             qCCritical(GstVideoReceiverLog) << "gst_element_factory_make('tee') failed";
+//             break;
+//         }
+//
+//         GstPad *pad = gst_element_get_static_pad(_tee, "sink");
+//         if (!pad) {
+//             qCCritical(GstVideoReceiverLog) << "gst_element_get_static_pad() failed";
+//             break;
+//         }
+//
+//         _lastSourceFrameTime = 0;
+//
+//         _teeProbeId = gst_pad_add_probe(pad, GST_PAD_PROBE_TYPE_BUFFER, _teeProbe, this, nullptr);
+//         gst_clear_object(&pad);
+//
+//         decoderQueue = gst_element_factory_make("queue", nullptr);
+//         if (!decoderQueue)  {
+//             qCCritical(GstVideoReceiverLog) << "gst_element_factory_make('queue') failed";
+//             break;
+//         }
+//
+//         _decoderValve = gst_element_factory_make("valve", nullptr);
+//         if (!_decoderValve)  {
+//             qCCritical(GstVideoReceiverLog) << "gst_element_factory_make('valve') failed";
+//             break;
+//         }
+//
+//         g_object_set(_decoderValve,
+//                      "drop", TRUE,
+//                      nullptr);
+//
+//         recorderQueue = gst_element_factory_make("queue", nullptr);
+//         if (!recorderQueue)  {
+//             qCCritical(GstVideoReceiverLog) << "gst_element_factory_make('queue') failed";
+//             break;
+//         }
+//
+//         _recorderValve = gst_element_factory_make("valve", nullptr);
+//         if (!_recorderValve) {
+//             qCCritical(GstVideoReceiverLog) << "gst_element_factory_make('valve') failed";
+//             break;
+//         }
+//
+//         g_object_set(_recorderValve,
+//                      "drop", TRUE,
+//                      nullptr);
+//
+//         _pipeline = gst_pipeline_new("receiver");
+//         if (!_pipeline) {
+//             qCCritical(GstVideoReceiverLog) << "gst_pipeline_new() failed";
+//             break;
+//         }
+//
+//         g_object_set(_pipeline,
+//                      "message-forward", TRUE,
+//                      nullptr);
+//
+//         _source = _makeSource(_uri);
+//         if (!_source) {
+//             qCCritical(GstVideoReceiverLog) << "_makeSource() failed";
+//             break;
+//         }
+//
+//         gst_bin_add_many(GST_BIN(_pipeline), _source, _tee, decoderQueue, _decoderValve, recorderQueue, _recorderValve, nullptr);
+//
+//         pipelineUp = true;
+//
+//         GstPad *srcPad = nullptr;
+//         GstIterator *it = gst_element_iterate_src_pads(_source);
+//         GValue vpad = G_VALUE_INIT;
+//         switch (gst_iterator_next(it, &vpad)) {
+//             case GST_ITERATOR_OK:
+//                 srcPad = GST_PAD(g_value_get_object(&vpad));
+//                 (void) gst_object_ref(srcPad);
+//                 (void) g_value_reset(&vpad);
+//                 break;
+//             case GST_ITERATOR_RESYNC:
+//                 gst_iterator_resync(it);
+//                 break;
+//             default:
+//                 break;
+//         }
+//         g_value_unset(&vpad);
+//         gst_iterator_free(it);
+//
+//         if (srcPad) {
+//             _onNewSourcePad(srcPad);
+//             gst_clear_object(&srcPad);
+//         } else {
+//             (void) g_signal_connect(_source, "pad-added", G_CALLBACK(_onNewPad), this);
+//         }
+//
+//         if (!gst_element_link_many(_tee, decoderQueue, _decoderValve, nullptr)) {
+//             qCCritical(GstVideoReceiverLog) << "Unable to link decoder queue";
+//             break;
+//         }
+//
+//         if (!gst_element_link_many(_tee, recorderQueue, _recorderValve, nullptr)) {
+//             qCCritical(GstVideoReceiverLog) << "Unable to link recorder queue";
+//             break;
+//         }
+//
+//         GstBus *bus = gst_pipeline_get_bus(GST_PIPELINE(_pipeline));
+//         if (bus) {
+//             gst_bus_enable_sync_message_emission(bus);
+//             (void) g_signal_connect(bus, "sync-message", G_CALLBACK(_onBusMessage), this);
+//             gst_clear_object(&bus);
+//         }
+//
+//         GST_DEBUG_BIN_TO_DOT_FILE(GST_BIN(_pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "pipeline-initial");
+//         running = (gst_element_set_state(_pipeline, GST_STATE_PLAYING) != GST_STATE_CHANGE_FAILURE);
+//     } while(0);
+//
+//     if (!running) {
+//         qCCritical(GstVideoReceiverLog) << "Failed";
+//
+//         if (_pipeline) {
+//             (void) gst_element_set_state(_pipeline, GST_STATE_NULL);
+//             gst_clear_object(&_pipeline);
+//         }
+//
+//         if (!pipelineUp) {
+//             gst_clear_object(&_recorderValve);
+//             gst_clear_object(&recorderQueue);
+//             gst_clear_object(&_decoderValve);
+//             gst_clear_object(&decoderQueue);
+//             gst_clear_object(&_tee);
+//             gst_clear_object(&_source);
+//         }
+//
+//         // Rate limit restarts on failure. This sleep is OK because we're in the video worker thread.
+//         QThread::sleep(1);
+//         _dispatchSignal([this]() { emit onStartComplete(STATUS_FAIL); });
+//     } else {
+//         GST_DEBUG_BIN_TO_DOT_FILE(GST_BIN(_pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "pipeline-started");
+//         qCDebug(GstVideoReceiverLog) << "Started" << _uri;
+//
+//         _dispatchSignal([this]() { emit onStartComplete(STATUS_OK); });
+//     }
+// }
 
 void GstVideoReceiver::stop()
 {
@@ -388,6 +559,8 @@ void GstVideoReceiver::startDecoding(void *sink)
 
     _dispatchSignal([this]() { emit onStartDecodingComplete(STATUS_OK); });
 }
+
+
 
 void GstVideoReceiver::stopDecoding()
 {
@@ -994,6 +1167,81 @@ bool GstVideoReceiver::_addDecoder(GstElement *src)
     gst_clear_object(&srcPad);
     return true;
 }
+
+// static void onDecoderPadAdded(GstElement *src, GstPad *newPad, gpointer user_data)
+// {
+//     GstVideoReceiver *self = static_cast<GstVideoReceiver*>(user_data);
+//
+//
+//     GstElement* videoSink = self->videoSink();
+//     if (!videoSink) {
+//         return;
+//     }
+//
+//     GstPad *sinkPad = gst_element_get_static_pad(videoSink, "sink");
+//     if (gst_pad_is_linked(sinkPad)) {
+//         gst_object_unref(sinkPad);
+//         return;
+//     }
+//
+//     GstCaps *newPadCaps = gst_pad_get_current_caps(newPad);
+//     GstStructure *newPadStruct = gst_caps_get_structure(newPadCaps, 0);
+//     const gchar *newPadType = gst_structure_get_name(newPadStruct);
+//
+//     if (g_str_has_prefix(newPadType, "video/x-raw")) {
+//         if (gst_pad_link(newPad, sinkPad) != GST_PAD_LINK_OK) {
+//             qCCritical(GstVideoReceiverLog) << "Failed to link decoder pad to video sink";
+//         }
+//     }
+//     gst_caps_unref(newPadCaps);
+//     gst_object_unref(sinkPad);
+// }
+
+
+// //切换是视频改用utovideosink
+// bool GstVideoReceiver::_addVideoSink(GstPad *pad)
+// {
+//     GstCaps *caps = gst_pad_query_caps(pad, nullptr);
+//
+//     if (!_videoSink) {
+//         _videoSink = gst_element_factory_make("autovideosink", "videosink");
+//         if (!_videoSink) {
+//             qCCritical(GstVideoReceiverLog) << "gst_element_factory_make('autovideosink') failed";
+//             gst_clear_caps(&caps);
+//             return false;
+//         }
+//
+//         gst_bin_add(GST_BIN(_pipeline), _videoSink);
+//         gst_element_sync_state_with_parent(_videoSink);
+//
+//         // 连接 decodebin 的 pad-added 信号，用动态链接
+//         g_signal_connect(_decoder, "pad-added", G_CALLBACK(onDecoderPadAdded), this);
+//     }
+//
+//     // 不要直接 gst_element_link(_decoder, _videoSink);
+//
+//     GST_DEBUG_BIN_TO_DOT_FILE(GST_BIN(_pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "pipeline-with-videosink");
+//
+//     // 下面处理视频大小信号部分保持不变
+//     if (_decoderValve) {
+//         GstPad *valveSrcPad = gst_element_get_static_pad(_decoderValve, "src");
+//         const GstCaps *valveSrcPadCaps = gst_pad_query_caps(valveSrcPad, nullptr);
+//         const GstStructure *structure = gst_caps_get_structure(valveSrcPadCaps, 0);
+//         if (structure) {
+//             gint width, height;
+//             (void) gst_structure_get_int(structure, "width", &width);
+//             (void) gst_structure_get_int(structure, "height", &height);
+//             _dispatchSignal([this, width, height]() { emit videoSizeChanged(QSize(width, height)); });
+//         }
+//         gst_object_unref(valveSrcPad);
+//     } else {
+//         _dispatchSignal([this]() { emit videoSizeChanged(QSize()); });
+//     }
+//
+//     gst_clear_caps(&caps);
+//     return true;
+// }
+
 
 bool GstVideoReceiver::_addVideoSink(GstPad *pad)
 {

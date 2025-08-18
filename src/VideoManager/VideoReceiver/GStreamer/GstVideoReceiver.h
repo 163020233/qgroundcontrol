@@ -60,6 +60,9 @@ public:
     explicit GstVideoReceiver(QObject *parent = nullptr);
     ~GstVideoReceiver();
 
+public:
+    GstElement* videoSink() const { return _videoSink; }
+
 public slots:
     void start(uint32_t timeout) override;
     void stop() override;
