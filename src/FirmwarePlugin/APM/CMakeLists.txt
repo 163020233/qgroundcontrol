@@ -50,6 +50,7 @@
 #target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE QGC_NO_ARDUPILOT_DIALECT)
 #endif()
 
+
 if(NOT QGC_DISABLE_APM_PLUGIN_FACTORY)
 target_sources(${CMAKE_PROJECT_NAME}
     PRIVATE
@@ -80,9 +81,7 @@ endif()
 # 不定义自己的 target，只是提供头文件路径
 set(APM_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
 
-
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-
 
 #让 APMFirmwarePlugin 成为独立目标
 #add_library(APMFirmwarePlugin STATIC
