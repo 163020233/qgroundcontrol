@@ -52,9 +52,9 @@ SetupPage {
 
             PowerComponentController {
                 id:                     controller
-                onOldFirmware:          mainWindow.showMessageDialog(qsTr("ESC Calibration"),           qsTr("%1 cannot perform ESC Calibration with this version of firmware. You will need to upgrade to a newer firmware.").arg(QGroundControl.appName))
-                onNewerFirmware:        mainWindow.showMessageDialog(qsTr("ESC Calibration"),           qsTr("%1 cannot perform ESC Calibration with this version of firmware. You will need to upgrade %1.").arg(QGroundControl.appName))
-                onDisconnectBattery:    mainWindow.showMessageDialog(qsTr("ESC Calibration failed"),    qsTr("You must disconnect the battery prior to performing ESC Calibration. Disconnect your battery and try again."))
+                onOldFirmware:          mainWindow.showMessageDialog(qsTr("电池校准"),           qsTr("%1 不支持电池校准，您需要升级到最新版本的 %1 才能进行电池校准.").arg(QGroundControl.appName))
+                onNewerFirmware:        mainWindow.showMessageDialog(qsTr("电池校准"),           qsTr("%1 不支持电池校准，您需要升级到最新版本的 %1 才能进行电池校准.").arg(QGroundControl.appName))
+                onDisconnectBattery:    mainWindow.showMessageDialog(qsTr("电池校准失败"),    qsTr("执行 ESC 校准前必须断开电池连接。请断开电池连接并重试。"))
                 onConnectBattery:       escCalibrationDlgComponent.createObject(mainWindow).open()
             }
 
@@ -103,7 +103,7 @@ SetupPage {
 
                 QGCGroupBox {
                     Layout.fillWidth:   true
-                    title:              qsTr("ESC PWM Minimum and Maximum Calibration")
+                    title:              qsTr("电池校准")
 
                     ColumnLayout {
                         anchors.left:   parent.left
@@ -113,16 +113,16 @@ SetupPage {
                         QGCLabel {
                             color:              qgcPal.warningText
                             wrapMode:           Text.WordWrap
-                            text:               qsTr("WARNING: Propellers must be removed from vehicle prior to performing ESC calibration.")
+                            text:               qsTr("警告：在执行电池校准前，必须先从飞行器上拆下所有螺旋桨。")
                             Layout.fillWidth:   true
                         }
 
                         QGCLabel {
-                            text: qsTr("You must use USB connection for this operation.")
+                            text: qsTr("执行电池校准前，必须使用 USB 连接。")
                         }
 
                         QGCButton {
-                            text:       qsTr("Calibrate")
+                            text:       qsTr("校准")
                             width:      ScreenTools.defaultFontPixelWidth * 20
                             onClicked:  controller.calibrateEsc()
                         }
@@ -131,13 +131,13 @@ SetupPage {
 
                 QGCCheckBox {
                     id:         showUAVCAN
-                    text:       qsTr("Show UAVCAN Settings")
+                    text:       qsTr("显示 UAVCAN 配置")
                     checked:    _uavcanEnable ? _uavcanEnable.rawValue !== 0 : false
                 }
 
                 QGCGroupBox {
                     Layout.fillWidth:       true
-                    title:                  qsTr("UAVCAN Bus Configuration")
+                    title:                  qsTr("UAVCAN 总线配置")
                     visible:                showUAVCAN.checked
 
                     Row {
@@ -153,14 +153,14 @@ SetupPage {
 
                         QGCLabel {
                             anchors.verticalCenter: parent.verticalCenter
-                            text:                   qsTr("Change required restart")
+                            text:                   qsTr("需要重启")
                         }
                     }
                 }
 
                 QGCGroupBox {
                     Layout.fillWidth:       true
-                    title:                  qsTr("UAVCAN Motor Index and Direction Assignment")
+                    title:                  qsTr("UAVCAN 电机索引和方向赋值")
                     visible:                showUAVCAN.checked
 
                     ColumnLayout {
@@ -171,30 +171,30 @@ SetupPage {
                         QGCLabel {
                             wrapMode:           Text.WordWrap
                             color:              qgcPal.warningText
-                            text:               qsTr("WARNING: Propellers must be removed from vehicle prior to performing UAVCAN ESC configuration.")
+                            text:               qsTr("警告：在执行 UAVCAN 配置前，必须先从飞行器上拆下所有螺旋桨。")
                             Layout.fillWidth:   true
                         }
 
                         QGCLabel {
                             wrapMode:           Text.WordWrap
-                            text:               qsTr("ESC parameters will only be accessible in the editor after assignment.")
+                            text:               qsTr("ESC 参数在赋值后才会在编辑器中可见。")
                             Layout.fillWidth:   true
                         }
 
                         QGCLabel {
                             wrapMode:           Text.WordWrap
-                            text:               qsTr("Start the process, then turn each motor into its turn direction, in the order of their motor indices.")
+                            text:               qsTr("开始赋值过程后，按照电机索引的顺序，将每个电机旋转到其正确的方向。")
                             Layout.fillWidth:   true
                         }
 
                         QGCButton {
-                            text:       qsTr("Start Assignment")
+                            text:       qsTr("开始赋值")
                             width:      ScreenTools.defaultFontPixelWidth * 20
                             onClicked:  controller.startBusConfigureActuators()
                         }
 
                         QGCButton {
-                            text:       qsTr("Stop Assignment")
+                            text:       qsTr("停止赋值")
                             width:      ScreenTools.defaultFontPixelWidth * 20
                             onClicked:  controller.stopBusConfigureActuators()
                         }
@@ -208,7 +208,7 @@ SetupPage {
 
                 QGCGroupBox {
                     Layout.fillWidth:   true
-                    title:              qsTr("Battery ") + (showBatteryIndex ? batteryIndex : "")
+                    title:              qsTr("电池 ") + (showBatteryIndex ? batteryIndex : "")
 
                     property var _controller:   controller
                     property int _batteryIndex: batteryIndex
@@ -252,7 +252,7 @@ SetupPage {
                             spacing: ScreenTools.defaultFontPixelWidth
                             visible: battSource.rawValue == -1
 
-                            QGCLabel { text:  qsTr("Source") }
+                            QGCLabel { text:  qsTr("电池源") }
                             FactComboBox {
                                 width:          _textEditWidth
                                 fact:           battSource
@@ -267,7 +267,7 @@ SetupPage {
                             columnSpacing:  ScreenTools.defaultFontPixelWidth
                             visible:        battSource.rawValue != -1
 
-                            QGCLabel { text:  qsTr("Source") }
+                            QGCLabel { text:  qsTr("电池源") }
                             FactComboBox {
                                 width:          _textEditWidth
                                 fact:           battSource
@@ -296,7 +296,7 @@ SetupPage {
                             }
 
                             QGCLabel { 
-                                text:  qsTr("Number of Cells (in Series)") 
+                                text:  qsTr("电池单元格数量") 
                                 visible: battNumCellsAvailable
                             }
                             FactTextField {
@@ -306,7 +306,7 @@ SetupPage {
                                 visible:    battNumCellsAvailable
                             }
                             QGCLabel { 
-                                text:       qsTr("Battery Max:")
+                                text:       qsTr("电池最大容量:")
                                 visible:    battImage.visible 
                             }
                             QGCLabel { 
@@ -321,7 +321,7 @@ SetupPage {
                             }
 
                             QGCLabel { 
-                                text:       qsTr("Empty Voltage (per cell)") 
+                                text:       qsTr("空电压（每节电池）") 
                                 visible:    battLowVoltAvailable
                             }
                             FactTextField {
@@ -331,7 +331,7 @@ SetupPage {
                                 visible:    battLowVoltAvailable
                             }
                             QGCLabel { 
-                                text:       qsTr("Battery Min:") 
+                                text:       qsTr("电池最小电压:") 
                                 visible:    battImage.visible
                             }
                             QGCLabel { 
@@ -346,7 +346,7 @@ SetupPage {
                             }
 
                             QGCLabel { 
-                                text:       qsTr("Full Voltage (per cell)") 
+                                text:       qsTr("电池最大电压（每节电池）") 
                                 visible:    battHighVoltAvailable
                             }
                             FactTextField {
@@ -363,7 +363,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:       qsTr("Voltage divider")
+                                text:       qsTr("分压器")
                                 visible:    battVoltageDividerAvailable
                             }
                             FactTextField {
@@ -371,7 +371,7 @@ SetupPage {
                                 visible:    battVoltageDividerAvailable
                             }
                             QGCButton {
-                                text:       qsTr("Calculate")
+                                text:       qsTr("计算")
                                 visible:    battVoltageDividerAvailable
                                 onClicked:  calcVoltageDividerDlgComponent.createObject(mainWindow, { batteryIndex: _batteryIndex }).open()
                             }
@@ -382,12 +382,12 @@ SetupPage {
                                 Layout.fillWidth:   true
                                 font.pointSize:     ScreenTools.smallFontPointSize
                                 wrapMode:           Text.WordWrap
-                                text:               qsTr("If the battery voltage reported by the vehicle is largely different than the voltage read externally using a voltmeter you can adjust the voltage multiplier value to correct this. ") +
-                                                    qsTr("Click the Calculate button for help with calculating a new value.")
+                                text:               qsTr("如果设备报告的电池电压与使用电压表从外部读取的电压有很大差异，您可以调整电压倍增器的值来纠正这个问题。") +
+                                                    qsTr("点击计算按钮获取计算新值的帮助。")
                                 visible:            battVoltageDividerAvailable
                             }
                             QGCLabel {
-                                text:       qsTr("Amps per volt")
+                                text:       qsTr("电流倍增器")
                                 visible:    battAmpsPerVoltAvailable
                             }
                             FactTextField {
@@ -395,7 +395,7 @@ SetupPage {
                                 visible:    battAmpsPerVoltAvailable
                             }
                             QGCButton {
-                                text:       qsTr("Calculate")
+                                text:       qsTr("计算")
                                 visible:    battAmpsPerVoltAvailable
                                 onClicked:  calcAmpsPerVoltDlgComponent.createObject(mainWindow, { batteryIndex: _batteryIndex }).open()
                             }
@@ -406,20 +406,20 @@ SetupPage {
                                 Layout.fillWidth:   true
                                 font.pointSize:     ScreenTools.smallFontPointSize
                                 wrapMode:           Text.WordWrap
-                                text:               qsTr("If the current draw reported by the vehicle is largely different than the current read externally using a current meter you can adjust the amps per volt value to correct this. ") +
-                                                    qsTr("Click the Calculate button for help with calculating a new value.")
+                                text:               qsTr("如果设备报告的电池电流与使用电流表从外部读取的电流有很大差异，您可以调整电流倍增器的值来纠正这个问题。") +
+                                                    qsTr("点击计算按钮获取计算新值的帮助。")
                                 visible:            battAmpsPerVoltAvailable
                             }
 
                             QGCCheckBox {
                                 id:                 showAdvanced
                                 Layout.columnSpan:  batteryGrid.columns
-                                text:               qsTr("Show Advanced Settings")
+                                text:               qsTr("显示高级设置")
                                 visible:            battVoltLoadDropAvailable
                             }
 
                             QGCLabel {
-                                text:       qsTr("Voltage Drop on Full Load (per cell)")
+                                text:       qsTr("电压下拉值（每节电池）")
                                 visible:    showAdvanced.checked
                             }
                             FactTextField {
@@ -435,14 +435,13 @@ SetupPage {
                                 Layout.fillWidth:   true
                                 wrapMode:           Text.WordWrap
                                 font.pointSize:     ScreenTools.smallFontPointSize
-                                text:               qsTr("Batteries show less voltage at high throttle. Enter the difference in Volts between idle throttle and full ") +
-                                                    qsTr("throttle, divided by the number of battery cells. Leave at the default if unsure. ") +
-                                                    _highlightPrefix + qsTr("If this value is set too high, the battery might be deep discharged and damaged.") + _highlightSuffix
+                                text:               qsTr("电池在高油门下显示更少的电压。输入怠速油门和满油门之间的电压差，除以电池单元格的数量。如果不确定，请保持默认值。 ") +
+                                                    _highlightPrefix + qsTr("如果此值设置过高，电池可能会被深度放电并损坏。") + _highlightSuffix
                                 visible:            showAdvanced.checked
                             }
 
                             QGCLabel {
-                                text:       qsTr("Compensated Minimum Voltage:")
+                                text:       qsTr("补偿后的最小电压:")
                                 visible:    showAdvanced.checked
                             }
                             QGCLabel {
@@ -459,7 +458,7 @@ SetupPage {
                 id: calcVoltageDividerDlgComponent
 
                 QGCPopupDialog {
-                    title:      qsTr("Calculate Voltage Divider")
+                    title:      qsTr("计算电压倍增器")
                     buttons:    Dialog.Close
 
                     property alias batteryIndex: batParams.batteryIndex
@@ -478,20 +477,20 @@ SetupPage {
                         QGCLabel {
                             Layout.preferredWidth:  gridLayout.width
                             wrapMode:               Text.WordWrap
-                            text:                   qsTr("Measure battery voltage using an external voltmeter and enter the value below. Click Calculate to set the new voltage multiplier.")
+                            text:                   qsTr("使用外部电压表测量电池电压，并在下面输入值。点击计算设置新的电压倍增器。")
                         }
 
                         GridLayout {
                             id:         gridLayout
                             columns:    2
 
-                            QGCLabel { text: qsTr("Measured voltage:") }
+                            QGCLabel { text: qsTr("测量电压:") }
                             QGCTextField { id: measuredVoltage; numericValuesOnly: true }
 
-                            QGCLabel { text: qsTr("Vehicle voltage:") }
+                            QGCLabel { text: qsTr("电池电压:") }
                             QGCLabel { text: _batteryFactGroup.voltage.valueString }
 
-                            QGCLabel { text: qsTr("Voltage divider:") }
+                            QGCLabel { text: qsTr("电压倍增器:") }
                             FactLabel { fact: batParams.battVoltageDivider }
                         }
 
@@ -536,25 +535,25 @@ SetupPage {
                         QGCLabel {
                             Layout.preferredWidth:  gridLayout.width
                             wrapMode:               Text.WordWrap
-                            text:                   qsTr("Measure current draw using an external current meter and enter the value below. Click Calculate to set the new amps per volt value.")
+                            text:                   qsTr("使用外部电流表测量电池电流，并在下面输入值。点击计算设置新的电流倍增器。")
                         }
 
                         GridLayout {
                             id:         gridLayout
                             columns:    2
 
-                            QGCLabel { text: qsTr("Measured current:") }
+                            QGCLabel { text: qsTr("测量电流:") }
                             QGCTextField { id: measuredCurrent; numericValuesOnly: true }
 
-                            QGCLabel { text: qsTr("Vehicle current:") }
+                            QGCLabel { text: qsTr("电池电流:") }
                             QGCLabel { text: _batteryFactGroup.current.valueString }
 
-                            QGCLabel { text: qsTr("Amps per volt:") }
+                            QGCLabel { text: qsTr("电流倍增器:") }
                             FactLabel { fact: batParams.battAmpsPerVolt }
                         }
 
                         QGCButton {
-                            text: qsTr("Calculate")
+                            text: qsTr("计算")
 
                             onClicked:  {
                                 var measuredCurrentValue = parseFloat(measuredCurrent.text)
@@ -576,23 +575,23 @@ SetupPage {
 
                 QGCPopupDialog {
                     id:                     escCalibrationDlg
-                    title:                  qsTr("ESC Calibration")
+                    title:                  qsTr("ESC 校准")
                     buttons:                Dialog.Ok
                     acceptButtonEnabled:    false
 
                     Connections {
                         target: controller
 
-                        onBatteryConnected:     textLabel.text = qsTr("Performing calibration. This will take a few seconds..")
-                        onCalibrationFailed:    { escCalibrationDlg.acceptButtonEnabled = true; textLabel.text = _highlightPrefix + qsTr("ESC Calibration failed. ") + _highlightSuffix + errorMessage }
-                        onCalibrationSuccess:   { escCalibrationDlg.acceptButtonEnabled = true; textLabel.text = qsTr("Calibration complete. You can disconnect your battery now if you like.") }
+                        onBatteryConnected:     textLabel.text = qsTr("正在校准ESC。这将需要几秒钟。")
+                        onCalibrationFailed:    { escCalibrationDlg.acceptButtonEnabled = true; textLabel.text = _highlightPrefix + qsTr("ESC 校准失败。 ") + _highlightSuffix + errorMessage }
+                        onCalibrationSuccess:   { escCalibrationDlg.acceptButtonEnabled = true; textLabel.text = qsTr("校准完成。您可以现在断开电池。") }
                     }
 
                     ColumnLayout {
                         QGCLabel {
                             id:                     textLabel
                             wrapMode:               Text.WordWrap
-                            text:                   _highlightPrefix + qsTr("WARNING: Props must be removed from vehicle prior to performing ESC calibration.") + _highlightSuffix + qsTr(" Connect the battery now and calibration will begin.")
+                            text:                   _highlightPrefix + qsTr("警告: 校准前请先拆下 props。") + _highlightSuffix + qsTr(" 连接电池后校准将开始。")
                             Layout.fillWidth:       true
                             Layout.maximumWidth:    mainWindow.width / 2
                         }

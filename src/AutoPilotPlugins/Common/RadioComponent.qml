@@ -49,15 +49,15 @@ SetupPage {
                 nextButton:     nextButton
                 skipButton:     skipButton
                 onChannelCountChanged:              updateChannelCount()
-                onFunctionMappingChangedAPMReboot:  mainWindow.showMessageDialog(qsTr("Reboot required"), qsTr("Your stick mappings have changed, you must reboot the vehicle for correct operation."))
-                onThrottleReversedCalFailure:       mainWindow.showMessageDialog(qsTr("Throttle channel reversed"), qsTr("Calibration failed. The throttle channel on your transmitter is reversed. You must correct this on your transmitter in order to complete calibration."))
+                onFunctionMappingChangedAPMReboot:  mainWindow.showMessageDialog(qsTr("重启 required"), qsTr("您的摇杆映射已更改，您必须重新启动车辆才能正确操作。"))
+                onThrottleReversedCalFailure:       mainWindow.showMessageDialog(qsTr("油门通道反转"), qsTr("校准失败。您的 transmitter 上的油门通道已反转。您必须在 transmitter 上更正此设置，才能完成校准。"))
             }
 
             Component {
                 id: spektrumBindDialogComponent
 
                 QGCPopupDialog {
-                    title:      qsTr("Spektrum Bind")
+                    title:      qsTr("绑定 Spektrum 接收机")
                     buttons:    Dialog.Ok | Dialog.Cancel
 
                     onAccepted: { controller.spektrumBindMode(radioGroup.checkedButton.bindMode) }
@@ -69,29 +69,29 @@ SetupPage {
 
                         QGCLabel {
                             wrapMode:   Text.WordWrap
-                            text:       qsTr("Click Ok to place your Spektrum receiver in the bind mode.")
+                            text:       qsTr("点击 OK 将您的 Spektrum 接收机放入绑定模式。")
                         }
 
                         QGCLabel {
                             wrapMode:   Text.WordWrap
-                            text:       qsTr("Select the specific receiver type below:")
+                            text:       qsTr("选择下面的具体接收机类型：")
                         }
 
                         QGCRadioButton {
-                            text:               qsTr("DSM2 Mode")
+                            text:               qsTr("DSM2 模式")
                             ButtonGroup.group:  radioGroup
                             property int bindMode: RadioComponentController.DSM2
                         }
 
                         QGCRadioButton {
-                            text:               qsTr("DSMX (7 channels or less)")
+                            text:               qsTr("DSMX (7 个通道或更少)")
                             ButtonGroup.group:  radioGroup
                             property int bindMode: RadioComponentController.DSMX7
                         }
 
                         QGCRadioButton {
                             checked:            true
-                            text:               qsTr("DSMX (8 channels or more)")
+                            text:               qsTr("DSMX (8 个通道或更多)")
                             ButtonGroup.group:  radioGroup
                             property int bindMode: RadioComponentController.DSMX8
                         }
@@ -147,7 +147,7 @@ SetupPage {
                         anchors.fill:           parent
                         horizontalAlignment:    Text.AlignHCenter
                         verticalAlignment:      Text.AlignVCenter
-                        text:                   qsTr("Not Mapped")
+                        text:                   qsTr("未映射")
                         visible:                !mapped
                     }
 
@@ -173,7 +173,7 @@ SetupPage {
                 Column {
                     width:      parent.width
                     spacing:    5
-                    QGCLabel { text: qsTr("Attitude Controls") }
+                    QGCLabel { text: qsTr("姿态控制") }
 
                     Item {
                         width:  parent.width
@@ -181,7 +181,7 @@ SetupPage {
                         QGCLabel {
                             id:     rollLabel
                             width:  globals.defaultTextWidth * 10
-                            text:   qsTr("Roll")
+                            text:   qsTr("横滚")
                         }
 
                         Loader {
@@ -210,7 +210,7 @@ SetupPage {
                         QGCLabel {
                             id:     pitchLabel
                             width:  globals.defaultTextWidth * 10
-                            text:   qsTr("Pitch")
+                            text:   qsTr("俯仰")
                         }
 
                         Loader {
@@ -239,7 +239,7 @@ SetupPage {
                         QGCLabel {
                             id:     yawLabel
                             width:  globals.defaultTextWidth * 10
-                            text:   qsTr("Yaw")
+                            text:   qsTr("偏航")
                         }
 
                         Loader {
@@ -268,7 +268,7 @@ SetupPage {
                         QGCLabel {
                             id:     throttleLabel
                             width:  globals.defaultTextWidth * 10
-                            text:   qsTr("Throttle")
+                            text:   qsTr("油门")
                         }
 
                         Loader {
@@ -296,33 +296,33 @@ SetupPage {
 
                     QGCButton {
                         id:         skipButton
-                        text:       qsTr("Skip")
+                        text:       qsTr("跳过")
                         onClicked:  controller.skipButtonClicked()
                     }
 
                     QGCButton {
                         id:         cancelButton
-                        text:       qsTr("Cancel")
+                        text:       qsTr("取消")
                         onClicked:  controller.cancelButtonClicked()
                     }
 
                     QGCButton {
                         id:         nextButton
                         primary:    true
-                        text:       qsTr("Calibrate")
+                        text:       qsTr("校准")
 
                         onClicked: {
-                            if (text === qsTr("Calibrate")) {
+                            if (text === qsTr("校准")) {
                                 if (controller.channelCount < controller.minChannelCount) {
-                                    mainWindow.showMessageDialog(qsTr("Radio Not Ready"),
-                                                                 controller.channelCount == 0 ? qsTr("Please turn on transmitter.") :
+                                    mainWindow.showMessageDialog(qsTr("无线电未准备好"),
+                                                                 controller.channelCount == 0 ? qsTr("请先打开 transmitter.") :
                                                                                                 (controller.channelCount < controller.minChannelCount ?
-                                                                                                     qsTr("%1 channels or more are needed to fly.").arg(controller.minChannelCount) :
-                                                                                                     qsTr("Ready to calibrate.")))
+                                                                                                     qsTr("%1 个通道或更多是飞行所需.").arg(controller.minChannelCount) :
+                                                                                                     qsTr("准备校准.")))
                                 } else {
-                                    mainWindow.showMessageDialog(qsTr("Zero Trims"),
-                                                                 qsTr("Before calibrating you should zero all your trims and subtrims. Click Ok to start Calibration.\n\n%1").arg(
-                                                                     (QGroundControl.multiVehicleManager.activeVehicle.px4Firmware ? "" : qsTr("Please ensure all motor power is disconnected AND all props are removed from the vehicle."))),
+                                    mainWindow.showMessageDialog(qsTr("零偏"),
+                                                                 qsTr("校准前请先将所有偏置调整到零. 点击确定开始校准.\n\n%1").arg(
+                                                                     (QGroundControl.multiVehicleManager.activeVehicle.px4Firmware ? "" : qsTr("请确保所有电机功率已断开并从车辆中移除所有 props."))),
                                                                  Dialog.Ok,
                                                                  function() { controller.nextButtonClicked() })
                                 }
@@ -347,7 +347,7 @@ SetupPage {
                     border.width:   1
                 }
 
-                QGCLabel { text: qsTr("Additional Radio setup:") }
+                QGCLabel { text: qsTr("额外无线电设置:") }
 
                 ColumnLayout {
                     id:                 switchSettingsGrid
@@ -372,22 +372,22 @@ SetupPage {
                 RowLayout {
                     QGCButton {
                         id:         bindButton
-                        text:       qsTr("Spektrum Bind")
+                        text:       qsTr("绑定")
                         onClicked:  spektrumBindDialogComponent.createObject(mainWindow).open()
                     }
 
                     QGCButton {
-                        text:       qsTr("CRSF Bind")
-                        onClicked:  mainWindow.showMessageDialog(qsTr("CRSF Bind"),
-                                                                 qsTr("Click Ok to place your CRSF receiver in the bind mode."),
+                        text:       qsTr("CRSF 绑定")
+                        onClicked:  mainWindow.showMessageDialog(qsTr("CRSF 绑定"),
+                                                                 qsTr("将 CRSF 接收器置于绑定模式. 点击确定."),
                                                                  Dialog.Ok | Dialog.Cancel,
                                                                  function() { controller.crsfBindMode() })
                     }
 
                     QGCButton {
-                        text:       qsTr("Copy Trims")
-                        onClicked:  mainWindow.showMessageDialog(qsTr("Copy Trims"),
-                                                                 qsTr("Center your sticks and move throttle all the way down, then press Ok to copy trims. After pressing Ok, reset the trims on your radio back to zero."),
+                        text:       qsTr("复制偏置")
+                        onClicked:  mainWindow.showMessageDialog(qsTr("复制偏置"),
+                                                                 qsTr("将摇杆居中并将油门拉到底, 然后点击确定复制偏置. 复制完成后, 请将无线电偏置调整回零."),
                                                                  Dialog.Ok | Dialog.Cancel,
                                                                  function() { controller.copyTrims() })
                     }
@@ -412,13 +412,13 @@ SetupPage {
                     spacing: ScreenTools.defaultFontPixelWidth
 
                     QGCRadioButton {
-                        text:       qsTr("Mode 1")
+                        text:       qsTr("模式 1")
                         checked:    controller.transmitterMode == 1
                         onClicked:  controller.transmitterMode = 1
                     }
 
                     QGCRadioButton {
-                        text:       qsTr("Mode 2")
+                        text:       qsTr("模式 2")
                         checked:    controller.transmitterMode == 2
                         onClicked:  controller.transmitterMode = 2
                     }

@@ -22,7 +22,7 @@ import QGroundControl.ScreenTools
 
 QGCPopupDialog {
     id:         root
-    title:      fact.componentId > 0 ? fact.name : qsTr("Value Editor")
+    title:      fact.componentId > 0 ? fact.name : qsTr("参数编辑器")
 
     buttons:    Dialog.Save | (validate ? 0 : Dialog.Cancel)
 
@@ -140,7 +140,7 @@ QGCPopupDialog {
 
             QGCButton {
                 visible:    _allowDefaultReset
-                text:       qsTr("Reset To Default")
+                text:       qsTr("重置为默认值")
 
                 onClicked: {
                     fact.value = fact.defaultValue
@@ -190,48 +190,48 @@ QGCPopupDialog {
 
             QGCLabel {
                 id:         minValueDisplay
-                text:       qsTr("Min: ") + fact.minString
+                text:       qsTr("最小值: ") + fact.minString
                 visible:    !fact.minIsDefaultForType
             }
 
             QGCLabel {
-                text:       qsTr("Max: ") + fact.maxString
+                text:       qsTr("最大值: ") + fact.maxString
                 visible:    !fact.maxIsDefaultForType
             }
 
             QGCLabel {
-                text:       qsTr("Default: ") + fact.defaultValueString
+                text:       qsTr("默认值: ") + fact.defaultValueString
                 visible:    _allowDefaultReset
             }
         }
 
         QGCLabel {
             visible:    fact.vehicleRebootRequired
-            text:       qsTr("Vehicle reboot required after change")
+            text:       qsTr("修改后需要重启飞行器")
         }
 
         QGCLabel {
             visible:    fact.qgcRebootRequired
-            text:       qsTr("Application restart required after change")
+            text:       qsTr("修改后需要重启QGC")
         }
 
         QGCLabel {
             Layout.fillWidth:   true
             wrapMode:   Text.WordWrap
-            text:       qsTr("Warning: Modifying values while vehicle is in flight can lead to vehicle instability and possible vehicle loss. ") +
-                        qsTr("Make sure you know what you are doing and double-check your values before Save!")
+            text:       qsTr("警告: 修改参数值时请确保飞行器未启动, 否则可能导致飞行器不稳定甚至丢失. ") +
+                        qsTr("请确保您知道自己在做什么, 并在保存前进行再次确认.")
             visible:    fact.componentId != -1
         }
 
         QGCCheckBox {
             id:         forceSave
             visible:    false
-            text:       qsTr("Force save (dangerous!)")
+            text:       qsTr("强制保存 (危险!)")
         }
 
         QGCCheckBox {
             id:         _advanced
-            text:       qsTr("Advanced settings")
+            text:       qsTr("高级设置")
             visible:    showRCToParam || factCombo.visible || bitmaskColumn.visible
         }
 
@@ -239,7 +239,7 @@ QGCPopupDialog {
         QGCCheckBox {
             id:         manualEntry
             visible:    _advanced.checked && (factCombo.visible || bitmaskColumn.visible)
-            text:       qsTr("Manual Entry")
+            text:       qsTr("手动输入")
 
             onClicked: {
                 valueField.text = fact.valueString
@@ -247,7 +247,7 @@ QGCPopupDialog {
         }
 
         QGCButton {
-            text:       qsTr("Set RC to Param")
+            text:       qsTr("设置RC参数")
             visible:    _advanced.checked && !validate && showRCToParam
             onClicked:  rcToParamDialog.createObject(mainWindow).open()
         }

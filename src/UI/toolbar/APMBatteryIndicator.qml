@@ -27,22 +27,22 @@ BatteryIndicator {
             FactPanelController { id: controller }
 
             property Fact batt1Monitor: controller.getParameterFact(-1, "BATT_MONITOR")
-            property string disabledString: qsTr("- disabled")
+            property string disabledString: qsTr("- 已禁用")
 
             SettingsGroupLayout {
                 Layout.fillWidth:   true
-                heading:            qsTr("Low Voltage Failsafe")
+                heading:            qsTr("低电压保护")
                 visible:            batt1Monitor.rawValue !== 0
 
                 LabelledFactComboBox {
-                    label:              qsTr("Vehicle Action")
+                    label:              qsTr("设备操作")
                     fact:               controller.getParameterFact(-1, "BATT_FS_LOW_ACT")
                     indexModel:         false
                 }
 
                 FactSlider {
                     Layout.fillWidth:   true
-                    label:              qsTr("Voltage Trigger") + (value == 0 ? disabledString : "")
+                    label:              qsTr("电压触发") + (value == 0 ? disabledString : "")
                     fact:               controller.getParameterFact(-1, "BATT_LOW_VOLT")
                     from:               0
                     to:                 100
@@ -51,7 +51,7 @@ BatteryIndicator {
 
                 FactSlider {
                     Layout.fillWidth:   true
-                    label:              qsTr("mAh Trigger") + (value == 0 ? disabledString : "")
+                    label:              qsTr("mAh 触发") + (value == 0 ? disabledString : "")
                     fact:               controller.getParameterFact(-1, "BATT_LOW_MAH")
                     from:               0
                     to:                 30000
@@ -61,18 +61,18 @@ BatteryIndicator {
 
             SettingsGroupLayout {
                 Layout.fillWidth:   true
-                heading:            qsTr("Critical Voltage Failsafe")
+                heading:            qsTr("低电压保护")
                 visible:            batt1Monitor.rawValue !== 0
 
                 LabelledFactComboBox {
-                    label:              qsTr("Vehicle Action")
+                    label:              qsTr("设备操作")
                     fact:               controller.getParameterFact(-1, "BATT_FS_CRT_ACT")
                     indexModel:         false
                 }
 
                 FactSlider {
                     Layout.fillWidth:   true
-                    label:              qsTr("Voltage Trigger") + (value == 0 ? disabledString : "")
+                    label:              qsTr("电压触发") + (value == 0 ? disabledString : "")
                     fact:               controller.getParameterFact(-1, "BATT_CRT_VOLT")
                     from:               0
                     to:                 100
@@ -81,7 +81,7 @@ BatteryIndicator {
 
                 FactSlider {
                     Layout.fillWidth:   true
-                    label:              qsTr("mAh Trigger") + (value == 0 ? disabledString : "")
+                    label:              qsTr("mAh 触发") + (value == 0 ? disabledString : "")
                     fact:               controller.getParameterFact(-1, "BATT_CRT_MAH")
                     from:               0
                     to:                 30000

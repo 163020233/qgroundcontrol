@@ -39,27 +39,27 @@ Item {
         anchors.fill:       parent
 
         VehicleSummaryRow {
-            labelText: qsTr("Arming Checks:")
-            valueText:  _armingCheck.value & 1 ? qsTr("Enabled") : qsTr("Some disabled")
+            labelText: qsTr("设备检查")
+            valueText:  _armingCheck.value & 1 ? qsTr("已启用") : qsTr("部分禁用")
         }
         VehicleSummaryRow {
-            labelText: qsTr("GCS failsafe:")
+            labelText: qsTr("GCS故障保护:")
             valueText: _failsafeGCSEnable.enumOrValueString
         }
         VehicleSummaryRow {
-            labelText: qsTr("Leak failsafe:")
+            labelText: qsTr("泄漏故障保护:")
             valueText:  _failsafeLeakEnable.enumOrValueString
         }
         VehicleSummaryRow {
             visible: !_firmware34
-            labelText: qsTr("Battery failsafe:")
+            labelText: qsTr("电池故障保护:")
             valueText: {
                 if(_firmware34) {
-                    return "Firmware not supported"
+                    return "固件不受支持"
                 }
 
                 if (!_failsafeBatteryEnable) {
-                    return "Disabled"
+                    return "已禁用"
                 }
 
                 return _failsafeBatteryEnable.enumOrValueString
@@ -67,20 +67,20 @@ Item {
         }
         VehicleSummaryRow {
             visible: !_firmware34
-            labelText: qsTr("EKF failsafe:")
+            labelText: qsTr("EKF故障保护:")
             valueText: _firmware34 ? "" : _failsafeEKFEnable.enumOrValueString
         }
         VehicleSummaryRow {
             visible: !_firmware34
-            labelText: qsTr("Pilot Input failsafe:")
+            labelText: qsTr("飞行输入故障保护:")
             valueText: _firmware34 ? "" : _failsafePilotEnable.enumOrValueString
         }
         VehicleSummaryRow {
-            labelText: qsTr("Int. Temperature failsafe:")
+            labelText: qsTr("内部温度故障保护:")
             valueText:  _failsafeTemperatureEnable.enumOrValueString
         }
         VehicleSummaryRow {
-            labelText: qsTr("Int. Pressure failsafe:")
+            labelText: qsTr("内部压力故障保护:")
             valueText:  _failsafePressureEnable.enumOrValueString
         }
     }

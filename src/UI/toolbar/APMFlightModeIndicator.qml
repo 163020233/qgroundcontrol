@@ -30,7 +30,7 @@ FlightModeIndicator {
 
         SettingsGroupLayout {
             Layout.fillWidth:   true
-            heading:            qsTr("Return to Launch")
+            heading:            qsTr("返航")
 
             property Fact rtlAltFact: controller.getParameterFact(-1, "RTL_ALT")
 
@@ -43,13 +43,13 @@ FlightModeIndicator {
                 QGCLabel {
                     id:                 label  
                     Layout.fillWidth:   true
-                    text:               qsTr("Return At")
+                    text:               qsTr("返航高度")
                 }
 
                 QGCComboBox {
                     id:             returnAtCombo
                     sizeToContents: true
-                    model:          [ qsTr("Current alttiude"), qsTr("Specified altitude") ]
+                    model:          [ qsTr("当前高度"), qsTr("指定高度") ]
 
                     function setCurrentIndex() {
                         if (rtlAltFact.value === 0) {

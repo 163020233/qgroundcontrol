@@ -275,7 +275,7 @@ Item {
             sourceItem:
                 MissionItemIndexLabel {
                 index:      _missionItem.sequenceNumber
-                label:      _useLoiterToAlt ? qsTr("Loiter") : qsTr("Approach")
+                label:      _useLoiterToAlt ? qsTr("盘旋") : qsTr("接近")
                 checked:    _missionItem.isCurrentItem
 
                 onClicked: _root.clicked(_missionItem.sequenceNumber)
@@ -329,7 +329,7 @@ Item {
 
             sourceItem: QGCLabel {
                 id:     landingAreaLabel
-                text:   qsTr("Landing Area")
+                text:   qsTr("着陆区域")
                 color:  "white"
 
                 property real _rawBearing:      _landingAreaBearing
@@ -367,7 +367,7 @@ Item {
 
             sourceItem: QGCLabel {
                 id:     glideSlopeLabel
-                text:   qsTr("Glide Slope")
+                text:   qsTr("下滑道")
                 color:  "white"
 
                 property real _rawBearing:      _landingAreaBearing

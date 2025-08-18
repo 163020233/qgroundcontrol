@@ -193,7 +193,7 @@ Rectangle {
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("Move to vehicle position")
+                        text:               qsTr("移动到设备位置")
                         enabled:            _activeVehicle && missionItem.specifiesCoordinate
 
                         onClicked: {
@@ -206,7 +206,7 @@ Rectangle {
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("Move to previous item position")
+                        text:               qsTr("移动到前一个项目位置")
                         enabled:            _missionController.previousCoordinate.isValid
                         onClicked: {
                             missionItem.coordinate = _missionController.previousCoordinate
@@ -216,7 +216,7 @@ Rectangle {
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("Edit position...")
+                        text:               qsTr("编辑位置...")
                         enabled:            missionItem.specifiesCoordinate
                         onClicked: {
                             editPositionDialog.createObject(mainWindow).open()
@@ -232,7 +232,7 @@ Rectangle {
 
                     QGCCheckBoxSlider {
                         Layout.fillWidth:   true
-                        text:               qsTr("Show all values")
+                        text:               qsTr("显示所有值")
                         visible:            QGroundControl.corePlugin.showAdvancedUI
                         checked:            missionItem.isSimpleItem ? missionItem.rawEdit : false
                         enabled:            missionItem.isSimpleItem && !_waypointsOnlyMode
@@ -242,7 +242,7 @@ Rectangle {
                             if (missionItem.rawEdit && !missionItem.friendlyEditAllowed) {
                                 missionItem.rawEdit = false
                                 checked = false
-                                mainWindow.showMessageDialog(qsTr("Mission Edit"), qsTr("You have made changes to the mission item which cannot be shown in Simple Mode"))
+                                mainWindow.showMessageDialog(qsTr("任务编辑"), qsTr("您已对任务项进行了更改，这些更改无法在简单模式下显示"))
                             }
                             hamburgerMenuDropPanel.close()
                         }
@@ -255,7 +255,7 @@ Rectangle {
                     }
 
                     QGCLabel { 
-                        text:       qsTr("Item #%1").arg(missionItem.sequenceNumber) 
+                        text:       qsTr("项目 #%1").arg(missionItem.sequenceNumber) 
                         enabled:    false
                     }
                 }

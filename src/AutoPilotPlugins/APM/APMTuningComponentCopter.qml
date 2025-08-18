@@ -124,7 +124,7 @@ SetupPage {
                 visible:            !advanced
 
                 QGCLabel {
-                    text:       qsTr("Basic Tuning")
+                    text:       qsTr("基本调参")
                     font.bold:   true
                 }
 
@@ -148,12 +148,12 @@ SetupPage {
                             anchors.right:      parent.right
 
                             QGCLabel {
-                                text:       qsTr("Roll/Pitch Sensitivity")
+                                text:       qsTr("横滚/俯仰灵敏度")
                                 font.bold:   true
                             }
 
                             QGCLabel {
-                                text: qsTr("Slide to the right if the copter is sluggish or slide to the left if the copter is twitchy")
+                                text: qsTr("将滑块向右滑动以增加敏感度，向左滑动以减少敏感度")
                             }
 
                             QGCSlider {
@@ -181,12 +181,12 @@ SetupPage {
                             anchors.right:      parent.right
 
                             QGCLabel {
-                                text:       qsTr("Climb Sensitivity")
+                                text:       qsTr("爬升灵敏度")
                                 font.bold:   true
                             }
 
                             QGCLabel {
-                                text: qsTr("Slide to the right to climb more aggressively or slide to the left to climb more gently")
+                                text: qsTr("将滑块向右滑动以增加敏感度，向左滑动以减少敏感度")
                             }
 
                             QGCSlider {
@@ -214,12 +214,12 @@ SetupPage {
                             visible:            _atcInputTCAvailable
 
                             QGCLabel {
-                                text:       qsTr("RC Roll/Pitch Feel")
+                                text:       qsTr("横滚/俯仰反馈")
                                 font.bold:   true
                             }
 
                             QGCLabel {
-                                text: qsTr("Slide to the left for soft control, slide to the right for crisp control")
+                                text: qsTr("向左滑动可实现柔和控制，向右滑动可实现清晰控制")
                             }
 
                             QGCSlider {
@@ -244,12 +244,12 @@ SetupPage {
                             anchors.right:      parent.right
 
                             QGCLabel {
-                                text:       qsTr("Spin While Armed")
+                                text:       qsTr("设备旋转")
                                 font.bold:   true
                             }
 
                             QGCLabel {
-                                text: qsTr("Adjust the amount the motors spin to indicate armed")
+                                text: qsTr("调整电机旋转以指示设备已启动")
                             }
 
                             QGCSlider {
@@ -274,16 +274,16 @@ SetupPage {
                             anchors.right:      parent.right
 
                             QGCLabel {
-                                text:       qsTr("Minimum Thrust")
+                                text:       qsTr("最小推力")
                                 font.bold:   true
                             }
 
                             QGCLabel {
-                                text: qsTr("Adjust the minimum amount of thrust require for the vehicle to move")
+                                text: qsTr("调整车辆移动所需的最小推力")
                             }
 
                             QGCLabel {
-                                text:       qsTr("Warning: This setting should be higher than 'Spin While Armed'")
+                                text:       qsTr("警告：此设置应高于“设备旋转”")
                                 color:      qgcPal.warningText
                                 visible:    _motSpinMin.rawValue < _motSpinArm.rawValue
                             }
@@ -319,7 +319,7 @@ SetupPage {
 
                         QGCLabel {
                             id:                 autoTuneLabel
-                            text:               qsTr("AutoTune")
+                            text:               qsTr("自动调参")
                             font.bold:          true
                         }
 
@@ -340,7 +340,7 @@ SetupPage {
                                 Row {
                                     spacing: _margins
 
-                                    QGCLabel { text: qsTr("Axes to AutoTune:") }
+                                    QGCLabel { text: qsTr("自动调参轴:") }
                                     FactBitmask { fact: _autoTuneAxes }
                                 }
 
@@ -349,13 +349,13 @@ SetupPage {
 
                                     QGCLabel {
                                         anchors.baseline:   autoTuneChannelCombo.baseline
-                                        text:               qsTr("Channel for AutoTune switch:")
+                                        text:               qsTr("自动调参开关通道:")
                                     }
 
                                     QGCComboBox {
                                         id:             autoTuneChannelCombo
                                         width:          ScreenTools.defaultFontPixelWidth * 14
-                                        model:          [qsTr("None"), qsTr("Channel 7"), qsTr("Channel 8"), qsTr("Channel 9"), qsTr("Channel 10"), qsTr("Channel 11"), qsTr("Channel 12") ]
+                                        model:          [qsTr("无"), qsTr("通道 7"), qsTr("通道 8"), qsTr("通道 9"), qsTr("通道 10"), qsTr("通道 11"), qsTr("通道 12") ]
                                         currentIndex:   _autoTuneSwitchChannelIndex
 
                                         onActivated: (index) => {
@@ -379,7 +379,7 @@ SetupPage {
 
                         QGCLabel {
                             id:                 inFlightTuneLabel
-                            text:               qsTr("In Flight Tuning")
+                            text:               qsTr("飞行调参")
                             font.bold:          true
                         }
 
@@ -403,7 +403,7 @@ SetupPage {
 
                                     QGCLabel {
                                         anchors.baseline:   optCombo.baseline
-                                        text:               qsTr("RC Channel 6 Option (Tuning):")
+                                        text:               qsTr("通道 6 选项 (调参):")
                                         //color:            controller.channelOptionEnabled[modelData] ? "yellow" : qgcPal.text
                                     }
 
@@ -421,7 +421,7 @@ SetupPage {
 
                                     QGCLabel {
                                         anchors.baseline:   tuneMinField.baseline
-                                        text:               qsTr("Min:")
+                                        text:               qsTr("最小值:")
                                         //color:            controller.channelOptionEnabled[modelData] ? "yellow" : qgcPal.text
                                     }
 
@@ -433,7 +433,7 @@ SetupPage {
 
                                     QGCLabel {
                                         anchors.baseline:   tuneMaxField.baseline
-                                        text:               qsTr("Max:")
+                                        text:               qsTr("最大值:")
                                         //color:            controller.channelOptionEnabled[modelData] ? "yellow" : qgcPal.text
                                     }
 
@@ -464,14 +464,14 @@ SetupPage {
                     height: availableHeight
 
                     property var roll: QtObject {
-                        property string name: qsTr("Roll")
+                        property string name: qsTr("滚轴")
                         property var plot: [
                             { name: "Response", value: globals.activeVehicle.rollRate.value },
                             { name: "Setpoint", value: globals.activeVehicle.setpoint.rollRate.value }
                         ]
                         property var params: ListModel {
                             ListElement {
-                                title:          qsTr("Roll axis angle controller P gain")
+                                title:          qsTr("滚轴角度控制器 P 增益")
                                 param:          "ATC_ANG_RLL_P"
                                 description:    ""
                                 min:            3
@@ -479,7 +479,7 @@ SetupPage {
                                 step:           1
                             }
                             ListElement {
-                                title:          qsTr("Roll axis rate controller P gain")
+                                title:          qsTr("滚轴速率控制器 P 增益")
                                 param:          "ATC_RAT_RLL_P"
                                 description:    ""
                                 min:            0.001
@@ -487,7 +487,7 @@ SetupPage {
                                 step:           0.025
                             }
                             ListElement {
-                                title:          qsTr("Roll axis rate controller I gain")
+                                title:          qsTr("滚轴速率控制器 I 增益")
                                 param:          "ATC_RAT_RLL_I"
                                 description:    ""
                                 min:            0.01
@@ -495,7 +495,7 @@ SetupPage {
                                 step:           0.05
                             }
                             ListElement {
-                                title:          qsTr("Roll axis rate controller D gain")
+                                title:          qsTr("滚轴速率控制器 D 增益")
                                 param:          "ATC_RAT_RLL_D"
                                 description:    ""
                                 min:            0.0
@@ -505,14 +505,14 @@ SetupPage {
                         }
                     }
                     property var pitch: QtObject {
-                        property string name: qsTr("Pitch")
+                        property string name: qsTr("俯仰")
                         property var plot: [
                             { name: "Response", value: globals.activeVehicle.pitchRate.value },
                             { name: "Setpoint", value: globals.activeVehicle.setpoint.pitchRate.value }
                         ]
                         property var params: ListModel {
                             ListElement {
-                                title:          qsTr("Pitch axis angle controller P gain")
+                                title:          qsTr("俯仰角度控制器 P 增益")
                                 param:          "ATC_ANG_PIT_P"
                                 description:    ""
                                 min:            3
@@ -520,7 +520,7 @@ SetupPage {
                                 step:           1
                             }
                             ListElement {
-                                title:          qsTr("Pitch axis rate controller P gain")
+                                title:          qsTr("俯仰速率控制器 P 增益")
                                 param:          "ATC_RAT_PIT_P"
                                 description:    ""
                                 min:            0.001
@@ -528,7 +528,7 @@ SetupPage {
                                 step:           0.025
                             }
                             ListElement {
-                                title:          qsTr("Pitch axis rate controller I gain")
+                                title:          qsTr("俯仰速率控制器 I 增益")
                                 param:          "ATC_RAT_PIT_I"
                                 description:    ""
                                 min:            0.01
@@ -536,7 +536,7 @@ SetupPage {
                                 step:           0.05
                             }
                             ListElement {
-                                title:          qsTr("Pitch axis rate controller D gain")
+                                title:          qsTr("俯仰速率控制器 D 增益")
                                 param:          "ATC_RAT_PIT_D"
                                 description:    ""
                                 min:            0.0
@@ -546,14 +546,14 @@ SetupPage {
                         }
                     }
                     property var yaw: QtObject {
-                        property string name: qsTr("Yaw")
+                        property string name: qsTr("偏航")
                         property var plot: [
                             { name: "Response", value: globals.activeVehicle.yawRate.value },
                             { name: "Setpoint", value: globals.activeVehicle.setpoint.yawRate.value }
                         ]
                         property var params: ListModel {
                             ListElement {
-                                title:          qsTr("Yaw axis angle controller P gain")
+                                title:          qsTr("偏航角度控制器 P 增益")
                                 param:          "ATC_ANG_YAW_P"
                                 description:    ""
                                 min:            3
@@ -561,7 +561,7 @@ SetupPage {
                                 step:           1
                             }
                             ListElement {
-                                title:          qsTr("Yaw axis rate controller P gain")
+                                title:          qsTr("偏航速率控制器 P 增益")
                                 param:          "ATC_RAT_YAW_P"
                                 description:    ""
                                 min:            0.1
@@ -569,7 +569,7 @@ SetupPage {
                                 step:           0.05
                             }
                             ListElement {
-                                title:          qsTr("Yaw axis rate controller I gain")
+                                title:          qsTr("偏航速率控制器 I 增益")
                                 param:          "ATC_RAT_YAW_I"
                                 description:    ""
                                 min:            0.01

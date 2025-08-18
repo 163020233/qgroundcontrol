@@ -28,13 +28,13 @@ ColumnLayout {
         Layout.fillWidth:       true
         font.pointSize:         ScreenTools.smallFontPointSize
         wrapMode:               Text.WordWrap
-        text:                   qsTr("Note: For best perfomance, please disable AutoConnect to UDP devices on the General page.")
+        text:                   qsTr("注意：为了获得最佳性能，请在“一般”页面上禁用UDP设备的自动连接。")
     }
 
     RowLayout {
         spacing: _colSpacing
 
-        QGCLabel { text: qsTr("Port") }
+        QGCLabel { text: qsTr("端口") }
         QGCTextField {
             id:                     portField
             text:                   subEditConfig.localPort.toString()
@@ -45,7 +45,7 @@ ColumnLayout {
         }
     }
 
-    QGCLabel { text: qsTr("Server Addresses (optional)") }
+    QGCLabel { text: qsTr("服务器地址（可选）") }
 
     Repeater {
         model: subEditConfig.hostList
@@ -59,7 +59,7 @@ ColumnLayout {
             }
 
             QGCButton {
-                text:       qsTr("Remove")
+                text:       qsTr("删除")
                 onClicked:  subEditConfig.removeHost(modelData)
             }
         }
@@ -71,10 +71,10 @@ ColumnLayout {
         QGCTextField {
             id:                     hostField
             Layout.preferredWidth:  _secondColumnWidth
-            placeholderText:        qsTr("Example: 127.0.0.1:14550")
+            placeholderText:        qsTr("示例：127.0.0.1:14550")
         }
         QGCButton {
-            text:       qsTr("Add Server")
+            text:       qsTr("添加服务器")
             enabled:    hostField.text !== ""
             onClicked: {
                 subEditConfig.addHost(hostField.text)

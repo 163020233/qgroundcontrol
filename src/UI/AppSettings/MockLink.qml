@@ -40,44 +40,44 @@ Rectangle {
 
             QGCCheckBox {
                 id:             sendStatusText
-                text:           qsTr("Send status text + voice")
+                text:           qsTr("发送状态文本 + 语音")
             }
             QGCButton {
-                text:               qsTr("PX4 Vehicle")
+                text:               qsTr("PX4 无人机")
                 Layout.fillWidth:   true
                 onClicked:          QGroundControl.startPX4MockLink(sendStatusText.checked)
             }
             QGCButton {
-                text:               qsTr("APM ArduCopter Vehicle")
+                text:               qsTr("APM ArduCopter 无人机")
                 visible:            QGroundControl.hasAPMSupport
                 Layout.fillWidth:   true
                 onClicked:          QGroundControl.startAPMArduCopterMockLink(sendStatusText.checked)
             }
             QGCButton {
-                text:               qsTr("APM ArduPlane Vehicle")
+                text:               qsTr("APM ArduPlane 无人机")
                 visible:            QGroundControl.hasAPMSupport
                 Layout.fillWidth:   true
                 onClicked:          QGroundControl.startAPMArduPlaneMockLink(sendStatusText.checked)
             }
             QGCButton {
-                text:               qsTr("APM ArduSub Vehicle")
+                text:               qsTr("APM ArduSub 无人机")
                 visible:            QGroundControl.hasAPMSupport
                 Layout.fillWidth:   true
                 onClicked:          QGroundControl.startAPMArduSubMockLink(sendStatusText.checked)
             }
             QGCButton {
-                text:               qsTr("APM ArduRover Vehicle")
+                text:               qsTr("APM ArduRover 无人机")
                 visible:            QGroundControl.hasAPMSupport
                 Layout.fillWidth:   true
                 onClicked:          QGroundControl.startAPMArduRoverMockLink(sendStatusText.checked)
             }
             QGCButton {
-                text:               qsTr("Generic Vehicle")
+                text:               qsTr("通用无人机")
                 Layout.fillWidth:   true
                 onClicked:          QGroundControl.startGenericMockLink(sendStatusText.checked)
             }
             QGCButton {
-                text:               qsTr("Stop One MockLink")
+                text:               qsTr("停止模拟无人机")
                 Layout.fillWidth:   true
                 onClicked:          QGroundControl.stopOneMockLink()
             }

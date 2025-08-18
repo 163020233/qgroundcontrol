@@ -47,7 +47,7 @@ RowLayout {
         }
 
         QGCLabel {
-            text:               activeVehicle ? activeVehicle.flightMode : qsTr("N/A", "No data to display")
+            text:               activeVehicle ? activeVehicle.flightMode : qsTr("N/A", "没有可显示的数据")
             font.pointSize:     fontPointSize
             Layout.alignment:   Qt.AlignCenter
 
@@ -173,7 +173,7 @@ RowLayout {
 
             QGCLabel {
                 id:                     hiddenModesLabel
-                text:                   qsTr("Some Modes Hidden")
+                text:                   qsTr("某些模式已隐藏")
                 Layout.fillWidth:       true
                 font.pointSize:         ScreenTools.smallFontPointSize
                 horizontalAlignment:    Text.AlignHCenter
@@ -209,7 +209,7 @@ RowLayout {
 
                     QGCLabel {
                         Layout.fillWidth:   true
-                        text:               qsTr("Edit Displayed Flight Modes")
+                        text:               qsTr("编辑显示的飞行模式")
                     }
 
                     QGCCheckBoxSlider {
@@ -219,8 +219,8 @@ RowLayout {
 
                 LabelledButton {
                     Layout.fillWidth:   true
-                    label:              qsTr("Flight Modes")
-                    buttonText:         qsTr("Configure")
+                    label:              qsTr("飞行模式")
+                    buttonText:         qsTr("配置")
                     visible:            _activeVehicle.autopilotPlugin.knownVehicleComponentAvailable(AutoPilotPlugin.KnownFlightModesVehicleComponent) &&
                                             QGroundControl.corePlugin.showAdvancedUI
 

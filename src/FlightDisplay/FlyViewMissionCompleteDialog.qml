@@ -59,7 +59,7 @@ Item {
 
         QGCPopupDialog {
             id:         missionCompleteDialog
-            title:      qsTr("Flight Plan complete")
+            title:      qsTr("任务完成")
             buttons:    Dialog.Close
 
             property var activeVehicleCopy: _activeVehicle
@@ -75,14 +75,14 @@ Item {
 
                 QGCLabel {
                     Layout.fillWidth:       true
-                    text:                   qsTr("%1 Images Taken").arg(_activeVehicle.cameraTriggerPoints.count)
+                    text:                   qsTr("%1 张图片已拍摄").arg(_activeVehicle.cameraTriggerPoints.count)
                     horizontalAlignment:    Text.AlignHCenter
                     visible:                _activeVehicle.cameraTriggerPoints.count !== 0
                 }
 
                 QGCButton {
                     Layout.fillWidth:   true
-                    text:               qsTr("Remove plan from vehicle")
+                    text:               qsTr("从设备中删除任务")
                     visible:            !_activeVehicle.communicationLost// && !_activeVehicle.apmFirmware  // ArduPilot has a bug somewhere with mission clear
                     onClicked: {
                         _planController.removeAllFromVehicle()
@@ -93,7 +93,7 @@ Item {
                 QGCButton {
                     Layout.fillWidth:   true
                     Layout.alignment:   Qt.AlignHCenter
-                    text:               qsTr("Leave plan on vehicle")
+                    text:               qsTr("保留任务在设备上")
                     onClicked:          missionCompleteDialog.close()
 
                 }
@@ -112,7 +112,7 @@ Item {
                     QGCButton {
                         Layout.fillWidth:   true
                         Layout.alignment:   Qt.AlignHCenter
-                        text:               qsTr("Resume Mission From Waypoint %1").arg(globals.guidedControllerFlyView._resumeMissionIndex)
+                        text:               qsTr("从航点恢复任务 %1").arg(globals.guidedControllerFlyView._resumeMissionIndex)
 
                         onClicked: {
                             globals.guidedControllerFlyView.executeAction(globals.guidedControllerFlyView.actionResumeMission, null, null)
@@ -123,7 +123,7 @@ Item {
                     QGCLabel {
                         Layout.fillWidth:   true
                         wrapMode:           Text.WordWrap
-                        text:               qsTr("Resume Mission will rebuild the current mission from the last flown waypoint and upload it to the vehicle for the next flight.")
+                        text:               qsTr("从当前航点恢复任务将从最后一个已飞航点重建当前任务，并将其上传到设备以进行下一次飞行任务。")
                     }
                 }
 
@@ -131,7 +131,7 @@ Item {
                     Layout.fillWidth:   true
                     wrapMode:           Text.WordWrap
                     color:              qgcPal.warningText
-                    text:               qsTr("If you are changing batteries for Resume Mission do not disconnect from the vehicle.")
+                    text:               qsTr("如果您正在为恢复任务更换电池，请不要断开与设备的连接。")
                     visible:            globals.guidedControllerFlyView.showResumeMission
                 }
             }

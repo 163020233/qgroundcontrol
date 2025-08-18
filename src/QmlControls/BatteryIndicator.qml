@@ -221,7 +221,7 @@ Item {
                 model: _activeVehicle ? _activeVehicle.batteries : 0
 
                 SettingsGroupLayout {
-                    heading:        qsTr("Battery %1").arg(_activeVehicle.batteries.length === 1 ? qsTr("Status") : object.id.rawValue)
+                    heading:        qsTr("电池 %1").arg(_activeVehicle.batteries.length === 1 ? qsTr("状态") : object.id.rawValue)
                     contentSpacing: 0
                     showDividers:   false
 
@@ -235,42 +235,42 @@ Item {
                     }
 
                     LabelledLabel {
-                        label:  qsTr("Charge State")
+                        label:  qsTr("电荷状态")
                         labelText:  object.chargeState.enumStringValue
                         visible:    batteryValuesAvailable.chargeStateAvailable
                     }
 
                     LabelledLabel {
-                        label:      qsTr("Remaining")
+                        label:      qsTr("剩余时间")
                         labelText:  object.timeRemainingStr.value
                         visible:    batteryValuesAvailable.timeRemainingAvailable
                     }
 
                     LabelledLabel {
-                        label:      qsTr("Remaining")
+                        label:      qsTr("剩余时间")
                         labelText:  object.percentRemaining.valueString + " " + object.percentRemaining.units
                         visible:    batteryValuesAvailable.percentRemainingAvailable
                     }
 
                     LabelledLabel {
-                        label:      qsTr("Voltage")
+                        label:      qsTr("电压")
                         labelText:  object.voltage.valueString + " " + object.voltage.units
                     }
 
                     LabelledLabel {
-                        label:      qsTr("Consumed")
+                        label:      qsTr("消耗")
                         labelText:  object.mahConsumed.valueString + " " + object.mahConsumed.units
                         visible:    batteryValuesAvailable.mahConsumedAvailable
                     }
 
                     LabelledLabel {
-                        label:      qsTr("Temperature")
+                        label:      qsTr("温度")
                         labelText:  object.temperature.valueString + " " + object.temperature.units
                         visible:    batteryValuesAvailable.temperatureAvailable
                     }
 
                     LabelledLabel {
-                        label:      qsTr("Function")
+                        label:      qsTr("功能")
                         labelText:  object.function.enumStringValue
                         visible:    batteryValuesAvailable.showFunction
                     }
@@ -288,12 +288,12 @@ Item {
             FactPanelController { id: controller }
 
             SettingsGroupLayout {
-                heading:            qsTr("Battery Display")
+                heading:            qsTr("电池显示")
                 Layout.fillWidth:   true
 
                 LabelledFactComboBox {
                     id:             editModeCheckBox
-                    label:          qsTr("Value")
+                    label:          qsTr("值")
                     fact:           _fact
                     visible:        _fact,visible
 
@@ -301,7 +301,7 @@ Item {
                 }
 
                 ColumnLayout {
-                    QGCLabel { text: qsTr("Coloring") }
+                    QGCLabel { text: qsTr("颜色") }
 
                     RowLayout {
                         spacing: ScreenTools.defaultFontPixelWidth * 0.05  // Reduced spacing between elements
@@ -374,7 +374,7 @@ Item {
                                 fillMode: Image.PreserveAspectFit
                                 color: qgcPal.colorOrange
                             }
-                            QGCLabel { text: qsTr("Low") }
+                            QGCLabel { text: qsTr("低") }
                         }
 
                         // Critical state
@@ -387,7 +387,7 @@ Item {
                                 fillMode: Image.PreserveAspectFit
                                 color: qgcPal.colorRed
                             }
-                            QGCLabel { text: qsTr("Critical") }
+                            QGCLabel { text: qsTr("临界") }
                         }
                     }
                 }
@@ -403,8 +403,8 @@ Item {
                             QGroundControl.corePlugin.showAdvancedUI
 
                 LabelledButton {
-                    label:      qsTr("Vehicle Power")
-                    buttonText: qsTr("Configure")
+                    label:      qsTr("设备电源")
+                    buttonText: qsTr("配置")
 
                     onClicked: {
                         mainWindow.showKnownVehicleComponentConfigPage(AutoPilotPlugin.KnownPowerVehicleComponent)

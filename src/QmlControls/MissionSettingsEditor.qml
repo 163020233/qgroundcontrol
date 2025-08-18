@@ -39,8 +39,8 @@ Rectangle {
     property bool   _showFlightSpeed:               !_controllerVehicle.vtol && !_simpleMissionStart && !_controllerVehicle.apmFirmware
     property bool   _allowFWVehicleTypeSelection:   _noMissionItemsAdded && !globals.activeVehicle
 
-    readonly property string _firmwareLabel:    qsTr("Firmware")
-    readonly property string _vehicleLabel:     qsTr("Vehicle")
+    readonly property string _firmwareLabel:    qsTr("固件")
+    readonly property string _vehicleLabel:     qsTr("设备")
     readonly property real  _margin:            ScreenTools.defaultFontPixelWidth / 2
 
     QGCPalette { id: qgcPal }
@@ -65,7 +65,7 @@ Rectangle {
         spacing:            _margin
 
         QGCLabel {
-            text:           qsTr("All Altitudes")
+            text:           qsTr("所有高度")
             font.pointSize: ScreenTools.smallFontPointSize
         }
         MouseArea {
@@ -112,7 +112,7 @@ Rectangle {
         }
 
         QGCLabel {
-            text:           qsTr("Initial Waypoint Alt")
+            text:           qsTr("初始项目高度")
             font.pointSize: ScreenTools.smallFontPointSize
         }
         FactTextField {
@@ -128,7 +128,7 @@ Rectangle {
 
             QGCCheckBox {
                 id:         flightSpeedCheckBox
-                text:       qsTr("Flight speed")
+                text:       qsTr("飞行速度")
                 visible:    _showFlightSpeed
                 checked:    missionItem.speedSection.specifyFlightSpeed
                 onClicked:   missionItem.speedSection.specifyFlightSpeed = checked
@@ -155,7 +155,7 @@ Rectangle {
             QGCLabel {
                 anchors.left:           parent.left
                 anchors.right:          parent.right
-                text:                   qsTr("Above camera commands will take affect immediately upon mission start.")
+                text:                   qsTr("相机命令将在项目启动时立即生效。")
                 wrapMode:               Text.WordWrap
                 horizontalAlignment:    Text.AlignHCenter
                 font.pointSize:         ScreenTools.smallFontPointSize
@@ -166,7 +166,7 @@ Rectangle {
                 id:             vehicleInfoSectionHeader
                 anchors.left:   parent.left
                 anchors.right:  parent.right
-                text:           qsTr("Vehicle Info")
+                text:           qsTr("设备信息")
                 visible:        !_waypointsOnlyMode
                 checked:        false
             }
@@ -217,12 +217,12 @@ Rectangle {
                     Layout.fillWidth:       true
                     wrapMode:               Text.WordWrap
                     font.pointSize:         ScreenTools.smallFontPointSize
-                    text:                   qsTr("The following speed values are used to calculate total mission time. They do not affect the flight speed for the mission.")
+                    text:                   qsTr("以下速度值用于计算总项目时间。它们不会影响项目的飞行速度。")
                     visible:                _showCruiseSpeed || _showHoverSpeed
                 }
 
                 QGCLabel {
-                    text:               qsTr("Cruise speed")
+                    text:               qsTr("巡航速度")
                     visible:            _showCruiseSpeed
                     Layout.fillWidth:   true
                 }
@@ -233,7 +233,7 @@ Rectangle {
                 }
 
                 QGCLabel {
-                    text:               qsTr("Hover speed")
+                    text:               qsTr("悬停速度")
                     visible:            _showHoverSpeed
                     Layout.fillWidth:   true
                 }
@@ -248,7 +248,7 @@ Rectangle {
                 id:             plannedHomePositionSection
                 anchors.left:   parent.left
                 anchors.right:  parent.right
-                text:           qsTr("Launch Position")
+                text:           qsTr("启动位置")
                 visible:        !_vehicleHasHomePosition
                 checked:        false
             }
@@ -267,7 +267,7 @@ Rectangle {
                     columns:        2
 
                     QGCLabel {
-                        text: qsTr("Altitude")
+                        text: qsTr("高度")
                     }
                     FactTextField {
                         fact:               missionItem.plannedHomePositionAltitude
@@ -279,12 +279,12 @@ Rectangle {
                     width:                  parent.width
                     wrapMode:               Text.WordWrap
                     font.pointSize:         ScreenTools.smallFontPointSize
-                    text:                   qsTr("Actual position set by vehicle at flight time.")
+                    text:                   qsTr("飞行时车辆设定的实际位置。")
                     horizontalAlignment:    Text.AlignHCenter
                 }
 
                 QGCButton {
-                    text:                       qsTr("Set To Map Center")
+                    text:                       qsTr("设置为地图中心")
                     onClicked:                  missionItem.coordinate = map.center
                     anchors.horizontalCenter:   parent.horizontalCenter
                 }

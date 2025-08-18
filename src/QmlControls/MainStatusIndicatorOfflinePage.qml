@@ -40,10 +40,10 @@ ToolIndicatorPage {
 
     contentComponent: Component {
         SettingsGroupLayout { 
-            heading: qsTr("Select Link to Connect")
+            heading: qsTr("选择连接的链接")
 
             QGCLabel {
-                text:       qsTr("No Links Configured")
+                text:       qsTr("没有配置的链接")
                 visible:    noLinks
             }
         
@@ -52,7 +52,7 @@ ToolIndicatorPage {
 
                 delegate: QGCButton {
                     Layout.fillWidth:   true
-                    text:               object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
+                    text:               object.name + (object.link ? " (" + qsTr("已连接") + ")" : "")
                     visible:            !object.dynamic
                     enabled:            !object.link
                     autoExclusive:      true
@@ -72,18 +72,18 @@ ToolIndicatorPage {
 
             SettingsGroupLayout {
                 LabelledButton {
-                    label:      qsTr("Communication Links")
-                    buttonText: qsTr("Configure")
+                    label:      qsTr("通信链接")
+                    buttonText: qsTr("配置")
 
                     onClicked: {
-                        mainWindow.showSettingsTool(qsTr("Comm Links"))
+                        mainWindow.showSettingsTool(qsTr("通讯链接"))
                         mainWindow.closeIndicatorDrawer()
                     }
                 }
             }
 
             SettingsGroupLayout {
-                heading:        qsTr("AutoConnect")
+                heading:        qsTr("自动连接")
                 visible:        autoConnectSettings.visible
 
                 Repeater {
@@ -99,7 +99,7 @@ ToolIndicatorPage {
                     ]
 
                     property var names: [ qsTr("Pixhawk"), qsTr("SiK Radio"), qsTr("LibrePilot"), qsTr("UDP"), qsTr("Zero-Conf"), qsTr("RTK") ]
-
+      
                     FactCheckBoxSlider {
                         Layout.fillWidth:   true
                         text:               autoConnectRepeater.names[index]

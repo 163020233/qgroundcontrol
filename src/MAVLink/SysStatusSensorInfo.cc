@@ -107,7 +107,7 @@ QStringList SysStatusSensorInfo::sensorStatus() const
 
     for (const SensorInfo &sensorInfo : _sensorInfoMap.values()) {
         if (!sensorInfo.enabled) {
-            rgStatus.append(tr("Disabled"));
+            rgStatus.append(tr("已禁用"));
         }
     }
 

@@ -88,7 +88,7 @@ QGCFlickable {
             anchors.margins:    _margin
             anchors.left:       parent.left
             anchors.top:        parent.top
-            text:               qsTr("UTM Service Editor")
+            text:               qsTr("UTM 服务编辑器")
             anchors.leftMargin: ScreenTools.defaultFontPixelWidth
         }
 
@@ -127,7 +127,7 @@ QGCFlickable {
 
                     Switch {
                         id:      loginSwitch
-                        text:    loginSwitch.checked ? qsTr("Enabled"):qsTr("Disabled")
+                        text:    loginSwitch.checked ? qsTr("已启用"):qsTr("已禁用")
                         visible: UTMSPStateStorage.loginState
                         indicator: Rectangle {
                             implicitWidth:  ScreenTools.defaultFontPixelWidth * 8
@@ -160,7 +160,7 @@ QGCFlickable {
 
                     // Logout button
                     QGCButton{
-                        text:       qsTr("Logout")
+                        text:       qsTr("注销")
                         width:      ScreenTools.defaultFontPixelWidth * 7.8
                         height:     ScreenTools.defaultFontPixelHeight * 2
                         visible:    !UTMSPStateStorage.loginState
@@ -231,7 +231,7 @@ QGCFlickable {
                     Column{
                         spacing:_margin * 1.667
 
-                        QGCLabel        { text: qsTr("User ID") }
+                        QGCLabel        { text: qsTr("用户 ID") }
                         QGCTextField {
                             id:                     userName
                             width:                  ScreenTools.defaultFontPixelWidth * 50
@@ -240,14 +240,14 @@ QGCFlickable {
                             visible:                true
                             Layout.fillWidth:       true
                             Layout.minimumWidth:    _editFieldWidth
-                            placeholderText:        "Enter your user ID"
+                            placeholderText:        "输入您的用户 ID"
                         }
                     }
 
                     Column{
                         spacing: _margin * 1.5
 
-                        QGCLabel { text: qsTr("Password:") }
+                        QGCLabel { text: qsTr("密码:") }
                         QGCTextField {
                             id:                     password
                             width:                  ScreenTools.defaultFontPixelWidth * 50
@@ -257,7 +257,7 @@ QGCFlickable {
                             echoMode:               TextInput.Password
                             Layout.fillWidth:       true
                             Layout.minimumWidth:    _editFieldWidth
-                            placeholderText:        "Enter your password"
+                            placeholderText:        "输入您的密码"
                         }
                     }
 
@@ -269,10 +269,10 @@ QGCFlickable {
                             height:  ScreenTools.defaultFontPixelHeight * 0.833
                             color:   qgcPal.windowShadeDark
                             visible: UTMSPStateStorage.loginState
-                        }
+                        } 
                         QGCButton {
                             id:         loginButton
-                            text:       qsTr("Login")
+                            text:       qsTr("登录")
                             enabled:    loginSwitch.checked
                             width:      ScreenTools.defaultFontPixelWidth * 18
                             height:     ScreenTools.defaultFontPixelHeight * 1.667
@@ -333,7 +333,7 @@ QGCFlickable {
                             color:  qgcPal.windowShadeDark
                         }
                         QGCLabel {
-                            text:               qsTr("Forgot Your Password?")
+                            text:               qsTr("忘记密码?")
                             Layout.alignment:   Qt.AlignHCenter
                             Layout.columnSpan:  3
                         }
@@ -353,7 +353,7 @@ QGCFlickable {
                             color:  qgcPal.windowShadeDark
                         }
                         QGCLabel {
-                            text:               qsTr("New User? Register Now") //TODO-->Will include register process
+                            text:               qsTr("新用户? 现在注册") //TODO-->Will include register process
                             Layout.alignment:   Qt.AlignHCenter
                             Layout.columnSpan:  3
                             enabled:            true
@@ -394,7 +394,7 @@ QGCFlickable {
                     id:             insertFence
                     anchors.left:   parent.left
                     anchors.right:  parent.right
-                    text:           qsTr("Insert Geofence")
+                    text:           qsTr("插入地理围栏")
                     checked:        false
                     visible:        !UTMSPStateStorage.loginState
                     PropertyAnimation on opacity {
@@ -418,7 +418,7 @@ QGCFlickable {
                     visible: insertFence.checked && !UTMSPStateStorage.loginState
                     Switch {
                         id:   geoSwitch
-                        text: geoSwitch.checked ? qsTr("Enabled") : qsTr("Disabled")
+                        text: geoSwitch.checked ? qsTr("已启用") : qsTr("已禁用")
                         indicator: Rectangle {
                             implicitWidth:  ScreenTools.defaultFontPixelWidth * 8
                             implicitHeight: ScreenTools.defaultFontPixelHeight * 1.44
@@ -465,7 +465,7 @@ QGCFlickable {
 
                     Row{
                         Label{
-                            text: qsTr("Min Altitude")
+                            text: qsTr("最小高度")
                             color: qgcPal.buttonText
                         }
                     }
@@ -529,7 +529,7 @@ QGCFlickable {
 
                     Row{
                         Label{
-                            text:  qsTr("Max Altitude")
+                            text:  qsTr("最大高度")
                             color: qgcPal.buttonText
                         }
                     }
@@ -594,7 +594,7 @@ QGCFlickable {
                     id:             dateandTime
                     anchors.left:   parent.left
                     anchors.right:  parent.right
-                    text:           qsTr("Date & Time")
+                    text:           qsTr("日期 & 时间")
                     checked:        false
                     visible:        !UTMSPStateStorage.loginState
 
@@ -619,7 +619,7 @@ QGCFlickable {
 
                     TabButton {
                         id:      dateButton
-                        text:    qsTr("Date")
+                        text:    qsTr("日期")
                         checked: !timeButton.checked
 
                         Image {
@@ -634,7 +634,7 @@ QGCFlickable {
 
                     TabButton {
                         id:      timeButton
-                        text:    qsTr("Time")
+                        text:    qsTr("时间")
                         checked: false
 
                         Image {
@@ -1227,7 +1227,7 @@ QGCFlickable {
 
                         QGCCheckBox {
                             id:      startID
-                            text:    qsTr("Start Time")
+                            text:    qsTr("开始时间")
                             checked: true
                             enabled: !stopID.checked
                             visible: timeButton.checked
@@ -1235,7 +1235,7 @@ QGCFlickable {
 
                         QGCCheckBox {
                             id:      stopID
-                            text:    qsTr("End Time")
+                            text:    qsTr("结束时间")
                             checked: false
                             visible: timeButton.checked
                         }
@@ -1252,7 +1252,7 @@ QGCFlickable {
                 Column{
                     visible:                !UTMSPStateStorage.loginState
                     QGCLabel        {
-                        text: qsTr("Mission Altitude")
+                        text: qsTr("任务高度")
                     }
 
                     FactTextField {
@@ -1280,7 +1280,7 @@ QGCFlickable {
 
                 QGCButton {
                     id:             submitFlightPlan
-                    text:           qsTr("Register Flight Plan")
+                    text:           qsTr("注册飞行计划")
                     visible:        !UTMSPStateStorage.loginState && UTMSPStateStorage.registerButtonState && !UTMSPStateStorage.removeFlightPlanState
                     anchors.left:   parent.left
                     anchors.right:  parent.right
@@ -1350,7 +1350,7 @@ QGCFlickable {
 
                 QGCButton {
                     id:             deleteFlightPlan
-                    text:           qsTr("Remove Flight Plan")
+                    text:           qsTr("删除飞行计划")
                     visible:        UTMSPStateStorage.removeFlightPlanState
                     anchors.left:   parent.left
                     anchors.right:  parent.right

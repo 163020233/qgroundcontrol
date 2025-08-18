@@ -114,7 +114,7 @@ View3D {
             margins: ScreenTools.defaultFontPixelWidth
         }
         width:          ScreenTools.screenWidth * 0.2
-        progressText: qsTr("Downloading Imageries: ")
+        progressText: qsTr("下载地形图: ")
     }
 
     Binding{

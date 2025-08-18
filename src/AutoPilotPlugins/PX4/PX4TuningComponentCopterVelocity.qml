@@ -27,7 +27,7 @@ ColumnLayout {
         columns: 2
 
         QGCLabel {
-            text:               qsTr("Position control mode (set this to 'simple' during tuning):")
+            text:               qsTr("位置控制模式 (调参过程中设置为 'simple'):")
             visible:            _mcPosMode
         }
         FactComboBox {
@@ -43,32 +43,32 @@ ColumnLayout {
         availableHeight:    _availableHeight - pidTuning.y
 
         property var horizontal: QtObject {
-            property string name: qsTr("Horizontal")
-            property string plotTitle: qsTr("Horizontal (Y direction, sidewards)")
+            property string name: qsTr("水平")
+            property string plotTitle: qsTr("水平 (Y 方向，侧面)")
             property var plot: [
                 { name: "Response", value: globals.activeVehicle.localPosition.vy.value },
                 { name: "Setpoint", value: globals.activeVehicle.localPositionSetpoint.vy.value }
             ]
             property var params: ListModel {
                 ListElement {
-                    title:          qsTr("Proportional gain (MPC_XY_VEL_P_ACC)")
-                    description:    qsTr("Increase for more responsiveness, reduce if the velocity overshoots (and increasing D does not help).")
+                    title:          qsTr("水平比例增益 (MPC_XY_VEL_P_ACC)")
+                    description:    qsTr("水平比例增益: 增加以提高响应速度，减少如果速率超调 (增加 D 没有帮助)。")
                     param:          "MPC_XY_VEL_P_ACC"
                     min:            1.2
                     max:            5
                     step:           0.05
                 }
                 ListElement {
-                    title:          qsTr("Integral gain (MPC_XY_VEL_I_ACC)")
-                    description:    qsTr("Increase to reduce steady-state error (e.g. wind)")
+                    title:          qsTr("水平积分增益 (MPC_XY_VEL_I_ACC)")
+                    description:    qsTr("水平积分增益: 增加以减少稳态误差 (例如风)")
                     param:          "MPC_XY_VEL_I_ACC"
                     min:            0.2
                     max:            10
                     step:           0.2
                 }
                 ListElement {
-                    title:          qsTr("Differential gain (MPC_XY_VEL_D_ACC)")
-                    description:    qsTr("Damping: increase to reduce overshoots and oscillations, but not higher than really needed.")
+                    title:          qsTr("水平微分增益 (MPC_XY_VEL_D_ACC)")
+                    description:    qsTr("水平微分增益: 增加以减少超调和振荡，但不能高于真正需要的。")
                     param:          "MPC_XY_VEL_D_ACC"
                     min:            0.1
                     max:            2
@@ -77,31 +77,31 @@ ColumnLayout {
             }
         }
         property var vertical: QtObject {
-            property string name: qsTr("Vertical")
+            property string name: qsTr("垂直")
             property var plot: [
                 { name: "Response", value: globals.activeVehicle.localPosition.vz.value },
                 { name: "Setpoint", value: globals.activeVehicle.localPositionSetpoint.vz.value }
             ]
             property var params: ListModel {
                 ListElement {
-                    title:          qsTr("Proportional gain (MPC_Z_VEL_P_ACC)")
-                    description:    qsTr("Increase for more responsiveness, reduce if the velocity overshoots (and increasing D does not help).")
+                    title:          qsTr("垂直比例增益 (MPC_Z_VEL_P_ACC)")
+                    description:    qsTr("垂直比例增益: 增加以提高响应速度，减少如果速率超调 (增加 D 没有帮助)。")
                     param:          "MPC_Z_VEL_P_ACC"
                     min:            2
                     max:            15
                     step:           0.5
                 }
                 ListElement {
-                    title:          qsTr("Integral gain (MPC_Z_VEL_I_ACC)")
-                    description:    qsTr("Increase to reduce steady-state error")
+                    title:          qsTr("垂直积分增益 (MPC_Z_VEL_I_ACC)")
+                    description:    qsTr("垂直积分增益: 增加以减少稳态误差")
                     param:          "MPC_Z_VEL_I_ACC"
                     min:            0.2
                     max:            3
                     step:           0.05
                 }
                 ListElement {
-                    title:          qsTr("Differential gain (MPC_Z_VEL_D_ACC)")
-                    description:    qsTr("Damping: increase to reduce overshoots and oscillations, but not higher than really needed.")
+                    title:          qsTr("垂直微分增益 (MPC_Z_VEL_D_ACC)")
+                    description:    qsTr("垂直微分增益: 增加以减少超调和振荡，但不能高于真正需要的。")
                     param:          "MPC_Z_VEL_D_ACC"
                     min:            0
                     max:            2

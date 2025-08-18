@@ -70,18 +70,18 @@ GridLayout {
     QGCCheckBox {
         id:                 sendStatus
         Layout.columnSpan:  2
-        text:               qsTr("Send Status Text and Voice")
+        text:               qsTr("发送状态文本 + 语音")
         checked:            subEditConfig.sendStatus
     }
 
     QGCCheckBox {
         id:                 incrementVehicleId
         Layout.columnSpan:  2
-        text:               qsTr("Increment Vehicle Id")
+        text:               qsTr("增加无人机ID")
         checked:            subEditConfig.incrementVehicleId
     }
 
-    QGCLabel { text: qsTr("Firmware") }
+    QGCLabel { text: qsTr("无人机类型") }
     QGCComboBox {
         id:                     firmwareTypeCombo
         Layout.preferredWidth:  _secondColumnWidth
@@ -91,7 +91,7 @@ GridLayout {
     }
 
     QGCLabel {
-        text:       qsTr("Vehicle Type")
+        text:       qsTr("无人机类型")
         visible:    firmwareTypeCombo.apmFirmwareSelected
     }
     QGCComboBox {

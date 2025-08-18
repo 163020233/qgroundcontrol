@@ -15,12 +15,12 @@ import QGroundControl.Vehicle
 
 // This class stores the data and functions of the check list but NOT the GUI (which is handled somewhere else).
 PreFlightCheckButton {
-    name:                           qsTr("Battery")
-    manualText:                     qsTr("Battery connector firmly plugged?")
+    name:                           qsTr("电池")
+    manualText:                     qsTr("电池连接器是否牢固插入？")
     telemetryFailure:               _batLow
     telemetryTextFailure:           allowTelemetryFailureOverride ?
-                                        qsTr("Warning - Battery charge below %1%.").arg(failurePercent) :
-                                        qsTr("Battery charge below %1%. Please recharge.").arg(failurePercent)
+                                        qsTr("警告 - 电池充电低于%1%。").arg(failurePercent) :
+                                        qsTr("电池充电低于%1%。请充电。").arg(failurePercent)
     allowTelemetryFailureOverride:  allowFailurePercentOverride
 
     property int    failurePercent:                 40

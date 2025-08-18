@@ -32,68 +32,68 @@ Item {
     property var fwdFlightGotoMapCircle
     property var orbitMapCircle
 
-    readonly property string emergencyStopTitle:            qsTr("EMERGENCY STOP")
-    readonly property string armTitle:                      qsTr("Arm")
-    readonly property string mvArmTitle:                    qsTr("Arm (MV)")
-    readonly property string forceArmTitle:                 qsTr("Force Arm")
-    readonly property string disarmTitle:                   qsTr("Disarm")
-    readonly property string mvDisarmTitle:                 qsTr("Disarm (MV)")
-    readonly property string rtlTitle:                      qsTr("Return")
-    readonly property string takeoffTitle:                  qsTr("Takeoff")
-    readonly property string gripperTitle:                  qsTr("Gripper Function")
-    readonly property string landTitle:                     qsTr("Land")
-    readonly property string startMissionTitle:             qsTr("Start Mission")
-    readonly property string mvStartMissionTitle:           qsTr("Start Mission (MV)")
-    readonly property string continueMissionTitle:          qsTr("Continue Mission")
-    readonly property string resumeMissionUploadFailTitle:  qsTr("Resume FAILED")
-    readonly property string pauseTitle:                    qsTr("Pause")
-    readonly property string mvPauseTitle:                  qsTr("Pause (MV)")
-    readonly property string changeAltTitle:                qsTr("Change Altitude")
-    readonly property string changeLoiterRadiusTitle:       qsTr("Change Loiter Radius")
-    readonly property string changeCruiseSpeedTitle:        qsTr("Change Max Ground Speed")
-    readonly property string changeAirspeedTitle:           qsTr("Change Airspeed")
-    readonly property string orbitTitle:                    qsTr("Orbit")
-    readonly property string landAbortTitle:                qsTr("Land Abort")
-    readonly property string setWaypointTitle:              qsTr("Set Waypoint")
-    readonly property string gotoTitle:                     qsTr("Go To Location")
-    readonly property string vtolTransitionTitle:           qsTr("VTOL Transition")
-    readonly property string roiTitle:                      qsTr("ROI")
-    readonly property string setHomeTitle:                  qsTr("Set Home")
-    readonly property string setEstimatorOriginTitle:       qsTr("Set Estimator origin")
-    readonly property string setFlightMode:                 qsTr("Set Flight Mode")
-    readonly property string changeHeadingTitle:            qsTr("Change Heading")
+    readonly property string emergencyStopTitle:            qsTr("紧急停止")
+    readonly property string armTitle:                      qsTr("启动")
+    readonly property string mvArmTitle:                    qsTr("启动 (MV)")
+    readonly property string forceArmTitle:                 qsTr("强制启动")
+    readonly property string disarmTitle:                   qsTr("取消启动")
+    readonly property string mvDisarmTitle:                 qsTr("取消启动 (MV)")
+    readonly property string rtlTitle:                      qsTr("返回")
+    readonly property string takeoffTitle:                  qsTr("起飞")
+    readonly property string gripperTitle:                  qsTr("夹爪功能")
+    readonly property string landTitle:                     qsTr("降落")
+    readonly property string startMissionTitle:             qsTr("开始任务")
+    readonly property string mvStartMissionTitle:           qsTr("开始任务 (MV)")
+    readonly property string continueMissionTitle:          qsTr("继续任务")
+    readonly property string resumeMissionUploadFailTitle:  qsTr("恢复任务失败")
+    readonly property string pauseTitle:                    qsTr("暂停")
+    readonly property string mvPauseTitle:                  qsTr("暂停 (MV)")
+    readonly property string changeAltTitle:                qsTr("改变高度")
+    readonly property string changeLoiterRadiusTitle:       qsTr("改变盘旋半径")
+    readonly property string changeCruiseSpeedTitle:        qsTr("改变最大地面速度")
+    readonly property string changeAirspeedTitle:           qsTr("改变空气速度")
+    readonly property string orbitTitle:                    qsTr("环绕")
+    readonly property string landAbortTitle:                qsTr("降落中止")
+    readonly property string setWaypointTitle:              qsTr("设置目标点")
+    readonly property string gotoTitle:                     qsTr("前往位置")
+    readonly property string vtolTransitionTitle:           qsTr("垂直起降过渡")
+    readonly property string roiTitle:                      qsTr("翻滚")
+    readonly property string setHomeTitle:                  qsTr("设置原点")
+    readonly property string setEstimatorOriginTitle:       qsTr("设置估计器原点")
+    readonly property string setFlightMode:                 qsTr("设置飞行模式")
+    readonly property string changeHeadingTitle:            qsTr("改变航向")
 
-    readonly property string armMessage:                        qsTr("Arm the vehicle.")
-    readonly property string mvArmMessage:                      qsTr("Arm selected vehicles.")
-    readonly property string forceArmMessage:                   qsTr("WARNING: This will force arming of the vehicle bypassing any safety checks.")
-    readonly property string disarmMessage:                     qsTr("Disarm the vehicle")
-    readonly property string mvDisarmMessage:                   qsTr("Disarm selected vehicles.")
-    readonly property string emergencyStopMessage:              qsTr("WARNING: THIS WILL STOP ALL MOTORS. IF VEHICLE IS CURRENTLY IN THE AIR IT WILL CRASH.")
-    readonly property string takeoffMessage:                    qsTr("Takeoff from ground and hold position.")
-    readonly property string gripperMessage:                    qsTr("Grab or Release the cargo")
-    readonly property string startMissionMessage:               qsTr("Takeoff from ground and start the current mission.")
-    readonly property string mvStartMissionMessage:             qsTr("Takeoff from ground and start the current mission for selected vehicles.")
-    readonly property string continueMissionMessage:            qsTr("Continue the mission from the current waypoint.")
-    readonly property string resumeMissionUploadFailMessage:    qsTr("Upload of resume mission failed. Confirm to retry upload")
-    readonly property string landMessage:                       qsTr("Land the vehicle at the current position.")
-    readonly property string rtlMessage:                        qsTr("Return to the launch position of the vehicle.")
-    readonly property string changeAltMessage:                  qsTr("Change the altitude of the vehicle up or down.")
-    readonly property string changeLoiterRadiusMessage:         qsTr("Change the forward flight loiter radius.")
-    readonly property string changeCruiseSpeedMessage:          qsTr("Change the maximum horizontal cruise speed.")
-    readonly property string changeAirspeedMessage:             qsTr("Change the equivalent airspeed setpoint.")
-    readonly property string gotoMessage:                       qsTr("Move the vehicle to the specified location.")
-             property string setWaypointMessage:                qsTr("Adjust current waypoint to %1.").arg(_actionData)
-    readonly property string orbitMessage:                      qsTr("Orbit the vehicle around the specified location.")
-    readonly property string landAbortMessage:                  qsTr("Abort the landing sequence.")
-    readonly property string pauseMessage:                      qsTr("Pause the vehicle at it's current position, adjusting altitude up or down as needed.")
-    readonly property string mvPauseMessage:                    qsTr("Pause selected vehicles at their current position.")
-    readonly property string vtolTransitionFwdMessage:          qsTr("Transition VTOL to fixed wing flight.")
-    readonly property string vtolTransitionMRMessage:           qsTr("Transition VTOL to multi-rotor flight.")
-    readonly property string roiMessage:                        qsTr("Make the specified location a Region Of Interest.")
-    readonly property string setHomeMessage:                    qsTr("Set vehicle home as the specified location. This will affect Return to Home position")
-    readonly property string setEstimatorOriginMessage:         qsTr("Make the specified location the estimator origin.")
-    readonly property string setFlightModeMessage:              qsTr("Set the vehicle flight mode to %1").arg(_actionData)
-    readonly property string changeHeadingMessage:              qsTr("Set the vehicle heading towards the specified location.")
+    readonly property string armMessage:                        qsTr("启动设备。")
+    readonly property string mvArmMessage:                      qsTr("启动选中的设备。")
+    readonly property string forceArmMessage:                   qsTr("警告：这将强制启动设备，绕过任何安全检查。")
+    readonly property string disarmMessage:                     qsTr("取消启动设备")
+    readonly property string mvDisarmMessage:                   qsTr("取消启动选中的设备。")
+    readonly property string emergencyStopMessage:              qsTr("警告：这将停止所有电机。如果设备当前在空中，它将崩溃。")
+    readonly property string takeoffMessage:                    qsTr("从地面起飞并保持位置。")
+    readonly property string gripperMessage:                    qsTr("抓取或释放货物")
+    readonly property string startMissionMessage:               qsTr("从地面起飞并开始当前任务。")
+    readonly property string mvStartMissionMessage:             qsTr("从地面起飞并开始当前任务为选中的设备。")
+    readonly property string continueMissionMessage:            qsTr("继续当前任务从当前目标点。")
+    readonly property string resumeMissionUploadFailMessage:    qsTr("恢复任务上传失败。确认重试上传")
+    readonly property string landMessage:                       qsTr("降落设备当前位置。")
+    readonly property string rtlMessage:                        qsTr("返回设备启动位置。")
+    readonly property string changeAltMessage:                  qsTr("改变设备高度。")
+    readonly property string changeLoiterRadiusMessage:         qsTr("改变前飞盘旋半径。")
+    readonly property string changeCruiseSpeedMessage:          qsTr("改变最大水平巡航速度。")
+    readonly property string changeAirspeedMessage:             qsTr("改变等效空气速度设置点。")
+    readonly property string gotoMessage:                       qsTr("将设备移动到指定位置。")
+    readonly property string setWaypointMessage:                qsTr("调整当前目标点到 %1.").arg(_actionData)
+    readonly property string orbitMessage:                      qsTr("环绕指定位置。")
+    readonly property string landAbortMessage:                  qsTr("降落中止")
+    readonly property string pauseMessage:                      qsTr("暂停设备在当前位置，根据需要调整高度。")
+    readonly property string mvPauseMessage:                    qsTr("暂停选中的设备在当前位置。")
+    readonly property string vtolTransitionFwdMessage:          qsTr("垂直起降过渡到固定翼飞行。")
+    readonly property string vtolTransitionMRMessage:           qsTr("垂直起降过渡到多旋翼飞行。")
+    readonly property string roiMessage:                        qsTr("将指定位置设置为兴趣区域。")
+    readonly property string setHomeMessage:                    qsTr("将设备home设置为指定位置。这将影响返回原点位置")
+    readonly property string setEstimatorOriginMessage:         qsTr("将指定位置设置为估计器原点。")
+    readonly property string setFlightModeMessage:              qsTr("将设备飞行模式设置为 %1").arg(_actionData)
+    readonly property string changeHeadingMessage:              qsTr("将设备航向设置为指定位置。")
 
     readonly property int actionRTL:                        1
     readonly property int actionLand:                       2
@@ -229,7 +229,7 @@ Item {
                 _unitsConversion.metersToAppSettingsVerticalDistanceUnits(_activeVehicle.minimumTakeoffAltitudeMeters()),
                 _flyViewSettings.guidedMaximumAltitude.value,
                 _unitsConversion.metersToAppSettingsVerticalDistanceUnits(_activeVehicle.minimumTakeoffAltitudeMeters()),
-                qsTr("Height (rel)"))
+                qsTr("高度 (rel)"))
         } else if (actionCode === actionChangeSpeed) {
             if (_vehicleInFwdFlight) {
                 guidedValueSlider.setupSlider(
@@ -237,14 +237,14 @@ Item {
                     _unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.minimumEquivalentAirspeed()).toFixed(1),
                     _unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.maximumEquivalentAirspeed()).toFixed(1),
                     _unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.airSpeed.rawValue),
-                    qsTr("Airspeed"))
+                    qsTr("空速"))
             } else if (!_vehicleInFwdFlight && _activeVehicle.haveMRSpeedLimits) {
                 guidedValueSlider.setupSlider(
                     GuidedValueSlider.SliderType.Speed,
                     _unitsConversion.metersSecondToAppSettingsSpeedUnits(0.1).toFixed(1),
                     _unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.maximumHorizontalSpeedMultirotor()).toFixed(1),
                     _unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.maximumHorizontalSpeedMultirotor()/2).toFixed(1),
-                    qsTr("Speed"))
+                    qsTr("速度"))
             } else {
                 console.error("setupSlider called for inapproproate change speed action", _vehicleInFwdFlight, _activeVehicle.haveMRSpeedLimits)
             }
@@ -254,7 +254,7 @@ Item {
                 _flyViewSettings.guidedMinimumAltitude.value,
                 _flyViewSettings.guidedMaximumAltitude.value,
                 _activeVehicle.altitudeRelative.value,
-                qsTr("Alt (rel)"))
+                qsTr("相对起飞点的高度 (rel)"))
         }
     }
 
@@ -494,7 +494,7 @@ Item {
             confirmDialog.title = rtlTitle
             confirmDialog.message = rtlMessage
             if (_activeVehicle.supportsSmartRTL) {
-                confirmDialog.optionText = qsTr("Smart RTL")
+                confirmDialog.optionText = qsTr("智能 RTL")
                 confirmDialog.optionChecked = false
             }
             confirmDialog.hideTrigger = Qt.binding(function() { return !showRTL })
@@ -733,7 +733,7 @@ Item {
             break
         default:
             if (!customController.customExecuteAction(actionCode, actionData, sliderOutputValue, optionChecked)) {
-                console.warn(qsTr("Internal error: unknown actionCode"), actionCode)
+                console.warn(qsTr("内部错误：未知的操作码"), actionCode)
                 return
             }
             break

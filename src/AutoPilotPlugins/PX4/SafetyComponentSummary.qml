@@ -25,48 +25,48 @@ Item {
         anchors.fill:       parent
 
         VehicleSummaryRow {
-            labelText: qsTr("Low Battery Failsafe")
+            labelText: qsTr("低电池保护")
             valueText: lowBattAction ? lowBattAction.enumStringValue : ""
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("RC Loss Failsafe")
+            labelText: qsTr("RC 丢失保护")
             valueText: rcLossAction ? rcLossAction.enumStringValue : ""
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("RC Loss Timeout")
+            labelText: qsTr("RC 丢失超时")
             valueText: commRCLossFact ? commRCLossFact.valueString + " " + commRCLossFact.units : ""
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Data Link Loss Failsafe")
+            labelText: qsTr("数据链路丢失保护")
             valueText: dataLossAction ? dataLossAction.enumStringValue : ""
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("RTL Climb To")
+            labelText: qsTr("RTL 爬升高度")
             valueText: returnAltFact ? returnAltFact.valueString + " " + returnAltFact.units : ""
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("RTL, Then")
+            labelText: qsTr("RTL, 然后")
             valueText: _rtlLandDelayValue === 0 ?
-                           qsTr("Land immediately") :
+                           qsTr("立即降落") :
                            (_rtlLandDelayValue < 0 ?
-                                qsTr("Loiter and do not land") :
-                                qsTr("Loiter and land after specified time"))
+                                qsTr("盘旋并不降落") :
+                                qsTr("盘旋并在指定时间后降落"))
 
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Loiter Alt")
+            labelText: qsTr("盘旋高度")
             valueText: _descendAltFact.valueString + " " + _descendAltFact.units
             visible:    _rtlLandDelayValue !== 0
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Land Delay")
+            labelText: qsTr("延迟降落")
             valueText: _rtlLandDelayValue + " " + _rtlLandDelayFact.units
             visible:    _rtlLandDelayValue > 0
         }

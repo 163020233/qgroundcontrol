@@ -33,20 +33,20 @@ Item {
         //-------------------------------------------------------------
         //-------------------------------------------------------------
         QGCRadioButton {
-            text:               qsTr("Full down stick is zero throttle")
+            text:               qsTr("全下拨为零油门")
             checked:            _activeJoystick ? _activeJoystick.throttleMode === 1 : false
             onClicked:          _activeJoystick.throttleMode = 1
             Layout.columnSpan:  2
         }
         QGCRadioButton {
-            text:               qsTr("Center stick is zero throttle")
+            text:               qsTr("中心拨为零油门")
             checked:            _activeJoystick ? _activeJoystick.throttleMode === 0 : false
             onClicked:          _activeJoystick.throttleMode = 0
             Layout.columnSpan:  2
         }
         //-------------------------------------------------------------
         QGCLabel {
-            text:               qsTr("Spring loaded throttle smoothing")
+            text:               qsTr("弹簧加载油门平滑")
             visible:            _activeJoystick ? _activeJoystick.throttleMode === 0 : false
             Layout.alignment:   Qt.AlignVCenter
             Layout.minimumWidth: ScreenTools.defaultFontPixelWidth * 36
@@ -58,7 +58,7 @@ Item {
         }
         //-------------------------------------------------------------
         QGCLabel {
-            text:               qsTr("Allow negative Thrust")
+            text:               qsTr("允许负油门")
             visible:            globals.activeVehicle.supportsNegativeThrust
             Layout.alignment:   Qt.AlignVCenter
         }
@@ -70,7 +70,7 @@ Item {
         }
         //---------------------------------------------------------------------
         QGCLabel {
-            text:               qsTr("Exponential:")
+            text:               qsTr("指数曲线")
         }
         Row {
             spacing:            ScreenTools.defaultFontPixelWidth
@@ -90,7 +90,7 @@ Item {
         //-----------------------------------------------------------------
         //-- Enable Advanced Mode
         QGCLabel {
-            text:               qsTr("Enable further advanced settings (careful!)")
+            text:               qsTr("启用高级设置（谨慎！）")
             Layout.alignment:   Qt.AlignVCenter
             Layout.minimumWidth: ScreenTools.defaultFontPixelWidth * 36
         }
@@ -106,7 +106,7 @@ Item {
         //-----------------------------------------------------------------
         //-- Axis Message Frequency
         QGCLabel {
-            text:               qsTr("Axis frequency (Hz):")
+            text:               qsTr("轴频率 (Hz)：")
             Layout.alignment:   Qt.AlignVCenter
             visible:            advancedSettings.checked
         }
@@ -124,7 +124,7 @@ Item {
         //-----------------------------------------------------------------
         //-- Button Repeat Frequency
         QGCLabel {
-            text:               qsTr("Button repeat frequency (Hz):")
+            text:               qsTr("按钮重复频率 (Hz)：")
             Layout.alignment:   Qt.AlignVCenter
             visible:            advancedSettings.checked
         }
@@ -142,7 +142,7 @@ Item {
         //-----------------------------------------------------------------
         //-- Enable circle correction
         QGCLabel {
-            text:               qsTr("Enable circle correction")
+            text:               qsTr("启用圆修正")
             Layout.alignment:   Qt.AlignVCenter
             visible:            advancedSettings.checked
         }
@@ -160,7 +160,7 @@ Item {
         //-----------------------------------------------------------------
         //-- Deadband
         QGCLabel {
-            text:               qsTr("Deadbands")
+            text:               qsTr("死区")
             Layout.alignment:   Qt.AlignVCenter
             visible:            advancedSettings.checked
         }
@@ -177,10 +177,8 @@ Item {
             font.pointSize:     ScreenTools.smallFontPointSize
             wrapMode:           Text.WordWrap
             visible:            advancedSettings.checked
-            text:   qsTr("Deadband can be set during the first ") +
-                    qsTr("step of calibration by gently wiggling each axis. ") +
-                    qsTr("Deadband can also be adjusted by clicking and ") +
-                    qsTr("dragging vertically on the corresponding axis monitor.")
+            text:   qsTr("可以在校准的第一步中通过轻轻摆动每个轴来设置死区。在第一个") +
+                    qsTr("校准步骤中，还可以通过单击并垂直拖动相应的轴监视器来调整死区。") 
         }
     }
 }

@@ -66,7 +66,7 @@ SetupPage {
 
                 QGCLabel {
                     id:         failsafeLabel
-                    text:       qsTr("Failsafe Actions")
+                    text:       qsTr("故障安全操作")
                     font.bold:   true
                 }
 
@@ -92,7 +92,7 @@ SetupPage {
                                 id:                     gcsEnableLabel
                                 width:                  failsafeSettings._labelWidth
                                 anchors.verticalCenter: gcsEnableCombo.verticalCenter
-                                text:                   qsTr("GCS Heartbeat:")
+                                text:                   qsTr("GCS 心跳:")
                                 wrapMode:               Text.Wrap
                             }
 
@@ -111,7 +111,7 @@ SetupPage {
                                 id:                     leakEnableLabel
                                 width:                  failsafeSettings._labelWidth
                                 anchors.verticalCenter: leakEnableCombo.verticalCenter
-                                text:                   qsTr("Leak:")
+                                text:                   qsTr("泄漏检测:")
                                 wrapMode:               Text.Wrap
                             }
 
@@ -123,7 +123,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:                   qsTr("Detector Pin:")
+                                text:                   qsTr("检测引脚:")
                                 width:                  failsafeSettings._labelWidth
                                 anchors.verticalCenter: leakEnableCombo.verticalCenter
                                 visible:                leakEnableCombo.currentIndex != 0
@@ -161,7 +161,7 @@ SetupPage {
                                 id:                     batteryEnableLabel
                                 width:                  failsafeSettings._labelWidth
                                 anchors.verticalCenter: batteryEnableCombo.verticalCenter
-                                text:                   qsTr("Battery:")
+                                text:                   qsTr("电池:")
                                 wrapMode:               Text.Wrap
                             }
 
@@ -174,7 +174,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:                   qsTr("Power module not set up")
+                                text:                   qsTr("电池未设置")
                                 width:                  failsafeSettings._labelWidth
                                 color:                  ggcPal.warningText
                                 anchors.verticalCenter: batteryEnableCombo.verticalCenter
@@ -182,7 +182,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:                   qsTr("Voltage:")
+                                text:                   qsTr("电压:")
                                 width:                  failsafeSettings._labelWidth
                                 anchors.verticalCenter: batteryEnableCombo.verticalCenter
                                 visible:                batteryEnableCombo.currentIndex != 0
@@ -196,7 +196,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:                   qsTr("Remaining Capacity:")
+                                text:                   qsTr("剩余容量:")
                                 width:                  failsafeSettings._labelWidth
                                 anchors.verticalCenter: batteryEnableCombo.verticalCenter
                                 visible:                batteryEnableCombo.currentIndex != 0
@@ -252,7 +252,7 @@ SetupPage {
                                 id:                     pilotEnableLabel
                                 width:                  failsafeSettings._labelWidth
                                 anchors.verticalCenter: pilotEnableCombo.verticalCenter
-                                text:                   qsTr("Pilot Input:")
+                                text:                   qsTr("飞行输入:")
                                 wrapMode:               Text.Wrap
                             }
 
@@ -264,7 +264,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:                   qsTr("Timeout:")
+                                text:                   qsTr("超时:")
                                 width:                  failsafeSettings._labelWidth
                                 anchors.verticalCenter: pilotEnableCombo.verticalCenter
                                 visible:                pilotEnableCombo.currentIndex != 0
@@ -287,7 +287,7 @@ SetupPage {
                                 id:                     temperatureEnableLabel
                                 width:                  failsafeSettings._labelWidth
                                 anchors.verticalCenter: temperatureEnableCombo.verticalCenter
-                                text:                   qsTr("Internal Temperature:")
+                                text:                   qsTr("内部温度:")
                                 wrapMode:               Text.Wrap
                             }
 
@@ -299,7 +299,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:               qsTr("Threshold:")
+                                text:               qsTr("温度阈值:")
                                 width:              failsafeSettings._labelWidth
                                 visible:            temperatureEnableCombo.currentIndex != 0
                                 anchors.baseline:   temperatureEnableCombo.baseline
@@ -320,7 +320,7 @@ SetupPage {
                                 id:                     pressureEnableLabel
                                 width:                  failsafeSettings._labelWidth
                                 anchors.verticalCenter: pressureEnableCombo.verticalCenter
-                                text:                   qsTr("Internal Pressure:")
+                                text:                   qsTr("内部压力:")
                                 wrapMode:               Text.Wrap
                             }
 
@@ -332,7 +332,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:               qsTr("Threshold:")
+                                text:               qsTr("压力阈值:")
                                 width:              failsafeSettings._labelWidth
                                 visible:            pressureEnableCombo.currentIndex != 0
                                 anchors.baseline:   pressureEnableCombo.baseline
@@ -353,7 +353,7 @@ SetupPage {
                 spacing: _margins / 2
 
                 QGCLabel {
-                    text:           qsTr("Arming Checks")
+                    text:           qsTr("设备检查")
                     font.bold:      true
                 }
 
@@ -384,7 +384,7 @@ SetupPage {
                             anchors.right:  parent.right
                             wrapMode:       Text.WordWrap
                             color:          qgcPal.warningText
-                            text:            qsTr("Warning: Turning off arming checks can lead to loss of Vehicle control.")
+                            text:            qsTr("警告: 关闭设备检查可能会导致设备控制丢失。")
                             visible:        _armingCheck.value != 1
                         }
                     }

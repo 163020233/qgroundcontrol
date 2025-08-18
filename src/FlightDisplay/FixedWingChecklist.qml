@@ -22,11 +22,11 @@ Item {
     PreFlightCheckModel {
         id:     listModel
         PreFlightCheckGroup {
-            name: qsTr("Fixed Wing Initial Checks")
+            name: qsTr("固定翼初始检查")
 
             PreFlightCheckButton {
-                name:           qsTr("Hardware")
-                manualText:     qsTr("Props mounted? Wings secured? Tail secured?")
+                name:           qsTr("硬件")
+                manualText:     qsTr("螺旋桨是否安装？机翼是否安全？尾翼是否安全？")
             }
 
             PreFlightBatteryCheck {
@@ -47,21 +47,21 @@ Item {
         }
 
         PreFlightCheckGroup {
-            name: qsTr("Please arm the vehicle here")
+            name: qsTr("请先启动设备")
 
             PreFlightCheckButton {
-                name:            qsTr("Actuators")
-                manualText:      qsTr("Move all control surfaces. Did they work properly?")
+                name:            qsTr("控制面")
+                manualText:      qsTr("控制面是否正常？")
             }
 
             PreFlightCheckButton {
-                name:            qsTr("Motors")
-                manualText:      qsTr("Propellers free? Then throttle up gently. Working properly?")
+                name:            qsTr("电机")
+                manualText:      qsTr("螺旋桨是否正常？电机是否正常？")
             }
 
             PreFlightCheckButton {
-                name:           qsTr("Mission")
-                manualText:     qsTr("Please confirm mission is valid (waypoints valid, no terrain collision).")
+                name:           qsTr("任务")
+                manualText:     qsTr("请确认任务有效（航点有效，无地形碰撞）")
             }
 
             PreFlightSoundCheck {
@@ -69,22 +69,22 @@ Item {
         }
 
         PreFlightCheckGroup {
-            name: qsTr("Last preparations before launch")
+            name: qsTr("起飞前的最后准备")
 
             // Check list item group 2 - Final checks before launch
             PreFlightCheckButton {
-                name:           qsTr("Payload")
-                manualText:     qsTr("Configured and started? Payload lid closed?")
+                name:           qsTr("荷载")
+                manualText:     qsTr("配置并启动? 有效载荷盖已关闭?")
             }
 
             PreFlightCheckButton {
-                name:           qsTr("Wind & weather")
+                name:           qsTr("风速与天气")
                 manualText:     qsTr("OK for your platform? Lauching into the wind?")
             }
 
             PreFlightCheckButton {
-                name:           qsTr("Flight area")
-                manualText:     qsTr("Launch area and path free of obstacles/people?")
+                name:           qsTr("起飞区域")
+                manualText:     qsTr("起飞区域和路径是否清空？")
             }
         }
     }

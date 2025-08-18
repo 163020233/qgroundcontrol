@@ -98,7 +98,7 @@ ChartView {
             rowSpacing:             ScreenTools.defaultFontPixelHeight * 0.25
             anchors.verticalCenter: parent.verticalCenter
             QGCLabel {
-                text:               qsTr("Scale:");
+                text:               qsTr("缩放:");
                 Layout.alignment:   Qt.AlignVCenter
             }
             QGCComboBox {
@@ -111,7 +111,7 @@ ChartView {
                 Layout.alignment:   Qt.AlignVCenter
             }
             QGCLabel {
-                text:               qsTr("Range:");
+                text:               qsTr("范围:");
                 Layout.alignment:   Qt.AlignVCenter
             }
             QGCComboBox {

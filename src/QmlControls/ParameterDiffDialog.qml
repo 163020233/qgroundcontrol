@@ -20,7 +20,7 @@ import QGroundControl.FactControls
 import QGroundControl.Controllers
 
 QGCPopupDialog {
-    title:      qsTr("Load Parameters")
+    title:      qsTr("加载参数")
     buttons:    Dialog.Cancel | (paramController.diffList.count ? Dialog.Ok : 0)
 
     property var paramController
@@ -36,8 +36,8 @@ QGCPopupDialog {
             Layout.preferredWidth:  mainGrid.visible ? mainGrid.width : ScreenTools.defaultFontPixelWidth * 40
             wrapMode:               Text.WordWrap
             text:                   paramController.diffList.count ?
-                                        qsTr("The following parameters from the loaded file differ from what is currently set on the Vehicle. Click 'Ok' to update them on the Vehicle.") :
-                                        qsTr("There are no differences between the file loaded and the current settings on the Vehicle.")
+                                        qsTr("以下参数从加载的文件与当前设备设置不同。 点击“确定”将它们更新到设备上。") :
+                                        qsTr("加载的文件与当前设备设置没有差异。")
         }
 
         GridLayout {
@@ -65,26 +65,26 @@ QGCPopupDialog {
 
             Repeater {
                 model: paramController.diffMultipleComponents ? 1 : 0
-                QGCLabel { text: qsTr("Comp ID") }
+                QGCLabel { text: qsTr("组件 ID") }
             }
             Repeater {
                 model: paramController.diffMultipleComponents ? paramController.diffList : 0
                 QGCLabel { text: object.componentId }
             }
 
-            QGCLabel { text: qsTr("Name") }
+            QGCLabel { text: qsTr("名称") }
             Repeater {
                 model: paramController.diffList
                 QGCLabel { text: object.name }
             }
 
-            QGCLabel { text: qsTr("File") }
+            QGCLabel { text: qsTr("文件") }
             Repeater {
                 model: paramController.diffList
                 QGCLabel { text: object.fileValue + " " + object.units }
             }
 
-            QGCLabel { text: qsTr("Vehicle") }
+            QGCLabel { text: qsTr("设备") }
             Repeater {
                 model: paramController.diffList
                 QGCLabel { text: object.noVehicleValue ? qsTr("N/A") : object.vehicleValue + " " + object.units }

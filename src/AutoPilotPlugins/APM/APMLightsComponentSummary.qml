@@ -60,17 +60,17 @@ Item {
 
     ListModel {
         id: lightsOutModel
-        ListElement { text: qsTr("Disabled"); value: 0 }
-        ListElement { text: qsTr("Channel 5"); value: 5 }
-        ListElement { text: qsTr("Channel 6"); value: 6 }
-        ListElement { text: qsTr("Channel 7"); value: 7 }
-        ListElement { text: qsTr("Channel 8"); value: 8 }
-        ListElement { text: qsTr("Channel 9"); value: 9 }
-        ListElement { text: qsTr("Channel 10"); value: 10 }
-        ListElement { text: qsTr("Channel 11"); value: 11 }
-        ListElement { text: qsTr("Channel 12"); value: 12 }
-        ListElement { text: qsTr("Channel 13"); value: 13 }
-        ListElement { text: qsTr("Channel 14"); value: 14 }
+        ListElement { text: qsTr("禁用"); value: 0 }
+        ListElement { text: qsTr("通道 5"); value: 5 }
+        ListElement { text: qsTr("通道 6"); value: 6 }
+        ListElement { text: qsTr("通道 7"); value: 7 }
+        ListElement { text: qsTr("通道 8"); value: 8 }
+        ListElement { text: qsTr("通道 9"); value: 9 }
+        ListElement { text: qsTr("通道 10"); value: 10 }
+        ListElement { text: qsTr("通道 11"); value: 11 }
+        ListElement { text: qsTr("通道 12"); value: 12 }
+        ListElement { text: qsTr("通道 13"); value: 13 }
+        ListElement { text: qsTr("通道 14"); value: 14 }
     }
 
     Loader {
@@ -86,12 +86,12 @@ Item {
         anchors.fill:       parent
 
         VehicleSummaryRow {
-            labelText:  qsTr("Lights Output 1")
+            labelText:  qsTr("灯光输出 1")
             valueText:  lightsOutModel.get(lightsLoader.lights1OutIndex).text
         }
 
         VehicleSummaryRow {
-            labelText:  qsTr("Lights Output 2")
+            labelText:  qsTr("灯光输出 2")
             valueText:  lightsOutModel.get(lightsLoader.lights2OutIndex).text
         }
     }

@@ -34,7 +34,7 @@ Rectangle {
         } else if (missionItem.altitudeMode === QGroundControl.AltitudeModeTerrainFrame) {
             altModeLabel.text = QGroundControl.altitudeModeShortDescription(QGroundControl.AltitudeModeTerrainFrame)
         } else {
-            altModeLabel.text = qsTr("Internal Error")
+            altModeLabel.text = qsTr("内部错误")
         }
     }
 
@@ -61,7 +61,7 @@ Rectangle {
             wrapMode:       Text.WordWrap
             font.pointSize: ScreenTools.smallFontPointSize
             text:           missionItem.rawEdit ?
-                                qsTr("Provides advanced access to all commands/parameters. Be very careful!") :
+                                qsTr("提供对所有命令/参数的高级访问。请非常小心！") :
                                 missionItem.commandDescription
         }
 
@@ -74,23 +74,23 @@ Rectangle {
             QGCLabel {
                 text:               qsTr("Move '%1' %2 to the %3 location. %4")
                 .arg(_controllerVehicle.vtol ? qsTr("T") : qsTr("T"))
-                .arg(_controllerVehicle.vtol ? qsTr("Transition Direction") : qsTr("Takeoff"))
-                .arg(_controllerVehicle.vtol ? qsTr("desired") : qsTr("climbout"))
-                .arg(_controllerVehicle.vtol ? (qsTr("Ensure distance from launch to transition direction is far enough to complete transition.")) : "")
+                .arg(_controllerVehicle.vtol ? qsTr("转换方向") : qsTr("起飞"))
+                .arg(_controllerVehicle.vtol ? qsTr("期望") : qsTr("爬升"))
+                .arg(_controllerVehicle.vtol ? (qsTr("确保从启动到转换方向的距离足够远以完成转换。")) : "")
                 Layout.fillWidth:   true
                 wrapMode:           Text.WordWrap
                 visible:            !initialClickLabel.visible
             }
 
             QGCLabel {
-                text:               qsTr("Ensure clear of obstacles and into the wind.")
+                text:               qsTr("确保没有障碍物并且迎风飞行。")
                 Layout.fillWidth:   true
                 wrapMode:           Text.WordWrap
                 visible:            !initialClickLabel.visible
             }
 
             QGCButton {
-                text:               qsTr("Done")
+                text:               qsTr("完成")
                 Layout.fillWidth:   true
                 visible:            !initialClickLabel.visible
                 onClicked: {
@@ -101,8 +101,8 @@ Rectangle {
             QGCLabel {
                 id:                 initialClickLabel
                 text:               missionItem.launchTakeoffAtSameLocation ?
-                                        qsTr("Click in map to set planned Takeoff location.") :
-                                        qsTr("Click in map to set planned Launch location.")
+                                        qsTr("点击地图设置计划起飞位置。") :
+                                        qsTr("点击地图设置计划启动位置。")
                 Layout.fillWidth:   true
                 wrapMode:           Text.WordWrap
                 visible:            missionItem.isTakeoffItem && !missionItem.launchCoordinate.isValid
@@ -125,7 +125,7 @@ Rectangle {
                     Layout.fillWidth:   true
                     wrapMode:           Text.WordWrap
                     font.pointSize:     ScreenTools.smallFontPointSize
-                    text:               qsTr("Altitude below specifies the approximate altitude of the ground. Normally 0 for landing back at original launch location.")
+                    text:               qsTr("下方高度指定地面的大致高度。通常情况下，返回原始发射位置时的高度为 0。")
                     visible:            missionItem.isLandCommand
                 }
 
@@ -153,7 +153,7 @@ Rectangle {
 
                         QGCLabel {
                             Layout.alignment:   Qt.AlignBaseline
-                            text:               qsTr("Altitude")
+                            text:               qsTr("高度")
                             font.pointSize:     ScreenTools.smallFontPointSize
                         }
                         QGCLabel {
@@ -179,7 +179,7 @@ Rectangle {
 
                 QGCLabel {
                     font.pointSize:     ScreenTools.smallFontPointSize
-                    text:               qsTr("Actual AMSL alt sent: %1 %2").arg(missionItem.amslAltAboveTerrain.valueString).arg(missionItem.amslAltAboveTerrain.units)
+                    text:               qsTr("实际 AMSL 高度发送：%1 %2").arg(missionItem.amslAltAboveTerrain.valueString).arg(missionItem.amslAltAboveTerrain.units)
                     visible:            missionItem.altitudeMode === QGroundControl.AltitudeModeCalcAboveTerrain
                 }
             }
@@ -239,7 +239,7 @@ Rectangle {
 
                 QGCCheckBox {
                     id:         flightSpeedCheckbox
-                    text:       qsTr("Flight Speed")
+                    text:       qsTr("飞行速度")
                     checked:    missionItem.speedSection.specifyFlightSpeed
                     onClicked:  missionItem.speedSection.specifyFlightSpeed = checked
                     visible:    missionItem.speedSection.available

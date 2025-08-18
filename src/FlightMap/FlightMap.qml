@@ -71,7 +71,7 @@ Map {
     Component {
         id: specifyMapPositionDialog
         EditPositionDialog {
-            title:                  qsTr("Specify Position")
+            title:                  qsTr("指定位置")
             coordinate:             center
             onCoordinateChanged:    center = coordinate
         }

@@ -59,7 +59,7 @@ Rectangle {
 
             QGCLabel {
                 Layout.alignment:   Qt.AlignHCenter
-                text:               qsTr("Zoom")
+                text:               qsTr("缩放")
                 font.pointSize:     ScreenTools.smallFontPointSize
             }
 
@@ -236,14 +236,14 @@ Rectangle {
 
                     QGCLabel {
                         Layout.alignment:   Qt.AlignHCenter
-                        text:               qsTr("Free Space: ") + _camera.storageFreeStr
+                        text:               qsTr("可用空间: ") + _camera.storageFreeStr
                         font.pointSize:     ScreenTools.defaultFontPointSize
                         visible:            _camera.storageStatus === MavlinkCameraControl.STORAGE_READY
                     }
 
                     QGCLabel {
                         Layout.alignment:   Qt.AlignHCenter
-                        text:               qsTr("Battery: ") + _camera.batteryRemainingStr
+                        text:               qsTr("电池: ") + _camera.batteryRemainingStr
                         font.pointSize:     ScreenTools.defaultFontPointSize
                         visible:            _camera.batteryRemaining >= 0
                     }
@@ -287,7 +287,7 @@ Rectangle {
 
                 QGCLabel {
                     Layout.alignment:   Qt.AlignHCenter
-                    text:               qsTr("Camera Tracking")
+                    text:               qsTr("相机跟踪")
                     font.pointSize:     ScreenTools.defaultFontPointSize
                     visible:            _camera && _camera.hasTracking
                 }
@@ -314,7 +314,7 @@ Rectangle {
             id: settingsDialogComponent
 
             QGCPopupDialog {
-                title:      qsTr("Settings")
+                title:      qsTr("设置")
                 buttons:    Dialog.Close
 
                 property bool _multipleMavlinkCameras:          _cameraManager.cameras.count > 1
@@ -334,25 +334,25 @@ Rectangle {
 
                         // First column
                         QGCLabel {
-                            text:               qsTr("Camera")
+                            text:               qsTr("相机")
                             visible:            _multipleMavlinkCameras
                             onVisibleChanged:   gridLayout.dynamicRows += visible ? 1 : -1
                         }
 
                         QGCLabel {
-                            text:               qsTr("Video Stream")
+                            text:               qsTr("视频流")
                             visible:            _multipleMavlinkCameraStreams
                             onVisibleChanged:   gridLayout.dynamicRows += visible ? 1 : -1
                         }
 
                         QGCLabel {
-                            text:               qsTr("Thermal View Mode")
+                            text:               qsTr("热成像模式")
                             visible:            _camera.thermalStreamInstance
                             onVisibleChanged:   gridLayout.dynamicRows += visible ? 1 : -1
                         }
 
                         QGCLabel {
-                            text:               qsTr("Blend Opacity")
+                            text:               qsTr("热成像透明度")
                             visible:            _camera.thermalStreamInstance && _camera.thermalMode === MavlinkCameraControl.THERMAL_BLEND
                             onVisibleChanged:   gridLayout.dynamicRows += visible ? 1 : -1
                         }
@@ -367,36 +367,36 @@ Rectangle {
                         }
 
                         QGCLabel {
-                            text:               qsTr("Photo Mode")
+                            text:               qsTr("照片模式")
                             visible:            _camera.capturesPhotos
                             onVisibleChanged:   gridLayout.dynamicRows += visible ? 1 : -1
                         }
 
                         QGCLabel {
-                            text:               qsTr("Photo Interval (seconds)")
+                            text:               qsTr("照片间隔 (秒)")
                             visible:            _camera.capturesPhotos && _camera.photoCaptureMode === MavlinkCameraControl.PHOTO_CAPTURE_TIMELAPSE
                             onVisibleChanged:   gridLayout.dynamicRows += visible ? 1 : -1
                         }
 
                         QGCLabel {
-                            text:               qsTr("Video Grid Lines")
+                            text:               qsTr("视频网格线")
                             visible:            _camera.hasVideoStream
                             onVisibleChanged:   gridLayout.dynamicRows += visible ? 1 : -1
                         }
 
                         QGCLabel {
-                            text:               qsTr("Video Screen Fit")
+                            text:               qsTr("视频屏幕适配")
                             visible:            _camera.hasVideoStream
                             onVisibleChanged:   gridLayout.dynamicRows += visible ? 1 : -1
                         }
 
                         QGCLabel {
-                            text:               qsTr("Reset Camera Defaults")
+                            text:               qsTr("重置相机默认值")
                             onVisibleChanged:   gridLayout.dynamicRows += visible ? 1 : -1
                         }
 
                         QGCLabel {
-                            text:               qsTr("Storage")
+                            text:               qsTr("存储")
                             visible:            _cameraStorageSupported
                             onVisibleChanged:   gridLayout.dynamicRows += visible ? 1 : -1
                         }
@@ -423,7 +423,7 @@ Rectangle {
                         QGCComboBox {
                             Layout.fillWidth:   true
                             sizeToContents:     true
-                            model:              [ qsTr("Off"), qsTr("Blend"), qsTr("Full"), qsTr("Picture In Picture") ]
+                            model:              [ qsTr("关闭"), qsTr("混合"), qsTr("全屏"), qsTr("小窗口") ]
                             currentIndex:       _camera.thermalMode
                             visible:            _camera.thermalStreamInstance
                             onActivated:        (index) => { _camera.thermalMode = index }
@@ -497,7 +497,7 @@ Rectangle {
                         QGCComboBox {
                             Layout.fillWidth:   true
                             sizeToContents:     true
-                            model:              [ qsTr("Single"), qsTr("Time Lapse") ]
+                            model:              [ qsTr("单张"), qsTr("延时拍摄") ]
                             currentIndex:       _camera.photoCaptureMode
                             visible:            _camera.capturesPhotos
                             onActivated:        (index) => { _camera.photoCaptureMode = index }
@@ -531,12 +531,12 @@ Rectangle {
 
                         QGCButton {
                             Layout.fillWidth:   true
-                            text:               qsTr("Reset")
+                            text:               qsTr("重置")
                             onClicked:          resetPrompt.open()
                             MessageDialog {
                                 id:                 resetPrompt
-                                title:              qsTr("Reset Camera to Factory Settings")
-                                text:               qsTr("Confirm resetting all settings?")
+                                title:              qsTr("将相机重置为出厂设置")
+                                text:               qsTr("确认重置所有设置？")
                                 buttons:            MessageDialog.Yes | MessageDialog.No
 
                                 onButtonClicked: function (button, role) {
@@ -555,13 +555,13 @@ Rectangle {
 
                         QGCButton {
                             Layout.fillWidth:   true
-                            text:               qsTr("Format")
+                            text:               qsTr("格式化")
                             visible:            _cameraStorageSupported
                             onClicked:          formatPrompt.open()
                             MessageDialog {
                                 id:                 formatPrompt
-                                title:              qsTr("Format Camera Storage")
-                                text:               qsTr("Confirm erasing all files?")
+                                title:              qsTr("格式化相机存储")
+                                text:               qsTr("确认删除所有文件？")
                                 buttons:            MessageDialog.Yes | MessageDialog.No
 
                                 onButtonClicked: function (button, role) {

@@ -61,7 +61,7 @@ Row {
                 anchors.verticalCenter: parent.verticalCenter
 
                 QGCLabel {
-                    text:                   qsTr("Value: ")
+                    text:                   qsTr("参数: ")
                     anchors.verticalCenter: parent.verticalCenter
                 }
 

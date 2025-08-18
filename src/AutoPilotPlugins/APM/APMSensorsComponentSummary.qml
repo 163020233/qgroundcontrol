@@ -25,7 +25,7 @@ Item {
         anchors.fill:       parent
 
         VehicleSummaryRow {
-        labelText:  qsTr("Compasses:")
+        labelText:  qsTr("指南针:")
         valueText: ""
         }
 
@@ -43,8 +43,8 @@ Item {
                                      (sensorParams.rgCompassExternalParamAvailable[index] ?
                                           (sensorParams.rgCompassExternal[index] ? ", External" : ", Internal" ) :
                                           "") :
-                                     qsTr("Setup required")) :
-                                qsTr("Not installed")
+                                     qsTr("校准需要")) :
+                                qsTr("未安装")
 
                     function getPriority (index) {
                         if (sensorParams.rgCompassId[index].value == sensorParams.rgCompassPrio[0].value) {
@@ -70,8 +70,8 @@ Item {
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Accelerometer(s):")
-            valueText: controller.accelSetupNeeded ? qsTr("Setup required") : qsTr("Ready")
+            labelText: qsTr("加速度计:")
+            valueText: controller.accelSetupNeeded ? qsTr("校准需要") : qsTr("已准备就绪")
         }
 
         Repeater {
@@ -83,8 +83,8 @@ Item {
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Barometer(s):")
-            valueText: sensorParams.baroIdAvailable ? "" : qsTr("Not Supported(Over APM 4.1)")
+            labelText: qsTr("气压计:")
+            valueText: sensorParams.baroIdAvailable ? "" : qsTr("不支持(APM 4.1及以上)")
         }
 
         Repeater {

@@ -34,7 +34,7 @@ QGCFlickable {
             anchors.margins:    _margin
             anchors.left:       parent.left
             anchors.top:        parent.top
-            text:               qsTr("GeoFence")
+            text:               qsTr("地理围栏")
             anchors.leftMargin: ScreenTools.defaultFontPixelWidth
         }
 
@@ -62,8 +62,8 @@ QGCFlickable {
                     wrapMode:           Text.WordWrap
                     font.pointSize:     myGeoFenceController.supported ? ScreenTools.smallFontPointSize : ScreenTools.defaultFontPointSize
                     text:               myGeoFenceController.supported ?
-                                            qsTr("GeoFencing allows you to set a virtual fence around the area you want to fly in.") :
-                                            qsTr("This vehicle does not support GeoFence.")
+                                            qsTr("地理围栏允许您设置一个虚拟围栏，将您要飞行的区域围起来。") :
+                                            qsTr("该设备不支持地理围栏。")
                 }
 
                 Column {
@@ -113,12 +113,12 @@ QGCFlickable {
                         id:             insertSection
                         anchors.left:   parent.left
                         anchors.right:  parent.right
-                        text:           qsTr("Insert GeoFence")
+                        text:           qsTr("插入地理围栏")
                     }
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("Polygon Fence")
+                        text:               qsTr("多边形围栏")
 
                         onClicked: {
                             var rect = Qt.rect(flightMap.centerViewport.x, flightMap.centerViewport.y, flightMap.centerViewport.width, flightMap.centerViewport.height)
@@ -130,7 +130,7 @@ QGCFlickable {
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("Circular Fence")
+                        text:               qsTr("圆形围栏")
 
                         onClicked: {
                             var rect = Qt.rect(flightMap.centerViewport.x, flightMap.centerViewport.y, flightMap.centerViewport.width, flightMap.centerViewport.height)
@@ -144,11 +144,11 @@ QGCFlickable {
                         id:             polygonSection
                         anchors.left:   parent.left
                         anchors.right:  parent.right
-                        text:           qsTr("Polygon Fences")
+                        text:           qsTr("多边形围栏")
                     }
 
                     QGCLabel {
-                        text:       qsTr("None")
+                        text:       qsTr("无")
                         visible:    polygonSection.checked && myGeoFenceController.polygons.count === 0
                     }
 
@@ -159,7 +159,7 @@ QGCFlickable {
                         visible:            polygonSection.checked && myGeoFenceController.polygons.count > 0
 
                         QGCLabel {
-                            text:               qsTr("Inclusion")
+                            text:               qsTr("包含")
                             Layout.column:      0
                             Layout.alignment:   Qt.AlignHCenter
                         }
@@ -175,7 +175,7 @@ QGCFlickable {
                         }
 
                         QGCLabel {
-                            text:               qsTr("Edit")
+                            text:               qsTr("编辑")
                             Layout.column:      1
                             Layout.alignment:   Qt.AlignHCenter
                         }
@@ -199,7 +199,7 @@ QGCFlickable {
                         }
 
                         QGCLabel {
-                            text:               qsTr("Delete")
+                            text:               qsTr("删除")
                             Layout.column:      2
                             Layout.alignment:   Qt.AlignHCenter
                         }
@@ -208,7 +208,7 @@ QGCFlickable {
                             model: myGeoFenceController.polygons
 
                             QGCButton {
-                                text:               qsTr("Del")
+                                text:               qsTr("删除")
                                 Layout.alignment:   Qt.AlignHCenter
                                 onClicked:          myGeoFenceController.deletePolygon(index)
                             }
@@ -219,11 +219,11 @@ QGCFlickable {
                         id:             circleSection
                         anchors.left:   parent.left
                         anchors.right:  parent.right
-                        text:           qsTr("Circular Fences")
+                        text:           qsTr("圆形围栏")
                     }
 
                     QGCLabel {
-                        text:       qsTr("None")
+                        text:       qsTr("无")
                         visible:    circleSection.checked && myGeoFenceController.circles.count === 0
                     }
 
@@ -235,7 +235,7 @@ QGCFlickable {
                         visible:            polygonSection.checked && myGeoFenceController.circles.count > 0
 
                         QGCLabel {
-                            text:               qsTr("Inclusion")
+                            text:               qsTr("包含")
                             Layout.column:      0
                             Layout.alignment:   Qt.AlignHCenter
                         }
@@ -251,7 +251,7 @@ QGCFlickable {
                         }
 
                         QGCLabel {
-                            text:               qsTr("Edit")
+                            text:               qsTr("编辑")
                             Layout.column:      1
                             Layout.alignment:   Qt.AlignHCenter
                         }
@@ -275,7 +275,7 @@ QGCFlickable {
                         }
 
                         QGCLabel {
-                            text:               qsTr("Radius")
+                            text:               qsTr("半径")
                             Layout.column:      2
                             Layout.alignment:   Qt.AlignHCenter
                         }
@@ -291,7 +291,7 @@ QGCFlickable {
                         }
 
                         QGCLabel {
-                            text:               qsTr("Delete")
+                            text:               qsTr("删除")
                             Layout.column:      3
                             Layout.alignment:   Qt.AlignHCenter
                         }
@@ -300,7 +300,7 @@ QGCFlickable {
                             model: myGeoFenceController.circles
 
                             QGCButton {
-                                text:               qsTr("Del")
+                                text:               qsTr("删除")
                                 Layout.alignment:   Qt.AlignHCenter
                                 onClicked:          myGeoFenceController.deleteCircle(index)
                             }
@@ -311,11 +311,11 @@ QGCFlickable {
                         id:             breachReturnSection
                         anchors.left:   parent.left
                         anchors.right:  parent.right
-                        text:           qsTr("Breach Return Point")
+                        text:           qsTr("突破返回点")
                     }
 
                     QGCButton {
-                        text:               qsTr("Add Breach Return Point")
+                        text:               qsTr("添加突破返回点")
                         visible:            breachReturnSection.visible && !myGeoFenceController.breachReturnPoint.isValid
                         anchors.left:       parent.left
                         anchors.right:      parent.right
@@ -324,7 +324,7 @@ QGCFlickable {
                     }
 
                     QGCButton {
-                        text:               qsTr("Remove Breach Return Point")
+                        text:               qsTr("删除突破返回点")
                         visible:            breachReturnSection.visible && myGeoFenceController.breachReturnPoint.isValid
                         anchors.left:       parent.left
                         anchors.right:      parent.right
@@ -339,7 +339,7 @@ QGCFlickable {
                         visible:            breachReturnSection.visible && myGeoFenceController.breachReturnPoint.isValid
 
                         QGCLabel {
-                            text: qsTr("Altitude")
+                            text: qsTr("高度")
                         }
 
                         FactTextField {

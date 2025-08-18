@@ -28,15 +28,15 @@ ColumnLayout {
         availableHeight:    _availableHeight - pidTuning.y
 
         property var roll: QtObject {
-            property string name: qsTr("Roll")
+            property string name: qsTr("滚转")
             property var plot: [
                 { name: "Response", value: globals.activeVehicle.roll.value },
                 { name: "Setpoint", value: globals.activeVehicle.setpoint.roll.value }
             ]
             property var params: ListModel {
                 ListElement {
-                    title:          qsTr("Time constant (FW_R_TC)")
-                    description:    qsTr("The latency between a roll step input and the achieved setpoint (inverse to a P gain)")
+                    title:          qsTr("滚转时间常数 (FW_R_TC)")
+                    description:    qsTr("滚转时间常数: 滚转输入与 achieved setpoint 之间的延迟 (与 P 增益成反比)")
                     param:          "FW_R_TC"
                     min:            0.4
                     max:            1.0
@@ -45,15 +45,15 @@ ColumnLayout {
             }
         }
         property var pitch: QtObject {
-            property string name: qsTr("Pitch")
+            property string name: qsTr("俯仰")
             property var plot: [
                 { name: "Response", value: globals.activeVehicle.pitch.value },
                 { name: "Setpoint", value: globals.activeVehicle.setpoint.pitch.value }
             ]
             property var params: ListModel {
                 ListElement {
-                    title:          qsTr("Time Constant (FW_P_TC)")
-                    description:    qsTr("The latency between a pitch step input and the achieved setpoint (inverse to a P gain)")
+                    title:          qsTr("俯仰时间常数 (FW_P_TC)")
+                    description:    qsTr("俯仰时间常数: 俯仰输入与 achieved setpoint 之间的延迟 (与 P 增益成反比)")
                     param:          "FW_P_TC"
                     min:            0.2
                     max:            1.0

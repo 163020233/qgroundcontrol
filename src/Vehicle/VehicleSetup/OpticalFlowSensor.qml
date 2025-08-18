@@ -18,7 +18,7 @@ import QGroundControl.ScreenTools
 
 Item {
     QGCLabel {
-        text: qsTr("Optical Flow Camera")
+        text: qsTr("光流相机")
         font.bold: true
     }
 

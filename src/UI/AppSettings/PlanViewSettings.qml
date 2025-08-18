@@ -26,35 +26,35 @@ SettingsPage {
 
         LabelledFactTextField {
             Layout.fillWidth:   true
-            label:              qsTr("Default Mission Altitude")
+            label:              qsTr("默认任务高度")
             fact:               _settingsManager.appSettings.defaultMissionItemAltitude
             visible:            fact.visible
         }
 
         LabelledFactTextField {
             Layout.fillWidth:   true
-            label:              qsTr("VTOL TransitionDistance")
+            label:              qsTr("VTOL 转换距离")
             fact:               _planViewSettings.vtolTransitionDistance
             visible:            fact.visible
         }
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Use MAV_CMD_CONDITION_GATE for pattern generation")
+            text:               qsTr("使用 MAV_CMD_CONDITION_GATE 生成模式")
             fact:               _planViewSettings.useConditionGate
             visible:            fact.visible
         }
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Missions do not require takeoff item")
+            text:               qsTr("任务不需要起飞项")
             fact:               _planViewSettings.takeoffItemNotRequired
             visible:            fact.visible
         }
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Allow configuring multiple landing sequences")
+            text:               qsTr("允许配置多个降落序列")
             fact:               _planViewSettings.allowMultipleLandingPatterns
             visible:            fact.visible
         }

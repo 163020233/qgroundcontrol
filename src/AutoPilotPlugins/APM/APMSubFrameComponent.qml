@@ -199,7 +199,7 @@ SetupPage {
 
         QGCPopupDialog {
             id:         confirmFrameDialog
-            title:      qsTr("Frame selection")
+            title:      qsTr("框架选择")
             buttons:    Dialog.Close
 
             ColumnLayout {
@@ -208,14 +208,14 @@ SetupPage {
                     width:              firstButton.width
                     wrapMode:           Text.WordWrap
                     text:               frameModelSelected.paramFileName != undefined ?
-                                            qsTr("Would you like to load the default parameters for the frame?") :
-                                            qsTr("Would you like to set the desired frame?")
+                                            qsTr("是否加载框架的默认参数?") :
+                                            qsTr("是否设置所需帧?")
                 }
 
                 QGCButton {
                     id:                 firstButton
                     Layout.fillWidth:   true
-                    text:               qsTr("Yes, Load default parameter set for %1").arg(frameModelSelected.name)
+                    text:               qsTr("是的, 加载 %1 的默认参数集").arg(frameModelSelected.name)
                     visible:            frameModelSelected.paramFileName != undefined
 
                     onClicked: {
@@ -228,8 +228,8 @@ SetupPage {
                 QGCButton {
                     Layout.fillWidth:   true
                     text:               frameModelSelected.paramFileName != undefined ?
-                                            qsTr("No, set frame only") :
-                                            qsTr("Confirm frame %1").arg(frameModelSelected.name)
+                                            qsTr("否, 仅设置框架") :
+                                            qsTr("确认框架 %1").arg(frameModelSelected.name)
 
                     onClicked: {
                         setFrameConfig(frameModelSelected.paramValue)

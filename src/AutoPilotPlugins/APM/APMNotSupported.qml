@@ -14,7 +14,7 @@ import QGroundControl.Controls
 
 QGCLabel {
     anchors.fill:           parent
-    text:                   qsTr("Not supported")
+    text:                   qsTr("不支持")
     horizontalAlignment:    Text.AlignHCenter
     verticalAlignment:      Text.AlignVCenter
 }

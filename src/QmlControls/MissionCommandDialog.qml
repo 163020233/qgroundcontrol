@@ -20,7 +20,7 @@ import QGroundControl.Palette
 
 QGCPopupDialog {
     id:         root
-    title:      qsTr("Select Mission Command")
+    title:      qsTr("选择任务命令")
     buttons:    Dialog.Cancel
 
     property var    vehicle
@@ -33,7 +33,7 @@ QGCPopupDialog {
             spacing: ScreenTools.defaultFontPixelWidth
 
             QGCLabel {
-                text: qsTr("Category:")
+                text: qsTr("类别:")
             }
 
             QGCComboBox {

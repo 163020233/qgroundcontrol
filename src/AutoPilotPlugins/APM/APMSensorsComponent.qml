@@ -37,16 +37,16 @@ SetupPage {
             // Help text which is shown both in the status text area prior to pressing a cal button and in the
             // pre-calibration dialog.
 
-            readonly property string orientationHelpSet:    qsTr("If mounted in the direction of flight, select None.")
-            readonly property string orientationHelpCal:    qsTr("Before calibrating make sure rotation settings are correct. ") + orientationHelpSet
-            readonly property string compassRotationText:   qsTr("If the compass or GPS module is mounted in flight direction, leave the default value (None)")
+            readonly property string orientationHelpSet:    qsTr("如果车辆安装方向与飞行方向相同，请选择None。")
+            readonly property string orientationHelpCal:    qsTr("在校准之前，请确保旋转设置正确。") + orientationHelpSet
+            readonly property string compassRotationText:   qsTr("如果罗盘或GPS模块安装在飞行方向，请保持默认值（None）")
 
-            readonly property string compassHelp:   qsTr("For Compass calibration you will need to rotate your vehicle through a number of positions.")
-            readonly property string gyroHelp:      qsTr("For Gyroscope calibration you will need to place your vehicle on a surface and leave it still.")
-            readonly property string accelHelp:     qsTr("For Accelerometer calibration you will need to place your vehicle on all six sides on a perfectly level surface and hold it still in each orientation for a few seconds.")
-            readonly property string levelHelp:     qsTr("To level the horizon you need to place the vehicle in its level flight position and press OK.")
+            readonly property string compassHelp:   qsTr("对于罗盘校准，您需要通过几种位置旋转车辆。")
+            readonly property string gyroHelp:      qsTr("对于陀螺仪校准，您需要将车辆放在表面上并保持静止。")
+            readonly property string accelHelp:     qsTr("对于加速度计校准，您需要将车辆放在所有六个方向上的完全水平表面上，并在每个方向上保持静止一段时间。")
+            readonly property string levelHelp:     qsTr("要水平地平线，您需要将车辆放在其水平飞行位置并按下OK。")
 
-            readonly property string statusTextAreaDefaultText: qsTr("Start the individual calibration steps by clicking one of the buttons to the left.")
+            readonly property string statusTextAreaDefaultText: qsTr("单击左侧的按钮即可开始单独的校准步骤")
 
             // Used to pass help text to the preCalibrationDialog dialog
             property string preCalibrationDialogHelp
@@ -54,8 +54,8 @@ SetupPage {
             property string _postCalibrationDialogText
             property var    _postCalibrationDialogParams
 
-            readonly property string _badCompassCalText: qsTr("The calibration for Compass %1 appears to be poor. ") +
-                                                         qsTr("Check the compass position within your vehicle and re-do the calibration.")
+            readonly property string _badCompassCalText: qsTr("罗盘 %1 的校准疑似有偏差。") +
+                                                         qsTr("检查设备的罗盘位置并重新校准。")
 
             readonly property int sideBarH1PointSize:  ScreenTools.mediumFontPointSize
             readonly property int mainTextH1PointSize: ScreenTools.mediumFontPointSize // Seems to be unused
@@ -96,19 +96,19 @@ SetupPage {
                 case _calTypeCompass:
                     _orientationsDialogShowCompass = true
                     _orientationDialogHelp = orientationHelpCal
-                    dialogTitle = qsTr("Calibrate Compass")
+                    dialogTitle = qsTr("校准罗盘")
                     dialogButtons |= Dialog.Cancel
                     break
                 case _calTypeAccel:
                     _orientationsDialogShowCompass = false
                     _orientationDialogHelp = orientationHelpCal
-                    dialogTitle = qsTr("Calibrate Accelerometer")
+                    dialogTitle = qsTr("校准加速度计")
                     dialogButtons |= Dialog.Cancel
                     break
                 case _calTypeSet:
                     _orientationsDialogShowCompass = true
                     _orientationDialogHelp = orientationHelpSet
-                    dialogTitle = qsTr("Sensor Settings")
+                    dialogTitle = qsTr("传感器设置")
                     break
                 }
 
@@ -120,11 +120,11 @@ SetupPage {
             }
 
             function compassLabel(index) {
-                var label = qsTr("Compass %1 ").arg(index+1)
+                var label = qsTr("罗盘 %1 ").arg(index+1)
                 var addOpenParan = true
                 var addComma = false
                 if (sensorParams.compassPrimaryFactAvailable) {
-                    label += sensorParams.rgCompassPrimary[index] ? qsTr("(primary") : qsTr("(secondary")
+                    label += sensorParams.rgCompassPrimary[index] ? qsTr("(主罗盘") : qsTr("(次罗盘")
                     addComma = true
                     addOpenParan = false
                 }
@@ -135,7 +135,7 @@ SetupPage {
                     if (addComma) {
                         label += qsTr(", ")
                     }
-                    label += sensorParams.rgCompassExternal[index] ? qsTr("external") : qsTr("internal")
+                    label += sensorParams.rgCompassExternal[index] ? qsTr("外部罗盘") : qsTr("内部罗盘")
                 }
                 label += ")"
                 return label
@@ -185,8 +185,8 @@ SetupPage {
                 id: waitForCancelDialogComponent
 
                 QGCSimpleMessageDialog {
-                    title:      qsTr("Calibration Cancel")
-                    text:       qsTr("Waiting for Vehicle to response to Cancel. This may take a few seconds.")
+                    title:      qsTr("校准取消")
+                    text:       qsTr("等待设备响应取消。这可能需要几秒钟。")
                     buttons:    0
 
                     Connections {
@@ -269,7 +269,7 @@ SetupPage {
 
                 QGCPopupDialog {
                     id:         postOnboardCompassCalibrationDialog
-                    title:      qsTr("Calibration complete")
+                    title:      qsTr("校准完成")
                     buttons:    Dialog.Ok
 
                     Column {
@@ -285,15 +285,15 @@ SetupPage {
                             anchors.left:   parent.left
                             anchors.right:  parent.right
                             wrapMode:       Text.WordWrap
-                            text:           qsTr("Shown in the indicator bars is the quality of the calibration for each compass.\n\n") +
-                                            qsTr("- Green indicates a well functioning compass.\n") +
-                                            qsTr("- Yellow indicates a questionable compass or calibration.\n") +
-                                            qsTr("- Red indicates a compass which should not be used.\n\n") +
-                                            qsTr("YOU MUST REBOOT YOUR VEHICLE AFTER EACH CALIBRATION.")
+                            text:           qsTr("展示校准结果 是每个罗盘校准质量的指示条。\n\n") +
+                                            qsTr("- 绿色表示功能正常的罗盘。\n") +
+                                            qsTr("- 黄色表示问题罗盘或校准。\n") +
+                                            qsTr("- 红色表示不应该使用的罗盘。\n\n") +
+                                            qsTr("您必须在每次校准后重新启动您的车辆。")
                         }
 
                         QGCButton {
-                            text:       qsTr("Reboot Vehicle")
+                            text:       qsTr("重新启动设备")
                             onClicked: {
                                 controller.vehicle.rebootVehicle()
                                 postOnboardCompassCalibrationDialog.close()
@@ -308,7 +308,7 @@ SetupPage {
 
                 QGCPopupDialog {
                     id:     postCalibrationDialog
-                    title:  qsTr("Calibration complete")
+                    title:  qsTr("校准完成")
 
                     Column {
                         width:      40 * ScreenTools.defaultFontPixelWidth
@@ -318,11 +318,11 @@ SetupPage {
                             anchors.left:   parent.left
                             anchors.right:  parent.right
                             wrapMode:       Text.WordWrap
-                            text:           qsTr("YOU MUST REBOOT YOUR VEHICLE AFTER EACH CALIBRATION.")
+                            text:           qsTr("您必须在每次校准后重新启动您的设备。")
                         }
 
                         QGCButton {
-                            text:       qsTr("Reboot Vehicle")
+                            text:       qsTr("重新启动设备")
                             onClicked: {
                                 controller.vehicle.rebootVehicle()
                                 postCalibrationDialog.close()
@@ -357,13 +357,13 @@ SetupPage {
 
                             FactCheckBox {
                                 id:         useCompassCheckBox
-                                text:       qsTr("Use Compass")
+                                text:       qsTr("使用罗盘")
                                 fact:       sensorParams.rgCompassUseFact[index]
                                 visible:    sensorParams.rgCompassUseParamAvailable[index] && !sensorParams.rgCompassPrimary[index]
                             }
 
                             QGCComboBox {
-                                model:      [ qsTr("Priority 1"), qsTr("Priority 2"), qsTr("Priority 3"), qsTr("Not Set") ]
+                                model:      [ qsTr("优先级 1"), qsTr("优先级 2"), qsTr("优先级 3"), qsTr("未设置") ]
                                 visible:    _singleCompassSettingsComponentShowPriority && sensorParams.compassPrioFactsAvailable && useCompassCheckBox.visible && useCompassCheckBox.checked
 
                                 property int _compassIndex: index
@@ -396,7 +396,7 @@ SetupPage {
                         Column {
                             visible: !_compassAutoRot && sensorParams.rgCompassExternal[index] && sensorParams.rgCompassRotParamAvailable[index]
 
-                            QGCLabel { text: qsTr("Orientation:") }
+                            QGCLabel { text: qsTr("方向:") }
 
                             FactComboBox {
                                 width:      rotationColumnWidth
@@ -456,7 +456,7 @@ SetupPage {
                         }
 
                         Column {
-                            QGCLabel { text: qsTr("Autopilot Rotation:") }
+                            QGCLabel { text: qsTr("自动旋转:") }
 
                             FactComboBox {
                                 width:      rotationColumnWidth
@@ -473,11 +473,11 @@ SetupPage {
                             QGCLabel {
                                 width:      parent.width
                                 wrapMode:   Text.WordWrap
-                                text: qsTr("Simple accelerometer calibration is less precise but allows calibrating without rotating the vehicle. Check this if you have a large/heavy vehicle.")
+                                text: qsTr("简单的加速度校准精度较低，但允许在不旋转设备的情况下校准。如果您的设备较大/较重，请选中此选项。")
                             }
 
                             QGCCheckBox {
-                                text: "Simple Accelerometer Calibration"
+                                text: "简单的加速度校准"
                                 onClicked: _doSimpleAccelCal = this.checked
                             }
                         }
@@ -491,7 +491,7 @@ SetupPage {
                             id:         magneticDeclinationLabel
                             width:      parent.width
                             visible:    globals.activeVehicle.sub && _orientationsDialogShowCompass
-                            text:       qsTr("Magnetic Declination")
+                            text:       qsTr("磁偏角")
                         }
 
                         Column {
@@ -503,7 +503,7 @@ SetupPage {
 
                             QGCCheckBox {
                                 id:                           manualMagneticDeclinationCheckBox
-                                text:                         qsTr("Manual Magnetic Declination")
+                                text:                         qsTr("手动磁偏角")
                                 property Fact autoDecFact:    controller.getParameterFact(-1, "COMPASS_AUTODEC")
                                 property int manual:          0
                                 property int automatic:       1
@@ -525,11 +525,11 @@ SetupPage {
                             width:      parent.width
                             visible:    _orientationsDialogShowCompass
                             wrapMode:   Text.WordWrap
-                            text:       qsTr("Fast compass calibration given vehicle position and yaw. This ") +
-                                        qsTr("results in zero diagonal and off-diagonal elements, so is only ") +
-                                        qsTr("suitable for vehicles where the field is close to spherical. It is ") +
-                                        qsTr("useful for large vehicles where moving the vehicle to calibrate it ") +
-                                        qsTr("is difficult. Point the vehicle North before using it.")
+                            text:       qsTr("快速校准给定车辆位置和偏航。这 ") +
+                                        qsTr("会导致零对角线和非对角线元素，因此仅 ") +
+                                        qsTr("适用于场强接近球形的设备。它对于 ") +
+                                        qsTr("大型设备校准很有用，因为移动设备校准 ") +
+                                        qsTr("很困难。请将设备向北指向校准。")
                         }
 
                         Column {
@@ -542,7 +542,7 @@ SetupPage {
                             QGCCheckBox {
                                 id:             northCalibrationCheckBox
                                 visible:        northCalibrationLabel.visible
-                                text:           qsTr("Fast Calibration")
+                                text:           qsTr("快速校准")
                             }
 
                             QGCLabel {
@@ -550,19 +550,19 @@ SetupPage {
                                 width:      parent.width
                                 visible:    northCalibrationCheckBox.checked && !globals.activeVehicle.coordinate.isValid
                                 wrapMode:   Text.WordWrap
-                                text:       qsTr("Vehicle has no Valid positon, please provide it")
+                                text:       qsTr("设备没有有效位置，请提供")
                             }
 
                             QGCCheckBox {
                                 visible:    northCalibrationManualPosition.visible && _gcsPosition.isValid
                                 id:         useGcsPositionCheckbox
-                                text:       qsTr("Use GCS position instead")
+                                text:       qsTr("使用GCS位置")
                                 checked:    _gcsPosition.isValid
                             }
                             QGCCheckBox {
                                 visible:    northCalibrationManualPosition.visible && !_gcsPosition.isValid
                                 id:         useMapPositionCheckbox
-                                text:       qsTr("Use current map position instead")
+                                text:       qsTr("使用当前地图位置")
                             }
 
                             QGCLabel {
@@ -596,7 +596,7 @@ SetupPage {
                 id: compassMotDialogComponent
 
                 QGCPopupDialog {
-                    title:      qsTr("Compass Motor Interference Calibration")
+                    title:      qsTr("罗盘电机干扰校准")
                     buttons:    Dialog.Cancel | Dialog.Ok
 
                     onAccepted: controller.calibrateMotorInterference()
@@ -609,38 +609,38 @@ SetupPage {
                             anchors.left:   parent.left
                             anchors.right:  parent.right
                             wrapMode:       Text.WordWrap
-                            text:           qsTr("This is recommended for vehicles that have only an internal compass and on vehicles where there is significant interference on the compass from the motors, power wires, etc. ") +
-                                            qsTr("CompassMot only works well if you have a battery current monitor because the magnetic interference is linear with current drawn. ") +
-                                            qsTr("It is technically possible to set-up CompassMot using throttle but this is not recommended.")
+                            text:           qsTr("这是一个推荐的校准方法，适用于只有内部罗盘的设备，以及在电机、电源线等干扰罗盘的设备上。 ") +
+                                            qsTr("CompassMot 仅在您有电池电流监控器时才有效，因为磁场干扰与电流成正比。 ") +
+                                            qsTr("理论上可以使用油门设置 CompassMot，但不推荐这样做。")
                         }
 
                         QGCLabel {
                             anchors.left:   parent.left
                             anchors.right:  parent.right
                             wrapMode:       Text.WordWrap
-                            text:           qsTr("Disconnect your props, flip them over and rotate them one position around the frame. ") +
-                                            qsTr("In this configuration they should push the copter down into the ground when the throttle is raised.")
+                            text:           qsTr("断开道具，将其翻转并围绕框架旋转一个位置。") +
+                                            qsTr("在这种配置下，当油门升起时，他们应该将直升机推到地面上。")
                         }
 
                         QGCLabel {
                             anchors.left:   parent.left
                             anchors.right:  parent.right
                             wrapMode:       Text.WordWrap
-                            text:           qsTr("Secure the copter (perhaps with tape) so that it does not move.")
+                            text:           qsTr("固定无人机（可以用胶带固定），使其不会移动.")
                         }
 
                         QGCLabel {
                             anchors.left:   parent.left
                             anchors.right:  parent.right
                             wrapMode:       Text.WordWrap
-                            text:           qsTr("Turn on your transmitter and keep throttle at zero.")
+                            text:           qsTr("打开发射器并保持油门为零。")
                         }
 
                         QGCLabel {
                             anchors.left:   parent.left
                             anchors.right:  parent.right
                             wrapMode:       Text.WordWrap
-                            text:           qsTr("Click Ok to start CompassMot calibration.")
+                            text:           qsTr("点击确定开始校准。")
                         }
                     }
                 }
@@ -663,7 +663,7 @@ SetupPage {
 
                     IndicatorButton {
                         width:          _buttonWidth
-                        text:           qsTr("Accelerometer")
+                        text:           qsTr("加速度计")
                         indicatorGreen: !accelCalNeeded
 
                         onClicked: function () {
@@ -674,12 +674,12 @@ SetupPage {
 
                     IndicatorButton {
                         width:          _buttonWidth
-                        text:           qsTr("Compass")
+                        text:           qsTr("罗盘")
                         indicatorGreen: !compassCalNeeded
 
                         onClicked: {
                             if (controller.accelSetupNeeded) {
-                                mainWindow.showMessageDialog(qsTr("Calibrate Compass"), qsTr("Accelerometer must be calibrated prior to Compass."))
+                                mainWindow.showMessageDialog(qsTr("校准罗盘"), qsTr("加速度计必须先校准，才能校准罗盘."))
                             } else {
                                 showOrientationsDialog(_calTypeCompass)
                             }
@@ -690,14 +690,14 @@ SetupPage {
                         width:  _buttonWidth
                         text:   _levelHorizonText
 
-                        readonly property string _levelHorizonText: qsTr("Level Horizon")
+                        readonly property string _levelHorizonText: qsTr("水平地平线")
 
                         onClicked: {
                             if (controller.accelSetupNeeded) {
-                                mainWindow.showMessageDialog(_levelHorizonText, qsTr("Accelerometer must be calibrated prior to Level Horizon."))
+                                mainWindow.showMessageDialog(_levelHorizonText, qsTr("加速度计必须先校准，才能校准水平地平线."))
                             } else {
                                 mainWindow.showMessageDialog(_levelHorizonText,
-                                                             qsTr("To level the horizon you need to place the vehicle in its level flight position and press Ok."),
+                                                             qsTr("要校准水平地平线，需要将飞行器放在水平位置并点击确定."),
                                                              Dialog.Cancel | Dialog.Ok,
                                                              function() { controller.levelHorizon() })
                             }
@@ -706,10 +706,10 @@ SetupPage {
 
                     QGCButton {
                         width:      _buttonWidth
-                        text:       qsTr("Gyro")
+                        text:       qsTr("陀螺仪")
                         visible:    globals.activeVehicle && (globals.activeVehicle.multiRotor | globals.activeVehicle.rover | globals.activeVehicle.sub)
-                        onClicked:  mainWindow.showMessageDialog(qsTr("Calibrate Gyro"),
-                                                                 qsTr("For Gyroscope calibration you will need to place your vehicle on a surface and leave it still.\n\nClick Ok to start calibration."),
+                        onClicked:  mainWindow.showMessageDialog(qsTr("校准陀螺仪"),
+                                                                 qsTr("要校准陀螺仪，需要将飞行器放在水平位置并点击确定."),
                                                                  Dialog.Cancel | Dialog.Ok,
                                                                  function() { controller.calibrateGyro() })
                     }
@@ -718,25 +718,25 @@ SetupPage {
                         width:      _buttonWidth
                         text:       _calibratePressureText
                         onClicked:  mainWindow.showMessageDialog(_calibratePressureText,
-                                                                 qsTr("Pressure calibration will set the %1 to zero at the current pressure reading. %2").arg(_altText).arg(_helpTextFW),
+                                                                 qsTr("气压计校准将把 %1 校准为当前气压值的零值. %2").arg(_altText).arg(_helpTextFW),
                                                                  Dialog.Cancel | Dialog.Ok,
                                                                  function() { controller.calibratePressure() })
 
-                        readonly property string _altText:                  globals.activeVehicle.sub ? qsTr("depth") : qsTr("altitude")
-                        readonly property string _helpTextFW:               globals.activeVehicle.fixedWing ? qsTr("To calibrate the airspeed sensor shield it from the wind. Do not touch the sensor or obstruct any holes during the calibration.") : ""
-                        readonly property string _calibratePressureText:    globals.activeVehicle.fixedWing ? qsTr("Baro/Airspeed") : qsTr("Pressure")
+                        readonly property string _altText:                  globals.activeVehicle.sub ? qsTr("深度") : qsTr("高度")
+                        readonly property string _helpTextFW:               globals.activeVehicle.fixedWing ? qsTr("要校准气压计，需要将飞行器放在水平位置并点击确定.") : ""
+                        readonly property string _calibratePressureText:    globals.activeVehicle.fixedWing ? qsTr("气压计/空速") : qsTr("气压")
                     }
 
                     QGCButton {
                         width:      _buttonWidth
-                        text:       qsTr("CompassMot")
+                        text:       qsTr("罗盘电机干扰校准")
                         visible:    globals.activeVehicle ? globals.activeVehicle.supportsMotorInterference : false
                         onClicked:  compassMotDialogComponent.createObject(mainWindow).open()
                     }
 
                     QGCButton {
                         width:      _buttonWidth
-                        text:       qsTr("Sensor Settings")
+                        text:       qsTr("传感器设置")
                         onClicked:  showOrientationsDialog(_calTypeSet)
                     }
                 } // Column - Cal Buttons
@@ -751,7 +751,7 @@ SetupPage {
                     QGCButton {
                         id:         nextButton
                         width:      _buttonWidth
-                        text:       qsTr("Next")
+                        text:       qsTr("下一步")
                         enabled:    false
                         onClicked:  controller.nextClicked()
                     }
@@ -759,7 +759,7 @@ SetupPage {
                     QGCButton {
                         id:         cancelButton
                         width:      _buttonWidth
-                        text:       qsTr("Cancel")
+                        text:       qsTr("取消")
                         enabled:    false
                         onClicked:  controller.cancelCalibration()
                     }
@@ -829,7 +829,7 @@ SetupPage {
                                 visible:            controller.orientationCalDownSideVisible
                                 calValid:           controller.orientationCalDownSideDone
                                 calInProgress:      controller.orientationCalDownSideInProgress
-                                calInProgressText:  controller.orientationCalDownSideRotate ? qsTr("Rotate") : qsTr("Hold Still")
+                                calInProgressText:  controller.orientationCalDownSideRotate ? qsTr("旋转") : qsTr("保持静止")
                                 imageSource:        "qrc:///qmlimages/VehicleDown.png"
                             }
                             VehicleRotationCal {
@@ -838,7 +838,7 @@ SetupPage {
                                 visible:            controller.orientationCalLeftSideVisible
                                 calValid:           controller.orientationCalLeftSideDone
                                 calInProgress:      controller.orientationCalLeftSideInProgress
-                                calInProgressText:  controller.orientationCalLeftSideRotate ? qsTr("Rotate") : qsTr("Hold Still")
+                                calInProgressText:  controller.orientationCalLeftSideRotate ? qsTr("旋转") : qsTr("保持静止")
                                 imageSource:        "qrc:///qmlimages/VehicleLeft.png"
                             }
                             VehicleRotationCal {
@@ -847,7 +847,7 @@ SetupPage {
                                 visible:            controller.orientationCalRightSideVisible
                                 calValid:           controller.orientationCalRightSideDone
                                 calInProgress:      controller.orientationCalRightSideInProgress
-                                calInProgressText:  controller.orientationCalRightSideRotate ? qsTr("Rotate") : qsTr("Hold Still")
+                                calInProgressText:  controller.orientationCalRightSideRotate ? qsTr("旋转") : qsTr("保持静止")
                                 imageSource:        "qrc:///qmlimages/VehicleRight.png"
                             }
                             VehicleRotationCal {
@@ -856,7 +856,7 @@ SetupPage {
                                 visible:            controller.orientationCalNoseDownSideVisible
                                 calValid:           controller.orientationCalNoseDownSideDone
                                 calInProgress:      controller.orientationCalNoseDownSideInProgress
-                                calInProgressText:  controller.orientationCalNoseDownSideRotate ? qsTr("Rotate") : qsTr("Hold Still")
+                                calInProgressText:  controller.orientationCalNoseDownSideRotate ? qsTr("旋转") : qsTr("保持静止")
                                 imageSource:        "qrc:///qmlimages/VehicleNoseDown.png"
                             }
                             VehicleRotationCal {
@@ -865,7 +865,7 @@ SetupPage {
                                 visible:            controller.orientationCalTailDownSideVisible
                                 calValid:           controller.orientationCalTailDownSideDone
                                 calInProgress:      controller.orientationCalTailDownSideInProgress
-                                calInProgressText:  controller.orientationCalTailDownSideRotate ? qsTr("Rotate") : qsTr("Hold Still")
+                                calInProgressText:  controller.orientationCalTailDownSideRotate ? qsTr("旋转") : qsTr("保持静止")
                                 imageSource:        "qrc:///qmlimages/VehicleTailDown.png"
                             }
                             VehicleRotationCal {
@@ -874,7 +874,7 @@ SetupPage {
                                 visible:            controller.orientationCalUpsideDownSideVisible
                                 calValid:           controller.orientationCalUpsideDownSideDone
                                 calInProgress:      controller.orientationCalUpsideDownSideInProgress
-                                calInProgressText:  controller.orientationCalUpsideDownSideRotate ? qsTr("Rotate") : qsTr("Hold Still")
+                                calInProgressText:  controller.orientationCalUpsideDownSideRotate ? qsTr("旋转") : qsTr("保持静止")
                                 imageSource:        "qrc:///qmlimages/VehicleUpsideDown.png"
                             }
                         }

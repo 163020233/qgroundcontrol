@@ -18,13 +18,13 @@ import QGroundControl.SettingsManager
 import QGroundControl.Controls
 
 FirstRunPrompt {
-    title:      qsTr("Measurement Units")
+    title:      qsTr("测量单位")
     promptId:   QGroundControl.corePlugin.unitsFirstRunPromptId
 
     property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
     property var    _unitsSettings:     QGroundControl.settingsManager.unitsSettings
     property var    _rgFacts:           [ _unitsSettings.horizontalDistanceUnits, _unitsSettings.verticalDistanceUnits, _unitsSettings.areaUnits, _unitsSettings.speedUnits, _unitsSettings.temperatureUnits ]
-    property var    _rgLabels:          [ qsTr("Horizontal Distance"), qsTr("Vertical Distance"), qsTr("Area"), qsTr("Speed"), qsTr("Temperature") ]
+    property var    _rgLabels:          [ qsTr("水平距离"), qsTr("垂直距离"), qsTr("面积"), qsTr("速度"), qsTr("温度") ]
     property int    _cVisibleFacts:     0
 
     Component.onCompleted: {
@@ -65,7 +65,7 @@ FirstRunPrompt {
 
         QGCLabel {
             id:         unitsSectionLabel
-            text:       qsTr("Choose the measurement units you want to use. You can also change it later in General Settings.")
+            text:       qsTr("选择您要使用的测量单位。您也可以在一般设置中稍后更改它。")
 
             Layout.preferredWidth: unitsGrid.width
             wrapMode: Text.WordWrap
@@ -85,7 +85,7 @@ FirstRunPrompt {
                 rows:               _cVisibleFacts + 1
                 flow:               GridLayout.TopToBottom
 
-                QGCLabel { text: qsTr("System of units") }
+                QGCLabel { text: qsTr("单位制") }
 
                 Repeater {
                     model: _rgFacts.length
@@ -98,7 +98,7 @@ FirstRunPrompt {
                 QGCComboBox {
                     Layout.fillWidth:   true
                     sizeToContents:     true
-                    model:              [ qsTr("Metric System"), qsTr("Imperial System") ]
+                    model:              [ qsTr("公制"), qsTr("英制") ]
                     currentIndex:       _unitsSettings.horizontalDistanceUnits.value === UnitsSettings.HorizontalDistanceUnitsMeters ? 0 : 1
                     onActivated: (index) => { changeSystemOfUnits(currentIndex === 0 /* metric */) }
                 }

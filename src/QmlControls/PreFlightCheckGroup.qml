@@ -47,7 +47,7 @@ Column  {
         id:             header
         anchors.left:   parent.left
         anchors.right:  parent.right
-        text:           name + (passed ? qsTr(" (passed)") : "")
+        text:           name + (passed ? qsTr(" (已通过)") : "")
         color:          failed ? qgcPal.statusFailedText : (passed ? qgcPal.statusPassedText : qgcPal.statusPendingText)
     }
 

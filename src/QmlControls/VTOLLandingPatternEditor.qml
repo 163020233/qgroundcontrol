@@ -37,8 +37,8 @@ Rectangle {
     property var    _missionVehicle:            _masterControler.controllerVehicle
     property real   _margin:                    ScreenTools.defaultFontPixelWidth / 2
     property real   _spacer:                    ScreenTools.defaultFontPixelWidth / 2
-    property string _setToVehicleHeadingStr:    qsTr("Set to vehicle heading")
-    property string _setToVehicleLocationStr:   qsTr("Set to vehicle location")
+    property string _setToVehicleHeadingStr:    qsTr("设置为设备航向")
+    property string _setToVehicleLocationStr:   qsTr("设置为设备位置")
     property bool   _showCameraSection:         !_missionVehicle.apmFirmware
     property int    _altitudeMode:              missionItem.altitudesAreRelative ? QGroundControl.AltitudeModeRelative : QGroundControl.AltitudeModeAbsolute
 
@@ -55,7 +55,7 @@ Rectangle {
             id:             finalApproachSection
             anchors.left:   parent.left
             anchors.right:  parent.right
-            text:           qsTr("Final approach")
+            text:           qsTr("最终着陆")
         }
 
         Column {
@@ -67,7 +67,7 @@ Rectangle {
             Item { width: 1; height: _spacer }
 
             FactCheckBox {
-                text:       qsTr("Use loiter to altitude")
+                text:       qsTr("使用盘旋到高度")
                 fact:       missionItem.useLoiterToAlt
             }
 
@@ -76,7 +76,7 @@ Rectangle {
                 anchors.right:   parent.right
                 columns:         2
 
-                QGCLabel { text: qsTr("Altitude") }
+                QGCLabel { text: qsTr("高度") }
 
                 AltitudeFactTextField {
                     Layout.fillWidth:   true
@@ -85,7 +85,7 @@ Rectangle {
                 }
 
                 QGCLabel {
-                    text:       qsTr("Radius")
+                    text:       qsTr("盘旋半径")
                     visible:    missionItem.useLoiterToAlt.rawValue
                 }
 
@@ -99,7 +99,7 @@ Rectangle {
             Item { width: 1; height: _spacer }
 
             FactCheckBox {
-                text:       qsTr("Loiter clockwise")
+                text:       qsTr("盘旋顺时针")
                 fact:       missionItem.loiterClockwise
                 visible:    missionItem.useLoiterToAlt.rawValue
             }
@@ -115,7 +115,7 @@ Rectangle {
             id:             landingPointSection
             anchors.left:   parent.left
             anchors.right:  parent.right
-            text:           qsTr("Landing point")
+            text:           qsTr("着陆点")
         }
 
         Column {
@@ -131,14 +131,14 @@ Rectangle {
                 anchors.right:   parent.right
                 columns:         2
 
-                QGCLabel { text: qsTr("Heading") }
+                QGCLabel { text: qsTr("航向") }
 
                 FactTextField {
                     Layout.fillWidth:   true
                     fact:               missionItem.landingHeading
                 }
 
-                QGCLabel { text: qsTr("Altitude") }
+                QGCLabel { text: qsTr("高度") }
 
                 AltitudeFactTextField {
                     Layout.fillWidth:   true
@@ -146,7 +146,7 @@ Rectangle {
                     altitudeMode:       _altitudeMode
                 }
 
-                QGCLabel { text: qsTr("Landing Dist") }
+                QGCLabel { text: qsTr("着陆距离") }
 
                 FactTextField {
                     fact:               missionItem.landingDistance
@@ -166,7 +166,7 @@ Rectangle {
 
         QGCCheckBox {
             anchors.right:  parent.right
-            text:           qsTr("Altitudes relative to launch")
+            text:           qsTr("相对于起飞的高度")
             checked:        missionItem.altitudesAreRelative
             visible:        QGroundControl.corePlugin.options.showMissionAbsoluteAltitude || !missionItem.altitudesAreRelative
             onClicked:      missionItem.altitudesAreRelative = checked
@@ -176,7 +176,7 @@ Rectangle {
             id:             cameraSection
             anchors.left:   parent.left
             anchors.right:  parent.right
-            text:           qsTr("Camera")
+            text:           qsTr("相机")
             visible:        _showCameraSection
         }
 
@@ -214,7 +214,7 @@ Rectangle {
                 wrapMode:               Text.WordWrap
                 color:                  qgcPal.warningText
                 font.pointSize:         ScreenTools.smallFontPointSize
-                text:                   qsTr("* Actual flight path will vary.")
+                text:                   qsTr("* 实际飞行路径会有变化。")
             }
 
             QGCLabel {
@@ -223,7 +223,7 @@ Rectangle {
                 wrapMode:               Text.WordWrap
                 color:                  qgcPal.warningText
                 font.pointSize:         ScreenTools.smallFontPointSize
-                text:                   qsTr("* Avoid tailwind on approach to land.")
+                text:                   qsTr("* 避免在着陆前顺风。")
             }
 
             QGCLabel {
@@ -232,7 +232,7 @@ Rectangle {
                 wrapMode:               Text.WordWrap
                 color:                  qgcPal.warningText
                 font.pointSize:         ScreenTools.smallFontPointSize
-                text:                   qsTr("* Ensure landing distance is enough to complete transition.")
+                text:                   qsTr("* 确保着陆距离足够完成转换。")
             }
         }
     }
@@ -258,14 +258,14 @@ Rectangle {
                 anchors.right:          parent.right
                 wrapMode:               Text.WordWrap
                 horizontalAlignment:    Text.AlignHCenter
-                text:                   qsTr("Click in map to set landing point.")
+                text:                   qsTr("点击地图设置着陆点。")
             }
 
             QGCLabel {
                 anchors.left:           parent.left
                 anchors.right:          parent.right
                 horizontalAlignment:    Text.AlignHCenter
-                text:                   qsTr("- or -")
+                text:                   qsTr("- 或 -")
                 visible:                globals.activeVehicle
             }
 
@@ -297,11 +297,11 @@ Rectangle {
             QGCLabel {
                 Layout.fillWidth:   true
                 wrapMode:           Text.WordWrap
-                text:               qsTr("Drag the loiter point to adjust landing direction for wind and obstacles as well as distance to land point.")
+                text:               qsTr("拖动并释放着陆点以调整着陆方向以避免顺风和障碍物，以及着陆距离。")
             }
 
             QGCButton {
-                text:               qsTr("Done")
+                text:               qsTr("完成")
                 Layout.fillWidth:   true
                 onClicked: {
                     missionItem.wizardMode = false

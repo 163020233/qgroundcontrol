@@ -63,7 +63,7 @@ Rectangle {
                     selectedVehicles.get(i).id
                 ).sort((a, b) => a - b)
                 .join(", ")
-                return qsTr("Selected: ") + ids
+                return qsTr("已选择: ") + ids
             }
         }
 
@@ -135,7 +135,7 @@ Rectangle {
                         implicitWidth:          Math.max(selectionRowLayout.width, actionRowLayout.width) + ScreenTools.defaultFontPixelHeight * 4
 
                         QGCLabel {
-                            text:               qsTr("Multi Vehicle Selection")
+                            text:               qsTr("多设备选择")
                             Layout.alignment:   Qt.AlignHCenter
                         }
 
@@ -144,13 +144,13 @@ Rectangle {
                             Layout.alignment:   Qt.AlignHCenter
 
                             QGCButton {
-                                text:                  qsTr("Select All")
+                                text:                  qsTr("全选")
                                 enabled:               multiVehicleList.selectedVehicles && multiVehicleList.selectedVehicles.count !== QGroundControl.multiVehicleManager.vehicles.count
                                 onClicked:             multiVehicleList.selectAll()
                             }
 
                             QGCButton {
-                                text:                  qsTr("Deselect All")
+                                text:                  qsTr("取消全选")
                                 enabled:               multiVehicleList.selectedVehicles && multiVehicleList.selectedVehicles.count > 0
                                 onClicked:             multiVehicleList.deselectAll()
                             }
@@ -159,7 +159,7 @@ Rectangle {
 
 
                         QGCLabel {
-                            text:              qsTr("Multi Vehicle Actions")
+                            text:              qsTr("多设备操作")
                             Layout.alignment:  Qt.AlignHCenter
                         }
 
@@ -168,7 +168,7 @@ Rectangle {
                             Layout.alignment:  Qt.AlignHCenter
 
                             QGCButton {
-                                text:                  qsTr("Arm")
+                                text:                  qsTr("启动")
                                 enabled:               multiVehicleList.armAvailable()
                                 onClicked:             _guidedController.confirmAction(_guidedController.actionMVArm)
                                 Layout.preferredWidth: ScreenTools.defaultFontPixelHeight * 2.75
@@ -177,7 +177,7 @@ Rectangle {
                             }
 
                             QGCButton {
-                                text:                  qsTr("Disarm")
+                                text:                  qsTr("取消启动")
                                 enabled:               multiVehicleList.disarmAvailable()
                                 onClicked:             _guidedController.confirmAction(_guidedController.actionMVDisarm)
                                 Layout.preferredWidth: ScreenTools.defaultFontPixelHeight * 2.75
@@ -186,7 +186,7 @@ Rectangle {
                             }
 
                             QGCButton {
-                                text:                  qsTr("Start")
+                                text:                  qsTr("开始任务")
                                 enabled:               multiVehicleList.startAvailable()
                                 onClicked:             _guidedController.confirmAction(_guidedController.actionMVStartMission)
                                 Layout.preferredWidth: ScreenTools.defaultFontPixelHeight * 2.75
@@ -195,7 +195,7 @@ Rectangle {
                             }
 
                             QGCButton {
-                                text:                  qsTr("Pause")
+                                text:                  qsTr("暂停")
                                 enabled:               multiVehicleList.pauseAvailable()
                                 onClicked:             _guidedController.confirmAction(_guidedController.actionMVPause)
                                 Layout.preferredWidth: ScreenTools.defaultFontPixelHeight * 2.75

@@ -39,7 +39,7 @@ ColumnLayout {
         columnSpacing:  _colSpacing
         rowSpacing:     _rowSpacing
 
-        QGCLabel { text: qsTr("Login:") }
+        QGCLabel { text: qsTr("登录:") }
         QGCTextField {
             id:                     loginField
             text:                   _loginFact.rawValue
@@ -48,7 +48,7 @@ ColumnLayout {
             onTextChanged:          subEditConfig.username = loginField.text
         }
 
-        QGCLabel { text: qsTr("Password:") }
+        QGCLabel { text: qsTr("密码:") }
         QGCTextField {
             id:                     passwordField
             text:                   _passFact.rawValue
@@ -76,13 +76,13 @@ ColumnLayout {
 
         QGCLabel {
             wrapMode: Text.WordWrap
-            text: qsTr("Don't have an account?")
+            text: qsTr("没有账号?")
         }
 
         QGCLabel {
             font.underline: true
             wrapMode: Text.WordWrap
-            text: qsTr("Register")
+            text: qsTr("注册")
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: true
@@ -92,7 +92,7 @@ ColumnLayout {
         }
     }
 
-    QGCLabel { text: qsTr("List of available devices") }
+    QGCLabel { text: qsTr("可用设备列表") }
 
     RowLayout {
         QGCComboBox {
@@ -116,7 +116,7 @@ ColumnLayout {
         }
 
         QGCButton {
-            text: qsTr("Refresh")
+            text: qsTr("刷新")
             onClicked:  {
                 QGroundControl.airlinkManager.updateDroneList(loginField.text, passwordField.text)
                 refreshHint.visible = false
@@ -130,6 +130,6 @@ ColumnLayout {
         Layout.fillWidth: true
         font.pointSize: ScreenTools.smallFontPointSize
         wrapMode: Text.WordWrap
-        text: qsTr("Click \"Refresh\" to authorize")
+        text: qsTr("点击 \"刷新\" 以授权")
     }
 }

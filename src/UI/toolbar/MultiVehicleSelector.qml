@@ -49,7 +49,7 @@ RowLayout {
         }
 
         QGCLabel {
-            text:               _activeVehicle ? qsTr("Vehicle") + " " + _activeVehicle.id : qsTr("N/A")
+            text:               _activeVehicle ? qsTr("当前设备") + " " + _activeVehicle.id : qsTr("N/A")
             font.pointSize:     ScreenTools.mediumFontPointSize
             Layout.alignment:   Qt.AlignCenter
 
@@ -94,7 +94,7 @@ RowLayout {
 
                     FactCheckBoxSlider {
                         Layout.fillWidth:   true
-                        text:               qsTr("Enable Multi-Vehicle Panel")
+                        text:               qsTr("启用多设备面板")
                         fact:               _enableMultiVehiclePanel
                         visible:            _enableMultiVehiclePanel.visible
 
@@ -110,7 +110,7 @@ RowLayout {
         if (_multipleVehicles) {
             for (var i = 0; i < QGroundControl.multiVehicleManager.vehicles.count; i++) {
                 var vehicle = QGroundControl.multiVehicleManager.vehicles.get(i)
-                newModel.push(qsTr("Vehicle") + " " + vehicle.id)
+                newModel.push(qsTr("设备") + " " + vehicle.id)
             }
         }
         _vehicleModel = newModel

@@ -195,7 +195,7 @@ Item {
 
                         QGCLabel {
                             Layout.alignment:     Qt.AlignHCenter
-                            text:                 _vehicle && _vehicle.armed ? qsTr("Armed") : qsTr("Disarmed")
+                            text:                 _vehicle && _vehicle.armed ? qsTr("已启动") : qsTr("已关闭")
                             color:                qgcPal.text
                         }
                     }

@@ -14,7 +14,7 @@ import QGroundControl.Controls
 import QGroundControl.Vehicle
 
 PreFlightCheckButton {
-    name:               qsTr("Sensors")
+    name:               qsTr("传感器")
     telemetryFailure:   _unhealthySensors & _allCheckedSensors
 
     property int    _unhealthySensors:  globals.activeVehicle ? globals.activeVehicle.sensorsUnhealthyBits : 1
@@ -32,13 +32,16 @@ PreFlightCheckButton {
 
     function updateTelemetryTextFailure() {
         if(_unhealthySensors & _allCheckedSensors) {
-            if (_unhealthySensors & Vehicle.SysStatusSensor3dMag)                       telemetryTextFailure = qsTr("Failure. Magnetometer issues. Check console.")
-            else if(_unhealthySensors & Vehicle.SysStatusSensor3dAccel)                 telemetryTextFailure = qsTr("Failure. Accelerometer issues. Check console.")
-            else if(_unhealthySensors & Vehicle.SysStatusSensor3dGyro)                  telemetryTextFailure = qsTr("Failure. Gyroscope issues. Check console.")
-            else if(_unhealthySensors & Vehicle.SysStatusSensorAbsolutePressure)        telemetryTextFailure = qsTr("Failure. Barometer issues. Check console.")
-            else if(_unhealthySensors & Vehicle.SysStatusSensorDifferentialPressure)    telemetryTextFailure = qsTr("Failure. Airspeed sensor issues. Check console.")
-            else if(_unhealthySensors & Vehicle.SysStatusSensorAHRS)                    telemetryTextFailure = qsTr("Failure. AHRS issues. Check console.")
-            else if(_unhealthySensors & Vehicle.SysStatusSensorGPS)                     telemetryTextFailure = qsTr("Failure. GPS issues. Check console.")
+            if (_unhealthySensors & Vehicle.SysStatusSensor3dMag)                       telemetryTextFailure = qsTr("失败，磁力计问题。请检查控制台。")
+            else if(_unhealthySensors & Vehicle.SysStatusSensor3dAccel)                 telemetryTextFailure = qsTr("失败，加速度计问题。请检查控制台。")
+            else if(_unhealthySensors & Vehicle.SysStatusSensor3dGyro)                  telemetryTextFailure = qsTr("失败，陀螺仪问题。请检查控制台。")
+            else if(_unhealthySensors & Vehicle.SysStatusSensorAbsolutePressure)        telemetryTextFailure = qsTr("失败，气压计问题。请检查控制台。")
+            else if(_unhealthySensors & Vehicle.SysStatusSensorDifferentialPressure)    telemetryTextFailure = qsTr("失败，空速传感器问题。请检查控制台。")
+            else if(_unhealthySensors & Vehicle.SysStatusSensorAHRS)                    telemetryTextFailure = qsTr("失败，AHRS 问题。请检查控制台。")
+            else if(_unhealthySensors & Vehicle.SysStatusSensorGPS)                     telemetryTextFailure = qsTr("失败，GPS 问题。请检查控制台。")
+            else                                                                       telemetryTextFailure = qsTr("失败，未知传感器问题。请检查控制台。")
+        } else {
+            telemetryTextFailure = qsTr("传感器正常")
         }
     }
 }

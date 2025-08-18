@@ -26,10 +26,10 @@ ColumnLayout {
     property bool   showMission:          true
     property bool   showAllItems:         true
 
-    QGCLabel { text: qsTr("Center map on:") }
+    QGCLabel { text: qsTr("居中地图于:") }
 
     QGCButton {
-        text:               qsTr("Mission")
+        text:               qsTr("任务")
         Layout.fillWidth:   true
         visible:            showMission
 
@@ -40,7 +40,7 @@ ColumnLayout {
     }
 
     QGCButton {
-        text:               qsTr("All items")
+        text:               qsTr("所有项目")
         Layout.fillWidth:   true
         visible:            showAllItems
 
@@ -51,7 +51,7 @@ ColumnLayout {
     }
 
     QGCButton {
-        text:               qsTr("Launch")
+        text:               qsTr("发射")
         Layout.fillWidth:   true
 
         onClicked: {
@@ -61,7 +61,7 @@ ColumnLayout {
     }
 
     QGCButton {
-        text:               qsTr("Vehicle")
+        text:               qsTr("设备")
         Layout.fillWidth:   true
         enabled:            globals.activeVehicle && globals.activeVehicle.coordinate.isValid
 
@@ -72,7 +72,7 @@ ColumnLayout {
     }
 
     QGCButton {
-        text:               qsTr("Current Location")
+        text:               qsTr("当前位置")
         Layout.fillWidth:   true
         enabled:            map.gcsPosition.isValid
 
@@ -83,7 +83,7 @@ ColumnLayout {
     }
 
     QGCButton {
-        text:               qsTr("Specified Location")
+        text:               qsTr("指定位置")
         Layout.fillWidth:   true
 
         onClicked: {

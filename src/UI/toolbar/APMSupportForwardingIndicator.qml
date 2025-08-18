@@ -30,10 +30,10 @@ Item {
         
         ToolIndicatorPage {
             contentComponent: SettingsGroupLayout {
-                QGCLabel { text: qsTr("Mavlink traffic is being forwarded to a support server") }
+                QGCLabel { text: qsTr("Mavlink 流量正在转发到支持服务器") }
 
                 LabelledLabel { 
-                    label:      qsTr("Server name:")
+                    label:      qsTr("服务器名称:")
                     labelText:  QGroundControl.settingsManager.mavlinkSettings.forwardMavlinkAPMSupportHostName.value
                 }
             }

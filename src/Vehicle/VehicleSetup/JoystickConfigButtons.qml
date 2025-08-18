@@ -46,7 +46,7 @@ ColumnLayout {
         QGCLabel {
             Layout.preferredWidth:  parent.width
             wrapMode:               Text.WordWrap
-            text:                   qsTr(" Multiple buttons that have the same action must be pressed simultaneously to invoke the action.")
+            text:                   qsTr(" 多个按钮可以同时按下以触发相同的操作。")
         }
         
         Flow {
@@ -96,7 +96,7 @@ ColumnLayout {
                     }
                     QGCCheckBox {
                         id:                         repeatCheck
-                        text:                       qsTr("Repeat")
+                        text:                       qsTr("重复")
                         enabled:                    currentAssignableAction && _activeJoystick.calibrated && currentAssignableAction.canRepeat
                         onClicked: {
                             _activeJoystick.setButtonRepeat(modelData, checked)
@@ -130,12 +130,12 @@ ColumnLayout {
             }
             QGCLabel {
                 width:                  ScreenTools.defaultFontPixelWidth * 26
-                text:                   qsTr("Function: ")
+                text:                   qsTr("键：")
             }
             QGCLabel {
                 width:                  ScreenTools.defaultFontPixelWidth * 26
                 visible:                globals.activeVehicle.supportsJSButton
-                text:                   qsTr("Shift Function: ")
+                text:                   qsTr("Shift 键: ")
             }
         }
         Repeater {
@@ -226,7 +226,7 @@ ColumnLayout {
                 }
                 QGCCheckBox {
                     id:                         repeatCheck
-                    text:                       qsTr("Repeat")
+                    text:                       qsTr("重复")
                     enabled:                    currentAssignableAction && _activeJoystick.calibrated && currentAssignableAction.canRepeat
                     visible:                    !globals.activeVehicle.supportsJSButton
 
@@ -255,13 +255,13 @@ ColumnLayout {
                 }
 
                 QGCLabel {
-                    text:                   qsTr("QGC functions do not support shift actions")
+                    text:                   qsTr("QGC 功能不支持 Shift 键")
                     width:                  ScreenTools.defaultFontPixelWidth * 15
                     visible:                hasFirmwareSupport && !buttonActionCombo.isFwAction
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 QGCLabel {
-                    text:                   qsTr("No firmware support")
+                    text:                   qsTr("无固件支持")
                     width:                  ScreenTools.defaultFontPixelWidth * 15
                     visible:                !hasFirmwareSupport
                     anchors.verticalCenter: parent.verticalCenter

@@ -36,7 +36,7 @@ Item {
             showExpand: false
 
             contentComponent: SettingsGroupLayout {
-                heading: qsTr("RC RSSI Status")
+                heading: qsTr("RC RSSI 状态")
 
                 LabelledLabel {
                     label:      qsTr("RSSI")

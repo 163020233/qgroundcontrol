@@ -22,7 +22,7 @@ Rectangle {
     property bool calInProgress: false
 
     // Text to show while calibration is in progress
-    property string calInProgressText: qsTr("Hold Still")
+    property string calInProgressText: qsTr("保持静止")
 
     // Image source
     property var imageSource: ""
@@ -54,7 +54,7 @@ Rectangle {
             horizontalAlignment:    Text.AlignHCenter
             verticalAlignment:      Text.AlignBottom
             font.pointSize:         ScreenTools.mediumFontPointSize
-            text:                   calInProgress ? calInProgressText : (calValid ? qsTr("Completed") : qsTr("Incomplete"))
+            text:                   calInProgress ? calInProgressText : (calValid ? qsTr("校准完成") : qsTr("校准未完成"))
         }
     }
 }

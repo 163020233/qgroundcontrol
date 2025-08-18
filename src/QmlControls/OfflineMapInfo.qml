@@ -44,7 +44,7 @@ RowLayout {
     }
 
     QGCButton {
-        text:       qsTr("Edit")
+        text:       qsTr("编辑")
         onClicked:  control.clicked()
     }
 }

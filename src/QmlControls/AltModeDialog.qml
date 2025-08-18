@@ -17,7 +17,7 @@ import QGroundControl.Controls
 import QGroundControl.ScreenTools
 
 QGCPopupDialog {
-    title:   qsTr("Select Altitude Mode")
+    title:   qsTr("选择高度模式")
     buttons: Dialog.Close
 
     property var rgRemoveModes
@@ -48,28 +48,28 @@ QGCPopupDialog {
         id: buttonModel
 
         ListElement {
-            modeName:   qsTr("Relative To Launch")
-            help:       qsTr("Specified altitudes are relative to launch position height.")
+            modeName:   qsTr("相对起飞高度")
+            help:       qsTr("指定高度是相对于起飞位置高度的。")
             modeValue:  QGroundControl.AltitudeModeRelative
         }
         ListElement {
             modeName:   qsTr("AMSL")
-            help:       qsTr("Specified altitudes are Above Mean Sea Level.")
+            help:       qsTr("指定高度是海平面高度。")
             modeValue:  QGroundControl.AltitudeModeAbsolute
         }
         ListElement {
-            modeName:   qsTr("Calculated Above Terrain")
-            help:       qsTr("Specified altitudes are distance above terrain. Actual altitudes sent to vehicle are calculated from terrain data and sent as AMSL values.")
+            modeName:   qsTr("计算高度")
+            help:       qsTr("指定高度是相对于地形高度的。")
             modeValue:  QGroundControl.AltitudeModeCalcAboveTerrain
         }
         ListElement {
-            modeName:   qsTr("Terrain Frame")
-            help:       qsTr("Specified altitudes are distance above terrain. The actual altitude flown is controlled by the vehicle either from terrain height maps being sent to vehicle or a distance sensor.")
+            modeName:   qsTr("地形框架")
+            help:       qsTr("指定高度是指高于地形的距离。实际飞行高度由飞行器根据地形高度图或距离传感器控制。")
             modeValue:  QGroundControl.AltitudeModeTerrainFrame
         }
         ListElement {
-            modeName:   qsTr("Mixed Modes")
-            help:       qsTr("The altitude mode can differ for each individual item.")
+            modeName:   qsTr("混合模式")
+            help:       qsTr("高度模式可以为每个项目单独设置。")
             modeValue:  QGroundControl.AltitudeModeMixed
         }
     }

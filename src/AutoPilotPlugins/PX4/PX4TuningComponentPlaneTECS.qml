@@ -28,17 +28,17 @@ ColumnLayout {
         availableHeight:    _availableHeight - pidTuning.y
 
         property var data: QtObject {
-            property string name: qsTr("Altitude & Airspeed")
+            property string name: qsTr("高度 & 对气速度")
             property var plot: [
-                { name: "Airspeed", value: globals.activeVehicle.airSpeed.value },
-                { name: "Airspeed Setpoint", value: globals.activeVehicle.airSpeedSetpoint.value },
-                { name: "Altitide (Rel)", value: globals.activeVehicle.altitudeTuning.value },
-                { name: "Altitude Setpoint", value: globals.activeVehicle.altitudeTuningSetpoint.value }
+                { name: "对气速度", value: globals.activeVehicle.airSpeed.value },
+                { name: "对气速度设置点", value: globals.activeVehicle.airSpeedSetpoint.value },
+                { name: "高度 (相对)", value: globals.activeVehicle.altitudeTuning.value },
+                { name: "高度设置点", value: globals.activeVehicle.altitudeTuningSetpoint.value }
             ]
             property var params: ListModel {
                 ListElement {
-                    title:          qsTr("Height rate feed forward (FW_T_HRATE_FF)")
-                    description:    qsTr("TODO")
+                    title:          qsTr("高度速率前馈增益 (FW_T_HRATE_FF)")
+                    description:    qsTr("高度速率前馈增益: 增加以补偿空气阻力。")
                     param:          "FW_T_HRATE_FF"
                     min:            0
                     max:            1

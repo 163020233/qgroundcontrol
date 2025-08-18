@@ -128,58 +128,58 @@ Popup {
         rejectButton.visible = false
         // Accept role buttons
         if (buttons & Dialog.Ok) {
-            acceptButton.text = qsTr("Ok")
+            acceptButton.text = qsTr("确定")
             acceptButton.visible = true
         } else if (buttons & Dialog.Open) {
-            acceptButton.text = qsTr("Open")
+            acceptButton.text = qsTr("打开")
             acceptButton.visible = true
         } else if (buttons & Dialog.Save) {
-            acceptButton.text = qsTr("Save")
+            acceptButton.text = qsTr("保存")
             acceptButton.visible = true
         } else if (buttons & Dialog.Apply) {
-            acceptButton.text = qsTr("Apply")
+            acceptButton.text = qsTr("应用")  
             acceptButton.visible = true
         } else if (buttons & Dialog.Open) {
-            acceptButton.text = qsTr("Open")
+            acceptButton.text = qsTr("打开")
             acceptButton.visible = true
         } else if (buttons & Dialog.SaveAll) {
-            acceptButton.text = qsTr("Save All")
+            acceptButton.text = qsTr("保存所有")
             acceptButton.visible = true
         } else if (buttons & Dialog.Yes) {
-            acceptButton.text = qsTr("Yes")
+            acceptButton.text = qsTr("确认")
             acceptButton.visible = true
         } else if (buttons & Dialog.YesToAll) {
-            acceptButton.text = qsTr("Yes to All")
+            acceptButton.text = qsTr("全部确认")
             acceptButton.visible = true
         } else if (buttons & Dialog.Retry) {
-            acceptButton.text = qsTr("Retry")
+            acceptButton.text = qsTr("重试")
             acceptButton.visible = true
         } else if (buttons & Dialog.Reset) {
-            acceptButton.text = qsTr("Reset")
+            acceptButton.text = qsTr("重置")
             acceptButton.visible = true
         } else if (buttons & Dialog.RestoreToDefaults) {
-            acceptButton.text = qsTr("Restore to Defaults")
+            acceptButton.text = qsTr("恢复默认值")
             acceptButton.visible = true
         } else if (buttons & Dialog.Ignore) {
-            acceptButton.text = qsTr("Ignore")
+            acceptButton.text = qsTr("忽略")
             acceptButton.visible = true
         }
 
         // Reject role buttons
         if (buttons & Dialog.Cancel) {
-            rejectButton.text = qsTr("Cancel")
+            rejectButton.text = qsTr("取消")
             rejectButton.visible = true
         } else if (buttons & Dialog.Close) {
-            rejectButton.text = qsTr("Close")
+            rejectButton.text = qsTr("关闭")
             rejectButton.visible = true
         } else if (buttons & Dialog.No) {
-            rejectButton.text = qsTr("No")
+            rejectButton.text = qsTr("否")
             rejectButton.visible = true
         } else if (buttons & Dialog.NoToAll) {
-            rejectButton.text = qsTr("No to All")
+            rejectButton.text = qsTr("全部拒绝")
             rejectButton.visible = true
         } else if (buttons & Dialog.Abort) {
-            rejectButton.text = qsTr("Abort")
+            rejectButton.text = qsTr("取消")
             rejectButton.visible = true
         }
 

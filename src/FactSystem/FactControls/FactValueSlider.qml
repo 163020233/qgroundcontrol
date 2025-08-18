@@ -97,7 +97,7 @@ Rectangle {
                 onClicked: {
                     valueListView.focus = true
                     if (_currentIndex === index) {
-                        editDialogComponent.createObject(mainWindow, { title: qsTr("Value Details") }).open()
+                        editDialogComponent.createObject(mainWindow, { title: qsTr("参数详情") }).open()
                     } else {
                         _currentIndex = index
                         valueListView.positionViewAtIndex(_currentIndex, ListView.Center)

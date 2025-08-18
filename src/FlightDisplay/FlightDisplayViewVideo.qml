@@ -70,7 +70,7 @@ Item {
 
             QGCLabel {
                 id:                 noVideoLabel
-                text:               QGroundControl.settingsManager.videoSettings.streamEnabled.rawValue ? qsTr("WAITING FOR VIDEO") : qsTr("VIDEO DISABLED")
+                text:               QGroundControl.settingsManager.videoSettings.streamEnabled.rawValue ? qsTr("等待视频") : qsTr("视频已禁用")
                 font.bold:          true
                 color:              "white"
                 font.pointSize:     useSmallFont ? ScreenTools.smallFontPointSize : ScreenTools.largeFontPointSize

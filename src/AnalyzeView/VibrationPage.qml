@@ -23,7 +23,7 @@ import QGroundControl.Controllers
 AnalyzePage {
     id:                 vibrationPage
     pageComponent:      pageComponent
-    pageDescription:    qsTr("Analyze vibration associated with your vehicle.")
+    pageDescription:    qsTr("分析与您的设备相关的振动。")
     allowPopout:        true
 
     property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle : QGroundControl.multiVehicleManager.offlineEditingVehicle
@@ -195,7 +195,7 @@ AnalyzePage {
                 anchors.left:       barRow.right
 
                 QGCLabel {
-                    text: qsTr("Clip count")
+                    text: qsTr("剪辑计数")
                 }
 
                 QGCLabel {
@@ -221,7 +221,7 @@ AnalyzePage {
                     anchors.fill:           parent
                     horizontalAlignment:    Text.AlignHCenter
                     verticalAlignment:      Text.AlignVCenter
-                    text:                   qsTr("Not Available")
+                    text:                   qsTr("未检测到振动传感器")
                 }
             }
         }

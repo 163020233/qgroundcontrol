@@ -249,7 +249,7 @@ FlightMap {
                     text: {
                         if(tileSet) {
                             if(tileSet.defaultSet)
-                                return qsTr("System Wide Tile Cache");
+                                return qsTr("系统全局磁贴缓存");
                             else
                                 return "(" + tileSet.mapTypeStr + ")"
                         } else
@@ -262,21 +262,21 @@ FlightMap {
                     spacing:    ScreenTools.defaultFontPixelWidth
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible:    !_defaultSet && mapType !== QGroundControl.elevationProviderName
-                    QGCLabel {  text: qsTr("Zoom Levels:"); width: infoView._labelWidth; }
+                    QGCLabel {  text: qsTr("缩放级别:"); width: infoView._labelWidth; }
                     QGCLabel {  text: tileSet ? (tileSet.minZoom + " - " + tileSet.maxZoom) : ""; horizontalAlignment: Text.AlignRight; width: infoView._valueWidth; }
                 }
                 Row {
                     spacing:    ScreenTools.defaultFontPixelWidth
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible:    !_defaultSet
-                    QGCLabel {  text: qsTr("Total:"); width: infoView._labelWidth; }
+                    QGCLabel {  text: qsTr("总磁贴数:"); width: infoView._labelWidth; }
                     QGCLabel {  text: (tileSet ? tileSet.totalTileCountStr : "") + " (" + (tileSet ? tileSet.totalTilesSizeStr : "") + ")"; horizontalAlignment: Text.AlignRight; width: infoView._valueWidth; }
                 }
                 Row {
                     spacing:    ScreenTools.defaultFontPixelWidth
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible:    tileSet && !_defaultSet && tileSet.uniqueTileCount > 0
-                    QGCLabel {  text: qsTr("Unique:"); width: infoView._labelWidth; }
+                    QGCLabel {  text: qsTr("唯一磁贴数:"); width: infoView._labelWidth; }
                     QGCLabel {  text: (tileSet ? tileSet.uniqueTileCountStr : "") + " (" + (tileSet ? tileSet.uniqueTileSizeStr : "") + ")"; horizontalAlignment: Text.AlignRight; width: infoView._valueWidth; }
                 }
 
@@ -284,14 +284,14 @@ FlightMap {
                     spacing:    ScreenTools.defaultFontPixelWidth
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible:    tileSet && !_defaultSet && !tileSet.complete
-                    QGCLabel {  text: qsTr("Downloaded:"); width: infoView._labelWidth; }
+                    QGCLabel {  text: qsTr("已下载:"); width: infoView._labelWidth; }
                     QGCLabel {  text: (tileSet ? tileSet.savedTileCountStr : "") + " (" + (tileSet ? tileSet.savedTileSizeStr : "") + ")"; horizontalAlignment: Text.AlignRight; width: infoView._valueWidth; }
                 }
                 Row {
                     spacing:    ScreenTools.defaultFontPixelWidth
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible:    tileSet && !_defaultSet && !tileSet.complete && tileSet.errorCount > 0
-                    QGCLabel {  text: qsTr("Error Count:"); width: infoView._labelWidth; }
+                    QGCLabel {  text: qsTr("错误数:"); width: infoView._labelWidth; }
                     QGCLabel {  text: tileSet ? tileSet.errorCountStr : ""; horizontalAlignment: Text.AlignRight; width: infoView._valueWidth; }
                 }
                 //-- Default Tile Set
@@ -299,21 +299,21 @@ FlightMap {
                     spacing:    ScreenTools.defaultFontPixelWidth
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible:    _defaultSet
-                    QGCLabel { text: qsTr("Size:"); width: infoView._labelWidth; }
+                    QGCLabel { text: qsTr("缓存大小:"); width: infoView._labelWidth; }
                     QGCLabel { text: tileSet ? tileSet.savedTileSizeStr  : ""; horizontalAlignment: Text.AlignRight; width: infoView._valueWidth; }
                 }
                 Row {
                     spacing:    ScreenTools.defaultFontPixelWidth
                     anchors.horizontalCenter: parent.horizontalCenter
                     visible:    _defaultSet
-                    QGCLabel { text: qsTr("Tile Count:"); width: infoView._labelWidth; }
+                    QGCLabel { text: qsTr("缓存磁贴数:"); width: infoView._labelWidth; }
                     QGCLabel { text: tileSet ? tileSet.savedTileCountStr : ""; horizontalAlignment: Text.AlignRight; width: infoView._valueWidth; }
                 }
                 Row {
                     spacing:    ScreenTools.defaultFontPixelWidth
                     anchors.horizontalCenter: parent.horizontalCenter
                     QGCButton {
-                        text:       qsTr("Resume Download")
+                        text:       qsTr("继续下载")
                         visible:    tileSet && tileSet && !_defaultSet && (!tileSet.complete && !tileSet.downloading)
                         width:      ScreenTools.defaultFontPixelWidth * 16
                         onClicked: {
@@ -322,7 +322,7 @@ FlightMap {
                         }
                     }
                     QGCButton {
-                        text:       qsTr("Cancel Download")
+                        text:       qsTr("取消下载")
                         visible:    tileSet && tileSet && !_defaultSet && (!tileSet.complete && tileSet.downloading)
                         width:      ScreenTools.defaultFontPixelWidth * 16
                         onClicked: {
@@ -331,13 +331,13 @@ FlightMap {
                         }
                     }
                     QGCButton {
-                        text:       qsTr("Delete")
+                        text:       qsTr("删除")
                         width:      ScreenTools.defaultFontPixelWidth * (infoView._extraButton ? 6 : 10)
                         onClicked:  deleteConfirmationDialogComponent.createObject(mainWindow).open()
                         enabled:    tileSet ? (tileSet.savedTileSize > 0) : false
                     }
                     QGCButton {
-                        text:       qsTr("Ok")
+                        text:       qsTr("确定")
                         width:      ScreenTools.defaultFontPixelWidth * (infoView._extraButton ? 6 : 10)
                         visible:    !_defaultSet
                         enabled:    editSetName.text !== ""
@@ -349,7 +349,7 @@ FlightMap {
                         }
                     }
                     QGCButton {
-                        text:       _defaultSet ? qsTr("Close") : qsTr("Cancel")
+                        text:       _defaultSet ? qsTr("关闭") : qsTr("取消")
                         width:      ScreenTools.defaultFontPixelWidth * (infoView._extraButton ? 6 : 10)
                         onClicked:  _map.destroy()
                     }
@@ -375,7 +375,7 @@ FlightMap {
                 spacing:                _margins
 
                 QGCButton {
-                    text:       qsTr("Show zoom previews")
+                    text:       qsTr("显示缩放预览")
                     visible:    !_showPreview
                     onClicked:  _showPreview = !_showPreview
                 }
@@ -410,7 +410,7 @@ FlightMap {
                         QGCMapLabel {
                             anchors.centerIn:   parent
                             map:                minZoomPreview
-                            text:               qsTr("Min Zoom: %1").arg(sliderMinZoom.value)
+                            text:               qsTr("最小缩放: %1").arg(sliderMinZoom.value)
                         }
                         MouseArea {
                             anchors.fill:   parent
@@ -449,7 +449,7 @@ FlightMap {
                         QGCMapLabel {
                             anchors.centerIn:   parent
                             map:                maxZoomPreview
-                            text:               qsTr("Max Zoom: %1").arg(sliderMaxZoom.value)
+                            text:               qsTr("最大缩放: %1").arg(sliderMaxZoom.value)
                         }
                         MouseArea {
                             anchors.fill:   parent
@@ -480,7 +480,7 @@ FlightMap {
                     anchors.left:       parent.left
                     anchors.right:      parent.right
                     wrapMode:           Text.WordWrap
-                    text:               qsTr("Add New Set")
+                    text:               qsTr("添加新的地图")
                     font.pointSize:     _saveRealEstate ? ScreenTools.defaultFontPointSize : ScreenTools.mediumFontPointSize
                     horizontalAlignment: Text.AlignHCenter
                 }
@@ -508,7 +508,7 @@ FlightMap {
                             spacing:            ScreenTools.isTinyScreen ? 0 : ScreenTools.defaultFontPixelHeight * 0.25
                             anchors.left:       parent.left
                             anchors.right:      parent.right
-                            QGCLabel { text: qsTr("Name:") }
+                            QGCLabel { text: qsTr("地图名称:") }
                             QGCTextField {
                                 id:                     setName
                                 anchors.left:           parent.left
@@ -526,7 +526,7 @@ FlightMap {
                             anchors.left:       parent.left
                             anchors.right:      parent.right
                             QGCLabel {
-                                text:       qsTr("Map type:")
+                                text:       qsTr("地图类型:")
                                 visible:    !_saveRealEstate
                             }
                             QGCComboBox {
@@ -549,7 +549,7 @@ FlightMap {
                             QGCCheckBox {
                                 anchors.left:   parent.left
                                 anchors.right:  parent.right
-                                text:           qsTr("Fetch elevation data")
+                                text:           qsTr("获取海拔数据")
                                 checked:        QGroundControl.mapEngineManager.fetchElevation
                                 onClicked: {
                                     QGroundControl.mapEngineManager.fetchElevation = checked
@@ -575,7 +575,7 @@ FlightMap {
                                 anchors.right:      parent.right
 
                                 QGCLabel {
-                                    text:           qsTr("Min/Max Zoom Levels")
+                                    text:           qsTr("最小/最大缩放级别")
                                     font.pointSize: _adjustableFontPointSize
                                     anchors.horizontalCenter: parent.horizontalCenter
                                 }
@@ -670,7 +670,7 @@ FlightMap {
                                     columns:    2
                                     rowSpacing: ScreenTools.isTinyScreen ? 0 : ScreenTools.defaultFontPixelHeight * 0.5
                                     QGCLabel {
-                                        text:           qsTr("Tile Count:")
+                                        text:           qsTr("地图标题:")
                                         font.pointSize: _adjustableFontPointSize
                                     }
                                     QGCLabel {
@@ -679,7 +679,7 @@ FlightMap {
                                     }
 
                                     QGCLabel {
-                                        text:           qsTr("Est Size:")
+                                        text:           qsTr("地图大小:")
                                         font.pointSize: _adjustableFontPointSize
                                     }
                                     QGCLabel {
@@ -691,7 +691,7 @@ FlightMap {
                         } // Rectangle - Zoom info
 
                         QGCLabel {
-                            text:       qsTr("Too many tiles")
+                            text:       qsTr("地图标题不能超过128个字符")
                             visible:    _tooManyTiles
                             color:      qgcPal.warningText
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -702,7 +702,7 @@ FlightMap {
                             spacing: ScreenTools.defaultFontPixelWidth
                             anchors.horizontalCenter: parent.horizontalCenter
                             QGCButton {
-                                text:       qsTr("Download")
+                                text:       qsTr("下载")
                                 width:      (addNewSetColumn.width * 0.5) - (addButtonRow.spacing * 0.5)
                                 enabled:    !_tooManyTiles && setName.text.length > 0
                                 onClicked: {
@@ -715,7 +715,7 @@ FlightMap {
                                 }
                             }
                             QGCButton {
-                                text:       qsTr("Cancel")
+                                text:       qsTr("取消")
                                 width:      (addNewSetColumn.width * 0.5) - (addButtonRow.spacing * 0.5)
                                 onClicked:  _map.destroy()
                             }
@@ -742,7 +742,7 @@ FlightMap {
         id: errorDialogComponent
 
         QGCSimpleMessageDialog {
-            title:      qsTr("Error Message")
+            title:      qsTr("错误消息")
             text:       _mapEngineManager.errorMessage
             buttons:    Dialog.Close
         }
@@ -752,10 +752,10 @@ FlightMap {
         id: deleteConfirmationDialogComponent
 
         QGCSimpleMessageDialog {
-            title:      qsTr("Confirm Delete")
+            title:      qsTr("确认删除")
             text:       tileSet.defaultSet ?
-                            qsTr("This will delete all tiles INCLUDING the tile sets you have created yourself.\n\nIs this really what you want?") :
-                            qsTr("Delete %1 and all its tiles.\n\nIs this really what you want?").arg(tileSet.name)
+                            qsTr("这将删除所有标题，包括您自己创建的标题集。\n\n这真的是你想要的吗？") :
+                            qsTr("这将删除%1及其所有标题。\n\n这真的是你想要的吗？").arg(tileSet.name)
             buttons:    Dialog.Yes | Dialog.No
 
             onAccepted: {

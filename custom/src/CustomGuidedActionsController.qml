@@ -35,7 +35,7 @@ QtObject {
     function customExecuteAction(actionCode, actionData, sliderOutputValue, optionCheckedode) {
         switch (actionCode) {
         case actionCustomButton:
-            mainWindow.showMessageDialog("Custom Action", "Custom action executed.")
+            mainWindow.showMessageDialog("自定义操作", "已执行自定义操作")
             break
         default:
             return false // false = action not handled here

@@ -38,7 +38,7 @@ QGCTextField {
         id: helpDialogComponent
 
         ParameterEditorDialog {
-            title:          qsTr("Value Details")
+            title:          qsTr("参数详情")
             fact:           control.fact
         }
     }

@@ -18,7 +18,7 @@ import QGroundControl.SettingsManager
 import QGroundControl.Controls
 
 FirstRunPrompt {
-    title:      qsTr("Vehicle Information")
+    title:      qsTr("设备信息")
     promptId:   QGroundControl.corePlugin.offlineVehicleFirstRunPromptId
 
     property real   _margins:               ScreenTools.defaultFontPixelWidth
@@ -33,7 +33,7 @@ FirstRunPrompt {
         QGCLabel {
             id:                     unitsSectionLabel
             Layout.preferredWidth:  valueRect.width
-            text:                   qsTr("Specify information about the vehicle you plan to fly. If you are unsure of the correct values leave them as is.")
+            text:                   qsTr("指定您计划飞行的设备的信息。如果您不确定正确的值，请保持默认值。")
             wrapMode:               Text.WordWrap
         }
 
@@ -53,7 +53,7 @@ FirstRunPrompt {
 
                 QGCLabel {
                     Layout.fillWidth:   true
-                    text:               qsTr("Firmware")
+                    text:               qsTr("固件")
                     visible:            _multipleFirmware
                 }
                 FactComboBox {
@@ -65,7 +65,7 @@ FirstRunPrompt {
 
                 QGCLabel {
                     Layout.fillWidth:   true
-                    text:               qsTr("Vehicle")
+                    text:               qsTr("设备")
                     visible:            _multipleVehicleTypes
                 }
                 FactComboBox {

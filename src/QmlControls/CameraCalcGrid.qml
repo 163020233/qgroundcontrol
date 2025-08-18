@@ -42,11 +42,11 @@ Column {
             Item { Layout.fillWidth: true }
             QGCLabel {
                 Layout.preferredWidth:  _root._fieldWidth
-                text:                   qsTr("Front Lap")
+                text:                   qsTr("前视")
             }
             QGCLabel {
                 Layout.preferredWidth:  _root._fieldWidth
-                text:                   qsTr("Side Lap")
+                text:                   qsTr("侧视")
             }
         }
 
@@ -54,7 +54,7 @@ Column {
             anchors.left:   parent.left
             anchors.right:  parent.right
             spacing:        _margin
-            QGCLabel { text: qsTr("Overlap"); Layout.fillWidth: true }
+            QGCLabel { text: qsTr("重叠"); Layout.fillWidth: true }
             FactTextField {
                 Layout.preferredWidth:  _root._fieldWidth
                 fact:                   cameraCalc.frontalOverlap
@@ -67,7 +67,7 @@ Column {
 
         QGCLabel {
             wrapMode:               Text.WordWrap
-            text:                   qsTr("Select one:")
+            text:                   qsTr("选择一种:")
             Layout.preferredWidth:  parent.width
             Layout.columnSpan:      2
         }

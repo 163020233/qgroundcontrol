@@ -78,7 +78,7 @@ Rectangle {
 
         QGCButton {
             id:                 disconnectButton
-            text:               qsTr("Disconnect")
+            text:               qsTr("断开连接")
             onClicked:          _activeVehicle.closeVehicle()
             visible:            _activeVehicle && _communicationLost
         }
@@ -190,7 +190,7 @@ Rectangle {
 
         QGCLabel {
             anchors.centerIn:   parent
-            text:               qsTr("Downloading")
+            text:               qsTr("下载中")
             font.pointSize:     ScreenTools.largeFontPointSize
         }
 
@@ -198,7 +198,7 @@ Rectangle {
             anchors.margins:    _margin
             anchors.right:      parent.right
             anchors.bottom:     parent.bottom
-            text:               qsTr("Click anywhere to hide")
+            text:               qsTr("点击任意位置隐藏")
 
             property real _margin: ScreenTools.defaultFontPixelWidth / 2
         }

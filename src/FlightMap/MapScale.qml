@@ -56,12 +56,12 @@ Item {
             dist = Math.round(dist / 5280)
             dist = dist
             if (dist == 1) {
-                dist += qsTr(" mile")
+                dist += qsTr(" 英里")
             } else {
-                dist += qsTr(" miles")
+                dist += qsTr(" 英里")
             }
         } else {
-            dist = dist + qsTr(" ft")
+            dist = dist + qsTr(" 英尺")
         }
         return dist
     }

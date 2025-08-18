@@ -30,7 +30,7 @@ Item {
     property real _statusWidth:     ScreenTools.defaultFontPixelWidth * 6
     property real _smallFont:       ScreenTools.smallFontPointSize
 
-    readonly property string    dialogTitle:    qsTr("controller WiFi Bridge")
+    readonly property string    dialogTitle:    qsTr("控制器 WiFi 桥接")
     property int                stStatus:       XMLHttpRequest.UNSENT
     property int                stErrorCount:   0
     property bool               stResetCounters:false
@@ -63,7 +63,7 @@ Item {
             if (stStatus === XMLHttpRequest.DONE) {
                 var objectArray = JSON.parse(req.responseText);
                 if (objectArray.errors !== undefined) {
-                    console.log(qsTr("Error fetching WiFi Bridge Status: %1").arg(objectArray.errors[0].message))
+                    console.log(qsTr("获取 WiFi 桥接状态错误: %1").arg(objectArray.errors[0].message))
                     stErrorCount = stErrorCount + 1
                     if(stErrorCount < 2)
                         timer.start()
@@ -113,7 +113,7 @@ Item {
                 anchors.horizontalCenter:               parent.horizontalCenter
                 Item { width: 1; height: _margins * 0.5; }
                 QGCLabel {
-                    text:                               qsTr("ESP WiFi Bridge Settings")
+                    text:                               qsTr("ESP 控制器 WiFi 桥接设置")
                     font.bold:                          true
                 }
                 Rectangle {
@@ -140,7 +140,7 @@ Item {
                             Row {
                                 visible:                    wifiMode
                                 QGCLabel {
-                                    text:                   qsTr("WiFi Mode")
+                                    text:                   qsTr("WiFi 模式")
                                     width:                  _middleRowWidth
                                     anchors.baseline:       modeField.baseline
                                 }
@@ -156,7 +156,7 @@ Item {
                             }
                             Row {
                                 QGCLabel {
-                                    text:                   qsTr("WiFi Channel")
+                                    text:                   qsTr("WiFi 通道")
                                     width:                  _middleRowWidth
                                     anchors.baseline:       channelField.baseline
                                 }
@@ -173,7 +173,7 @@ Item {
                             }
                             Row {
                                 QGCLabel {
-                                    text:                   qsTr("WiFi AP SSID")
+                                    text:                   qsTr("WiFi 访问点 SSID")
                                     width:                  _middleRowWidth
                                     anchors.baseline:       ssidField.baseline
                                 }
@@ -189,7 +189,7 @@ Item {
                             }
                             Row {
                                 QGCLabel {
-                                    text:                   qsTr("WiFi AP Password")
+                                    text:                   qsTr("WiFi 访问点密码")
                                     width:                  _middleRowWidth
                                     anchors.baseline:       passwordField.baseline
                                 }
@@ -205,7 +205,7 @@ Item {
                             }
                             Row {
                                 QGCLabel {
-                                    text:                   qsTr("WiFi STA SSID")
+                                    text:                   qsTr("WiFi 客户端 SSID")
                                     width:                  _middleRowWidth
                                     anchors.baseline:       stassidField.baseline
                                 }
@@ -222,7 +222,7 @@ Item {
                             }
                             Row {
                                 QGCLabel {
-                                    text:                   qsTr("WiFi STA Password")
+                                    text:                   qsTr("WiFi 客户端密码")
                                     width:                  _middleRowWidth
                                     anchors.baseline:       passwordStaField.baseline
                                 }
@@ -239,7 +239,7 @@ Item {
                             }
                             Row {
                                 QGCLabel {
-                                    text:                   qsTr("UART Baud Rate")
+                                    text:                   qsTr("UART 波特率")
                                     width:                  _middleRowWidth
                                     anchors.baseline:       baudField.baseline
                                 }
@@ -255,7 +255,7 @@ Item {
                             }
                             Row {
                                 QGCLabel {
-                                    text:                   qsTr("QGC UDP Port")
+                                    text:                   qsTr("QGC UDP 端口")
                                     width:                  _middleRowWidth
                                     anchors.baseline:       qgcportField.baseline
                                 }
@@ -274,7 +274,7 @@ Item {
                     }
                 }
                 QGCLabel {
-                    text:                               qsTr("ESP WiFi Bridge Status")
+                    text:                               qsTr("ESP WiFi桥接状态")
                     font.bold:                          true
                 }
                 Rectangle {
@@ -287,21 +287,21 @@ Item {
                        columnSpacing:                   _margins * 2
                        anchors.centerIn:                parent
                        QGCLabel {
-                           text:                        qsTr("Bridge/Vehicle Link")
+                           text:                        qsTr("桥接/设备连接")
                            Layout.alignment:            Qt.AlignHCenter
                        }
                        QGCLabel {
-                           text:                        qsTr("Bridge/QGC Link")
+                           text:                        qsTr("桥接/QGC 连接")
                            Layout.alignment:            Qt.AlignHCenter
                        }
                        QGCLabel {
-                           text:                        qsTr("QGC/Bridge Link")
+                           text:                        qsTr("QGC/桥接")
                            Layout.alignment:            Qt.AlignHCenter
                        }
                        Row {
                            spacing:                     _margins
                            QGCLabel {
-                               text:                    qsTr("Messages Received")
+                               text:                    qsTr("消息接收")
                                font.pointSize:          _smallFont
                                width:                   _labelWidth
                            }
@@ -316,7 +316,7 @@ Item {
                            spacing:                     _margins
                            QGCLabel {
                                font.pointSize:          _smallFont
-                               text:                    qsTr("Messages Received")
+                               text:                    qsTr("消息接收")
                                width:                   _labelWidth
                            }
                            QGCLabel {
@@ -330,7 +330,7 @@ Item {
                            spacing:                     _margins
                            QGCLabel {
                                font.pointSize:          _smallFont
-                               text:                    qsTr("Messages Received")
+                               text:                    qsTr("消息接收")
                                width:                   _labelWidth
                            }
                            QGCLabel {
@@ -343,7 +343,7 @@ Item {
                        Row {
                            spacing:                     _margins
                            QGCLabel {
-                               text:                    qsTr("Messages Lost")
+                               text:                    qsTr("消息丢失")
                                font.pointSize:          _smallFont
                                width:                   _labelWidth
                            }
@@ -357,7 +357,7 @@ Item {
                        Row {
                            spacing:                     _margins
                            QGCLabel {
-                               text:                    qsTr("Messages Lost")
+                               text:                    qsTr("消息丢失")
                                font.pointSize:          _smallFont
                                width:                   _labelWidth
                            }
@@ -371,7 +371,7 @@ Item {
                        Row {
                            spacing:                     _margins
                            QGCLabel {
-                               text:                    qsTr("Messages Lost")
+                               text:                    qsTr("消息丢失")
                                font.pointSize:          _smallFont
                                width:                   _labelWidth
                            }
@@ -385,7 +385,7 @@ Item {
                        Row {
                            spacing:                     _margins
                            QGCLabel {
-                               text:                    qsTr("Messages Sent")
+                               text:                    qsTr("消息发送")
                                font.pointSize:          _smallFont
                                width:                   _labelWidth
                            }
@@ -399,7 +399,7 @@ Item {
                        Row {
                            spacing:                     _margins
                            QGCLabel {
-                               text:                    qsTr("Messages Sent")
+                               text:                    qsTr("消息发送")
                                font.pointSize:          _smallFont
                                width:                   _labelWidth
                            }
@@ -413,7 +413,7 @@ Item {
                        Row {
                            spacing:                     _margins
                            QGCLabel {
-                               text:                    qsTr("Messages Sent")
+                               text:                    qsTr("消息发送")
                                font.pointSize:          _smallFont
                                width:                   _labelWidth
                            }
@@ -430,14 +430,14 @@ Item {
                     spacing:                            _margins
                     anchors.horizontalCenter:           parent.horizontalCenter
                     QGCButton {
-                        text:                           qsTr("Restore Defaults")
+                        text:                           qsTr("恢复默认值")
                         width:                          _editFieldWidth
                         onClicked: {
                             controller.restoreDefaults()
                         }
                     }
                     QGCButton {
-                        text:                           qsTr("Restart WiFi Bridge")
+                        text:                           qsTr("重启WiFi桥接")
                         enabled:                        !controller.busy
                         width:                          _editFieldWidth
                         onClicked: {
@@ -447,8 +447,8 @@ Item {
                             id:         rebootDialog
                             visible:    false
                             buttons:    MessageDialog.Yes | MessageDialog.No
-                            title:      qsTr("Reboot WiFi Bridge")
-                            text:       qsTr("This will restart the WiFi Bridge so the settings you've changed can take effect. Note that you may have to change your computer WiFi settings and QGroundControl link settings to match these changes. Are you sure you want to restart it?")
+                            title:      qsTr("重启WiFi桥接")
+                            text:       qsTr("这将重启WiFi桥接，使您所做的更改生效。请注意，您可能需要更改计算机的WiFi设置和QGroundControl链接设置以匹配这些更改。您确定要重启它吗？")
                             onButtonClicked: function (button, role) {
                                 switch (button) {
                                 case MessageDialog.Yes:
@@ -463,7 +463,7 @@ Item {
                         }
                     }
                     QGCButton {
-                        text:                           qsTr("Reset Counters")
+                        text:                           qsTr("重置计数")
                         width:                          _editFieldWidth
                         onClicked: {
                             stResetCounters = true;

@@ -30,10 +30,10 @@ Rectangle {
     readonly property real      _horizontalMargin:  _defaultTextWidth / 2
     readonly property real      _verticalMargin:    _defaultTextHeight / 2
     readonly property real      _buttonWidth:       _defaultTextWidth * 18
-    readonly property string    _armedVehicleText:  qsTr("This operation cannot be performed while the vehicle is armed.")
+    readonly property string    _armedVehicleText:  qsTr("此操作无法在设备解锁时执行。")
 
     property bool   _vehicleArmed:                  QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle.armed : false
-    property string _messagePanelText:              qsTr("missing message panel text")
+    property string _messagePanelText:              qsTr("缺少消息面板文本")
     property bool   _fullParameterVehicleAvailable: QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable && !QGroundControl.multiVehicleManager.activeVehicle.parameterManager.missingParameters
     property var    _corePlugin:                    QGroundControl.corePlugin
 
@@ -71,7 +71,7 @@ Rectangle {
             var autopilotPlugin = QGroundControl.multiVehicleManager.activeVehicle.autopilotPlugin
             var prereq = autopilotPlugin.prerequisiteSetup(vehicleComponent)
             if (prereq !== "") {
-                _messagePanelText = qsTr("%1 setup must be completed prior to %2 setup.").arg(prereq).arg(vehicleComponent.name)
+                _messagePanelText = qsTr("%1 必须在之前完成设置 %2 才能继续设置.").arg(prereq).arg(vehicleComponent.name)
                 panelLoader.setSourceComponent(messagePanelComponent)
             } else {
                 panelLoader.setSource(vehicleComponent.setupSource, vehicleComponent)
@@ -129,8 +129,8 @@ Rectangle {
                 horizontalAlignment:    Text.AlignHCenter
                 wrapMode:               Text.WordWrap
                 font.pointSize:         ScreenTools.mediumFontPointSize
-                text:                   qsTr("%1 does not currently support setup of your vehicle type. ").arg(QGroundControl.appName) +
-                                        "If your vehicle is already configured you can still Fly."
+                text:                   qsTr("%1 不支持您的设备类型设置。").arg(QGroundControl.appName) +
+                                        "如果您的设备已配置，您仍然可以飞行。"
                 onLinkActivated: (link) => Qt.openUrlExternally(link)
             }
         }
@@ -147,8 +147,8 @@ Rectangle {
                 horizontalAlignment:    Text.AlignHCenter
                 wrapMode:               Text.WordWrap
                 font.pointSize:         ScreenTools.largeFontPointSize
-                text:                   qsTr("Vehicle settings and info will display after connecting your vehicle.") +
-                                        (ScreenTools.isMobile || !_corePlugin.options.showFirmwareUpgrade ? "" : " Click Firmware on the left to upgrade your vehicle.")
+                text:                   qsTr("设备设置和信息将在连接设备后显示。") +
+                                        (ScreenTools.isMobile || !_corePlugin.options.showFirmwareUpgrade ? "" : " 点击左侧的固件升级以升级您的设备。")
 
                 onLinkActivated: (link) => Qt.openUrlExternally(link)
             }
@@ -168,8 +168,8 @@ Rectangle {
                 horizontalAlignment:    Text.AlignHCenter
                 wrapMode:               Text.WordWrap
                 font.pointSize:         ScreenTools.mediumFontPointSize
-                text:                   qsTr("You are currently connected to a vehicle but it did not return the full parameter list. ") +
-                                        qsTr("As a result, the full set of vehicle setup options are not available.")
+                text:                   qsTr("您当前已连接到设备，但它未返回完整的参数列表。") +
+                                        qsTr("因此，无法使用完整的设备设置选项。")
 
                 onLinkActivated: (link) => Qt.openUrlExternally(link)
             }
@@ -220,7 +220,7 @@ Rectangle {
 
             ConfigButton {
                 visible:            QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle.flowImageIndex > 0 : false
-                text:               qsTr("Optical Flow")
+                text:               qsTr("光流相机")
                 Layout.fillWidth:   true
                 onClicked:          showPanel(this, "qrc:/qml/QGroundControl/VehicleSetup/OpticalFlowSensor.qml")
             }
@@ -230,7 +230,7 @@ Rectangle {
                 icon.source:      "/qmlimages/Joystick.png"
                 setupComplete:      _activeJoystick ? _activeJoystick.calibrated || _buttonsOnly : false
                 visible:            _fullParameterVehicleAvailable && joystickManager.joysticks.length !== 0
-                text:               _forcedToButtonsOnly ? qsTr("Buttons") : qsTr("Joystick")
+                text:               _forcedToButtonsOnly ? qsTr("按钮") : qsTr("摇杆")
                 Layout.fillWidth:   true
                 onClicked:          showPanel(this, "qrc:/qml/QGroundControl/VehicleSetup/JoystickConfig.qml")
 
@@ -260,7 +260,7 @@ Rectangle {
                 visible:            QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable &&
                                     !QGroundControl.multiVehicleManager.activeVehicle.usingHighLatencyLink &&
                                     _corePlugin.showAdvancedUI
-                text:               qsTr("Parameters")
+                text:               qsTr("参数")
                 Layout.fillWidth:   true
                 icon.source:        "/qmlimages/subMenuButtonImage.png"
                 onClicked:          showPanel(this, "qrc:/qml/QGroundControl/VehicleSetup/SetupParameterEditor.qml")
@@ -270,7 +270,7 @@ Rectangle {
                 id:                 firmwareButton
                 icon.source:      "/qmlimages/FirmwareUpgradeIcon.png"
                 visible:            !ScreenTools.isMobile && _corePlugin.options.showFirmwareUpgrade
-                text:               qsTr("Firmware")
+                text:               qsTr("固件升级")
                 Layout.fillWidth:   true
 
                 onClicked: showPanel(this, "qrc:/qml/QGroundControl/VehicleSetup/FirmwareUpgrade.qml")

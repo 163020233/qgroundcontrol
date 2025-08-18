@@ -81,7 +81,7 @@ ToolIndicatorPage {
 
                 QGCLabel {
                     id:                         remoteIDLabel
-                    text:                       qsTr("RemoteID Status")
+                    text:                       qsTr("远程ID 状态")
                     font.bold:                  true
                     anchors.horizontalCenter:   parent.horizontalCenter
                 }
@@ -104,7 +104,7 @@ ToolIndicatorPage {
 
                         QGCLabel {
                             anchors.fill:           parent
-                            text:                   qsTr("ARM STATUS")
+                            text:                   qsTr("ARM 状态")
                             wrapMode:               Text.WordWrap
                             horizontalAlignment:    Text.AlignHCenter
                             verticalAlignment:      Text.AlignVCenter
@@ -128,7 +128,7 @@ ToolIndicatorPage {
 
                         QGCLabel {
                             anchors.fill:           parent
-                            text:                   commsFlag ? qsTr("RID COMMS") : qsTr("NOT CONNECTED")
+                            text:                   commsFlag ? qsTr("远程ID 通信") : qsTr("未连接")
                             wrapMode:               Text.WordWrap
                             horizontalAlignment:    Text.AlignHCenter
                             verticalAlignment:      Text.AlignVCenter
@@ -178,7 +178,7 @@ ToolIndicatorPage {
 
                         QGCLabel {
                             anchors.fill:           parent
-                            text:                   qsTr("BASIC ID")
+                            text:                   qsTr("基本ID")
                             wrapMode:               Text.WordWrap
                             horizontalAlignment:    Text.AlignHCenter
                             verticalAlignment:      Text.AlignVCenter
@@ -203,7 +203,7 @@ ToolIndicatorPage {
 
                         QGCLabel {
                             anchors.fill:           parent
-                            text:                   qsTr("OPERATOR ID")
+                            text:                   qsTr("操作ID")
                             wrapMode:               Text.WordWrap
                             horizontalAlignment:    Text.AlignHCenter
                             verticalAlignment:      Text.AlignVCenter
@@ -229,7 +229,7 @@ ToolIndicatorPage {
 
                 QGCLabel {
                     id:                     emergencyDeclareLabel
-                    text:                   emergencyDeclared ? qsTr("EMERGENCY HAS BEEN DECLARED, Press and Hold for 3 seconds to cancel") : qsTr("Press and Hold below button to declare emergency")
+                    text:                   emergencyDeclared ? qsTr("紧急声明已被声明，按并按住3秒取消") : qsTr("按并按住下面的按钮声明紧急情况")
                     font.bold:              true
                     anchors.top:            parent.top
                     anchors.left:           parent.left
@@ -254,7 +254,7 @@ ToolIndicatorPage {
 
                     QGCLabel {
                         anchors.fill:           parent
-                        text:                   emergencyDeclared ? qsTr("Clear Emergency") : qsTr("EMERGENCY")
+                        text:                   emergencyDeclared ? qsTr("清除紧急情况") : qsTr("紧急情况")
                         wrapMode:               Text.WordWrap
                         horizontalAlignment:    Text.AlignHCenter
                         verticalAlignment:      Text.AlignVCenter
@@ -332,21 +332,21 @@ ToolIndicatorPage {
                     visible:            armStatusLabel.labelText !== ""
                     LabelledLabel {
                         id :                armStatusLabel
-                        label:              qsTr("Arm Status Error")
+                        label:              qsTr("arm状态错误")
                         labelText:          remoteIDManager.armStatusError
                         Layout.fillWidth:   true
                     }
                 }
 
                 SettingsGroupLayout {
-                    heading:                qsTr("Self ID")
-                    headingDescription:     qsTr("If an emergency is declared, Emergency Text will be broadcast even if Broadcast setting is not enabled.")
+                    heading:                qsTr("自我身份识别ID")
+                    headingDescription:     qsTr("如果声明了紧急情况，即使未启用广播设置，也会广播紧急文本。")
                     Layout.fillWidth:       true
                     Layout.preferredWidth:  textLabelWidth + textFieldWidth
 
                     FactCheckBoxSlider {
                         id:                 sendSelfIDSlider
-                        text:               qsTr("Broadcast")
+                        text:               qsTr("播送")
                         fact:               _fact
                         visible:            _fact.visible
                         Layout.fillWidth:   true
@@ -356,7 +356,7 @@ ToolIndicatorPage {
 
                     LabelledFactComboBox {
                         id:                 selfIDTypeCombo
-                        label:              qsTr("Broadcast Message")
+                        label:              qsTr("广播消息")
                         fact:               _fact
                         indexModel:         false
                         visible:            _fact.visible
@@ -411,7 +411,7 @@ ToolIndicatorPage {
 
                         QGCLabel { Layout.fillWidth: true; text: qsTr("Remote ID") }
                         QGCButton {
-                            text: qsTr("Configure")
+                            text: qsTr("配置")
                             onClicked: {
                                 goToSettings()
                             }

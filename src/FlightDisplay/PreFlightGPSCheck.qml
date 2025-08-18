@@ -17,7 +17,7 @@ PreFlightCheckButton {
     name:                           qsTr("GPS")
     telemetryFailure:               _3dLockFailure || _satCountFailure
     telemetryTextFailure:           _3dLockFailure ?
-                                        qsTr("Waiting for 3D lock.") :
+                                        qsTr("等待3D锁定") :
                                         (_satCountFailure ? _satCountFailureText : "")
     allowTelemetryFailureOverride:  !_3dLockFailure && _satCountFailure && allowOverrideSatCount
 
@@ -28,5 +28,5 @@ PreFlightCheckButton {
     property int    _satCount:              globals.activeVehicle ? globals.activeVehicle.gps.count.rawValue : 0
     property bool   _3dLockFailure:         !_3dLock
     property bool   _satCountFailure:       failureSatCount !== -1 && _satCount <= failureSatCount
-    property string _satCountFailureText:   allowOverrideSatCount ? qsTr("Warning - Sat count below %1.").arg(failureSatCount + 1) : qsTr("Waiting for sat count above %1.").arg(failureSatCount)
+    property string _satCountFailureText:   allowOverrideSatCount ? qsTr("警告 - 卫星数量低于%1.").arg(failureSatCount + 1) : qsTr("等待卫星数量高于%1.").arg(failureSatCount)
 }

@@ -132,7 +132,7 @@ Item {
                 width:      40 * ScreenTools.defaultFontPixelWidth
                 spacing:    ScreenTools.defaultFontPixelHeight / 2
 
-                QGCLabel { text: qsTr("Path: %1").arg(_mobileShortPath) }
+                QGCLabel { text: qsTr("路径: %1").arg(_mobileShortPath) }
 
                 Repeater {
                     id:     fileRepeater
@@ -163,7 +163,7 @@ Item {
                             onAboutToHide: fileButton.highlight = false
 
                             QGCMenuItem {
-                                text:           qsTr("Delete")
+                                text:           qsTr("删除")
                                 onTriggered: {
                                     controller.deleteFile(hamburgerMenu.fileToDelete)
                                     fileRepeater.model = controller.getFiles(folder, _rgExtensions)
@@ -174,7 +174,7 @@ Item {
                 }
 
                 QGCLabel {
-                    text:       qsTr("No files")
+                    text:       qsTr("没有文件")
                     visible:    fileRepeater.model.length === 0
                 }
             }
@@ -214,7 +214,7 @@ Item {
                     anchors.right:  parent.right
                     spacing:        ScreenTools.defaultFontPixelWidth
 
-                    QGCLabel { text: qsTr("New file name:") }
+                    QGCLabel { text: qsTr("新文件名:") }
 
                     QGCTextField {
                         id:                 filenameTextField
@@ -228,7 +228,7 @@ Item {
                     anchors.left:   parent.left
                     anchors.right:  parent.right
                     wrapMode:       Text.WordWrap
-                    text:           qsTr("The file %1 exists. Click Save again to replace it.").arg(filenameTextField.text)
+                    text:           qsTr("文件 %1 已存在。再次点击保存将替换它。").arg(filenameTextField.text)
                     visible:        false
                     color:          qgcPal.warningText
                 }
@@ -236,7 +236,7 @@ Item {
                 SectionHeader {
                     anchors.left:   parent.left
                     anchors.right:  parent.right
-                    text:           qsTr("Save to existing file:")
+                    text:           qsTr("保存到已存在文件:")
                 }
 
                 Repeater {
@@ -268,7 +268,7 @@ Item {
                             onAboutToHide: fileButton.highlight = false
 
                             QGCMenuItem {
-                                text:           qsTr("Delete")
+                                text:           qsTr("删除")
                                 onTriggered: {
                                     controller.deleteFile(hamburgerMenu.fileToDelete)
                                     fileRepeater.model = controller.getFiles(folder, [ _rgExtensions ])

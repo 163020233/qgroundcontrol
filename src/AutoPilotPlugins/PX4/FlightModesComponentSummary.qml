@@ -18,13 +18,13 @@ Item {
 	Column {
 		anchors.fill:       parent
 		VehicleSummaryRow {
-			labelText: qsTr("Mode switch")
+			labelText: qsTr("模式切换")
 			valueText: _rcMapFltmode.value === 0 ? qsTr("Setup required") : _rcMapFltmode.enumStringValue
 		}
 		Repeater {
 			model: 6
 			VehicleSummaryRow {
-				labelText: qsTr("Flight Mode %1 ").arg(index + 1)
+				labelText: qsTr("飞行模式 %1 ").arg(index + 1)
 				valueText: controller.getParameterFact(-1, "COM_FLTMODE" + (index + 1)).enumStringValue
 			}
 		}

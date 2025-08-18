@@ -55,7 +55,7 @@ Rectangle {
         }
 
         QGCLabel {
-            text:           qsTr("Exit Plan")
+            text:           qsTr("退出")
             font.pointSize: ScreenTools.largeFontPointSize
         }
     }
@@ -128,14 +128,14 @@ Rectangle {
 
         QGCLabel {
             anchors.centerIn:   parent
-            text:               qsTr("Syncing Mission")
+            text:               qsTr("同步任务")
             font.pointSize:     ScreenTools.largeFontPointSize
             visible:            _controllerProgressPct !== 1
         }
 
         QGCLabel {
             anchors.centerIn:   parent
-            text:               qsTr("Done")
+            text:               qsTr("完成")
             font.pointSize:     ScreenTools.largeFontPointSize
             visible:            _controllerProgressPct === 1
         }
@@ -144,7 +144,7 @@ Rectangle {
             anchors.margins:    _margin
             anchors.right:      parent.right
             anchors.bottom:     parent.bottom
-            text:               qsTr("Click anywhere to hide")
+            text:               qsTr("点击任意位置隐藏")
 
             property real _margin: ScreenTools.defaultFontPixelWidth / 2
         }

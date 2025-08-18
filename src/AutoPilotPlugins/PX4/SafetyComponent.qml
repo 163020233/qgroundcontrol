@@ -62,7 +62,7 @@ SetupPage {
                 anchors.horizontalCenter:   parent.horizontalCenter
 
                 QGCLabel {
-                    text:                   qsTr("Low Battery Failsafe Trigger")
+                    text:                   qsTr("低电池故障安全触发")
                 }
 
                 Rectangle {
@@ -90,7 +90,7 @@ SetupPage {
                             anchors.verticalCenter: parent.verticalCenter
 
                             QGCLabel {
-                                text:               qsTr("Failsafe Action:")
+                                text:               qsTr("故障安全措施:")
                                 Layout.minimumWidth:_labelWidth
                                 Layout.fillWidth:   true
                             }
@@ -102,7 +102,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:               qsTr("Battery Warn Level:")
+                                text:               qsTr("电池警告水平:")
                                 Layout.fillWidth:   true
                             }
                             FactTextField {
@@ -111,7 +111,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:               qsTr("Battery Failsafe Level:")
+                                text:               qsTr("电池故障安全水平:")
                                 Layout.fillWidth:   true
                             }
                             FactTextField {
@@ -120,7 +120,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:               qsTr("Battery Emergency Level:")
+                                text:               qsTr("电池紧急水平:")   
                                 Layout.fillWidth:   true
                             }
                             FactTextField {
@@ -132,7 +132,7 @@ SetupPage {
                 }
 
                 QGCLabel {
-                    text:                   qsTr("Object Detection")
+                    text:                   qsTr("对象检测")
                 }
 
                 Rectangle {
@@ -160,12 +160,12 @@ SetupPage {
                             anchors.verticalCenter: parent.verticalCenter
 
                             QGCLabel {
-                                text:               qsTr("Collision Prevention:")
+                                text:               qsTr("碰撞预防:")
                                 Layout.minimumWidth:_labelWidth
                                 Layout.fillWidth:   true
                             }
                             QGCComboBox {
-                                model:              [qsTr("Disabled"), qsTr("Enabled")]
+                                model:              [qsTr("已禁用"), qsTr("已启用")]
                                 enabled:            _collisionPrevention
                                 Layout.minimumWidth:_editFieldWidth
                                 Layout.fillWidth:   true
@@ -180,11 +180,11 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:               qsTr("Obstacle Avoidance:")
+                                text:               qsTr("对象避免:")
                                 Layout.fillWidth:   true
                             }
                             QGCComboBox {
-                                model:              [qsTr("Disabled"), qsTr("Enabled")]
+                                model:              [qsTr("已禁用"), qsTr("已启用")]
                                 enabled:            _objectAvoidance && _collisionPrevention.rawValue > 0
                                 Layout.minimumWidth:_editFieldWidth
                                 Layout.fillWidth:   true
@@ -197,7 +197,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:               qsTr("Minimum Distance: (") + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString + ")"
+                                text:               qsTr("最小距离: (") + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString + ")"
                                 Layout.fillWidth:   true
                                 Layout.alignment:   Qt.AlignVCenter
                             }
@@ -233,7 +233,7 @@ SetupPage {
 
                             FactCheckBox {
                                 id:         showObstacleDistanceOverlayCheckBox
-                                text:       qsTr("Show obstacle distance overlay")
+                                text:       qsTr("显示障碍物距离叠加")
                                 visible:    _showObstacleDistanceOverlay.visible
                                 fact:       _showObstacleDistanceOverlay
 
@@ -244,7 +244,7 @@ SetupPage {
                 }
 
                 QGCLabel {
-                    text:                   qsTr("RC Loss Failsafe Trigger")
+                    text:                   qsTr("RC 丢失故障安全触发")
                 }
 
                 Rectangle {
@@ -272,7 +272,7 @@ SetupPage {
                             anchors.verticalCenter: parent.verticalCenter
 
                             QGCLabel {
-                                text:               qsTr("Failsafe Action:")
+                                text:               qsTr("故障安全措施:")
                                 Layout.minimumWidth:_labelWidth
                                 Layout.fillWidth:   true
                             }
@@ -284,7 +284,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:               qsTr("RC Loss Timeout:")
+                                text:               qsTr("RC 丢失超时:")
                                 Layout.fillWidth:   true
                             }
                             FactTextField {
@@ -296,7 +296,7 @@ SetupPage {
                 }
 
                 QGCLabel {
-                    text:                   qsTr("Data Link Loss Failsafe Trigger")
+                    text:                   qsTr("数据链路丢失故障保护触发器")
                 }
 
                 Rectangle {
@@ -324,7 +324,7 @@ SetupPage {
                             anchors.verticalCenter: parent.verticalCenter
 
                             QGCLabel {
-                                text:               qsTr("Failsafe Action:")
+                                text:               qsTr("故障安全措施:")
                                 Layout.minimumWidth:_labelWidth
                                 Layout.fillWidth:   true
                             }
@@ -336,7 +336,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:               qsTr("Data Link Loss Timeout:")
+                                text:               qsTr("数据链路丢失超时:")
                                 Layout.fillWidth:   true
                             }
                             FactTextField {
@@ -348,7 +348,7 @@ SetupPage {
                 }
 
                 QGCLabel {
-                    text:                   qsTr("Geofence Failsafe Trigger")
+                    text:                   qsTr("地理围栏故障安全触发")
                 }
 
                 Rectangle {
@@ -377,7 +377,7 @@ SetupPage {
                             anchors.verticalCenter: parent.verticalCenter
 
                             QGCLabel {
-                                text:               qsTr("Action on breach:")
+                                text:               qsTr("违规行为:")
                                 Layout.minimumWidth:_labelWidth
                                 Layout.fillWidth:   true
                             }
@@ -390,7 +390,7 @@ SetupPage {
 
                             QGCCheckBox {
                                 id:                 fenceRadiusCheckBox
-                                text:               qsTr("Max Radius:")
+                                text:               qsTr("最大半径:")
                                 checked:            _fenceRadius.value > 0
                                 onClicked:          _fenceRadius.value = checked ? 100 : 0
                                 Layout.fillWidth:   true
@@ -403,7 +403,7 @@ SetupPage {
 
                             QGCCheckBox {
                                 id:                 fenceAltMaxCheckBox
-                                text:               qsTr("Max Altitude:")
+                                text:               qsTr("最大高度:")
                                 checked:            _fenceAlt ? _fenceAlt.value > 0 : false
                                 onClicked:          _fenceAlt.value = checked ? 100 : 0
                                 Layout.fillWidth:   true
@@ -418,7 +418,7 @@ SetupPage {
                 }
 
                 QGCLabel {
-                    text:               qsTr("Return To Launch Settings")
+                    text:               qsTr("返航设置")
                 }
 
                 Rectangle {
@@ -446,7 +446,7 @@ SetupPage {
                             anchors.verticalCenter:     parent.verticalCenter
 
                             QGCLabel {
-                                text:                   qsTr("Climb to altitude of:")
+                                text:                   qsTr("爬升高度:")
                                 Layout.minimumWidth:    _labelWidth
                                 Layout.fillWidth:       true
                             }
@@ -457,7 +457,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:                   qsTr("Return to launch, then:")
+                                text:                   qsTr("返航后:")
                                 Layout.columnSpan:      2
                             }
                             Row {
@@ -466,7 +466,7 @@ SetupPage {
                                 QGCRadioButton {
                                     id:                 homeLandRadio
                                     checked:            _rtlLandDelay ? _rtlLandDelay.value === 0 : false
-                                    text:               qsTr("Land immediately")
+                                    text:               qsTr("立即降落")
                                     onClicked:          _rtlLandDelay.value = 0
                                 }
                             }
@@ -476,7 +476,7 @@ SetupPage {
                                 QGCRadioButton {
                                     id:                 homeLoiterNoLandRadio
                                     checked:            _rtlLandDelay ? _rtlLandDelay.value < 0 : false
-                                    text:               qsTr("Loiter and do not land")
+                                    text:               qsTr("盘旋不降落")
                                     onClicked:          _rtlLandDelay.value = -1
                                 }
                             }
@@ -486,13 +486,13 @@ SetupPage {
                                 QGCRadioButton {
                                     id:                 homeLoiterLandRadio
                                     checked:            _rtlLandDelay ? _rtlLandDelay.value > 0 : false
-                                    text:               qsTr("Loiter and land after specified time")
+                                    text:               qsTr("盘旋并在指定时间降落")
                                     onClicked:          _rtlLandDelay.value = 60
                                 }
                             }
 
                             QGCLabel {
-                                text:                   qsTr("Loiter Time")
+                                text:                   qsTr("盘旋时间:")
                                 Layout.fillWidth:       true
                             }
                             FactTextField {
@@ -502,7 +502,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:                   qsTr("Loiter Altitude")
+                                text:                   qsTr("盘旋高度:")
                                 Layout.fillWidth:       true
                             }
                             FactTextField {
@@ -544,7 +544,7 @@ SetupPage {
 
                             QGCLabel {
                                 id:                 landVelocityLabel
-                                text:               qsTr("Landing Descent Rate:")
+                                text:               qsTr("降落速度:")
                                 visible:            controller.vehicle && !controller.vehicle.fixedWing
                                 Layout.minimumWidth:_labelWidth
                                 Layout.fillWidth:   true
@@ -558,7 +558,7 @@ SetupPage {
 
                             QGCCheckBox {
                                 id:                 disarmDelayCheckBox
-                                text:               qsTr("Disarm After:")
+                                text:               qsTr("降落后:")
                                 checked:            _disarmLandDelay.value > 0
                                 onClicked:          _disarmLandDelay.value = checked ? 2 : 0
                                 Layout.fillWidth:   true
@@ -573,7 +573,7 @@ SetupPage {
                 }
 
                 QGCLabel {
-                    text:               qsTr("Vehicle Telemetry Logging")
+                    text:               qsTr("设备遥测记录")
                 }
 
                 Rectangle {
@@ -600,12 +600,12 @@ SetupPage {
                             columns:                2
                             anchors.verticalCenter: parent.verticalCenter
                             QGCLabel {
-                                text:               qsTr("Telemetry logging to vehicle storage:")
+                                text:               qsTr("遥测记录至设备存储:")
                                 Layout.minimumWidth:_labelWidth
                                 Layout.fillWidth:   true
                             }
                             QGCComboBox {
-                                model:              [qsTr("Disabled"), qsTr("Enabled")]
+                                model:              [qsTr("已禁用"), qsTr("已启用")]
                                 enabled:            _enableLogging
                                 Layout.minimumWidth:_editFieldWidth
                                 Layout.fillWidth:   true
@@ -623,7 +623,7 @@ SetupPage {
                 }
 
                 QGCLabel {
-                    text:               qsTr("Hardware in the Loop Simulation")
+                    text:               qsTr("硬件在环仿真")
                     visible:            _hitlAvailable
                 }
 
@@ -652,7 +652,7 @@ SetupPage {
                             columns:                2
                             anchors.verticalCenter: parent.verticalCenter
                             QGCLabel {
-                                text:               qsTr("HITL Enabled:")
+                                text:               qsTr("HITL 已启用:")
                                 Layout.minimumWidth:_labelWidth
                                 Layout.fillWidth:   true
                             }

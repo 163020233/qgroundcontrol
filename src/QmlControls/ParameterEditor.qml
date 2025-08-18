@@ -51,50 +51,50 @@ Item {
     QGCMenu {
         id:                 toolsMenu
         QGCMenuItem {
-            text:           qsTr("Refresh")
+            text:           qsTr("刷新")
             onTriggered:	controller.refresh()
         }
         QGCMenuItem {
-            text:           qsTr("Reset all to firmware's defaults")
-            onTriggered:    mainWindow.showMessageDialog(qsTr("Reset All"),
-                                                         qsTr("Select Reset to reset all parameters to their defaults.\n\nNote that this will also completely reset everything, including UAVCAN nodes, all vehicle settings, setup and calibrations."),
+            text:           qsTr("重置所有参数到固件默认值")
+            onTriggered:    mainWindow.showMessageDialog(qsTr("重置所有参数"),
+                                                         qsTr("选择重置将所有参数重置到固件默认值。\n\n注意：这将完全重置所有内容，包括UAVCAN节点、所有设备设置、设置和校准。"),
                                                          Dialog.Cancel | Dialog.Reset,
                                                          function() { controller.resetAllToDefaults() })
         }
         QGCMenuItem {
-            text:           qsTr("Reset to vehicle's configuration defaults")
+            text:           qsTr("重置所有参数到设备配置默认值")
             visible:        !_activeVehicle.apmFirmware
-            onTriggered:    mainWindow.showMessageDialog(qsTr("Reset All"),
-                                                         qsTr("Select Reset to reset all parameters to the vehicle's configuration defaults."),
+            onTriggered:    mainWindow.showMessageDialog(qsTr("重置所有参数"),
+                                                         qsTr("选择重置将所有参数重置到设备配置默认值。\n\n注意：这将重置所有参数到设备配置默认值。"),
                                                          Dialog.Cancel | Dialog.Reset,
                                                          function() { controller.resetAllToVehicleConfiguration() })
         }
         QGCMenuSeparator { }
         QGCMenuItem {
-            text:           qsTr("Load from file for review...")
+            text:           qsTr("从文件加载参数进行审核...")
             onTriggered: {
-                fileDialog.title =          qsTr("Load Parameters")
+                fileDialog.title =          qsTr("加载参数")
                 fileDialog.openForLoad()
             }
         }
         QGCMenuItem {
-            text:           qsTr("Save to file...")
+            text:           qsTr("保存参数到文件...")
             onTriggered: {
-                fileDialog.title =          qsTr("Save Parameters")
+                fileDialog.title =          qsTr("保存参数")
                 fileDialog.openForSave()
             }
         }
         QGCMenuSeparator { visible: _showRCToParam }
         QGCMenuItem {
-            text:           qsTr("Clear all RC to Param")
+            text:           qsTr("清除所有RC到参数映射")
             onTriggered:	_activeVehicle.clearAllParamMapRC()
             visible:        _showRCToParam
         }
         QGCMenuSeparator { }
         QGCMenuItem {
-            text:           qsTr("Reboot Vehicle")
-            onTriggered:    mainWindow.showMessageDialog(qsTr("Reboot Vehicle"),
-                                                         qsTr("Select Ok to reboot vehicle."),
+            text:           qsTr("重启设备")
+            onTriggered:    mainWindow.showMessageDialog(qsTr("重启设备"),
+                                                         qsTr("选择确定重启设备。"),
                                                          Dialog.Cancel | Dialog.Ok,
                                                          function() { _activeVehicle.rebootVehicle() })
         }
@@ -104,7 +104,7 @@ Item {
     QGCFileDialog {
         id:             fileDialog
         folder:         _appSettings.parameterSavePath
-        nameFilters:    [ qsTr("Parameter Files (*.%1)").arg(_appSettings.parameterFileExtension) , qsTr("All Files (*)") ]
+        nameFilters:    [ qsTr("参数文件 (*.%1)").arg(_appSettings.parameterFileExtension) , qsTr("所有文件 (*)") ]
 
         onAcceptedForSave: (file) => {
             controller.saveToFile(file)
@@ -147,12 +147,12 @@ Item {
 
             QGCTextField {
                 id:                     searchText
-                placeholderText:        qsTr("Search")
+                placeholderText:        qsTr("搜索")
                 onDisplayTextChanged:   controller.searchText = displayText
             }
 
             QGCButton {
-                text: qsTr("Clear")
+                text: qsTr("清除")
                 onClicked: {
                     if(ScreenTools.isMobile) {
                         Qt.inputMethod.hide();
@@ -162,7 +162,7 @@ Item {
             }
 
             QGCCheckBox {
-                text:       qsTr("Show modified only")
+                text:       qsTr("仅显示已修改参数")
                 checked:    controller.showModifiedOnly
                 onClicked:  controller.showModifiedOnly = checked
                 visible:    QGroundControl.multiVehicleManager.activeVehicle.px4Firmware
@@ -171,7 +171,7 @@ Item {
 
         QGCButton {
             Layout.alignment:   Qt.AlignRight
-            text:               qsTr("Tools")
+            text:               qsTr("工具")
             onClicked:          toolsMenu.popup()
         }
     }

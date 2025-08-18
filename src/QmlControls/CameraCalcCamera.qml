@@ -104,11 +104,11 @@ ColumnLayout {
                     Item { Layout.fillWidth: true }
                     QGCLabel {
                         Layout.preferredWidth:  _root._fieldWidth
-                        text:                   qsTr("Width")
+                        text:                   qsTr("宽度")
                     }
                     QGCLabel {
                         Layout.preferredWidth:  _root._fieldWidth
-                        text:                   qsTr("Height")
+                        text:                   qsTr("高度")
                     }
                 }
 
@@ -116,7 +116,7 @@ ColumnLayout {
                     Layout.fillWidth:   true
                     spacing:            _margin
 
-                    QGCLabel { text: qsTr("Sensor"); Layout.fillWidth: true }
+                    QGCLabel { text: qsTr("传感器"); Layout.fillWidth: true }
                     FactTextField {
                         Layout.preferredWidth:  _root._fieldWidth
                         fact:                   cameraCalc.sensorWidth
@@ -131,7 +131,7 @@ ColumnLayout {
                     Layout.fillWidth:   true
                     spacing:            _margin
 
-                    QGCLabel { text: qsTr("Image"); Layout.fillWidth: true }
+                    QGCLabel { text: qsTr("图像"); Layout.fillWidth: true }
                     FactTextField {
                         Layout.preferredWidth:  _root._fieldWidth
                         fact:                   cameraCalc.imageWidth
@@ -146,7 +146,7 @@ ColumnLayout {
                     Layout.fillWidth:   true
                     spacing:            _margin
                     QGCLabel {
-                        text:                   qsTr("Focal length")
+                        text:                   qsTr("焦距")
                         Layout.fillWidth:       true
                     }
                     FactTextField {

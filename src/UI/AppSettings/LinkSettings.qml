@@ -23,7 +23,7 @@ SettingsPage {
     property var _autoConnectSettings:  QGroundControl.settingsManager.autoConnectSettings
 
     SettingsGroupLayout {
-        heading:        qsTr("AutoConnect")
+        heading:        qsTr("自动连接")
         visible:        _autoConnectSettings.visible
 
         Repeater {
@@ -55,7 +55,7 @@ SettingsPage {
 
         LabelledComboBox {
             id: nmeaPortCombo
-            label: qsTr("Device")
+            label: qsTr("设备")
 
             model: ListModel {}
 
@@ -68,11 +68,11 @@ SettingsPage {
             Component.onCompleted: {
                 var model = []
 
-                model.push(qsTr("Disabled"))
-                model.push(qsTr("UDP Port"))
+                model.push(qsTr("已禁用"))
+                model.push(qsTr("UDP 端口"))
 
                 if (QGroundControl.linkManager.serialPorts.length === 0) {
-                    model.push(qsTr("Serial <none available>"))
+                    model.push(qsTr("串口 <无可用设备>"))
                 } else {
                     for (var i in QGroundControl.linkManager.serialPorts) {
                         model.push(QGroundControl.linkManager.serialPorts[i])
@@ -87,8 +87,8 @@ SettingsPage {
 
         LabelledComboBox {
             id: nmeaBaudCombo
-            visible: (nmeaPortCombo.currentText !== "UDP Port") && (nmeaPortCombo.currentText !== "Disabled")
-            label: qsTr("Baudrate")
+            visible: (nmeaPortCombo.currentText !== "UDP 端口") && (nmeaPortCombo.currentText !== "已禁用")
+            label: qsTr("波特率")
             model: QGroundControl.linkManager.serialBaudRates
 
             onActivated: (index) => {
@@ -104,14 +104,14 @@ SettingsPage {
         }
 
         LabelledFactTextField {
-            visible: nmeaPortCombo.currentText === "UDP Port"
-            label: qsTr("NMEA stream UDP port")
+            visible: nmeaPortCombo.currentText === "UDP 端口"
+            label: qsTr("NMEA 流 UDP 端口")
             fact: QGroundControl.settingsManager.autoConnectSettings.nmeaUdpPort
         }
     }
 
     SettingsGroupLayout {
-        heading: qsTr("Links")
+        heading: qsTr("链接")
 
         Repeater {
             model: _linkManager.linkConfigurations
@@ -166,8 +166,8 @@ SettingsPage {
                     QGCMouseArea {
                         fillItem:   parent
                         onClicked:  mainWindow.showMessageDialog(
-                                        qsTr("Delete Link"), 
-                                        qsTr("Are you sure you want to delete '%1'?").arg(object.name), 
+                                        qsTr("删除链接"), 
+                                        qsTr("确定要删除 '%1' 吗？").arg(object.name), 
                                         Dialog.Ok | Dialog.Cancel, 
                                         function () {
                                             _linkManager.removeConfiguration(object)
@@ -175,7 +175,7 @@ SettingsPage {
                     }
                 }
                 QGCButton {
-                    text:       object.link ? qsTr("Disconnect") : qsTr("Connect")
+                    text:       object.link ? qsTr("断开连接") : qsTr("连接")
                     onClicked: {
                         if (object.link) {
                             object.link.disconnect()
@@ -188,8 +188,8 @@ SettingsPage {
         }
 
         LabelledButton {
-            label:      qsTr("Add New Link")
-            buttonText: qsTr("Add")
+            label:      qsTr("添加新链接")
+            buttonText: qsTr("添加")  
 
             onClicked: {
                 var editingConfig = _linkManager.createConfiguration(ScreenTools.isSerialAvailable ? LinkConfiguration.TypeSerial : LinkConfiguration.TypeUdp, "")
@@ -202,7 +202,7 @@ SettingsPage {
         id: linkDialogComponent
 
         QGCPopupDialog {
-            title:                  originalConfig ? qsTr("Edit Link") : qsTr("Add New Link")
+            title:                  originalConfig ? qsTr("编辑链接") : qsTr("添加新链接")
             buttons:                Dialog.Save | Dialog.Cancel
             acceptButtonEnabled:    nameField.text !== ""
 
@@ -230,31 +230,31 @@ SettingsPage {
                     Layout.fillWidth:   true
                     spacing:            ScreenTools.defaultFontPixelWidth
 
-                    QGCLabel { text: qsTr("Name") }
+                    QGCLabel { text: qsTr("名称") }
                     QGCTextField {
                         id:                 nameField
                         Layout.fillWidth:   true
                         text:               editingConfig.name
-                        placeholderText:    qsTr("Enter name")
+                        placeholderText:    qsTr("输入名称")
                     }
                 }
 
                 QGCCheckBoxSlider {
                     Layout.fillWidth:   true
-                    text:               qsTr("Automatically Connect on Start")
+                    text:               qsTr("自动连接")
                     checked:            editingConfig.autoConnect
                     onCheckedChanged:   editingConfig.autoConnect = checked
                 }
 
                 QGCCheckBoxSlider {
                     Layout.fillWidth:   true
-                    text:               qsTr("High Latency")
+                    text:               qsTr("高延迟")
                     checked:            editingConfig.highLatency
                     onCheckedChanged:   editingConfig.highLatency = checked
                 }
 
                 LabelledComboBox {
-                    label:                  qsTr("Type")
+                    label:                  qsTr("类型")
                     enabled:                originalConfig == null
                     model:                  _linkManager.linkTypeStrings
                     Component.onCompleted:  comboBox.currentIndex = editingConfig.linkType

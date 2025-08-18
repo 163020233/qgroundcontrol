@@ -353,7 +353,7 @@ FlightMap {
 
             sourceItem: MissionItemIndexLabel {
                 id:         itemIndexLabel
-                label:      qsTr("R", "rally point map item label")
+                label:      qsTr("航点")
             }
         }
     }
@@ -449,7 +449,7 @@ FlightMap {
         sourceItem: MissionItemIndexLabel {
             checked:    true
             index:      -1
-            label:      qsTr("Go here", "Go to location waypoint")
+            label:      qsTr("前往", "前往位置航点")
         }
 
         property bool inGotoFlightMode: _activeVehicle ? _activeVehicle.flightMode === _activeVehicle.gotoFlightMode : false
@@ -589,7 +589,7 @@ FlightMap {
         sourceItem: MissionItemIndexLabel {
             checked:    true
             index:      -1
-            label:      qsTr("ROI here", "Make this a Region Of Interest")
+            label:      qsTr("ROI 这里", "将此设置为区域兴趣点")
         }
 
         //-- Visibilty controlled by actual state
@@ -616,7 +616,7 @@ FlightMap {
         sourceItem: MissionItemIndexLabel {
             checked:    true
             index:      -1
-            label:      qsTr("Orbit", "Orbit waypoint")
+            label:      qsTr("环绕", "环绕航点")
         }
     }
 
@@ -624,7 +624,7 @@ FlightMap {
         id: roiEditPositionDialogComponent
 
         EditPositionDialog {
-            title:                  qsTr("Edit ROI Position")
+            title:                  qsTr("编辑环绕位置")
             coordinate:             roiLocationItem.coordinate
             onCoordinateChanged: {
                 roiLocationItem.coordinate = coordinate
@@ -645,7 +645,7 @@ FlightMap {
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("Cancel ROI")
+                        text:               qsTr("取消环绕")
                         onClicked: {
                             _activeVehicle.stopGuidedModeROI()
                             roiEditDropPanel.close()
@@ -654,7 +654,7 @@ FlightMap {
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("Edit Position")
+                        text:               qsTr("编辑位置")
                         onClicked: {         
                             roiEditPositionDialogComponent.createObject(mainWindow, { showSetPositionFromVehicle: false }).open()
                             roiEditDropPanel.close()
@@ -679,7 +679,7 @@ FlightMap {
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("Go to location")
+                        text:               qsTr("前往此位置")
                         visible:            globals.guidedControllerFlyView.showGotoLocation
                         onClicked: {
                             mapClickDropPanel.close()
@@ -696,7 +696,7 @@ FlightMap {
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("Orbit at location")
+                        text:               qsTr("环绕此位置")
                         visible:            globals.guidedControllerFlyView.showOrbit
                         onClicked: {
                             mapClickDropPanel.close()
@@ -707,7 +707,7 @@ FlightMap {
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("ROI at location")
+                        text:               qsTr("环绕此位置")
                         visible:            globals.guidedControllerFlyView.showROI
                         onClicked: {
                             mapClickDropPanel.close()
@@ -717,7 +717,7 @@ FlightMap {
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("Set home here")
+                        text:               qsTr("设置此位置为原点")
                         visible:            globals.guidedControllerFlyView.showSetHome
                         onClicked: {
                             mapClickDropPanel.close()
@@ -727,7 +727,7 @@ FlightMap {
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("Set Estimator Origin")
+                        text:               qsTr("设置此位置为估计器原点")
                         visible:            globals.guidedControllerFlyView.showSetEstimatorOrigin
                         onClicked: {
                             mapClickDropPanel.close()
@@ -737,7 +737,7 @@ FlightMap {
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("Set Heading")
+                        text:               qsTr("设置此位置为 heading")
                         visible:            globals.guidedControllerFlyView.showChangeHeading
                         onClicked: {
                             mapClickDropPanel.close()
@@ -747,8 +747,8 @@ FlightMap {
 
                     ColumnLayout {
                         spacing: 0
-                        QGCLabel { text: qsTr("Lat: %1").arg(mapClickCoord.latitude.toFixed(6)) }
-                        QGCLabel { text: qsTr("Lon: %1").arg(mapClickCoord.longitude.toFixed(6)) }
+                        QGCLabel { text: qsTr("纬度: %1").arg(mapClickCoord.latitude.toFixed(6)) }
+                        QGCLabel { text: qsTr("经度: %1").arg(mapClickCoord.longitude.toFixed(6)) }
                     }
                 }
             }

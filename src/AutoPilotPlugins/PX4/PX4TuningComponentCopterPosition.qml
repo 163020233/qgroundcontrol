@@ -27,7 +27,7 @@ ColumnLayout {
         columns: 2
 
         QGCLabel {
-            text:               qsTr("Position control mode (set this to 'simple' during tuning):")
+            text:               qsTr("位置控制模式 (在调参过程中设置为 '简易'):")
             visible:            _mcPosMode
         }
         FactComboBox {
@@ -43,16 +43,16 @@ ColumnLayout {
         availableHeight:    _availableHeight - pidTuning.y
 
         property var horizontal: QtObject {
-            property string name: qsTr("Horizontal")
-            property string plotTitle: qsTr("Horizontal (Y direction, sidewards)")
+            property string name: qsTr("水平")
+            property string plotTitle: qsTr("水平 (Y 方向，侧面)")
             property var plot: [
                 { name: "Response", value: globals.activeVehicle.localPosition.y.value },
                 { name: "Setpoint", value: globals.activeVehicle.localPositionSetpoint.y.value }
             ]
             property var params: ListModel {
                 ListElement {
-                    title:          qsTr("Proportional gain (MPC_XY_P)")
-                    description:    qsTr("Increase for more responsiveness, reduce if the position overshoots (there is only a setpoint when hovering, i.e. when centering the stick).")
+                    title:          qsTr("水平比例增益 (MPC_XY_P)")
+                    description:    qsTr("增加以获得更多的响应速度，减少以避免位置超调 (当悬停时只有一个设置点，即当摇杆居中时)。")
                     param:          "MPC_XY_P"
                     min:            0
                     max:            2
@@ -61,15 +61,15 @@ ColumnLayout {
             }
         }
         property var vertical: QtObject {
-            property string name: qsTr("Vertical")
+            property string name: qsTr("垂直")
             property var plot: [
                 { name: "Response", value: globals.activeVehicle.localPosition.z.value },
                 { name: "Setpoint", value: globals.activeVehicle.localPositionSetpoint.z.value }
             ]
             property var params: ListModel {
                 ListElement {
-                    title:          qsTr("Proportional gain (MPC_Z_P)")
-                    description:    qsTr("Increase for more responsiveness, reduce if the position overshoots (there is only a setpoint when hovering, i.e. when centering the stick).")
+                    title:          qsTr("垂直比例增益 (MPC_Z_P)")
+                    description:    qsTr("增加以获得更多的响应速度，减少以避免位置超调 (当悬停时只有一个设置点，即当摇杆居中时)。")
                     param:          "MPC_Z_P"
                     min:            0
                     max:            2

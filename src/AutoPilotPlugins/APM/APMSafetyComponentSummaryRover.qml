@@ -51,32 +51,33 @@ Item {
     function setFailsafeActionText() {
         switch (_failsafeAction.value) {
         case 0:
-            _failsafeActionText = qsTr("Disabled")
+            _failsafeActionText = qsTr("已禁用")
             break
         case 1:
-            _failsafeActionText = qsTr("Always RTL")
+            _failsafeActionText = qsTr("总是返回")
             break
         case 2:
-            _failsafeActionText = qsTr("Always Hold")
+            _failsafeActionText = qsTr("永远保持位置")
+
             break
         default:
-            _failsafeActionText = qsTr("Unknown")
+            _failsafeActionText = qsTr("未知")
         }
     }
 
     function setFailsafeCrashCheckText() {
         switch (_failsafeCrashCheck.value) {
         case 0:
-            _failsafeCrashCheckText = qsTr("Disabled")
+            _failsafeCrashCheckText = qsTr("已禁用")
             break
         case 1:
-            _failsafeCrashCheckText = qsTr("Hold")
+            _failsafeCrashCheckText = qsTr("保持位置")
             break
         case 2:
-            _failsafeCrashCheckText = qsTr("Hold and Disarm")
+            _failsafeCrashCheckText = qsTr("保持位置并断开")
             break
         default:
-            _failsafeCrashCheckText = qsTr("Unknown")
+            _failsafeCrashCheckText = qsTr("未知")
         }
     }
 
@@ -84,22 +85,22 @@ Item {
         anchors.fill:       parent
 
         VehicleSummaryRow {
-            labelText: qsTr("Arming Checks:")
-            valueText:  _armingCheck.value & 1 ? qsTr("Enabled") : qsTr("Some disabled")
+            labelText: qsTr("设备检查")
+            valueText:  _armingCheck.value & 1 ? qsTr("已启用") : qsTr("部分已禁用")
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Throttle failsafe:")
-            valueText:  _failsafeThrEnable.value != 0 ? _failsafeThrValue.valueString : qsTr("Disabled")
+            labelText: qsTr("油门故障保护")
+            valueText:  _failsafeThrEnable.value != 0 ? _failsafeThrValue.valueString : qsTr("已禁用")
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Failsafe Action:")
+            labelText: qsTr("故障安全措施:")
             valueText: _failsafeActionText
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Failsafe Crash Check:")
+            labelText: qsTr("故障安全碰撞检查：")
             valueText: _failsafeCrashCheckText
         }
 

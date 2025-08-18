@@ -23,24 +23,24 @@ Item {
         anchors.fill:       parent
 
         VehicleSummaryRow {
-            labelText: qsTr("Compass:")
-            valueText: mag0IdFact ? (mag0IdFact.value  === 0 ? qsTr("Setup required") : qsTr("Ready")) : ""
+            labelText: qsTr("罗盘:")
+            valueText: mag0IdFact ? (mag0IdFact.value  === 0 ? qsTr("需要设置") : qsTr("已准备")) : ""
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Gyro:")
-            valueText: gyro0IdFact ? (gyro0IdFact.value === 0 ? qsTr("Setup required") : qsTr("Ready")) : ""
+            labelText: qsTr("陀螺仪:")
+            valueText: gyro0IdFact ? (gyro0IdFact.value === 0 ? qsTr("需要设置") : qsTr("已准备")) : ""
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Accelerometer:")
-            valueText: accel0IdFact ? (accel0IdFact.value === 0 ? qsTr("Setup required") : qsTr("Ready")) : ""
+            labelText: qsTr("加速度计:")
+            valueText: accel0IdFact ? (accel0IdFact.value === 0 ? qsTr("需要设置") : qsTr("已准备")) : ""
         }
 
         VehicleSummaryRow {
-            labelText:  qsTr("Airspeed:")
+            labelText:  qsTr("对气速度:")
             visible:    vehicleComponent.airspeedCalSupported
-            valueText:  vehicleComponent.airspeedCalRequired ? qsTr("Setup required") : qsTr("Ready")
+            valueText:  vehicleComponent.airspeedCalRequired ? qsTr("需要设置") : qsTr("已准备")
         }
     }
 }

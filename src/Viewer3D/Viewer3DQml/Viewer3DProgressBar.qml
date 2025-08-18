@@ -16,7 +16,7 @@ Rectangle{
     id: progressBody
 
     property real progressValue: 100.0
-    property string progressText: qsTr("Progress")
+    property string progressText: qsTr("进度")
 
     QGCPalette { id: qgcPal; colorGroupEnabled: true }
 

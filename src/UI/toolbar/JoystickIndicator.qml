@@ -32,19 +32,19 @@ Item {
             showExpand: false
 
             contentComponent: SettingsGroupLayout {
-                heading: qsTr("Joystick Status")
+                heading: qsTr("摇杆状态")
 
                 GridLayout {
                     columns: 2
 
-                    QGCLabel { text: qsTr("Connected:") }
+                    QGCLabel { text: qsTr("连接:") }
                     QGCLabel {
-                        text:  joystickManager.activeJoystick ? qsTr("Yes") : qsTr("No")
+                        text:  joystickManager.activeJoystick ? qsTr("是") : qsTr("否")
                         color: joystickManager.activeJoystick ? qgcPal.buttonText : "red"
                     }
-                    QGCLabel { text: qsTr("Enabled:") }
+                    QGCLabel { text: qsTr("已启用:") }
                     QGCLabel {
-                        text:  globals.activeVehicle && globals.activeVehicle.joystickEnabled ? qsTr("Yes") : qsTr("No")
+                        text:  globals.activeVehicle && globals.activeVehicle.joystickEnabled ? qsTr("是") : qsTr("否")
                         color: globals.activeVehicle && globals.activeVehicle.joystickEnabled ? qgcPal.buttonText : "red"
                     }
                 }

@@ -81,7 +81,7 @@ SetupPage {
                 visible: _batt1MonitorEnabled && _batt1ParamsAvailable
 
                 QGCLabel {
-                    text:       qsTr("Battery1 Failsafe Triggers")
+                    text:       qsTr("电池1故障保险触发器")
                     font.bold:   true
                 }
 
@@ -102,7 +102,7 @@ SetupPage {
                             columnSpacing:  _margins
                             rowSpacing:     _margins
                             columns:        2
-                            QGCLabel { text: qsTr("Battery low action:") }
+                            QGCLabel { text: qsTr("电池低电量：") }
                             FactComboBox {
                                 fact:               _failsafeBattLowAct
                                 indexModel:         false
@@ -110,7 +110,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:       qsTr("Battery critical action:")
+                                text:       qsTr("电池电量过低提醒：")
                                 visible:    _failsafeBattCritActAvailable
                             }
                             FactComboBox {
@@ -121,7 +121,7 @@ SetupPage {
                             }
 
                             QGCCheckBox {
-                                text:      qsTr("Voltage threshold:")
+                                text:      qsTr("电池电压阈值：")
                                 checked:   _failsafeBattVoltage.value != 0
                                 onClicked: _failsafeBattVoltage.value = checked ? 10.5 : 0
                             }
@@ -132,7 +132,7 @@ SetupPage {
                             }
 
                             QGCCheckBox {
-                                text:       qsTr("MAH threshold:")
+                                text:       qsTr("电池电量阈值：")
                                 checked:    _failsafeBattMah.value != 0
                                 onClicked:  _failsafeBattMah.value = checked ? 600 : 0
                             }
@@ -151,7 +151,7 @@ SetupPage {
                 visible:    _batt2MonitorEnabled && _batt2ParamsAvailable
 
                 QGCLabel {
-                    text:       qsTr("Battery2 Failsafe Triggers")
+                    text:       qsTr("电池2故障保险触发器")
                     font.bold:   true
                 }
 
@@ -174,7 +174,7 @@ SetupPage {
                             columns:        2
                             visible:        _batt2MonitorEnabled && _failsafeBatt2LowActAvailable
 
-                            QGCLabel { text: qsTr("Battery low action:") }
+                            QGCLabel { text: qsTr("电池低电量：") }
                             FactComboBox {
                                 fact:               _failsafeBatt2LowAct
                                 indexModel:         false
@@ -182,7 +182,7 @@ SetupPage {
                             }
 
                             QGCLabel {
-                                text:       qsTr("Battery critical action:")
+                                text:       qsTr("电池电量过低提醒：")
                             }
                             FactComboBox {
                                 fact:               _failsafeBatt2CritAct
@@ -191,7 +191,7 @@ SetupPage {
                             }
 
                             QGCCheckBox {
-                                text:      qsTr("Voltage threshold:")
+                                text:      qsTr("电池电压阈值：")
                                 checked:   _failsafeBatt2Voltage.value != 0
                                 onClicked: _failsafeBatt2Voltage.value = checked ? 10.5 : 0
                             }
@@ -202,7 +202,7 @@ SetupPage {
                             }
 
                             QGCCheckBox {
-                                text:       qsTr("MAH threshold:")
+                                text:       qsTr("电池电量阈值：")
                                 checked:    _failsafeBatt2Mah.value != 0
                                 onClicked:  _failsafeBatt2Mah.value = checked ? 600 : 0
                             }
@@ -220,7 +220,7 @@ SetupPage {
                 spacing: _margins / 2
 
                 QGCLabel {
-                    text:       qsTr("General Failsafe Triggers")
+                    text:       qsTr("通用故障保险触发器")
                     font.bold:   true
                 }
 
@@ -241,24 +241,24 @@ SetupPage {
                             rowSpacing:     _margins
                             columns:        2
 
-                            QGCLabel { text: qsTr("Ground Station failsafe:") }
+                            QGCLabel { text: qsTr("地面站故障保险：") }
                             FactComboBox {
                                 fact:               _failsafeGCSEnable
                                 indexModel:         false
                                 Layout.fillWidth:   true
                             }
 
-                            QGCLabel { text: qsTr("Throttle failsafe:") }
+                            QGCLabel { text: qsTr("油门故障保险：") }
                             QGCComboBox {
-                                model:              [qsTr("Disabled"), qsTr("Always RTL"),
-                                    qsTr("Continue with Mission in Auto Mode"), qsTr("Always Land")]
+                                model:              [qsTr("禁用"), qsTr("RTL"),
+                                    qsTr("继续执行任务"), qsTr("降落")]
                                 currentIndex:       _failsafeThrEnable.value
                                 Layout.fillWidth:   true
 
                                 onActivated: (index) => { _failsafeThrEnable.value = index }
                             }
 
-                            QGCLabel { text: qsTr("PWM threshold:") }
+                            QGCLabel { text: qsTr("油门故障保险阈值：") }
                             FactTextField {
                                 fact:               _failsafeThrValue
                                 showUnits:          true
@@ -274,7 +274,7 @@ SetupPage {
 
                 QGCLabel {
                     id:             geoFenceLabel
-                    text:           qsTr("GeoFence")
+                    text:           qsTr("地理围栏")
                     font.bold:      true
                 }
 
@@ -289,7 +289,7 @@ SetupPage {
                         anchors.margins:    _margins
                         anchors.left:       parent.left
                         anchors.top:        parent.top
-                        text:               qsTr("Circle GeoFence enabled")
+                        text:               qsTr("圆型地理围栏")
                         checked:            _fenceEnable.value != 0 && _fenceType.value & 2
 
                         onClicked: {
@@ -314,7 +314,7 @@ SetupPage {
                         anchors.topMargin:  _margins / 2
                         anchors.left:       circleGeo.left
                         anchors.top:        circleGeo.bottom
-                        text:               qsTr("Altitude GeoFence enabled")
+                        text:               qsTr("海拔地理围栏")
                         checked:            _fenceEnable.value != 0 && _fenceType.value & 1
 
                         onClicked: {
@@ -339,7 +339,7 @@ SetupPage {
                         anchors.margins:    _margins
                         anchors.left:       parent.left
                         anchors.top:        altitudeGeo.bottom
-                        text:               qsTr("Report only")
+                        text:               qsTr("仅报告")
                         exclusiveGroup:     fenceActionRadioGroup
                         checked:            _fenceAction.value == 0
 
@@ -351,7 +351,7 @@ SetupPage {
                         anchors.topMargin:  _margins / 2
                         anchors.left:       circleGeo.left
                         anchors.top:        geoReportRadio.bottom
-                        text:               qsTr("RTL or Land")
+                        text:               qsTr("RTL或者陆地")
                         exclusiveGroup:     fenceActionRadioGroup
                         checked:            _fenceAction.value == 1
 
@@ -362,7 +362,7 @@ SetupPage {
                         id:                 fenceRadiusLabel
                         anchors.left:       circleGeo.left
                         anchors.baseline:   fenceRadiusField.baseline
-                        text:               qsTr("Max radius:")
+                        text:               qsTr("最大半径：")
                     }
 
                     FactTextField {
@@ -378,7 +378,7 @@ SetupPage {
                         id:                 fenceAltMaxLabel
                         anchors.left:       circleGeo.left
                         anchors.baseline:   fenceAltMaxField.baseline
-                        text:               qsTr("Max altitude:")
+                        text:               qsTr("最大高度:")
                     }
 
                     FactTextField {
@@ -398,7 +398,7 @@ SetupPage {
 
                 QGCLabel {
                     id:             rtlLabel
-                    text:           qsTr("Return to Launch")
+                    text:           qsTr("返航")
                     font.bold:      true
                 }
 
@@ -434,7 +434,7 @@ SetupPage {
                         anchors.margins:    _margins
                         anchors.left:       _showIcon ? icon.right : parent.left
                         anchors.top:        parent.top
-                        text:               qsTr("Return at current altitude")
+                        text:               qsTr("返航当前高度")
                         checked:            _rtlAltFact.value == 0
                         exclusiveGroup:     returnAltRadioGroup
 
@@ -446,7 +446,7 @@ SetupPage {
                         anchors.topMargin:  _margins
                         anchors.left:       returnAtCurrentRadio.left
                         anchors.top:        returnAtCurrentRadio.bottom
-                        text:               qsTr("Return at specified altitude:")
+                        text:               qsTr("返航指定高度:")
                         exclusiveGroup:     returnAltRadioGroup
                         checked:            _rtlAltFact.value != 0
 
@@ -468,7 +468,7 @@ SetupPage {
                         anchors.left:       returnAtCurrentRadio.left
                         anchors.baseline:   landDelayField.baseline
                         checked:            _rtlLoitTimeFact.value > 0
-                        text:               qsTr("Loiter above Home for:")
+                        text:               qsTr("盘旋在当前位置:")
 
                         onClicked: _rtlLoitTimeFact.value = (checked ? 60 : 0)
                     }
@@ -487,7 +487,7 @@ SetupPage {
                         id:                 landRadio
                         anchors.left:       returnAtCurrentRadio.left
                         anchors.baseline:   landSpeedField.baseline
-                        text:               qsTr("Land with descent speed:")
+                        text:               qsTr("以下降速度着陆:")
                         checked:            _rtlAltFinalFact.value == 0
                         exclusiveGroup:     landLoiterRadioGroup
 
@@ -508,7 +508,7 @@ SetupPage {
                         id:                 finalLoiterRadio
                         anchors.left:       returnAtCurrentRadio.left
                         anchors.baseline:   rltAltFinalField.baseline
-                        text:               qsTr("Final loiter altitude:")
+                        text:               qsTr("盘旋在返航高度:")
                         exclusiveGroup:     landLoiterRadioGroup
 
                         onClicked: _rtlAltFinalFact.value = _rtlAltFact.value
@@ -530,7 +530,7 @@ SetupPage {
                 spacing: _margins / 2
 
                 QGCLabel {
-                    text:           qsTr("Arming Checks")
+                    text:           qsTr("设备检查")
                     font.bold:      true
                 }
 
@@ -561,7 +561,7 @@ SetupPage {
                             anchors.right:  parent.right
                             wrapMode:       Text.WordWrap
                             color:          qgcPal.warningText
-                            text:            qsTr("Warning: Turning off arming checks can lead to loss of Vehicle control.")
+                            text:            qsTr("警告: 关闭设备检查可能会导致设备失去控制。")
                             visible:        _armingCheck.value != 1
                         }
                     }

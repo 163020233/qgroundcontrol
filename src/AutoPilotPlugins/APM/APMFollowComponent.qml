@@ -190,7 +190,7 @@ SetupPage {
             QGCPalette { id: ggcPal; colorGroupEnabled: true }
 
             QGCCheckBox {
-                text:       qsTr("Enable Follow Me")
+                text:       qsTr("启用跟随")
                 checked:    _followEnabled.rawValue == 1
                 onClicked: {
                     if (checked) {
@@ -209,7 +209,7 @@ SetupPage {
 
             QGCLabel {
                 id:         vehicleParamRefreshLabel
-                text:       qsTr("Waiting for Vehicle to update")
+                text:       qsTr("等待设备更新")
                 visible:    false
             }
 
@@ -221,13 +221,13 @@ SetupPage {
                 QGCLabel {
                     anchors.left:   parent.left
                     anchors.right:  parent.right
-                    text:           qsTr("The vehicle parameters required for follow me are currently set in a way which is not supported. Using follow with this setup may lead to unpredictable/hazardous results.")
+                    text:           qsTr("当前不支持设置“跟随”所需的设备参数。在此设置下使用“跟随”可能会导致不可预测/危险的后果。")
                     wrapMode:       Text.WordWrap
                     onWidthChanged: console.log('width', width)
                 }
 
                 QGCButton {
-                    text:       qsTr("Reset To Supported Settings")
+                    text:       qsTr("重置为支持的设置")
                     onClicked:  _setFollowMeParamDefaults()
                 }
             }
@@ -245,11 +245,11 @@ SetupPage {
                         Layout.fillWidth:   true
                         columns:            2
 
-                        QGCLabel { text: qsTr("Vehicle Position") }
+                        QGCLabel { text: qsTr("设备位置") }
                         QGCComboBox {
                             id:                 followPositionCombo
                             Layout.fillWidth:   true
-                            model:              [ qsTr("Maintain Current Offsets"), qsTr("Specify Offsets")]
+                            model:              [ qsTr("保持当前偏移"), qsTr("指定偏移")]
 
                             onActivated: (index) => {
                                 if (index == 0) {
@@ -262,7 +262,7 @@ SetupPage {
                         }
 
                         QGCLabel {
-                            text:       qsTr("Point Vehicle")
+                            text:       qsTr("设备指向")
                             visible:    !_roverFirmware
                         }
                         QGCComboBox {
@@ -272,7 +272,7 @@ SetupPage {
                             visible:                !_roverFirmware
                             onActivated: (index) => { _followYawBehavior.rawValue = rgValues[index] }
 
-                            property var rgText:    [ qsTr("Maintain current vehicle orientation"), qsTr("Point at ground station location"), qsTr("Same direction as ground station movement") ]
+                            property var rgText:    [ qsTr("保持当前设备指向"), qsTr("指向地面站位置"), qsTr("与地面站移动方向相同") ]
                             property var rgValues:  [ _followYawBehaviorNone, _followYawBehaviorFace, _followYawBehaviorFlight ]
                         }
                     }
@@ -285,16 +285,16 @@ SetupPage {
                         QGCLabel {
                             Layout.columnSpan:  2
                             Layout.alignment:   Qt.AlignHCenter
-                            text:               qsTr("Vehicle Offsets")
+                            text:               qsTr("设备偏移")
                         }
 
-                        QGCLabel { text: qsTr("Angle") }
+                        QGCLabel { text: qsTr("角度") }
                         FactTextField {
                             fact:       controller.angle
                             onUpdated:  { console.log("updated"); _setXYOffsetByAngleAndDistance(controller.angle.rawValue, controller.distance.rawValue) }
                         }
 
-                        QGCLabel { text: qsTr("Distance") }
+                        QGCLabel { text: qsTr("距离") }
                         FactTextField {
                             fact:       controller.distance
                             onUpdated:  _setXYOffsetByAngleAndDistance(controller.angle.rawValue, controller.distance.rawValue)
@@ -302,7 +302,7 @@ SetupPage {
 
                         QGCLabel {
                             id:         heightLabel
-                            text:       qsTr("Height")
+                            text:       qsTr("高度")
                             visible:    !_roverFirmware && !_followMaintain
                         }
                         FactTextField {
@@ -343,7 +343,7 @@ SetupPage {
                         anchors.horizontalCenter:   parent.horizontalCenter
                         anchors.topMargin:          parent.height / 4
                         anchors.top:                parent.top
-                        text:                       qsTr("Click in the graphic to change angle")
+                        text:                       qsTr("点击图形以更改角度")
                         opacity:                    0.5
                     }
 

@@ -30,23 +30,23 @@ Item {
         anchors.fill:       parent
 
         VehicleSummaryRow {
-            labelText: qsTr("Throttle failsafe:")
-            valueText:  _failsafeThrEnable.value != 0 ? _failsafeThrValue.valueString : qsTr("Disabled")
+            labelText: qsTr("油门故障保护")
+            valueText:  _failsafeThrEnable.value != 0 ? _failsafeThrValue.valueString : qsTr("已禁用")
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Voltage failsafe:")
-            valueText:  _failsafeBattVoltage.value == 0 ? qsTr("Disabled") : _failsafeBattVoltage.valueString + " " + _failsafeBattVoltage.units
+            labelText: qsTr("电池电压故障保护:")
+            valueText:  _failsafeBattVoltage.value == 0 ? qsTr("已禁用") : _failsafeBattVoltage.valueString + " " + _failsafeBattVoltage.units
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("mAh failsafe:")
-            valueText:  _failsafeBattMah.value == 0 ? qsTr("Disabled") : _failsafeBattMah.valueString + " " + _failsafeBattMah.units
+            labelText: qsTr("电池容量故障保护:")
+            valueText:  _failsafeBattMah.value == 0 ? qsTr("已禁用") : _failsafeBattMah.valueString + " " + _failsafeBattMah.units
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("RTL min alt:")
-            valueText: _rtlAltFact.value < 0 ? qsTr("current") : _rtlAltFact.valueString + " " + _rtlAltFact.units
+            labelText: qsTr("RTL最小高度:")
+            valueText: _rtlAltFact.value < 0 ? qsTr("当前高度") : _rtlAltFact.valueString + " " + _rtlAltFact.units
         }
     }
 }

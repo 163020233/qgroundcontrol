@@ -56,7 +56,7 @@ RowLayout {
         }
 
         QGCLabel {
-            text:               activeVehicle ? activeVehicle.flightMode : qsTr("N/A", "No data to display")
+            text:               activeVehicle ? activeVehicle.flightMode : qsTr("N/A", "没有可显示的数据")
             font.pointSize:     fontPointSize
             Layout.alignment:   Qt.AlignCenter
 
@@ -126,7 +126,7 @@ RowLayout {
                 RowLayout {
                     Layout.fillWidth: true
 
-                    QGCLabel { Layout.fillWidth: true; text: qsTr("RTL Altitude") }
+                    QGCLabel { Layout.fillWidth: true; text: qsTr("RTL 高度") }
                     FactTextField {
                         fact:                   controller.getParameterFact(-1, "RTL_RETURN_ALT")
                         Layout.minimumWidth:    _editFieldWidth
@@ -137,7 +137,7 @@ RowLayout {
                     Layout.fillWidth:   true
                     visible:            _mpcLandSpeedFact && controller.vehicle && !controller.vehicle.fixedWing 
 
-                    QGCLabel { Layout.fillWidth: true; text: qsTr("Land Descent Rate:") }
+                    QGCLabel { Layout.fillWidth: true; text: qsTr("降落速度") }
                     FactTextField {
                         fact:                   _mpcLandSpeedFact
                         Layout.minimumWidth:    _editFieldWidth
@@ -148,7 +148,7 @@ RowLayout {
                     Layout.fillWidth:   true
                     visible:            _precisionLandingFact
 
-                    QGCLabel { Layout.fillWidth: true; text: qsTr("Precision Landing") }
+                    QGCLabel { Layout.fillWidth: true; text: qsTr("精密降落") }
                     FactComboBox {
                         fact:                   _precisionLandingFact
                         indexModel:             false

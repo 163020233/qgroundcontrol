@@ -69,14 +69,14 @@ Button {
             id:                     _infoCol
             spacing:                ScreenTools.defaultFontPixelHeight * 0.25
             QGCLabel {
-                text:               qsTr("Vehicle ") + (vehicle ? vehicle.id : qsTr("None"))
+                text:               qsTr("设备 ") + (vehicle ? vehicle.id : qsTr("无"))
                 font.bold:          true
                 color:              button.checked ? qgcPal.buttonHighlightText : qgcPal.buttonText
             }
             Row {
                 spacing:            ScreenTools.defaultFontPixelWidth
                 QGCLabel {
-                    text:           vehicle ? vehicle.flightMode : qsTr("None")
+                    text:           vehicle ? vehicle.flightMode : qsTr("无")
                     color:          button.checked ? qgcPal.buttonHighlightText : qgcPal.buttonText
                 }
                 Rectangle {

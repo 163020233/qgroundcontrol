@@ -25,7 +25,7 @@ ColumnLayout {
     FactPanelController { id: controller }
 
     SettingsGroupLayout {
-        heading:            qsTr("Ground Control Comm Loss Failsafe")
+        heading:            qsTr("地面控制通信丢失失败保护")
         Layout.fillWidth:   true
 
         RowLayout {
@@ -34,7 +34,7 @@ ColumnLayout {
 
             QGCLabel {
                 Layout.fillWidth:   true;
-                text:               qsTr("Vehicle Action")
+                text:               qsTr("设备操作")
             }
             FactComboBox {
                 id:                     failsafeActionCombo
@@ -46,7 +46,7 @@ ColumnLayout {
         FactSlider {
             Layout.fillWidth:       true
             Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 40
-            label:                  qsTr("Loss Timeout")
+            label:                  qsTr("丢失超时")
             fact:                   controller.getParameterFact(-1, "COM_DL_LOSS_T")
             majorTickStepSize:      5
         }

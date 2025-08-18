@@ -24,7 +24,7 @@ import QGroundControl.ScreenTools
 SetupPage {
     id:             firmwarePage
     pageComponent:  firmwarePageComponent
-    pageName:       qsTr("Firmware")
+    pageName:       qsTr("固件")
     showAdvanced:   globals.activeVehicle && globals.activeVehicle.apmFirmware
 
     Component {
@@ -40,16 +40,16 @@ SetupPage {
             // a better way to hightlight them, or use less highlights.
 
             // User visible strings
-            readonly property string title:             qsTr("Firmware Setup") // Popup dialog title
+            readonly property string title:             qsTr("固件设置") // Popup dialog title
             readonly property string highlightPrefix:   "<font color=\"" + qgcPal.warningText + "\">"
             readonly property string highlightSuffix:   "</font>"
-            readonly property string welcomeText:       qsTr("%1 can upgrade the firmware on Pixhawk devices and SiK Radios.").arg(QGroundControl.appName)
-            readonly property string welcomeTextSingle: qsTr("Update the autopilot firmware to the latest version")
-            readonly property string plugInText:        "<big>" + highlightPrefix + qsTr("Plug in your device") + highlightSuffix + qsTr(" via USB to ") + highlightPrefix + qsTr("start") + highlightSuffix + qsTr(" firmware upgrade.") + "</big>"
-            readonly property string flashFailText:     qsTr("If upgrade failed, make sure to connect ") + highlightPrefix + qsTr("directly") + highlightSuffix + qsTr(" to a powered USB port on your computer, not through a USB hub. ") +
-                                                        qsTr("Also make sure you are only powered via USB ") + highlightPrefix + qsTr("not battery") + highlightSuffix + "."
-            readonly property string qgcUnplugText1:    qsTr("All %1 connections to vehicles must be ").arg(QGroundControl.appName) + highlightPrefix + qsTr(" disconnected ") + highlightSuffix + qsTr("prior to firmware upgrade.")
-            readonly property string qgcUnplugText2:    highlightPrefix + "<big>" + qsTr("Please unplug your Pixhawk and/or Radio from USB.") + "</big>" + highlightSuffix
+            readonly property string welcomeText:       qsTr("%1 可以升级 Pixhawk 设备和 SiK 无线电上的固件。").arg(QGroundControl.appName)
+            readonly property string welcomeTextSingle: qsTr("将自动驾驶仪固件更新至最新版本")
+            readonly property string plugInText:        "<big>" + highlightPrefix + qsTr("将设备通过 USB 连接") + highlightSuffix + qsTr(" 至 ") + highlightPrefix + qsTr("开始") + highlightSuffix + qsTr(" 固件升级。") + "</big>"
+            readonly property string flashFailText:     qsTr("如果升级失败，请确保通过 ") + highlightPrefix + qsTr("直接") + highlightSuffix + qsTr(" 连接至计算机的已供电 USB 端口，而不是通过 USB 集线器。 ") +
+                                                        qsTr("另外，请确保仅通过 USB 供电，而不是电池供电。")
+            readonly property string qgcUnplugText1:    qsTr("所有 %1 连接至设备的连接必须 ").arg(QGroundControl.appName) + highlightPrefix + qsTr(" 断开 ") + highlightSuffix + qsTr("  prior to firmware upgrade.")
+            readonly property string qgcUnplugText2:    highlightPrefix + "<big>" + qsTr("请断开 Pixhawk 和/或 无线电的 USB 连接。") + "</big>" + highlightSuffix
 
             readonly property int _defaultFimwareTypePX4:   12
             readonly property int _defaultFimwareTypeAPM:   3
@@ -72,8 +72,8 @@ SetupPage {
 
             QGCFileDialog {
                 id:                 customFirmwareDialog
-                title:              qsTr("Select Firmware File")
-                nameFilters:        [qsTr("Firmware Files (*.px4 *.apj *.bin *.ihx)"), qsTr("All Files (*)")]
+                title:              qsTr("选择固件文件")
+                nameFilters:        [qsTr("固件文件 (*.px4 *.apj *.bin *.ihx)"), qsTr("所有文件 (*)")]
                 folder:             QGroundControl.settingsManager.appSettings.logSavePath
                 onAcceptedForLoad: (file) => {
                     controller.flashFirmwareUrl(file)
@@ -116,15 +116,15 @@ SetupPage {
 
                         var availableDevices = controller.availableBoardsName()
                         if (availableDevices.length > 1) {
-                            statusTextArea.append(highlightPrefix + qsTr("Multiple devices detected! Remove all detected devices to perform the firmware upgrade."))
-                            statusTextArea.append(qsTr("Detected [%1]: ").arg(availableDevices.length) + availableDevices.join(", "))
+                            statusTextArea.append(highlightPrefix + qsTr("多个设备检测到！请移除所有检测到的设备以执行固件升级。"))
+                            statusTextArea.append(qsTr("检测到 [%1]: ").arg(availableDevices.length) + availableDevices.join(", "))
                         }
                         if (QGroundControl.multiVehicleManager.activeVehicle) {
                             QGroundControl.multiVehicleManager.activeVehicle.vehicleLinkManager.autoDisconnect = true
                         }
                     } else {
                         // We end up here when we detect a board plugged in after we've started upgrade
-                        statusTextArea.append(highlightPrefix + qsTr("Found device") + highlightSuffix + ": " + controller.boardType)
+                        statusTextArea.append(highlightPrefix + qsTr("发现新设备") + highlightSuffix + ": " + controller.boardType)
                     }
                 }
 
@@ -137,7 +137,7 @@ SetupPage {
 
                 QGCPopupDialog {
                     id:         firmwareSelectDialog
-                    title:      qsTr("Firmware Setup")
+                    title:      qsTr("固件设置")
                     buttons:    Dialog.Ok | Dialog.Cancel
 
                     property bool showFirmwareTypeSelection:    _advanced.checked
@@ -196,19 +196,19 @@ SetupPage {
                                 } else {
                                     if (controller.apmFirmwareNames.length === 0) {
                                         // Not ready yet, or no firmware available
-                                        mainWindow.showMessageDialog(firmwareSelectDialog.title, qsTr("Either firmware list is still downloading, or no firmware is available for current selection."))
+                                        mainWindow.showMessageDialog(firmwareSelectDialog.title, qsTr("当前选择的固件列表仍在下载中，或当前选择没有可用的固件。"))
                                         firmwareSelectDialog.preventClose = true
                                         return
                                     }
                                     if (ardupilotFirmwareSelectionCombo.currentIndex == -1) {
-                                        mainWindow.showMessageDialog(firmwareSelectDialog.title, qsTr("You must choose a board type."))
+                                        mainWindow.showMessageDialog(firmwareSelectDialog.title, qsTr("您必须选择一个板类型。"))
                                         firmwareSelectDialog.preventClose = true
                                         return
                                     }
 
                                     var firmwareUrl = controller.apmFirmwareUrls[ardupilotFirmwareSelectionCombo.currentIndex]
                                     if (firmwareUrl == "") {
-                                        mainWindow.showMessageDialog(firmwareSelectDialog.title, qsTr("No firmware was found for the current selection."))
+                                        mainWindow.showMessageDialog(firmwareSelectDialog.title, qsTr("当前选择的固件列表仍在下载中，或当前选择没有可用的固件。"))
                                         firmwareSelectDialog.preventClose = true
                                         return
                                     }
@@ -226,7 +226,7 @@ SetupPage {
                     }
 
                     function reject() {
-                        statusTextArea.append(highlightPrefix + qsTr("Upgrade cancelled") + highlightSuffix)
+                        statusTextArea.append(highlightPrefix + qsTr("固件升级已取消") + highlightSuffix)
                         statusTextArea.append("------------------------------------------")
                         controller.cancel()
                         close()
@@ -236,19 +236,19 @@ SetupPage {
                         id: firmwareBuildTypeList
 
                         ListElement {
-                            text:           qsTr("Standard Version (stable)")
+                            text:           qsTr("标准版本（稳定）")
                             firmwareType:   FirmwareUpgradeController.StableFirmware
                         }
                         ListElement {
-                            text:           qsTr("Beta Testing (beta)")
+                            text:           qsTr("测试版本（测试）")
                             firmwareType:   FirmwareUpgradeController.BetaFirmware
                         }
                         ListElement {
-                            text:           qsTr("Developer Build (master)")
+                            text:           qsTr("开发者版本（主）")
                             firmwareType:   FirmwareUpgradeController.DeveloperFirmware
                         }
                         ListElement {
-                            text:           qsTr("Custom firmware file...")
+                            text:           qsTr("自定义固件文件...")
                             firmwareType:   FirmwareUpgradeController.CustomFirmware
                         }
                     }
@@ -257,11 +257,11 @@ SetupPage {
                         id: singleFirmwareModeTypeList
 
                         ListElement {
-                            text:           qsTr("Standard Version")
+                            text:           qsTr("标准版本（稳定）")
                             firmwareType:   FirmwareUpgradeController.StableFirmware
                         }
                         ListElement {
-                            text:           qsTr("Custom firmware file...")
+                            text:           qsTr("自定义固件文件...")
                             firmwareType:   FirmwareUpgradeController.CustomFirmware
                         }
                     }
@@ -275,8 +275,8 @@ SetupPage {
                             wrapMode:           Text.WordWrap
                             text:               (_singleFirmwareMode || !QGroundControl.apmFirmwareSupported) ? _singleFirmwareLabel : _pixhawkLabel
 
-                            readonly property string _pixhawkLabel:          qsTr("Detected Pixhawk board. You can select from the following flight stacks:")
-                            readonly property string _singleFirmwareLabel:   qsTr("Press Ok to upgrade your vehicle.")
+                            readonly property string _pixhawkLabel:          qsTr("已检测到 Pixhawk 开发板。您可以从以下飞行堆栈中选择：")
+                            readonly property string _singleFirmwareLabel:   qsTr("按“确定”即可升级您的设备。")
                         }
 
                         Column {
@@ -343,20 +343,20 @@ SetupPage {
                         QGCLabel {
                             Layout.fillWidth:   true
                             wrapMode:           Text.WordWrap
-                            text:               qsTr("Downloading list of available firmwares...")
+                            text:               qsTr("正在下载可用固件列表...")
                             visible:            controller.downloadingFirmwareList
                         }
 
                         QGCLabel {
                             Layout.fillWidth:   true
                             wrapMode:           Text.WordWrap
-                            text:               qsTr("No Firmware Available")
+                            text:               qsTr("没有可用的固件")
                             visible:            !controller.downloadingFirmwareList && (QGroundControl.apmFirmwareSupported && controller.apmFirmwareNames.length === 0)
                         }
 
                         QGCCheckBox {
                             id:         _advanced
-                            text:       qsTr("Advanced settings")
+                            text:       qsTr("高级设置")
                             checked:    false
 
                             onClicked: {
@@ -370,8 +370,8 @@ SetupPage {
                             Layout.fillWidth:   true
                             wrapMode:           Text.WordWrap
                             visible:            showFirmwareTypeSelection
-                            text:               _singleFirmwareMode ?  qsTr("Select the standard version or one from the file system (previously downloaded):") :
-                                                                      qsTr("Select which version of the above flight stack you would like to install:")
+                            text:               _singleFirmwareMode ?  qsTr("选择标准版本或从文件系统（之前下载）中选择：") :
+                                                                      qsTr("选择上述飞行堆栈的哪个版本您想安装：")
                         }
 
                         QGCComboBox {
@@ -385,18 +385,18 @@ SetupPage {
                                 controller.selectedFirmwareBuildType = model.get(index).firmwareType
                                 if (model.get(index).firmwareType === FirmwareUpgradeController.BetaFirmware) {
                                     firmwareWarningMessageVisible = true
-                                    firmwareVersionWarningLabel.text = qsTr("WARNING: BETA FIRMWARE. ") +
-                                            qsTr("This firmware version is ONLY intended for beta testers. ") +
-                                            qsTr("Although it has received FLIGHT TESTING, it represents actively changed code. ") +
-                                            qsTr("Do NOT use for normal operation.")
+                                    firmwareVersionWarningLabel.text = qsTr("警告：测试版固件。") +
+                                            qsTr("此固件版本仅供 beta 测试人员使用。") +
+                                            qsTr("尽管它已经接受了飞行测试，但它代表了主动改变的代码。") +
+                                            qsTr("请勿用于正常操作。")
                                 } else if (model.get(index).firmwareType === FirmwareUpgradeController.DeveloperFirmware) {
                                     firmwareWarningMessageVisible = true
-                                    firmwareVersionWarningLabel.text = qsTr("WARNING: CONTINUOUS BUILD FIRMWARE. ") +
-                                            qsTr("This firmware has NOT BEEN FLIGHT TESTED. ") +
-                                            qsTr("It is only intended for DEVELOPERS. ") +
-                                            qsTr("Run bench tests without props first. ") +
-                                            qsTr("Do NOT fly this without additional safety precautions. ") +
-                                            qsTr("Follow the forums actively when using it.")
+                                    firmwareVersionWarningLabel.text = qsTr("警告：持续构建固件。") +
+                                            qsTr("此固件尚未经过飞行测试。") +
+                                            qsTr("它仅供开发人员使用。") +
+                                            qsTr("首先进行不使用道具的台架测试。") +
+                                            qsTr("如果没有采取额外的安全预防措施，请勿飞行。") +
+                                            qsTr("使用时请积极关注论坛。")
                                 } else {
                                     firmwareWarningMessageVisible = false
                                 }
@@ -422,7 +422,7 @@ SetupPage {
 
             QGCButton {
                 id:         flashBootloaderButton
-                text:       qsTr("Flash ChibiOS Bootloader")
+                text:       qsTr("Flash ChibiOS 引导加载程序")
                 visible:    firmwarePage.advanced
                 onClicked:  globals.activeVehicle.flashBootloader()
             }

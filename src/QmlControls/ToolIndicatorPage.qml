@@ -36,7 +36,7 @@ RowLayout {
     property bool _loadPages: !waitForParameters || parametersReady
 
     QGCLabel {
-        text:       qsTr("Waiting for parameters...")
+        text:       qsTr("等待参数...")
         visible:    waitForParameters && !parametersReady
     }
 

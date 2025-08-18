@@ -22,11 +22,11 @@ Item {
     PreFlightCheckModel {
         id:     listModel
         PreFlightCheckGroup {
-            name: qsTr("Submarine Initial checks")
+            name: qsTr("Sub 初始化检查")
 
             PreFlightCheckButton {
-                name:           qsTr("Hardware")
-                manualText:     qsTr("All seals in place?")
+                name:           qsTr("硬件")
+                manualText:     qsTr("所有密封是否就位？")
             }
 
             PreFlightBatteryCheck {
@@ -47,21 +47,21 @@ Item {
         }
 
         PreFlightCheckGroup {
-            name: qsTr("Please arm the vehicle here")
+            name: qsTr("请展开飞机旋翼")
 
             PreFlightCheckButton {
-                name:            qsTr("Actuators")
-                manualText:      qsTr("Move all control surfaces. Did they work properly?")
+                name:            qsTr("电机")
+                manualText:      qsTr("电机是否正常？")
             }
 
             PreFlightCheckButton {
-                name:            qsTr("Motors")
-                manualText:      qsTr("Propellers free? Then throttle up gently. Working properly?")
+                name:            qsTr("旋翼")
+                manualText:      qsTr("旋翼是否正常？")
             }
 
             PreFlightCheckButton {
-                name:           qsTr("Mission")
-                manualText:     qsTr("Please confirm mission is valid (waypoints valid, no terrain collision).")
+                name:           qsTr("任务")
+                manualText:     qsTr("任务是否正常？")
             }
 
             PreFlightSoundCheck {
@@ -69,12 +69,12 @@ Item {
         }
 
         PreFlightCheckGroup {
-            name: qsTr("Last preparations before launch")
+            name: qsTr("起飞前的最后准备")
 
             // Check list item group 2 - Final checks before launch
             PreFlightCheckButton {
-                name:           qsTr("Payload")
-                manualText:     qsTr("Configured and started? Payload lid closed?")
+                name:           qsTr("载荷")
+                manualText:     qsTr("配置完毕并启动？有效载荷盖关好了吗？")
             }
 
         }

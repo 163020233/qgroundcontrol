@@ -40,7 +40,7 @@ SetupPage {
             }
 
             QGCLabel {
-                text: qsTr("Radio Settings")
+                text: qsTr("系统链接设置")
                 font.bold:   true
             }
 
@@ -58,7 +58,7 @@ SetupPage {
                     columnSpacing:      ScreenTools.defaultFontPixelWidth
 
                     QGCLabel {
-                        text:               qsTr("Channel")
+                        text:               qsTr("通道")
                     }
 
                     QGCTextField {
@@ -83,7 +83,7 @@ SetupPage {
 
                     QGCLabel {
                         id:                 addressLabel
-                        text:               qsTr("Address")
+                        text:               qsTr("地址")
                     }
 
                     QGCTextField {
@@ -103,13 +103,13 @@ SetupPage {
                         Layout.fillWidth:   true
                         font.pointSize:     ScreenTools.smallFontPointSize
                         wrapMode:           Text.WordWrap
-                        text:               qsTr("Address in hex. Default is E7E7E7E7E7.")
+                        text:               qsTr("地址为 16 进制, 默认值为 E7E7E7E7E7.")
                     }
 
 
                     QGCLabel {
                         id:                 rateLabel
-                        text:               qsTr("Data Rate")
+                        text:               qsTr("数据率")
                     }
 
                     QGCComboBox {
@@ -123,7 +123,7 @@ SetupPage {
                     }
 
                     QGCButton {
-                        text:                           qsTr("Restore Defaults")
+                        text:                           qsTr("恢复默认值")
                         width:                          textEditWidth
                         onClicked: {
                             controller.resetDefaults()

@@ -119,7 +119,7 @@ RowLayout {
         min:                    0
         max:                    0
         labelFormat:            "%.1f"
-        titleText:              ScreenTools.isShortScreen ? "" : qsTr("sec") // Save space on small screens
+        titleText:              ScreenTools.isShortScreen ? "" : qsTr("秒") // Save space on small screens
         tickCount:              Math.min(Math.max(Math.floor(chart.width / (ScreenTools.defaultFontPixelWidth * 7)), 4), 11)
         labelsFont.pointSize:   ScreenTools.defaultFontPointSize
         labelsFont.family:      ScreenTools.normalFontFamily
@@ -248,12 +248,12 @@ RowLayout {
                 spacing: _margins
 
                 QGCButton {
-                    text:       qsTr("Clear")
+                    text:       qsTr("清除")
                     onClicked:  resetGraphs()
                 }
 
                 QGCButton {
-                    text:       dataTimer.running ? qsTr("Stop") : qsTr("Start")
+                    text:       dataTimer.running ? qsTr("停止") : qsTr("开始")
                     onClicked: {
                         dataTimer.running = !dataTimer.running
                         _last_t = 0
@@ -276,7 +276,7 @@ RowLayout {
             QGCCheckBox {
                 visible: showAutoModeChange
                 id:     autoModeChange
-                text:   qsTr("Automatic Flight Mode Switching")
+                text:   qsTr("自动切换飞行模式")
                 onClicked: {
                     if (checked)
                         dataTimer.running = false
@@ -286,12 +286,12 @@ RowLayout {
             Column {
                 visible: autoModeChange.checked
                 QGCLabel {
-                    text:            qsTr("Switches to 'Stabilized' when you click Start.")
+                    text:            qsTr("当您点击开始时，切换到“稳定”模式。")
                     font.pointSize:     ScreenTools.smallFontPointSize
                 }
 
                 QGCLabel {
-                    text:            qsTr("Switches to '%1' when you click Stop.").arg(globals.activeVehicle.pauseFlightMode)
+                    text:            qsTr("单击“停止”时切换到“%1”").arg(globals.activeVehicle.pauseFlightMode)
                     font.pointSize:     ScreenTools.smallFontPointSize
                 }
             }
@@ -307,13 +307,13 @@ RowLayout {
 
             QGCRadioButton {
                 id:         useAutoTuningRadio
-                text:       qsTr("Use auto-tuning")
+                text:       qsTr("使用自动调优")
                 checked:    useAutoTuning
                 onClicked:  useAutoTuning = true
             }
             QGCRadioButton {
                 id:         useManualTuningRadio
-                text:       qsTr("Use manual tuning")
+                text:       qsTr("使用手动调优")
                 checked:    !useAutoTuning
                 onClicked:  useAutoTuning = false
             }
@@ -331,7 +331,7 @@ RowLayout {
                     spacing: _margins
                     visible: axis.length > 1
 
-                    QGCLabel { text: qsTr("Select Tuning:") }
+                    QGCLabel { text: qsTr("选择调优:") }
 
                     Repeater {
                         model: axis
@@ -357,7 +357,7 @@ RowLayout {
             }
 
             Column {
-                QGCLabel { text: qsTr("Clipboard Values:") }
+                QGCLabel { text: qsTr("复制粘贴值:") }
 
                 GridLayout {
                     rows:           savedRepeater.model.length
@@ -383,12 +383,12 @@ RowLayout {
                 spacing: _margins
 
                 QGCButton {
-                    text:       qsTr("Save To Clipboard")
+                    text:       qsTr("保存到剪贴板")
                     onClicked:  saveTuningParamValues()
                 }
 
                 QGCButton {
-                    text:       qsTr("Restore From Clipboard")
+                    text:       qsTr("从剪贴板恢复")
                     onClicked:  resetToSavedTuningParamValues()
                 }
             }

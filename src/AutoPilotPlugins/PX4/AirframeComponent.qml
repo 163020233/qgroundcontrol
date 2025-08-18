@@ -41,12 +41,12 @@ SetupPage {
                 width:      parent.width * 0.5
                 height:     ScreenTools.defaultFontPixelHeight * 4
                 wrapMode:   Text.WordWrap
-                text:       qsTr("Your vehicle is using a custom airframe configuration. ") +
-                            qsTr("This configuration can only be modified through the Parameter Editor.\n\n") +
-                            qsTr("If you want to reset your airframe configuration and select a standard configuration, click 'Reset' below.")
+                text:       qsTr("您的设备正在使用自定义的飞控配置. ") +
+                            qsTr("此配置只能通过参数编辑器进行修改.\n\n") +
+                            qsTr("如果您想重置您的飞控配置并选择一个标准配置, 请点击下方的 '重置' 按钮.")
             }
             QGCButton {
-                text:       qsTr("Reset")
+                text:       qsTr("重置")
                 enabled:    sys_autostart
                 anchors.horizontalCenter: parent.horizontalCenter
                 property Fact sys_autostart: controller.getParameterFact(-1, "SYS_AUTOSTART")
@@ -106,9 +106,9 @@ SetupPage {
                     id:             helpText
                     width:          parent.width - applyButton.width - 5
                     text:           (controller.currentVehicleName != "" ?
-                                         qsTr("You've connected a %1.").arg(controller.currentVehicleName) :
-                                         qsTr("Airframe is not set.")) +
-                                    qsTr("To change this configuration, select the desired airframe below then click 'Apply and Restart'.")
+                                         qsTr("您已连接 %1.").arg(controller.currentVehicleName) :
+                                         qsTr("飞控未设置.")) +
+                                    qsTr("要更改此配置, 请选择下方的所需飞控然后点击 '应用并重新启动'.")
                     font.bold:      true
                     wrapMode:       Text.WordWrap
                 }
@@ -116,11 +116,11 @@ SetupPage {
                 QGCButton {
                     id:             applyButton
                     anchors.right:  parent.right
-                    text:           qsTr("Apply and Restart")
+                    text:           qsTr("应用并重新启动")
                     onClicked:      mainWindow.showMessageDialog(qsTr("Apply and Restart"),
-                                                                 qsTr("Clicking 'Apply' will save the changes you have made to your airframe configuration.<br><br>\
-                                                                        All vehicle parameters other than Radio Calibration will be reset.<br><br>\
-                                                                        Your vehicle will also be restarted in order to complete the process."),
+                                                                 qsTr("点击 '应用' 按钮将保存您对飞控配置的更改.<br><br>\
+                                                                        所有飞控参数(除了无线电校准)都将被重置.<br><br>\
+                                                                        您的设备也将被重新启动, 以便完成进程."),
                                                                  Dialog.Apply | Dialog.Cancel,
                                                                  function() { controller.changeAutostart() })
 

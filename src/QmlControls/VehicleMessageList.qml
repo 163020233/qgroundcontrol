@@ -25,7 +25,7 @@ TextArea {
     readOnly:               true
     textFormat:             TextEdit.RichText
     color:                  qgcPal.text
-    placeholderText:        qsTr("No Messages")
+    placeholderText:        qsTr("无消息")
     placeholderTextColor:   qgcPal.text
     padding:                0
     wrapMode:               TextEdit.Wrap
@@ -73,7 +73,7 @@ TextArea {
         id: paramEditorDialogComponent
 
         ParameterEditorDialog {
-            title:          qsTr("Edit Parameter")
+            title:          qsTr("编辑参数")
             fact:           messageText._fact
             destroyOnClose: true
         }

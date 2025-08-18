@@ -28,15 +28,15 @@ ColumnLayout {
         availableHeight:    _availableHeight - pidTuning.y
 
         property var roll: QtObject {
-            property string name: qsTr("Roll")
+            property string name: qsTr("滚转")
             property var plot: [
                 { name: "Response", value: globals.activeVehicle.roll.value },
                 { name: "Setpoint", value: globals.activeVehicle.setpoint.roll.value }
             ]
             property var params: ListModel {
                 ListElement {
-                    title:          qsTr("Proportional Gain (MC_ROLL_P)")
-                    description:    qsTr("Increase for more responsiveness, reduce if the attitude overshoots.")
+                    title:          qsTr("滚转比例增益 (MC_ROLL_P)")
+                    description:    qsTr("增加以获得更多的响应速度，减少以避免姿态超调。")
                     param:          "MC_ROLL_P"
                     min:            1
                     max:            14
@@ -45,15 +45,15 @@ ColumnLayout {
             }
         }
         property var pitch: QtObject {
-            property string name: qsTr("Pitch")
+            property string name: qsTr("俯仰")
             property var plot: [
                 { name: "Response", value: globals.activeVehicle.pitch.value },
                 { name: "Setpoint", value: globals.activeVehicle.setpoint.pitch.value }
             ]
             property var params: ListModel {
                 ListElement {
-                    title:          qsTr("Proportional Gain (MC_PITCH_P)")
-                    description:    qsTr("Increase for more responsiveness, reduce if the attitude overshoots.")
+                    title:          qsTr("俯仰比例增益 (MC_PITCH_P)")
+                    description:    qsTr("增加以获得更多的响应速度，减少以避免姿态超调。")
                     param:          "MC_PITCH_P"
                     min:            1
                     max:            14
@@ -62,15 +62,15 @@ ColumnLayout {
             }
         }
         property var yaw: QtObject {
-            property string name: qsTr("Yaw")
+            property string name: qsTr("偏航")
             property var plot: [
                 { name: "Response", value: globals.activeVehicle.heading.value },
                 { name: "Setpoint", value: globals.activeVehicle.setpoint.yaw.value }
             ]
             property var params: ListModel {
                 ListElement {
-                    title:          qsTr("Proportional Gain (MC_YAW_P)")
-                    description:    qsTr("Increase for more responsiveness, reduce if the attitude overshoots (there is only a setpoint when yaw is fixed, i.e. when centering the stick).")
+                    title:          qsTr("偏航比例增益 (MC_YAW_P)")
+                    description:    qsTr("增加以获得更多的响应速度，减少以避免姿态超调 (当偏航固定时，只有一个设置点，即当摇杆居中时)。")
                     param:          "MC_YAW_P"
                     min:            1
                     max:            5

@@ -52,40 +52,40 @@ Item {
             showExpand: false
 
             contentComponent: SettingsGroupLayout {
-                heading: qsTr("Telemetry RSSI Status")
+                heading: qsTr("遥测 RSSI 状态")
 
                 LabelledLabel {
-                    label:      qsTr("Local RSSI:")
+                    label:      qsTr("本地 RSSI:")
                     labelText:  _activeVehicle.telemetryLRSSI + " " + qsTr("dBm")
                 }
 
                 LabelledLabel {
-                    label:      qsTr("Remote RSSI:")
+                    label:      qsTr("远程 RSSI:")
                     labelText:  _activeVehicle.telemetryRRSSI + " " + qsTr("dBm")
                 }
 
                 LabelledLabel {
-                    label:      qsTr("RX Errors:")
+                    label:      qsTr("接收错误:")
                     labelText:  _activeVehicle.telemetryRXErrors
                 }
 
                 LabelledLabel {
-                    label:      qsTr("Errors Fixed:")
+                    label:      qsTr("错误修复:")
                     labelText:  _activeVehicle.telemetryFixed
                 }
 
                 LabelledLabel {
-                    label:      qsTr("TX Buffer:")
+                    label:      qsTr("TX 缓冲区:")
                     labelText:  _activeVehicle.telemetryTXBuffer
                 }
 
                 LabelledLabel {
-                    label:      qsTr("Local Noise:")
+                    label:      qsTr("本地噪声:")
                     labelText:  _activeVehicle.telemetryLNoise
                 }
 
                 LabelledLabel {
-                    label:      qsTr("Remote Noise:")
+                    label:      qsTr("远程噪声:")
                     labelText:  _activeVehicle.telemetryRNoise
                 }
             }

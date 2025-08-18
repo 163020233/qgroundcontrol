@@ -59,7 +59,7 @@ Item {
             Layout.fillWidth: true
 
             LabelledComboBox {
-                label:      qsTr("Provider")
+                label:      qsTr("地图提供程序")
                 model:      _mapEngineManager.mapProviderList
 
                 onActivated: (index) => {
@@ -75,7 +75,7 @@ Item {
             }
 
             LabelledComboBox {
-                label: qsTr("Type")
+                label: qsTr("地图类型")
                 model: _mapEngineManager.mapTypeList(_mapProviderFact.rawValue)
 
                 onActivated: (index) => { _mapTypeFact.rawValue = comboBox.textAt(index) }
@@ -88,7 +88,7 @@ Item {
             }
 
             LabelledComboBox {
-                label: qsTr("Elevation Provider")
+                label: qsTr("高程提供程序")
                 model: _mapEngineManager.elevationProviderList
 
                 onActivated: (index) => { _elevationProviderFact.rawValue = comboBox.textAt(index) }
@@ -103,8 +103,8 @@ Item {
 
         SettingsGroupLayout {
             Layout.fillWidth:   true
-            heading:            qsTr("Offline Maps")
-            headingDescription: qsTr("Download map tiles for use when offline")
+            heading:            qsTr("离线地图")
+            headingDescription: qsTr("下载地图磁贴以在离线时使用")
 
             Repeater {
                 model: QGroundControl.mapEngineManager.tileSets
@@ -117,15 +117,15 @@ Item {
             }
 
             LabelledButton {
-                label:      qsTr("Add New Set")
-                buttonText: qsTr("Add")
+                label:      qsTr("添加新地图集")
+                buttonText: qsTr("添加")
                 enabled:    !_currentlyImportOrExporting
                 onClicked:  offlineMapEditorComponent.createObject(root).addNewSet()
             }
 
             LabelledButton {
-                label:      qsTr("Import Map Tiles")
-                buttonText: qsTr("Import")
+                label:      qsTr("导入地图磁贴")
+                buttonText: qsTr("导入")
                 visible:    QGroundControl.corePlugin.options.showOfflineMapImport
                 enabled:    !_currentlyImportOrExporting
                 onClicked: {
@@ -135,8 +135,8 @@ Item {
             }
 
             LabelledButton {
-                label:      qsTr("Export Map Tiles")
-                buttonText: qsTr("Export")
+                label:      qsTr("导出地图磁贴")
+                buttonText: qsTr("导出")
                 visible:    QGroundControl.corePlugin.options.showOfflineMapExport
                 enabled:    !_currentlyImportOrExporting
                 onClicked:  exportDialogComponent.createObject(mainWindow).open()
@@ -148,7 +148,7 @@ Item {
 
                 QGCLabel {
                     Layout.fillWidth:   true
-                    text:               _mapEngineManager.importAction === QGCMapEngineManager.ActionExporting ? qsTr("Exporting") : qsTr("Importing")
+                    text:               _mapEngineManager.importAction === QGCMapEngineManager.ActionExporting ? qsTr("导出中") : qsTr("导入中")
                     font.bold:          true
                 }
                 ProgressBar {

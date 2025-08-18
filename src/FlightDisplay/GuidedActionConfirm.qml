@@ -115,7 +115,7 @@ Rectangle {
 
             SliderSwitch {
                 id:                 slider
-                confirmText:        ScreenTools.isMobile ? qsTr("Slide to confirm") : qsTr("Slide or hold spacebar")
+                confirmText:        ScreenTools.isMobile ? qsTr("滑动确认") : qsTr("滑动或按住空格键")
                 Layout.fillWidth:   true
                 enabled: _utmspEnabled === true? utmspSliderTrigger : true
                 opacity: if(_utmspEnabled){utmspSliderTrigger === true ? 1 : 0.5} else{1}

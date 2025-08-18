@@ -46,7 +46,7 @@ SetupPage {
 
                 QGCCheckBox {
                     id:                 responsivenessCheckbox
-                    text:               qsTr("Enable responsiveness slider (if enabled, acceleration limit parameters and others are automatically set)")
+                    text:               qsTr("启用响应滑块（如果启用，则会自动设置加速度限制参数和其他参数）")
                     checked:            _sys_vehicle_resp && _sys_vehicle_resp.value >= 0
                     onClicked: {
                         if (checked) {
@@ -65,8 +65,8 @@ SetupPage {
                         id:             responsivenessSlider
 
                         ListElement {
-                            title:          qsTr("Responsiveness")
-                            description:    qsTr("A higher value makes the vehicle react faster. Be aware that this affects braking as well, and a combination of slow responsiveness with high maximum velocity will lead to long braking distances.")
+                            title:          qsTr("响应度")
+                            description:    qsTr("较高的值会使设备更快地响应。请注意，这也会影响制动，因此响应度与最大速度的组合会导致较长的制动距离。")
                             param:          "SYS_VEHICLE_RESP"
                             min:            0.01
                             max:            1
@@ -77,7 +77,7 @@ SetupPage {
                 QGCLabel {
                     visible:            _sys_vehicle_resp && _sys_vehicle_resp.value > 0.8
                     color:              qgcPal.warningText
-                    text:              qsTr("Warning: a high responsiveness requires a vehicle with large thrust-to-weight ratio. The vehicle might lose altitude otherwise.")
+                    text:              qsTr("警告：较高的响应度要求设备具有较大的推力到重量比。否则，车辆可能会失去高度。")
                 }
             }
 
@@ -86,7 +86,7 @@ SetupPage {
 
                 QGCCheckBox {
                     id:                 xyVelCheckbox
-                    text:               qsTr("Enable horizontal velocity slider (if enabled, individual velocity limit parameters are automatically set)")
+                    text:               qsTr("启用水平速度滑块（如果启用，则会自动设置个体速度限制参数）")
                     checked:            _mpc_xy_vel_all ? (_mpc_xy_vel_all.value >= 0) : false
                     onClicked: {
                         if (checked) {
@@ -105,8 +105,8 @@ SetupPage {
                         id:             xyVelSlider
 
                         ListElement {
-                            title:          qsTr("Horizontal velocity (m/s)")
-                            description:    qsTr("Limit the horizonal velocity (applies to all modes).")
+                            title:          qsTr("水平速度（m/s）")
+                            description:    qsTr("限制水平速度（适用于所有模式）。")
                             param:          "MPC_XY_VEL_ALL"
                             min:            0.5
                             max:            20
@@ -121,7 +121,7 @@ SetupPage {
 
                 QGCCheckBox {
                     id:                 zVelCheckbox
-                    text:               qsTr("Enable vertical velocity slider (if enabled, individual velocity limit parameters are automatically set)")
+                    text:               qsTr("启用垂直速度滑块（如果启用，则会自动设置个体速度限制参数）")
                     checked:            _mpc_z_vel_all && _mpc_z_vel_all.value >= 0
                     onClicked: {
                         if (checked) {
@@ -140,8 +140,8 @@ SetupPage {
                         id:             zVelSlider
 
                         ListElement {
-                            title:          qsTr("Vertical velocity (m/s)")
-                            description:    qsTr("Limit the vertical velocity (applies to all modes).")
+                            title:          qsTr("垂直速度（m/s）")
+                            description:    qsTr("限制垂直速度（适用于所有模式）。")
                             param:          "MPC_Z_VEL_ALL"
                             min:            0.2
                             max:            8
@@ -156,8 +156,8 @@ SetupPage {
 
                 sliderModel: ListModel {
                     ListElement {
-                        title:          qsTr("Mission Turning Radius")
-                        description:    qsTr("Increasing this leads to rounder turns in missions (corner cutting). Use the minimum value for accurate corner tracking.")
+                        title:          qsTr("任务转弯半径")
+                        description:    qsTr("增加此值会导致任务中的转弯更圆（角落切割）。使用最小化值以实现准确的角落跟踪。")
                         param:          "NAV_ACC_RAD"
                         min:            2
                         max:            16

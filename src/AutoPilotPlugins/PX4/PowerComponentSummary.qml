@@ -37,22 +37,22 @@ Item {
         anchors.fill:       parent
 
         VehicleSummaryRow {
-            labelText: qsTr("Battery Source")
+            labelText: qsTr("电池源")
             valueText: battParams.battSource.enumStringValue
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Battery Full")
+            labelText: qsTr("满电")
             valueText: battParams.battHighVoltAvailable ? battParams.battHighVolt.valueString + " " + battParams.battHighVolt.units : _naString
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Battery Empty")
+            labelText: qsTr("空电")
             valueText: battParams.battLowVoltAvailable ? battParams.battLowVolt.valueString + " " + battParams.battLowVolt.units : _naString
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Number of Cells")
+            labelText: qsTr("电池节数")
             valueText: battParams.battNumCellsAvailable ? battParams.battNumCells.valueString : _naString
         }
     }

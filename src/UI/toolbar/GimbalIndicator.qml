@@ -47,9 +47,9 @@ Item {
             contentComponent: GridLayout {
                 // Label indicating the purpose of the panel and active gimbal instance
                 QGCLabel {
-                    text:                   qsTr("Gimbal ") + 
+                    text:                   qsTr("云台 ") + 
                                                 (multiGimbalSetup ? activeGimbal.deviceId.rawValue : "") + 
-                                                    qsTr("<br> Controls")
+                                                    qsTr("<br> 控制")
 
                     font.pointSize:         ScreenTools.smallFontPointSize
                     Layout.preferredWidth:  buttonHeight * 1.1
@@ -64,11 +64,11 @@ Item {
 
                     model: [
                         {id: "yawLock",   text: activeGimbal.yawLock ? qsTr("Yaw <br> Follow") : qsTr("Yaw <br> Lock")  , visible: true                    },
-                        {id: "center",    text: qsTr("Center")                                                          , visible: true                    },
-                        {id: "tilt90",    text: qsTr("Tilt 90")                                                         , visible: true                    },
-                        {id: "pointHome", text: qsTr("Point <br> Home")                                                 , visible: true                    },
-                        {id: "retract",   text: qsTr("Retract")                                                         , visible: true                    },
-                        {id: "acqControl",text: hasControl ? qsTr("Release <br> Control") : qsTr("Acquire <br> Control"), visible: acqControlButtonEnabled }
+                        {id: "center",    text: qsTr("居中")                                                          , visible: true                    },
+                        {id: "tilt90",    text: qsTr("俯仰90")                                                         , visible: true                    },
+                        {id: "pointHome", text: qsTr("指向 <br> 原点")                                                 , visible: true                    },
+                        {id: "retract",   text: qsTr("收回")                                                         , visible: true                    },
+                        {id: "acqControl",text: hasControl ? qsTr("释放 <br> 控制") : qsTr("获取 <br> 控制"), visible: acqControlButtonEnabled }
                     ]
 
                     QGCButton {
@@ -116,7 +116,7 @@ Item {
 
                 // Active gimbal selector section
                 QGCLabel {
-                    text:                   qsTr("Active <br> Gimbal: ") + activeGimbal.deviceId.rawValue
+                    text:                   qsTr("当前 <br> 云台: ") + activeGimbal.deviceId.rawValue
                     font.pointSize:         ScreenTools.smallFontPointSize
                     Layout.preferredWidth:  buttonHeight * 1.1
                     Layout.leftMargin:      margins
@@ -128,7 +128,7 @@ Item {
                     Layout.preferredWidth:  Layout.preferredHeight
                     Layout.preferredHeight: buttonHeight
                     Layout.alignment:       Qt.AlignHCenter | Qt.AlignBottom
-                    text:                   qsTr("Select <br> Gimbal")
+                    text:                   qsTr("选择 <br> 云台")
                     fontWeight:             Font.DemiBold
                     pointSize:              ScreenTools.smallFontPointSize
                     backRadius:             panelRadius * 0.5
@@ -185,7 +185,7 @@ Item {
                                     fontWeight:             Font.DemiBold
                                     pointSize:              ScreenTools.smallFontPointSize
                                     backRadius:             panelRadius * 0.5
-                                    text:                   qsTr("Gimbal ") + object.deviceId.rawValue
+                                    text:                   qsTr("云台 ") + object.deviceId.rawValue
                                     checked:                activeGimbal === object
                                     onClicked: {
                                         gimbalController.activeGimbal = object
@@ -214,7 +214,7 @@ Item {
                     Layout.preferredWidth:  Layout.preferredHeight
                     Layout.preferredHeight: buttonHeight
                     Layout.alignment:       Qt.AlignHCenter | Qt.AlignBottom
-                    text:                   qsTr("Settings")
+                    text:                   qsTr("设置")
                     fontWeight:             Font.DemiBold
                     pointSize:              ScreenTools.smallFontPointSize
                     backRadius:             panelRadius * 0.5
@@ -251,7 +251,7 @@ Item {
 
                     QGCLabel {
                         id:                 controlTypeLabel
-                        text:               qsTr("Control type: ")
+                        text:               qsTr("控制类型: ")
                         visible:            enableOnScreenControlCheckbox.checked
                     }
                     FactComboBox {
@@ -261,7 +261,7 @@ Item {
                     }
 
                     QGCLabel {
-                        text:               qsTr("Horizontal FOV")
+                        text:               qsTr("水平FOV")
                         visible:            enableOnScreenControlCheckbox.checked && QGroundControl.settingsManager.gimbalControllerSettings.ControlType.rawValue === 0
                     }
                     FactTextField {
@@ -270,7 +270,7 @@ Item {
                     }
 
                     QGCLabel {
-                        text:               qsTr("Vertical FOV")
+                        text:               qsTr("垂直FOV")
                         visible:            enableOnScreenControlCheckbox.checked && QGroundControl.settingsManager.gimbalControllerSettings.ControlType.rawValue === 0
                     }
                     FactTextField {
@@ -279,7 +279,7 @@ Item {
                     }
 
                     QGCLabel {
-                        text:               qsTr("Max speed:")
+                        text:               qsTr("最大速度:")
                         visible:            enableOnScreenControlCheckbox.checked && QGroundControl.settingsManager.gimbalControllerSettings.ControlType.rawValue === 1
                     }
                     FactTextField {
@@ -297,7 +297,7 @@ Item {
                     }
 
                     QGCLabel {
-                        text:               qsTr("Joystick buttons speed:")
+                        text:               qsTr("摇杆按钮速度:")
                         visible:            joystickButtonsAvailable && QGroundControl.settingsManager.gimbalControllerSettings.visible
                     }
                     FactTextField {
@@ -318,7 +318,7 @@ Item {
 
                     FactCheckBox {
                         id:                 gimbalAzimuthMapCheckbox
-                        text:               "  " + qsTr("Show gimbal Azimuth indicator in map")
+                        text:               "  " + qsTr("显示云台方位指示器在地图上")
                         fact:               QGroundControl.settingsManager.gimbalControllerSettings.showAzimuthIndicatorOnMap
                         Layout.columnSpan:  2
                         checkedValue:       1
@@ -327,7 +327,7 @@ Item {
 
                     FactCheckBox {
                         id:                 gimbalAzimutIndicatorCheckbox
-                        text:               "  " + qsTr("Use Azimuth instead of local yaw on top toolbar indicator")
+                        text:               "  " + qsTr("在顶部工具栏指示器上使用方位而不是本地偏航")
                         fact:               QGroundControl.settingsManager.gimbalControllerSettings.toolbarIndicatorShowAzimuth
                         Layout.columnSpan:  2
                         checkedValue:       1
@@ -336,7 +336,7 @@ Item {
 
                     FactCheckBox {
                         id:                 showAcquireControlCheckbox
-                        text:               "  " + qsTr("Show Acquire/Release control button")
+                        text:               "  " + qsTr("显示获取/释放控制按钮")
                         fact:               QGroundControl.settingsManager.gimbalControllerSettings.toolbarIndicatorShowAcquireReleaseControl
                         Layout.columnSpan:  2
                         checkedValue:       1
@@ -385,8 +385,8 @@ Item {
         QGCLabel {
             id:                     statusLabel
             text:                   activeGimbal && activeGimbal.retracted ? 
-                                        qsTr("Retracted") :
-                                        (activeGimbal && activeGimbal.yawLock ? qsTr("Yaw locked") : qsTr("Yaw follow"))
+                                        qsTr("已收起") :
+                                        (activeGimbal && activeGimbal.yawLock ? qsTr("偏航已锁定") : qsTr("偏航跟随"))
             Layout.columnSpan:      2
             Layout.alignment:       Qt.AlignHCenter
         }

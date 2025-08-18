@@ -55,7 +55,7 @@ SetupPage {
                 spacing: _margins / 2
 
                 QGCLabel {
-                    text:       qsTr("Failsafe Triggers")
+                    text:       qsTr("故障安全触发")
                     font.bold:   true
                 }
 
@@ -69,7 +69,7 @@ SetupPage {
                         anchors.margins:    _margins
                         anchors.left:       parent.left
                         anchors.baseline:   throttlePWMField.baseline
-                        text:               qsTr("Throttle PWM threshold:")
+                        text:               qsTr("油门PWM阈值:")
                         checked:            _failsafeThrEnable.value == 1
 
                         onClicked: _failsafeThrEnable.value = (checked ? 1 : 0)
@@ -90,7 +90,7 @@ SetupPage {
                         anchors.margins:    _margins
                         anchors.left:       parent.left
                         anchors.baseline:   voltageField.baseline
-                        text:               qsTr("Voltage threshold:")
+                        text:               qsTr("电池电压阈值:")
                         checked:            _failsafeBattVoltage.value != 0
 
                         onClicked: _failsafeBattVoltage.value = checked ? 10.5 : 0
@@ -111,7 +111,7 @@ SetupPage {
                         anchors.margins:    _margins
                         anchors.left:       parent.left
                         anchors.baseline:   mahField.baseline
-                        text:               qsTr("MAH threshold:")
+                        text:               qsTr("电池电量阈值:")
                         checked:            _failsafeBattMah.value != 0
 
                         onClicked: _failsafeBattMah.value = checked ? 600 : 0
@@ -132,7 +132,7 @@ SetupPage {
                         anchors.margins:    _margins
                         anchors.left:       parent.left
                         anchors.top:        mahField.bottom
-                        text:               qsTr("GCS failsafe")
+                        text:               qsTr("地面站故障保险:")
                         checked:            _failsafeGCSEnable.value != 0
 
                         onClicked: _failsafeGCSEnable.value = checked ? 1 : 0
@@ -144,7 +144,7 @@ SetupPage {
                 spacing: _margins / 2
 
                 QGCLabel {
-                    text:           qsTr("Return to Launch")
+                    text:           qsTr("返航高度")
                     font.bold:      true
                 }
 
@@ -158,7 +158,7 @@ SetupPage {
                         anchors.margins:    _margins
                         anchors.left:       parent.left
                         anchors.top:        parent.top
-                        text:               qsTr("Return at current altitude")
+                        text:               qsTr("按当前高度返回")
                         checked:            _rtlAltFact.value < 0
                         exclusiveGroup:     returnAltRadioGroup
 
@@ -170,7 +170,7 @@ SetupPage {
                         anchors.topMargin:  _margins / 2
                         anchors.left:       returnAtCurrentRadio.left
                         anchors.top:        returnAtCurrentRadio.bottom
-                        text:               qsTr("Return at specified altitude:")
+                        text:               qsTr("按指定高度返回:")
                         exclusiveGroup:     returnAltRadioGroup
                         checked:            _rtlAltFact.value >= 0
 

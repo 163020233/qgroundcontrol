@@ -22,7 +22,7 @@ RowLayout {
         subEditConfig.filename = logField.text
     }
 
-    QGCLabel { text: qsTr("Log File") }
+    QGCLabel { text: qsTr("日志文件") }
 
     QGCTextField {
         id: logField
@@ -31,14 +31,14 @@ RowLayout {
     }
 
     QGCButton {
-        text: qsTr("Browse")
+        text: qsTr("浏览")
         onClicked: filePicker.openForLoad()
     }
 
     QGCFileDialog {
         id: filePicker
-        title: qsTr("Select Telemetery Log")
-        nameFilters: [ qsTr("Telemetry Logs (*.%1)").arg(_logFileExtension), qsTr("All Files (*)") ]
+        title: qsTr("选择日志文件")
+        nameFilters: [ qsTr("日志文件 (*.%1)").arg(_logFileExtension), qsTr("所有文件 (*)") ]
         folder: QGroundControl.settingsManager.appSettings.telemetrySavePath
 
         property string _logFileExtension: QGroundControl.settingsManager.appSettings.telemetryFileExtension

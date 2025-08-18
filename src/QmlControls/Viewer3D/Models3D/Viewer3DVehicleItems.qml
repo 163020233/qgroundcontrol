@@ -69,7 +69,7 @@ Node {
                 return qsTr("R"); //ROI DEPRECATED
             }
         }
-        return qsTr("null")
+        return qsTr("未知")
     }
 
     function addMissionItemsToListModel() {

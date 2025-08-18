@@ -33,24 +33,24 @@ Item {
         anchors.fill:       parent
 
         VehicleSummaryRow {
-            labelText: qsTr("Batt1 monitor")
+            labelText: qsTr("电池1监控")
             valueText: _batt1Monitor.enumStringValue
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Batt1 capacity")
+            labelText: qsTr("电池1容量")
             valueText:  _batt1MonitorEnabled ? _battCapacity.valueString + " " + _battCapacity.units : ""
             visible:    _batt1MonitorEnabled
         }
 
         VehicleSummaryRow {
-            labelText:  qsTr("Batt2 monitor")
+            labelText:  qsTr("电池2监控")
             valueText:  _batt2MonitorAvailable ? _batt2Monitor.enumStringValue : ""
             visible:    _batt2MonitorAvailable
         }
 
         VehicleSummaryRow {
-            labelText:  qsTr("Batt2 capacity")
+            labelText:  qsTr("电池2容量")
             valueText:  _batt2MonitorEnabled ? _batt2Capacity.valueString + " " + _batt2Capacity.units : ""
             visible:    _batt2MonitorEnabled
         }

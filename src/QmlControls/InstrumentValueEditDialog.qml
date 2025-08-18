@@ -22,7 +22,7 @@ import QGroundControl.Palette
 
 QGCPopupDialog {
     id:         root
-    title:      qsTr("Telemetry Display")
+    title:      qsTr("遥测显示")
     buttons:    Dialog.Close
 
     property var instrumentValueData
@@ -38,7 +38,7 @@ QGCPopupDialog {
         id: noFactComponent
 
         QGCLabel {
-            text: qsTr("Valuec requires a connected vehicle for setup.")
+            text: qsTr("遥测显示需要连接车辆。")
         }
     }
 
@@ -52,11 +52,11 @@ QGCPopupDialog {
                 spacing: ScreenTools.defaultFontPixelHeight / 2
 
                 SettingsGroupLayout {
-                    heading: qsTr("Telemetry")
+                    heading: qsTr("遥测")
 
                     LabelledComboBox {
                         id:                     factGroupCombo
-                        label:                  qsTr("Group")
+                        label:                  qsTr("组")
                         model:                  instrumentValueData.factGroupNames
                         currentIndex:           instrumentValueData.factGroupNames.indexOf(instrumentValueData.factGroupName)
                         onActivated: (index) => {
@@ -72,7 +72,7 @@ QGCPopupDialog {
 
                     LabelledComboBox {
                         id:                     factNamesCombo
-                        label:                  qsTr("Value")
+                        label:                  qsTr("值")
                         model:                  instrumentValueData.factValueNames
                         currentIndex:           instrumentValueData.factValueNames.indexOf(instrumentValueData.factName)
                         onActivated: (index) => {
@@ -88,7 +88,7 @@ QGCPopupDialog {
                 }
 
                 SettingsGroupLayout {
-                    heading: qsTr("Label")
+                    heading: qsTr("标签")
 
                     ColumnLayout {
                         Layout.fillWidth:   true
@@ -99,7 +99,7 @@ QGCPopupDialog {
 
                             QGCRadioButton {
                                 id:                     iconRadio
-                                text:                   qsTr("Icon")
+                                text:                   qsTr("图标")
                                 Layout.fillWidth:       true
                                 Component.onCompleted:  checked = instrumentValueData.icon != ""
                                 onClicked: {
@@ -133,7 +133,7 @@ QGCPopupDialog {
                                 }
                                 QGCButton {
                                     id:         changeIconBtn
-                                    text:       qsTr("Change")
+                                    text:       qsTr("切换图标")
                                     enabled:    iconRadio.checked
                                     onClicked: {
                                         var updateFunction = function(icon){ instrumentValueData.icon = icon }
@@ -148,13 +148,13 @@ QGCPopupDialog {
 
                             QGCRadioButton {
                                 id:                     textRadio
-                                text:                   qsTr("Text")
+                                text:                   qsTr("文本")
                                 Layout.fillWidth:       true
                                 ButtonGroup.group:      labelTypeGroup
                                 Component.onCompleted:  checked = instrumentValueData.icon == ""
                                 onClicked: {
                                     instrumentValueData.icon = ""
-                                    instrumentValueData.text = instrumentValueData.fact ? instrumentValueData.fact.shortDescription : qsTr("Label")
+                                    instrumentValueData.text = instrumentValueData.fact ? instrumentValueData.fact.shortDescription : qsTr("标签")
                                 }
                             }
 
@@ -163,14 +163,14 @@ QGCPopupDialog {
                                 Layout.minimumWidth:    iconOptionInputs.width
                                 text:                   textRadio.checked 
                                                             ? instrumentValueData.text
-                                                            : instrumentValueData.fact ? instrumentValueData.fact.shortDescription : qsTr("Label")
+                                                            : instrumentValueData.fact ? instrumentValueData.fact.shortDescription : qsTr("标签")
                                 onEditingFinished:      instrumentValueData.text = text 
                             }
                         }
                     }
 
                     LabelledComboBox {
-                        label:          qsTr("Size") 
+                        label:          qsTr("大小") 
                         model:          instrumentValueData.factValueGrid.fontSizeNames
                         currentIndex:   instrumentValueData.factValueGrid.fontSize
                         onActivated:    (index) => { instrumentValueData.factValueGrid.fontSize = index }
@@ -178,7 +178,7 @@ QGCPopupDialog {
 
                     QGCCheckBoxSlider {
                         Layout.fillWidth: true
-                        text:       qsTr("Show Units") 
+                        text:       qsTr("显示单位") 
                         checked:    instrumentValueData.showUnits
                         onClicked:  instrumentValueData.showUnits = checked
                     }
@@ -187,7 +187,7 @@ QGCPopupDialog {
 
             SettingsGroupLayout {
                 Layout.alignment:   Qt.AlignTop
-                heading:            qsTr("Value range")
+                heading:            qsTr("范围")
 
                 ColumnLayout {
                     Layout.fillWidth: true
@@ -198,7 +198,7 @@ QGCPopupDialog {
 
                         QGCLabel {
                             Layout.fillWidth:       true
-                            text:                   qsTr("Type") 
+                            text:                   qsTr("类型") 
                         }
 
                         QGCComboBox {
@@ -290,7 +290,7 @@ QGCPopupDialog {
 
                 QGCLabel {
                     width:      rowLayout.width
-                    text:       qsTr("Specify the color you want to apply based on value ranges. The color will be applied to the icon if available, otherwise to the value itself.")
+                    text:       qsTr("指定值范围对应的颜色。如果图标可用，则应用图标颜色，否则应用值本身的颜色。")
                     wrapMode:   Text.WordWrap
                 }
 
@@ -371,7 +371,7 @@ QGCPopupDialog {
                 }
 
                 QGCButton {
-                    text:       qsTr("Add Row")
+                    text:       qsTr("添加行")
                     onClicked:  instrumentValueData.addRangeValue()
                 }
             }
@@ -403,7 +403,7 @@ QGCPopupDialog {
 
                 QGCLabel {
                     width:      rowLayout.width
-                    text:       qsTr("Specify the icon you want to display based on value ranges.")
+                    text:       qsTr("指定值范围对应的图标。")
                     wrapMode:   Text.WordWrap
                 }
 
@@ -476,7 +476,7 @@ QGCPopupDialog {
                 }
 
                 QGCButton {
-                    text:       qsTr("Add Row")
+                    text:       qsTr("添加行")
                     onClicked:  instrumentValueData.addRangeValue()
                 }
             }
@@ -508,7 +508,7 @@ QGCPopupDialog {
 
                 QGCLabel {
                     width:      rowLayout.width
-                    text:       qsTr("Specify the icon opacity you want based on value ranges.")
+                    text:       qsTr("指定值范围对应的图标透明度。")
                     wrapMode:   Text.WordWrap
                 }
 
@@ -567,7 +567,7 @@ QGCPopupDialog {
                 }
 
                 QGCButton {
-                    text:       qsTr("Add Row")
+                    text:       qsTr("添加行")
                     onClicked:  instrumentValueData.addRangeValue()
                 }
             }
@@ -578,7 +578,7 @@ QGCPopupDialog {
         id: iconPickerDialog
 
         QGCPopupDialog {
-            title:      qsTr("Select Icon")
+            title:      qsTr("选择图标")
             buttons:    Dialog.Close
 
             property var     iconNames

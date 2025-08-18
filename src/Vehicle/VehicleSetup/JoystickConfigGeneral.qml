@@ -40,7 +40,7 @@ Item {
             //---------------------------------------------------------------------
             //-- Enable Joystick
             QGCLabel {
-                text:               _requiresCalibration ? qsTr("Enable not allowed (Calibrate First)") : qsTr("Enable joystick input")
+                text:               _requiresCalibration ? qsTr("不允许启用（先校准）") : qsTr("启用操纵杆输入")
                 Layout.alignment:   Qt.AlignVCenter
                 Layout.minimumWidth: ScreenTools.defaultFontPixelWidth * 36
             }
@@ -72,7 +72,7 @@ Item {
             //---------------------------------------------------------------------
             //-- Joystick Selector
             QGCLabel {
-                text:               qsTr("Active joystick:")
+                text:               qsTr("当前操纵杆:")
                 Layout.alignment:   Qt.AlignVCenter
             }
             QGCComboBox {
@@ -84,7 +84,7 @@ Item {
                 Component.onCompleted: {
                     var index = joystickCombo.find(joystickManager.activeJoystickName)
                     if (index === -1) {
-                        console.warn(qsTr("Active joystick name not in combo"), joystickManager.activeJoystickName)
+                        console.warn(qsTr("当前操纵杆名称不在组合框中"), joystickManager.activeJoystickName)
                     } else {
                         joystickCombo.currentIndex = index
                     }
@@ -102,7 +102,7 @@ Item {
             //---------------------------------------------------------------------
             //-- RC Mode
             QGCLabel {
-                text:               qsTr("RC Mode:")
+                text:               qsTr("RC 模式:")
                 Layout.alignment:   Qt.AlignVCenter
                 visible:            !_buttonsOnly
             }
@@ -159,7 +159,7 @@ Item {
                     rowSpacing:         ScreenTools.defaultFontPixelHeight
                     anchors.centerIn:   parent
                     QGCLabel {
-                        text:               globals.activeVehicle.sub ? qsTr("Lateral") : qsTr("Roll")
+                        text:               globals.activeVehicle.sub ? qsTr("横向") : qsTr("横滚")
                         Layout.minimumWidth: ScreenTools.defaultFontPixelWidth * 12
                     }
                     AxisMonitor {
@@ -173,7 +173,7 @@ Item {
                     QGCLabel {
                         id:                 pitchLabel
                         width:              _attitudeLabelWidth
-                        text:               globals.activeVehicle.sub ? qsTr("Forward") : qsTr("Pitch")
+                        text:               globals.activeVehicle.sub ? qsTr("纵向") : qsTr("俯仰")
                     }
                     AxisMonitor {
                         id:                 pitchAxis
@@ -186,7 +186,7 @@ Item {
                     QGCLabel {
                         id:                 yawLabel
                         width:              _attitudeLabelWidth
-                        text:               qsTr("Yaw")
+                        text:               qsTr("偏航")
                     }
                     AxisMonitor {
                         id:                 yawAxis
@@ -199,7 +199,7 @@ Item {
                     QGCLabel {
                         id:                 throttleLabel
                         width:              _attitudeLabelWidth
-                        text:               qsTr("Throttle")
+                        text:               qsTr("油门")
                     }
                     AxisMonitor {
                         id:                 throttleAxis

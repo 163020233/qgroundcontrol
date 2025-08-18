@@ -28,39 +28,39 @@ ColumnLayout {
         availableHeight:    _availableHeight - pidTuning.y
 
         property var roll: QtObject {
-            property string name: qsTr("Roll")
+            property string name: qsTr("滚转")
             property var plot: [
                 { name: "Response", value: globals.activeVehicle.rollRate.value },
                 { name: "Setpoint", value: globals.activeVehicle.setpoint.rollRate.value }
             ]
             property var params: ListModel {
                 ListElement {
-                    title:          qsTr("Porportional gain (FW_RR_P)")
-                    description:    qsTr("Porportional gain.")
+                    title:          qsTr("滚转比例增益 (FW_RR_P)")
+                    description:    qsTr("滚转比例增益.")
                     param:          "FW_RR_P"
                     min:            0.0
                     max:            1
                     step:           0.005
                 }
                 ListElement {
-                    title:          qsTr("Differential Gain (FW_RR_D)")
-                    description:    qsTr("Damping: increase to reduce overshoots and oscillations, but not higher than really needed.")
+                    title:          qsTr("滚转微分增益 (FW_RR_D)")
+                    description:    qsTr("滚转微分增益: 增加以减少超调和振荡，但不能高于真正需要的。")
                     param:          "FW_RR_D"
                     min:            0.0
                     max:            1.0
                     step:           0.005
                 }
                 ListElement {
-                    title:          qsTr("Integral Gain (FW_RR_I)")
-                    description:    qsTr("Generally does not need much adjustment, reduce this when seeing slow oscillations.")
+                    title:          qsTr("滚转积分增益 (FW_RR_I)")
+                    description:    qsTr("滚转积分增益: 增加以减少稳态误差 (例如风)")
                     param:          "FW_RR_I"
                     min:            0.0
                     max:            0.5
                     step:           0.005
                 }
                 ListElement {
-                    title:          qsTr("Feedforward Gain (FW_RR_FF)")
-                    description:    qsTr("Feedforward gused to compensate for aerodynamic damping.")
+                    title:          qsTr("滚转前馈增益 (FW_RR_FF)")
+                    description:    qsTr("滚转前馈增益: 增加以补偿空气阻力。")
                     param:          "FW_RR_FF"
                     min:            0.0
                     max:            10.0
@@ -69,39 +69,39 @@ ColumnLayout {
             }
         }
         property var pitch: QtObject {
-            property string name: qsTr("Pitch")
+            property string name: qsTr("俯仰")
             property var plot: [
                 { name: "Response", value: globals.activeVehicle.pitchRate.value },
                 { name: "Setpoint", value: globals.activeVehicle.setpoint.pitchRate.value }
             ]
             property var params: ListModel {
                 ListElement {
-                    title:          qsTr("Porportional Gain (FW_PR_P)")
-                    description:    qsTr("Porportional Gain.")
+                    title:          qsTr("俯仰比例增益 (FW_PR_P)")
+                    description:    qsTr("俯仰比例增益.")
                     param:          "FW_PR_P"
                     min:            0.0
                     max:            1
                     step:           0.005
                 }
                 ListElement {
-                    title:          qsTr("Differential Gain (FW_PR_D)")
-                    description:    qsTr("Damping: increase to reduce overshoots and oscillations, but not higher than really needed.")
+                    title:          qsTr("俯仰微分增益 (FW_PR_D)")
+                    description:    qsTr("俯仰微分增益: 增加以减少超调和振荡，但不能高于真正需要的。")
                     param:          "FW_PR_D"
                     min:            0.0
                     max:            1.00
                     step:           0.005
                 }
                 ListElement {
-                    title:          qsTr("Integral Gain (FW_PR_I)")
-                    description:    qsTr("Generally does not need much adjustment, reduce this when seeing slow oscillations.")
+                    title:          qsTr("俯仰积分增益 (FW_PR_I)")
+                    description:    qsTr("俯仰积分增益: 增加以减少稳态误差 (例如风)")
                     param:          "FW_PR_I"
                     min:            0.0
                     max:            0.5
                     step:           0.005
                 }
                 ListElement {
-                    title:          qsTr("Feedforward Gain (FW_PR_FF)")
-                    description:    qsTr("Feedforward gused to compensate for aerodynamic damping.")
+                    title:          qsTr("俯仰前馈增益 (FW_PR_FF)")
+                    description:    qsTr("俯仰前馈增益: 增加以补偿空气阻力。")
                     param:          "FW_PR_FF"
                     min:            0.0
                     max:            10.0
@@ -110,47 +110,47 @@ ColumnLayout {
             }
         }
         property var yaw: QtObject {
-            property string name: qsTr("Yaw")
+            property string name: qsTr("偏航")
             property var plot: [
                 { name: "Response", value: globals.activeVehicle.yawRate.value },
                 { name: "Setpoint", value: globals.activeVehicle.setpoint.yawRate.value }
             ]
             property var params: ListModel {
                 ListElement {
-                    title:          qsTr("Porportional Gain (FW_YR_P)")
-                    description:    qsTr("Porportional Gain.")
+                    title:          qsTr("偏航比例增益 (FW_YR_P)")
+                    description:    qsTr("偏航比例增益.")
                     param:          "FW_YR_P"
                     min:            0.0
                     max:            1
                     step:           0.005
                 }
                 ListElement {
-                    title:          qsTr("Integral Gain (FW_YR_D)")
-                    description:    qsTr("Generally does not need much adjustment, reduce this when seeing slow oscillations.")
+                    title:          qsTr("偏航微分增益 (FW_YR_D)")
+                    description:    qsTr("偏航微分增益: 增加以减少超调和振荡，但不能高于真正需要的。")
                     param:          "FW_YR_D"
                     min:            0.0
                     max:            1.0
                     step:           0.005
                 }
                 ListElement {
-                    title:          qsTr("Integral Gain (FW_YR_I)")
-                    description:    qsTr("Generally does not need much adjustment, reduce this when seeing slow oscillations.")
+                    title:          qsTr("偏航积分增益 (FW_YR_I)")
+                    description:    qsTr("偏航积分增益: 增加以减少稳态误差 (例如风)")
                     param:          "FW_YR_I"
                     min:            0.0
                     max:            50.0
                     step:           0.5
                 }
                 ListElement {
-                    title:          qsTr("Feedforward Gain (FW_YR_FF)")
-                    description:    qsTr("Feedforward gused to compensate for aerodynamic damping.")
+                    title:          qsTr("偏航前馈增益 (FW_YR_FF)")
+                    description:    qsTr("偏航前馈增益: 增加以补偿空气阻力。")
                     param:          "FW_YR_FF"
                     min:            0.0
                     max:            10.0
                     step:           0.05
                 }
                 ListElement {
-                    title:          qsTr("Roll control to yaw feedforward (FW_RLL_TO_YAW_FF)")
-                    description:    qsTr("Used to counteract the adverse yaw effect for fixed wings.")
+                    title:          qsTr("滚转到偏航前馈增益 (FW_RLL_TO_YAW_FF)")
+                    description:    qsTr("用于抵消固定翼的逆偏航效果。")
                     param:          "FW_RLL_TO_YAW_FF"
                     min:            0.0
                     max:            1.0

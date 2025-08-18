@@ -183,29 +183,29 @@ SetupPage {
 
             ListModel {
                 id: gimbalOutModel
-                ListElement { text: qsTr("Disabled");   value: 0 }
-                ListElement { text: qsTr("Channel 5");  value: 5 }
-                ListElement { text: qsTr("Channel 6");  value: 6 }
-                ListElement { text: qsTr("Channel 7");  value: 7 }
-                ListElement { text: qsTr("Channel 8");  value: 8 }
-                ListElement { text: qsTr("Channel 9");  value: 9 }
-                ListElement { text: qsTr("Channel 10"); value: 10 }
-                ListElement { text: qsTr("Channel 11"); value: 11 }
-                ListElement { text: qsTr("Channel 12"); value: 12 }
-                ListElement { text: qsTr("Channel 13"); value: 13 }
-                ListElement { text: qsTr("Channel 14"); value: 14 }
-                ListElement { text: qsTr("Channel 15"); value: 15 }
-                ListElement { text: qsTr("Channel 16"); value: 16 }
+                ListElement { text: qsTr("禁用");   value: 0 }
+                ListElement { text: qsTr("通道 5");  value: 5 }
+                ListElement { text: qsTr("通道 6");  value: 6 }
+                ListElement { text: qsTr("通道 7");  value: 7 }
+                ListElement { text: qsTr("通道 8");  value: 8 }
+                ListElement { text: qsTr("通道 9");  value: 9 }
+                ListElement { text: qsTr("通道 10"); value: 10 }
+                ListElement { text: qsTr("通道 11"); value: 11 }
+                ListElement { text: qsTr("通道 12"); value: 12 }
+                ListElement { text: qsTr("通道 13"); value: 13 }
+                ListElement { text: qsTr("通道 14"); value: 14 }
+                ListElement { text: qsTr("通道 15"); value: 15 }
+                ListElement { text: qsTr("通道 16"); value: 16 }
             }
 
             QGCCheckBox {
                 id:     _allVisible
-                text:   qsTr("Show all settings (advanced)")
+                text:   qsTr("显示所有设置（高级）")
             }
 
             QGCLabel {
                 visible:     !_oldFW
-                text:        qsTr("Camera mount tilt speed:")
+                text:        qsTr("相机支架倾斜速度：")
                 font.bold:   true
             }
 
@@ -287,7 +287,7 @@ SetupPage {
                         // Section Title
                         QGCLabel {
                             id:          directionLabel
-                            text:        qsTr("Gimbal ") + directionTitle
+                            text:        qsTr("云台 ") + directionTitle
                             font.bold:   true
                         }
 
@@ -320,7 +320,7 @@ SetupPage {
                                             QGCLabel {
                                                 id:               gimbalOutLabel
                                                 anchors.baseline: outputChan.baseline
-                                                text:             qsTr("Output channel:")
+                                                text:             qsTr("输出通道:")
                                             }
 
                                             QGCComboBox {
@@ -345,7 +345,7 @@ SetupPage {
                                         enabled: directionEnabled
 
                                         FactCheckBox {
-                                            text:           qsTr("Servo reverse")
+                                            text:           qsTr("伺服反转")
                                             checkedValue:   _servoReverseIsBool ? 1 : -1
                                             uncheckedValue: _servoReverseIsBool ? 0 : 1
                                             fact:           servoReverseFact
@@ -355,7 +355,7 @@ SetupPage {
 
                                         FactCheckBox {
                                             anchors.margins: _margins
-                                            text:            qsTr("Stabilize")
+                                            text:            qsTr("稳定")
                                             fact:            mountStabFact
                                             checkedValue:    1
                                             uncheckedValue:  0
@@ -373,13 +373,13 @@ SetupPage {
                                     property var _labelBaseline: servoPWMMinField.baseline
 
                                     QGCLabel {
-                                        text:             qsTr("Servo PWM limits:")
+                                        text:             qsTr("伺服PWM限制：")
                                         anchors.baseline: servoLimitRow._labelBaseline
                                         width:            angleLimitLabel.width
                                     }
 
                                     QGCLabel {
-                                        text:             qsTr("min")
+                                        text:             qsTr("最小")
                                         anchors.baseline: servoLimitRow._labelBaseline
                                     }
 
@@ -389,7 +389,7 @@ SetupPage {
                                     }
 
                                     QGCLabel {
-                                        text:             qsTr("max")
+                                        text:             qsTr("最大")
                                         anchors.baseline: servoLimitRow._labelBaseline
                                     }
 
@@ -409,12 +409,12 @@ SetupPage {
 
                                     QGCLabel {
                                         id:                 angleLimitLabel
-                                        text:               qsTr("Gimbal angle limits:")
+                                        text:               qsTr("万向节角度限制：")
                                         anchors.baseline:   angleLimitRow._labelBaseline
                                     }
 
                                     QGCLabel {
-                                        text:               qsTr("min")
+                                        text:               qsTr("最小")
                                         anchors.baseline:   angleLimitRow._labelBaseline
                                     }
 
@@ -424,7 +424,7 @@ SetupPage {
                                     }
 
                                     QGCLabel {
-                                        text:              qsTr("max")
+                                        text:              qsTr("最大")
                                         anchors.baseline:  angleLimitRow._labelBaseline
                                     }
 
@@ -450,7 +450,7 @@ SetupPage {
 
                     QGCLabel {
                         id:             settingsLabel
-                        text:           qsTr("Gimbal Settings")
+                        text:           qsTr("云台设置")
                         font.bold:      true
                     }
 
@@ -467,7 +467,7 @@ SetupPage {
                             anchors.margins:    _margins
                             anchors.left:       parent.left
                             anchors.baseline:   gimbalTypeCombo.baseline
-                            text:               qsTr("Type:")
+                            text:               qsTr("类型:")
                         }
 
                         FactComboBox {
@@ -489,7 +489,7 @@ SetupPage {
                             anchors.right:          parent.right
                             anchors.top:            gimbalTypeCombo.bottom
                             wrapMode:               Text.WordWrap
-                            text:                   qsTr("Gimbal Type changes takes affect next reboot of autopilot")
+                            text:                   qsTr("云台类型更改将影响自动驾驶仪下次重启")
                         }
 
                         QGCLabel {
@@ -497,7 +497,7 @@ SetupPage {
                             anchors.margins:    _margins
                             anchors.left:       parent.left
                             anchors.baseline:   gimbalModeCombo.baseline
-                            text:               qsTr("Default Mode:")
+                            text:               qsTr("默认模式:")
                         }
 
                         FactComboBox {

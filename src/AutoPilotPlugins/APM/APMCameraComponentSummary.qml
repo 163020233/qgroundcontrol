@@ -24,22 +24,22 @@ Item {
 
         VehicleSummaryRow {
             visible:    _mountTypeExists
-            labelText:  qsTr("Gimbal type")
+            labelText:  qsTr("万向架类型")
             valueText:  _mountTypeValue
         }
 
         VehicleSummaryRow {
-            labelText:  qsTr("Tilt input channel")
+            labelText:  qsTr("倾斜输入通道")
             valueText:  _mountRCInTilt.enumStringValue
         }
 
         VehicleSummaryRow {
-            labelText:  qsTr("Pan input channel")
+            labelText:  qsTr("声像输入通道")
             valueText:  _mountRCInPan.enumStringValue
         }
 
         VehicleSummaryRow {
-            labelText:  qsTr("Roll input channel")
+            labelText:  qsTr("滚动输入通道")
             valueText:  _mountRCInRoll.enumStringValue
         }
     }

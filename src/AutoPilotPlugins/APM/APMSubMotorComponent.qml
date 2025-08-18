@@ -113,7 +113,7 @@ SetupPage {
                         anchors.left:   parent.left
                         anchors.right:  parent.right
                         wrapMode:       Text.WordWrap
-                        text:           qsTr("Reverse Motor Direction")
+                        text:           qsTr("反转电机方向")
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignBottom
                     }
@@ -160,8 +160,8 @@ SetupPage {
                 anchors.left:   parent.left
                 anchors.right:  parent.right
                 wrapMode:       Text.WordWrap
-                text:           qsTr("Moving the sliders will cause the motors to spin. Make sure the motors and propellers are clear from obstructions! The direction of the motor rotation is dependent on how the three phases of the motor are physically connected to the ESCs (if any two wires are swapped, the direction of rotation will flip). Because we cannot guarantee what order the phases are connected, the motor directions must be configured in software. When a slider is moved DOWN, the thruster should push air/water TOWARD the cable entering the housing. Click the checkbox to reverse the direction of the corresponding thruster.\n\n"
-                                     + "Blue Robotics thrusters are lubricated by water and are not designed to be run in air. Testing the thrusters in air is ok at low speeds for short periods of time. Extended operation of Blue Robotics in air may lead to overheating and permanent damage. Without water lubrication, Blue Robotics thrusters may also make some unpleasant noises when operated in air; this is normal.")
+                text:           qsTr("移动滑块将导致电机旋转。请确保电机和螺旋桨没有障碍物！电机旋转方向取决于电机的三个相位如何物理连接到ESC（如果交换了两根导线，旋转方向将翻转）。由于我们无法保证相位的顺序，因此必须在软件中配置电机方向。当滑块向下移动时，螺旋桨应该向进入 housing 的电缆推动空气/水。点击复选框以反转对应螺旋桨的方向。\n\n"
+                                     + "Blue Robotics 电机是通过水润滑的，不设计用于在空气中运行。在低速度下，Blue Robotics 电机在空气中运行是可以的，但在短时间内运行。在空气中长时间运行 Blue Robotics 电机可能会导致过热和永久损坏。没有水润滑，Blue Robotics 电机在空气中运行时也可能会发出一些 unpleasant的噪音；这是正常的。")
             }
 
             Row {
@@ -214,7 +214,7 @@ SetupPage {
                 anchors.left:        parent.left
                 anchors.right:       parent.right
                 font.pointSize:      ScreenTools.largeFontPointSize
-                text:                qsTr("Automatic Motor Direction Detection")
+                text:                qsTr("自动电机方向检测")
             }
 
             QGCLabel {
@@ -222,9 +222,8 @@ SetupPage {
                 anchors.left:   parent.left
                 anchors.right:  parent.right
                 wrapMode:       Text.WordWrap
-                text:           qsTr("This will attempt to automatically detect the direction (normal/reversed) of your thrusters.\n"
-                                   + "Please place your vehicle in water, click the button, and wait. Note that the thrusters still need "
-                                   + "to be connected to the correct outputs (thrusters 2 and 3 can't be swapped, for example).")
+                text:           qsTr("这将尝试自动检测您的螺旋桨的方向（正常/反转）。\n"
+                                   + "请将您的车辆放入水中，点击按钮，等待。请注意，螺旋桨仍然需要连接到正确的输出（螺旋桨 2 和 3 不能交换，例如）。")
             }
 
             Row {

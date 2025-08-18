@@ -21,7 +21,7 @@ import QGroundControl.Controllers
 
 QGCPopupDialog {
     id:         root
-    title:      qsTr("Edit Position")
+    title:      qsTr("编辑位置")
     buttons:    Dialog.Close
 
     property alias coordinate:                  controller.coordinate
@@ -46,14 +46,14 @@ QGCPopupDialog {
         LabelledComboBox {
             id:                 coordinateSystemCombo
             Layout.fillWidth:   true
-            label:              qsTr("Coordinate System")
+            label:              qsTr("坐标系统")
             model:              showSetPositionFromVehicle && globals.activeVehicle ? 
-                                    [ qsTr("Geographic"), qsTr("Universal Transverse Mercator"), qsTr("Military Grid Reference"), qsTr("Vehicle Position") ] :
-                                    [ qsTr("Geographic"), qsTr("Universal Transverse Mercator"), qsTr("Military Grid Reference") ]
+                                    [ qsTr("地理"), qsTr("通用横轴墨卡托投影"), qsTr("军事网格参考"), qsTr("设备位置") ] :
+                                    [ qsTr("地理"), qsTr("通用横轴墨卡托投影"), qsTr("军事网格参考") ]
         }
 
         LabelledFactTextField {
-            label:              qsTr("Latitude")
+            label:              qsTr("纬度")
             fact:               controller.latitude
             textFieldPreferredWidth: _textFieldWidth
             Layout.fillWidth:   true
@@ -61,7 +61,7 @@ QGCPopupDialog {
         }
 
         LabelledFactTextField {
-            label:              qsTr("Longitude")
+            label:              qsTr("经度")
             fact:               controller.longitude
             textFieldPreferredWidth: _textFieldWidth
             Layout.fillWidth:   true
@@ -69,8 +69,8 @@ QGCPopupDialog {
         }
 
         LabelledButton {
-            label:               qsTr("Set position")
-            buttonText:          qsTr("Move")
+            label:               qsTr("设置位置")
+            buttonText:          qsTr("移动")
             visible:             _showGeographic
             onClicked: {
                 controller.setFromGeo()
@@ -79,7 +79,7 @@ QGCPopupDialog {
         }
 
         LabelledFactTextField {
-            label:              qsTr("Zone")
+            label:              qsTr("区域")
             fact:               controller.zone
             textFieldPreferredWidth: _textFieldWidth
             Layout.fillWidth:   true
@@ -87,7 +87,7 @@ QGCPopupDialog {
         }
 
         LabelledFactComboBox {
-            label:              qsTr("Hemisphere")
+            label:              qsTr("半球")
             fact:               controller.hemisphere
             indexModel:         false
             Layout.fillWidth:   true
@@ -95,7 +95,7 @@ QGCPopupDialog {
         }
 
         LabelledFactTextField {
-            label:              qsTr("Easting")
+            label:              qsTr("东")
             fact:               controller.easting
             textFieldPreferredWidth: _textFieldWidth
             Layout.fillWidth:   true
@@ -103,7 +103,7 @@ QGCPopupDialog {
         }
 
         LabelledFactTextField {
-            label:              qsTr("Northing")
+            label:              qsTr("北")
             fact:               controller.northing
             textFieldPreferredWidth: _textFieldWidth
             Layout.fillWidth:   true
@@ -111,8 +111,8 @@ QGCPopupDialog {
         }
 
         LabelledButton {
-            label:               qsTr("Set position")
-            buttonText:          qsTr("Move")
+            label:               qsTr("设置位置")
+            buttonText:          qsTr("移动")
             visible:             _showUTM
             onClicked: {
                 controller.setFromUTM()
@@ -129,8 +129,8 @@ QGCPopupDialog {
         }
 
         LabelledButton {
-            label:               qsTr("Set position")
-            buttonText:          qsTr("Move")
+            label:               qsTr("设置位置")
+            buttonText:          qsTr("移动")
             visible:             _showMGRS
             onClicked: {
                 controller.setFromMGRS()
@@ -139,8 +139,8 @@ QGCPopupDialog {
         }
 
         LabelledButton {
-            label:               qsTr("Set position")
-            buttonText:          qsTr("Move")
+            label:               qsTr("设置位置")
+            buttonText:          qsTr("移动")
             visible:             _showVehicle
             onClicked: {
                 controller.setFromVehicle()

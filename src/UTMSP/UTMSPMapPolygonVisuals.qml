@@ -37,8 +37,8 @@ Item {
     property real            _zorderDragHandle   : QGroundControl.zOrderMapItems + 3
     property real            _zorderSplitHandle  : QGroundControl.zOrderMapItems + 2
     property real            _zorderCenterHandle : QGroundControl.zOrderMapItems + 1
-    readonly property string _polygonToolsText   : qsTr("Option")
-    readonly property string _fenceText          : qsTr("Click on the map to add vertices. Click 'Done Fencing' when finished.")
+    readonly property string _polygonToolsText   : qsTr("多边形工具")
+    readonly property string _fenceText          : qsTr("点击地图添加顶点。完成后点击“完成围栏”。")
     property string          someParameter       : "defaultParameter"
     property real            radius              : ScreenTools.defaultFontPixelHeight * 4.44     //Automatic Geofence Radius
     property real            centerX             //Initial Drone X-Position
@@ -370,7 +370,7 @@ Item {
 
         QGCMenuItem {
             id:             removeVertexItem
-            text:           qsTr("Remove vertex")
+            text:           qsTr("删除顶点")
             onTriggered: {
                 if (menu._editingVertexIndex >= 0) {
                     mapPolygon.removeVertex(menu._editingVertexIndex)
@@ -383,12 +383,12 @@ Item {
         }
 
         QGCMenuItem {
-            text:           qsTr("Edit position..." )
+            text:           qsTr("编辑位置...")
             onTriggered:    editCenterPositionDialog.createObject(mainWindow).open()
         }
 
         QGCMenuItem {
-            text:           qsTr("Edit position..." )
+            text:           qsTr("编辑顶点位置...")
             visible:        menu._editingVertexIndex >= 0
             onTriggered:    editVertexPositionDialog.createObject(mainWindow).open()
         }
@@ -573,7 +573,7 @@ Item {
         id: editCenterPositionDialog
 
         EditPositionDialog {
-            title:      qsTr("Edit Center Position")
+            title:      qsTr("编辑中心位置")
             coordinate: mapPolygon.center
             onCoordinateChanged: {
                 // Prevent spamming signals on vertex changes by setting centerDrag = true when changing center position.
@@ -589,7 +589,7 @@ Item {
         id: editVertexPositionDialog
 
         EditPositionDialog {
-            title:      qsTr("Edit Vertex Position")
+            title:      qsTr("编辑顶点位置")
             coordinate: mapPolygon.vertexCoordinate(menu._editingVertexIndex)
             onCoordinateChanged: {
                 mapPolygon.adjustVertex(menu._editingVertexIndex, coordinate)
@@ -642,7 +642,7 @@ Item {
 
             QGCButton {
                 _horizontalPadding: 2
-                text:               qsTr("Automatic")
+                text:               qsTr("自动")
                 visible:            !mapPolygon.traceMode
                 onClicked:          _resetPolygon()
             }
@@ -650,7 +650,7 @@ Item {
 
             QGCButton {
                 _horizontalPadding: 2
-                text:               mapPolygon.traceMode ? qsTr("Done fencing") : qsTr("Mannual")
+                text:               mapPolygon.traceMode ? qsTr("完成围栏") : qsTr("手动")
                 onClicked: {
                     if (mapPolygon.traceMode) {
                         if (mapPolygon.count < 3) {

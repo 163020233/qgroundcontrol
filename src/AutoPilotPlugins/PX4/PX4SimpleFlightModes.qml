@@ -64,7 +64,7 @@ Item {
 
                     QGCLabel {
                         id:             flightModeLabel
-                        text:           qsTr("Flight Mode Settings")
+                        text:           qsTr("飞行模式设置")
                         font.bold:      true
                     }
 
@@ -86,7 +86,7 @@ Item {
 
                             QGCLabel {
                                 Layout.fillWidth:   true
-                                text:               qsTr("Mode Channel")
+                                text:               qsTr("飞行模式通道")
                             }
 
                             Repeater {
@@ -94,7 +94,7 @@ Item {
 
                                 QGCLabel {
                                     Layout.fillWidth:   true
-                                    text:               qsTr("Flight Mode %1").arg(modelData + 1)
+                                    text:               qsTr("飞行模式 %1").arg(modelData + 1)
                                     color:              (controller.activeFlightMode - 1) == index ? "yellow" : qgcPal.text
                                 }
                             }
@@ -125,7 +125,7 @@ Item {
                     spacing:    _margins
 
                     QGCLabel {
-                        text:           qsTr("Switch Settings")
+                        text:           qsTr("切换设置")
                         font.bold:      true
                     }
 

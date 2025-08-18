@@ -19,11 +19,11 @@ import QGroundControl.ScreenTools
 PX4TuningComponent {
     model: ListModel {
         ListElement { 
-            buttonText: qsTr("Rate Controller")
+            buttonText: qsTr("速度控制器")
             tuningPage: "PX4TuningComponentPlaneRate.qml" 
         }
         ListElement { 
-            buttonText: qsTr("Rate Controller")
+            buttonText: qsTr("姿态控制器")
             tuningPage: "PX4TuningComponentPlaneAttitude.qml" 
         }
     }

@@ -38,16 +38,16 @@ Item {
     // Help text which is shown both in the status text area prior to pressing a cal button and in the
     // pre-calibration dialog.
 
-    readonly property string boardRotationText: qsTr("If the orientation is in the direction of flight, select ROTATION_NONE.")
-    readonly property string compassRotationText: qsTr("If the orientation is in the direction of flight, select ROTATION_NONE.")
+    readonly property string boardRotationText: qsTr("如果方向与飞行方向一致，请选择ROTATION_NONE。")
+    readonly property string compassRotationText: qsTr("如果方向与飞行方向一致，请选择ROTATION_NONE。")
 
-    readonly property string compassHelp:   qsTr("For Compass calibration you will need to rotate your vehicle through a number of positions.")
-    readonly property string gyroHelp:      qsTr("For Gyroscope calibration you will need to place your vehicle on a surface and leave it still.")
-    readonly property string accelHelp:     qsTr("For Accelerometer calibration you will need to place your vehicle on all six sides on a perfectly level surface and hold it still in each orientation for a few seconds.")
-    readonly property string levelHelp:     qsTr("To level the horizon you need to place the vehicle in its level flight position and leave still.")
-    readonly property string airspeedHelp:  qsTr("For Airspeed calibration you will need to keep your airspeed sensor out of any wind and then blow across the sensor. Do not touch the sensor or obstruct any holes during the calibration.")
+    readonly property string compassHelp:   qsTr("罗盘校准需要您通过多个位置旋转设备。")
+    readonly property string gyroHelp:      qsTr("陀螺仪校准需要您将设备放在表面并保持静止。")
+    readonly property string accelHelp:     qsTr("加速度计校准需要您将设备放在所有六个侧面的完美水平表面上并保持静止在每个方向上。")
+    readonly property string levelHelp:     qsTr("水平校准需要您将设备放在水平位置并保持静止。")
+    readonly property string airspeedHelp:  qsTr("进行空速校准时，您需要将空速传感器置于避风处，然后吹气。校准过程中请勿触摸传感器或堵塞任何孔洞。")
 
-    readonly property string statusTextAreaDefaultText: qsTr("Start the individual calibration steps by clicking one of the buttons to the left.")
+    readonly property string statusTextAreaDefaultText: qsTr("请点击左侧的按钮开始单个校准步骤。")
 
     // Used to pass what type of calibration is being performed to the preCalibrationDialog
     property string preCalibrationDialogType
@@ -163,7 +163,7 @@ Item {
         onMagCalComplete: {
             setOrientationsButton.visible               = orientationsButtonVisible()
             setOrientationsDialogShowBoardOrientation   = false
-            setOrientationsDialogComponent.createObject(mainWindow, { title: qsTr("Compass Calibration Complete"), showRebootVehicleButton: true }).open()
+            setOrientationsDialogComponent.createObject(mainWindow, { title: qsTr("罗盘校准完成"), showRebootVehicleButton: true }).open()
         }
 
         onWaitingForCancelChanged: {
@@ -176,7 +176,7 @@ Item {
     Component.onCompleted: {
         var usingUDP = controller.usingUDPLink()
         if (usingUDP && !_wifiReliableForCalibration) {
-            mainWindow.showMessageDialog(qsTr("Sensor Calibration"), qsTr("Performing sensor calibration over a WiFi connection is known to be unreliable. You should disconnect and perform calibration using a direct USB connection instead."))
+            mainWindow.showMessageDialog(qsTr("传感器校准"), qsTr("通过WiFi连接执行传感器校准已知不可靠。您应该断开连接并使用直接USB连接进行校准。"))
         }
     }
 
@@ -184,8 +184,8 @@ Item {
         id: waitForCancelDialogComponent
 
         QGCSimpleMessageDialog {
-            title:      qsTr("Calibration Cancel")
-            text:       qsTr("Waiting for Vehicle to response to Cancel. This may take a few seconds.")
+            title:      qsTr("校准取消")
+            text:       qsTr("等待设备响应取消。这可能需要几秒钟。")
             buttons:    0
 
             Connections {
@@ -238,12 +238,12 @@ Item {
                         id:         boardRotationHelp
                         wrapMode:   Text.WordWrap
                         visible:    !_sensorsHaveFixedOrientation && (preCalibrationDialogType == "accel" || preCalibrationDialogType == "compass")
-                        text:       qsTr("Set autopilot orientation before calibrating.")
+                        text:       qsTr("校准前请设置自动驾驶仪方向。")
                     }
 
                     Column {
                         visible:    boardRotationHelp.visible
-                        QGCLabel { text: qsTr("Autopilot Orientation") }
+                        QGCLabel { text: qsTr("自动驾驶仪方向") }
 
                         FactComboBox {
                             sizeToContents: true
@@ -252,13 +252,13 @@ Item {
 
                         QGCLabel {
                             wrapMode:   Text.WordWrap
-                            text:       qsTr("ROTATION_NONE indicates component points in direction of flight.")
+                            text:       qsTr("ROTATION_NONE 表示组件指向飞行方向。")
                         }
                     }
 
                     QGCLabel {
                         wrapMode:   Text.WordWrap
-                        text:       qsTr("Click Ok to start calibration.")
+                        text:       qsTr("点击 OK 开始校准。")
                     }
                 }
             }
@@ -279,18 +279,18 @@ Item {
                 spacing: ScreenTools.defaultFontPixelHeight
 
                 QGCLabel {
-                    text:       qsTr("Reboot the vehicle prior to flight.")
+                    text:       qsTr("校准完成后请重启设备。")
                     visible:    showRebootVehicleButton
                 }
 
                 QGCButton {
-                    text:       qsTr("Reboot Vehicle")
+                    text:       qsTr("重启设备")
                     visible:    showRebootVehicleButton
                     onClicked: { controller.vehicle.rebootVehicle(); close() }
                 }
 
                 QGCLabel {
-                    text:       qsTr("Adjust orientations as needed.\n\nROTATION_NONE indicates component points in direction of flight.")
+                    text:       qsTr("调整方向。\n\nROTATION_NONE 表示组件指向飞行方向。")
                     visible:    _boardOrientationChangeAllowed || (_compassOrientationChangeAllowed && currentExternalMagCount() !== 0)
                 }
 
@@ -298,7 +298,7 @@ Item {
                     visible: _boardOrientationChangeAllowed
 
                     QGCLabel {
-                        text: qsTr("Autopilot Orientation")
+                        text: qsTr("自动驾驶仪方向")
                     }
 
                     FactComboBox {
@@ -318,7 +318,7 @@ Item {
                         property Fact calMagRotFact:    controller.getParameterFact(-1, _calMagRotParamFormat.replace("#", index))
 
                         QGCLabel {
-                            text: qsTr("Mag %1 Orientation").arg(index)
+                            text: qsTr("放大%1方向").arg(index)
                         }
 
                         FactComboBox {
@@ -345,49 +345,49 @@ Item {
             IndicatorButton {
                 id:             compassButton
                 width:          _buttonWidth
-                text:           qsTr("Compass")
+                text:           qsTr("罗盘")
                 indicatorGreen: cal_mag0_id.value !== 0
                 visible:        !_allMagsDisabled && QGroundControl.corePlugin.options.showSensorCalibrationCompass && showSensorCalibrationCompass
 
                 onClicked: {
                     preCalibrationDialogType = "compass"
                     preCalibrationDialogHelp = compassHelp
-                    preCalibrationDialogComponent.createObject(mainWindow, { title: qsTr("Calibrate Compass") }).open()
+                    preCalibrationDialogComponent.createObject(mainWindow, { title: qsTr("校准罗盘") }).open()
                 }
             }
 
             IndicatorButton {
                 id:             gyroButton
                 width:          _buttonWidth
-                text:           qsTr("Gyroscope")
+                text:           qsTr("陀螺仪")
                 indicatorGreen: cal_gyro0_id.value !== 0
                 visible:        QGroundControl.corePlugin.options.showSensorCalibrationGyro && showSensorCalibrationGyro
 
                 onClicked: {
                     preCalibrationDialogType = "gyro"
                     preCalibrationDialogHelp = gyroHelp
-                    preCalibrationDialogComponent.createObject(mainWindow, { title: qsTr("Calibrate Gyro") }).open()
+                    preCalibrationDialogComponent.createObject(mainWindow, { title: qsTr("校准陀螺仪") }).open()
                 }
             }
 
             IndicatorButton {
                 id:             accelButton
                 width:          _buttonWidth
-                text:           qsTr("Accelerometer")
+                text:           qsTr("加速度计")
                 indicatorGreen: cal_acc0_id.value !== 0
                 visible:        QGroundControl.corePlugin.options.showSensorCalibrationAccel && showSensorCalibrationAccel
 
                 onClicked: {
                     preCalibrationDialogType = "accel"
                     preCalibrationDialogHelp = accelHelp
-                    preCalibrationDialogComponent.createObject(mainWindow, { title: qsTr("Calibrate Accelerometer") }).open()
+                    preCalibrationDialogComponent.createObject(mainWindow, { title: qsTr("校准加速度计") }).open()
                 }
             }
 
             IndicatorButton {
                 id:             levelButton
                 width:          _buttonWidth
-                text:           qsTr("Level Horizon")
+                text:           qsTr("水平校准")
                 indicatorGreen: true
                 enabled:        cal_acc0_id.value !== 0 && cal_gyro0_id.value !== 0
                 visible:        QGroundControl.corePlugin.options.showSensorCalibrationLevel && showSensorCalibrationLevel
@@ -395,14 +395,14 @@ Item {
                 onClicked: {
                     preCalibrationDialogType = "level"
                     preCalibrationDialogHelp = levelHelp
-                    preCalibrationDialogComponent.createObject(mainWindow, { title: qsTr("Level Horizon") }).open()
+                    preCalibrationDialogComponent.createObject(mainWindow, { title: qsTr("水平校准") }).open()
                 }
             }
 
             IndicatorButton {
                 id:             airspeedButton
                 width:          _buttonWidth
-                text:           qsTr("Airspeed")
+                text:           qsTr("对气速度")
                 visible:        vehicleComponent.airspeedCalSupported && 
                                     QGroundControl.corePlugin.options.showSensorCalibrationAirspeed &&
                                     showSensorCalibrationAirspeed
@@ -411,14 +411,14 @@ Item {
                 onClicked: {
                     preCalibrationDialogType = "airspeed"
                     preCalibrationDialogHelp = airspeedHelp
-                    preCalibrationDialogComponent.createObject(mainWindow, { title: qsTr("Calibrate Airspeed") }).open()
+                    preCalibrationDialogComponent.createObject(mainWindow, { title: qsTr("校准对气速度") }).open()
                 }
             }
 
             QGCButton {
                 id:         cancelButton
                 width:      _buttonWidth
-                text:       qsTr("Cancel")
+                text:       qsTr("取消")
                 enabled:    false
                 onClicked:  controller.cancelCalibration()
             }
@@ -427,7 +427,7 @@ Item {
             QGCButton {
                 id:         nextButton
                 width:      _buttonWidth
-                text:       qsTr("Next")
+                text:       qsTr("下一步")
                 visible:    showNextButton
                 onClicked:  _root.nextButtonClicked()
             }
@@ -435,12 +435,12 @@ Item {
             QGCButton {
                 id:         setOrientationsButton
                 width:      _buttonWidth
-                text:       qsTr("Orientations")
+                text:       qsTr("设置方向")
                 visible:    orientationsButtonVisible()
 
                 onClicked:  {
                     setOrientationsDialogShowBoardOrientation = true
-                    setOrientationsDialogComponent.createObject(mainWindow, { title: qsTr("Set Orientations"), showRebootVehicleButton: false }).open()
+                    setOrientationsDialogComponent.createObject(mainWindow, { title: qsTr("设置方向"), showRebootVehicleButton: false }).open()
                 }
             }
         } // Column - Buttons
@@ -511,7 +511,7 @@ Item {
                         visible:            controller.orientationCalDownSideVisible
                         calValid:           controller.orientationCalDownSideDone
                         calInProgress:      controller.orientationCalDownSideInProgress
-                        calInProgressText:  controller.orientationCalDownSideRotate ? qsTr("Rotate") : qsTr("Hold Still")
+                        calInProgressText:  controller.orientationCalDownSideRotate ? qsTr("旋转") : qsTr("保持静止")
                         imageSource:        controller.orientationCalDownSideRotate ? "qrc:///qmlimages/VehicleDownRotate.png" : "qrc:///qmlimages/VehicleDown.png"
                     }
                     VehicleRotationCal {
@@ -520,7 +520,7 @@ Item {
                         visible:            controller.orientationCalUpsideDownSideVisible
                         calValid:           controller.orientationCalUpsideDownSideDone
                         calInProgress:      controller.orientationCalUpsideDownSideInProgress
-                        calInProgressText:  controller.orientationCalUpsideDownSideRotate ? qsTr("Rotate") : qsTr("Hold Still")
+                        calInProgressText:  controller.orientationCalUpsideDownSideRotate ? qsTr("旋转") : qsTr("保持静止")
                         imageSource:        controller.orientationCalUpsideDownSideRotate ? "qrc:///qmlimages/VehicleUpsideDownRotate.png" : "qrc:///qmlimages/VehicleUpsideDown.png"
                     }
                     VehicleRotationCal {
@@ -529,7 +529,7 @@ Item {
                         visible:            controller.orientationCalNoseDownSideVisible
                         calValid:           controller.orientationCalNoseDownSideDone
                         calInProgress:      controller.orientationCalNoseDownSideInProgress
-                        calInProgressText:  controller.orientationCalNoseDownSideRotate ? qsTr("Rotate") : qsTr("Hold Still")
+                        calInProgressText:  controller.orientationCalNoseDownSideRotate ? qsTr("旋转") : qsTr("保持静止")
                         imageSource:        controller.orientationCalNoseDownSideRotate ? "qrc:///qmlimages/VehicleNoseDownRotate.png" : "qrc:///qmlimages/VehicleNoseDown.png"
                     }
                     VehicleRotationCal {
@@ -538,7 +538,7 @@ Item {
                         visible:            controller.orientationCalTailDownSideVisible
                         calValid:           controller.orientationCalTailDownSideDone
                         calInProgress:      controller.orientationCalTailDownSideInProgress
-                        calInProgressText:  controller.orientationCalTailDownSideRotate ? qsTr("Rotate") : qsTr("Hold Still")
+                        calInProgressText:  controller.orientationCalTailDownSideRotate ? qsTr("旋转") : qsTr("保持静止")
                         imageSource:        controller.orientationCalTailDownSideRotate ? "qrc:///qmlimages/VehicleTailDownRotate.png" : "qrc:///qmlimages/VehicleTailDown.png"
                     }
                     VehicleRotationCal {
@@ -547,7 +547,7 @@ Item {
                         visible:            controller.orientationCalLeftSideVisible
                         calValid:           controller.orientationCalLeftSideDone
                         calInProgress:      controller.orientationCalLeftSideInProgress
-                        calInProgressText:  controller.orientationCalLeftSideRotate ? qsTr("Rotate") : qsTr("Hold Still")
+                        calInProgressText:  controller.orientationCalLeftSideRotate ? qsTr("旋转") : qsTr("保持静止")
                         imageSource:        controller.orientationCalLeftSideRotate ? "qrc:///qmlimages/VehicleLeftRotate.png" : "qrc:///qmlimages/VehicleLeft.png"
                     }
                     VehicleRotationCal {
@@ -556,14 +556,14 @@ Item {
                         visible:            controller.orientationCalRightSideVisible
                         calValid:           controller.orientationCalRightSideDone
                         calInProgress:      controller.orientationCalRightSideInProgress
-                        calInProgressText:  controller.orientationCalRightSideRotate ? qsTr("Rotate") : qsTr("Hold Still")
+                        calInProgressText:  controller.orientationCalRightSideRotate ? qsTr("旋转") : qsTr("保持静止")
                         imageSource:        controller.orientationCalRightSideRotate ? "qrc:///qmlimages/VehicleRightRotate.png" : "qrc:///qmlimages/VehicleRight.png"
                     }
                 }
             }
 
             QGCButton {
-                text:  qsTr("Factory reset")
+                text:  qsTr("恢复出厂设置")
                 width: _buttonWidth
 
                 anchors {

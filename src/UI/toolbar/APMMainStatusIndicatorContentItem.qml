@@ -25,11 +25,11 @@ ColumnLayout {
     FactPanelController { id: controller }
 
     SettingsGroupLayout {
-        heading:            qsTr("Ground Control Comm Loss Failsafe")
+        heading:            qsTr("通信丢失保护")
         Layout.fillWidth:   true
 
         LabelledFactComboBox {
-            label:      qsTr("Vehicle Action")
+            label:      qsTr("设备操作")
             fact:       controller.getParameterFact(-1, "FS_GCS_ENABLE")
             indexModel: false
         }
@@ -37,14 +37,14 @@ ColumnLayout {
         FactSlider {
             Layout.fillWidth:       true
             Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 20
-            label:                  qsTr("Loss Timeout")
+            label:                  qsTr("超时时间")
             fact:                   controller.getParameterFact(-1, "FS_GCS_TIMEOUT")
             majorTickStepSize:      5
         }
     }
 
     SettingsGroupLayout {
-        heading:            qsTr("Failsafe Options")
+        heading:            qsTr("保护选项")
         Layout.fillWidth:   true
 
         Repeater {

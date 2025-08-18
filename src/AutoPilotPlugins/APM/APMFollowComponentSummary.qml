@@ -26,15 +26,15 @@ Item {
     property bool followParamsAvailable: controller.parameterExists(-1, "FOLL_SYSID")
 
     property var followItems: [
-        { label: qsTr("Follow Enabled"),    fact: getFact("FOLL_ENABLE"),       visible: true},
-        { label: qsTr("Follow System ID"),  fact: getFact("FOLL_SYSID"),        visible: followParamsAvailable },
-        { label: qsTr("Max Distance"),      fact: getFact("FOLL_DIST_MAX"),     visible: followParamsAvailable },
-        { label: qsTr("Offset X"),          fact: getFact("FOLL_OFS_X"),        visible: followParamsAvailable },
-        { label: qsTr("Offset Y"),          fact: getFact("FOLL_OFS_Y"),        visible: followParamsAvailable },
-        { label: qsTr("Offset Z"),          fact: getFact("FOLL_OFS_Z"),        visible: followParamsAvailable },
-        { label: qsTr("Offset Type"),       fact: getFact("FOLL_OFS_TYPE"),     visible: followParamsAvailable },
-        { label: qsTr("Altitude Type"),     fact: getFact("FOLL_ALT_TYPE"),     visible: followParamsAvailable },
-        { label: qsTr("Yaw Behavior"),      fact: getFact("FOLL_YAW_BEHAVE"),   visible: followParamsAvailable }
+        { label: qsTr("跟随已启用"),    fact: getFact("FOLL_ENABLE"),       visible: true},
+        { label: qsTr("跟随系统ID"),  fact: getFact("FOLL_SYSID"),        visible: followParamsAvailable },
+        { label: qsTr("最大距离"),      fact: getFact("FOLL_DIST_MAX"),     visible: followParamsAvailable },
+        { label: qsTr("X偏移"),          fact: getFact("FOLL_OFS_X"),        visible: followParamsAvailable },
+        { label: qsTr("Y偏移"),          fact: getFact("FOLL_OFS_Y"),        visible: followParamsAvailable },
+        { label: qsTr("Z偏移"),          fact: getFact("FOLL_OFS_Z"),        visible: followParamsAvailable },
+        { label: qsTr("偏移类型"),       fact: getFact("FOLL_OFS_TYPE"),     visible: followParamsAvailable },
+        { label: qsTr("高度类型"),     fact: getFact("FOLL_ALT_TYPE"),     visible: followParamsAvailable },
+        { label: qsTr("Yaw 行为"),      fact: getFact("FOLL_YAW_BEHAVE"),   visible: followParamsAvailable }
     ]
 
     Column {

@@ -14,28 +14,28 @@ import QGroundControl.ScreenTools
 
 ListModel {
     ListElement {
-        name: qsTr("General")
+        name: qsTr("一般")
         url: "qrc:/qml/QGroundControl/AppSettings/GeneralSettings.qml"
         iconUrl: "qrc:/res/QGCLogoWhite.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
-        name: qsTr("Fly View")
+        name: qsTr("飞行视图")
         url: "qrc:/qml/QGroundControl/AppSettings/FlyViewSettings.qml"
         iconUrl: "qrc:/qmlimages/PaperPlane.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
-        name: qsTr("Plan View")
+        name: qsTr("计划视图")
         url: "qrc:/qml/QGroundControl/AppSettings/PlanViewSettings.qml"
         iconUrl: "qrc:/qmlimages/Plan.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
-        name: qsTr("Video")
+        name: qsTr("视频")
         url: "qrc:/qml/QGroundControl/AppSettings/VideoSettings.qml"
         iconUrl: "qrc:/InstrumentValueIcons/camera.svg"
         pageVisible: function() { return QGroundControl.settingsManager.videoSettings.visible }
@@ -55,14 +55,14 @@ ListModel {
     // }
 
     ListElement {
-        name: qsTr("Comm Links")
+        name: qsTr("通信链接")
         url: "qrc:/qml/QGroundControl/AppSettings/LinkSettings.qml"
         iconUrl: "qrc:/InstrumentValueIcons/usb.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
-        name: qsTr("Maps")
+        name: qsTr("地图")
         url: "qrc:/qml/QGroundControl/AppSettings/MapSettings.qml"
         iconUrl: "qrc:/InstrumentValueIcons/globe.svg"
         pageVisible: function() { return true }
@@ -102,7 +102,7 @@ ListModel {
     // }
 
     ListElement {
-        name: qsTr("Mock Link")
+        name: qsTr("模拟链接")
         url: "qrc:/qml/QGroundControl/AppSettings/MockLink.qml"
         iconUrl: "qrc:/InstrumentValueIcons/drone.svg"
         pageVisible: function() { return ScreenTools.isDebug }

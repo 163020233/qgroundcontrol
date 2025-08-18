@@ -20,7 +20,7 @@ import QGroundControl.FactControls
 import QGroundControl.Controllers
 
 QGCPopupDialog {
-    title:      qsTr("RC To Param")
+    title:      qsTr("RC 通道到参数")
     buttons:    Dialog.Cancel | Dialog.Ok
 
     property alias tuningFact: controller.tuningFact
@@ -38,13 +38,13 @@ QGCPopupDialog {
             Layout.preferredWidth:  mainGrid.width
             Layout.fillWidth:       true
             wrapMode:               Text.WordWrap
-            text:                   qsTr("Bind an RC Channel to a parameter value. Tuning IDs can be mapped to an RC Channel from Radio Setup page.")
+            text:                   qsTr("将 RC 频道绑定到参数值。可以从“无线电设置”页面将调谐 ID 映射到 RC 频道。")
         }
 
         QGCLabel {
             Layout.preferredWidth:  mainGrid.width
             Layout.fillWidth:       true
-            text:                   qsTr("Waiting on parameter update from Vehicle.")
+            text:                   qsTr("等待设备更新参数。")
             visible:                !controller.ready
         }
 
@@ -55,10 +55,10 @@ QGCPopupDialog {
             columnSpacing:  ScreenTools.defaultDialogControlSpacing
             enabled:        controller.ready
 
-            QGCLabel { text: qsTr("Parameter") }
+            QGCLabel { text: qsTr("参数") }
             QGCLabel { text: tuningFact.name }
 
-            QGCLabel { text: qsTr("Tuning ID") }
+            QGCLabel { text: qsTr("调谐 ID") }
             QGCComboBox {
                 id:                 tuningID
                 Layout.fillWidth:   true
@@ -66,25 +66,25 @@ QGCPopupDialog {
                 model:              [ 1, 2, 3 ]
             }
 
-            QGCLabel { text: qsTr("Scale") }
+            QGCLabel { text: qsTr("缩放") }
             QGCTextField {
                 id:     scale
                 text:   controller.scale.valueString
             }
 
-            QGCLabel { text: qsTr("Center Value") }
+            QGCLabel { text: qsTr("中心值") }
             QGCTextField {
                 id:     centerValue
                 text:   controller.center.valueString
             }
 
-            QGCLabel { text: qsTr("Min Value") }
+            QGCLabel { text: qsTr("最小值") }
             QGCTextField {
                 id:     minValue
                 text:   controller.min.valueString
             }
 
-            QGCLabel { text: qsTr("Max Value") }
+            QGCLabel { text: qsTr("最大值") }
             QGCTextField {
                 id:     maxValue
                 text:   controller.max.valueString
@@ -95,7 +95,7 @@ QGCPopupDialog {
             Layout.preferredWidth:  mainGrid.width
             Layout.fillWidth:       true
             wrapMode:               Text.WordWrap
-            text:                   qsTr("Double check that all values are correct prior to confirming dialog.")
+            text:                   qsTr("请在确认对话框之前检查所有值是否正确。")
         }
     }
 }

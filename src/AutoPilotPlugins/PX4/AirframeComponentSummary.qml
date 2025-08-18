@@ -20,25 +20,24 @@ Item {
     Column {
         anchors.fill:       parent
         VehicleSummaryRow {
-            labelText: qsTr("System ID")
+            labelText: qsTr("飞控ID")
             valueText: sysIdFact ? sysIdFact.valueString : ""
         }
         VehicleSummaryRow {
-            labelText: qsTr("Airframe type")
-            valueText: autoStartSet ? controller.currentAirframeType : qsTr("Setup required")
+            labelText: qsTr("飞控类型")
+            valueText: autoStartSet ? controller.currentAirframeType : qsTr("未设置")
         }
         VehicleSummaryRow {
-            labelText: qsTr("Vehicle")
-            valueText: autoStartSet ? controller.currentVehicleName : qsTr("Setup required")
+            labelText: qsTr("飞控")
+            valueText: autoStartSet ? controller.currentVehicleName : qsTr("未设置")
         }
-
         VehicleSummaryRow {
-            labelText: qsTr("Firmware Version")
-            valueText: globals.activeVehicle.firmwareMajorVersion === -1 ? qsTr("Unknown") : globals.activeVehicle.firmwareMajorVersion + "." + globals.activeVehicle.firmwareMinorVersion + "." + globals.activeVehicle.firmwarePatchVersion + globals.activeVehicle.firmwareVersionTypeString
+            labelText: qsTr("飞控版本")
+            valueText: globals.activeVehicle.firmwareMajorVersion === -1 ? qsTr("未知") : globals.activeVehicle.firmwareMajorVersion + "." + globals.activeVehicle.firmwareMinorVersion + "." + globals.activeVehicle.firmwarePatchVersion + globals.activeVehicle.firmwareVersionTypeString
         }
         VehicleSummaryRow {
             visible: globals.activeVehicle.firmwareCustomMajorVersion !== -1
-            labelText: qsTr("Custom Fw. Ver.")
+            labelText: qsTr("自定义飞控版本")
             valueText: globals.activeVehicle.firmwareCustomMajorVersion + "." + globals.activeVehicle.firmwareCustomMinorVersion + "." + globals.activeVehicle.firmwareCustomPatchVersion
         }
     }

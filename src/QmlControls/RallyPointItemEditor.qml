@@ -48,7 +48,7 @@ Rectangle {
             anchors.leftMargin:     _margin
             anchors.left:           indicator.right
             anchors.verticalCenter: parent.verticalCenter
-            text:                   qsTr("Rally Point")
+            text:                   qsTr("集合点")
             color:                  _outerTextColor
         }
 
@@ -71,7 +71,7 @@ Rectangle {
                     id: hamburgerMenu
 
                     QGCMenuItem {
-                        text:           qsTr("Delete")
+                        text:           qsTr("删除")
                         onTriggered:    controller.removePoint(rallyPoint)
                     }
                 }

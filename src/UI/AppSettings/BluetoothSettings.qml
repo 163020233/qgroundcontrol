@@ -28,20 +28,20 @@ ColumnLayout {
         columnSpacing:  _colSpacing
         rowSpacing:     _rowSpacing
 
-        QGCLabel { text: qsTr("Device") }
+        QGCLabel { text: qsTr("设备") }
         QGCLabel {
             Layout.preferredWidth:  _secondColumnWidth
             text:                   subEditConfig.deviceName
         }
 
-        QGCLabel { text: qsTr("Address") }
+        QGCLabel { text: qsTr("地址") }
         QGCLabel {
             Layout.preferredWidth:  _secondColumnWidth
             text:                   subEditConfig.address
         }
     }
 
-    QGCLabel { text: qsTr("Bluetooth Devices") }
+    QGCLabel { text: qsTr("蓝牙设备") }
 
     Repeater {
         model: subEditConfig.nameList
@@ -64,13 +64,13 @@ ColumnLayout {
         spacing:            _colSpacing
 
         QGCButton {
-            text:       qsTr("Scan")
+            text:       qsTr("扫描")
             enabled:    !subEditConfig.scanning
             onClicked:  subEditConfig.startScan()
         }
 
         QGCButton {
-            text:       qsTr("Stop")
+            text:       qsTr("停止")
             enabled:    subEditConfig.scanning
             onClicked:  subEditConfig.stopScan()
         }

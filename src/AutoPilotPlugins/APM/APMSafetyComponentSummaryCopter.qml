@@ -38,59 +38,59 @@ Item {
         anchors.fill:       parent
 
         VehicleSummaryRow {
-            labelText: qsTr("Arming Checks:")
-            valueText: _armingCheck.value & 1 ? qsTr("Enabled") : qsTr("Some disabled")
+            labelText: qsTr("设备检查")
+            valueText: _armingCheck.value & 1 ? qsTr("已启用") : qsTr("某些已禁用")
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Throttle failsafe:")
+            labelText: qsTr("油门故障保护")
             valueText: _failsafeThrEnable.enumStringValue
         }
 
         VehicleSummaryRow {
-            labelText:  qsTr("Batt1 low failsafe:")
+            labelText:  qsTr("电池1低电压故障保护:")
             valueText:  _batt1MonitorEnabled ? _batt1FSLowAct.enumStringValue : ""
             visible:    _batt1MonitorEnabled
         }
 
         VehicleSummaryRow {
-            labelText:  qsTr("Batt1 critical failsafe:")
+            labelText:  qsTr("电池1关键故障保护:")
             valueText:  _batt1FSCritActAvailable ? _batt1FSCritAct.enumStringValue : ""
             visible:    _batt1FSCritActAvailable
         }
 
         VehicleSummaryRow {
-            labelText:  qsTr("Batt2 low failsafe:")
+            labelText:  qsTr("电池2低电压故障保护:")
             valueText:  _batt2MonitorEnabled ? _batt2FSLowAct.enumStringValue : ""
             visible:    _batt2MonitorEnabled
         }
 
         VehicleSummaryRow {
-            labelText:  qsTr("Batt2 critical failsafe:")
+            labelText:  qsTr("电池2关键故障保护:")
             valueText:  _batt2MonitorEnabled ? _batt2FSCritAct.enumStringValue : ""
             visible:    _batt2MonitorEnabled
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("GeoFence:")
+            labelText: qsTr("地理围栏:")
             valueText: _fenceEnable.value == 0 || _fenceType == 0 ?
-                           qsTr("Disabled") :
+                           qsTr("已禁用") :
                            (_fenceType.value == 1 ?
-                                qsTr("Altitude") :
-                                (_fenceType.value == 2 ? qsTr("Circle") : qsTr("Altitude,Circle")))
+                                qsTr("高度") :
+                                (_fenceType.value == 2 ? qsTr("圆型") : qsTr("高度,圆型")))
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("GeoFence:")
+            labelText: qsTr("地理围栏:")
             valueText: _fenceAction.value == 0 ?
-                           qsTr("Report only") :
-                           (_fenceAction.value == 1 ? qsTr("RTL or Land") : qsTr("Unknown"))
+                           qsTr("仅报告") :
+                           (_fenceAction.value == 1 ? qsTr("RTL或降落") : qsTr("未知"))
             visible:    _fenceEnable.value != 0
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("RTL min alt:")
-            valueText: _rtlAltFact.value == 0 ? qsTr("current") : _rtlAltFact.valueString + " " + _rtlAltFact.units
+            labelText: qsTr("RTL最小高度:")
+            valueText: _rtlAltFact.value == 0 ? qsTr("当前高度") : _rtlAltFact.valueString + " " + _rtlAltFact.units
         }
     }
 }

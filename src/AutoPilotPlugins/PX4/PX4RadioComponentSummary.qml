@@ -44,18 +44,18 @@ Item {
 
         VehicleSummaryRow {
             labelText:  qsTr("Flaps")
-            valueText:  mapFlapsFact ? (mapFlapsFact.value === 0 ? qsTr("Disabled") : mapFlapsFact.valueString) : ""
+            valueText:  mapFlapsFact ? (mapFlapsFact.value === 0 ? qsTr("已禁用") : mapFlapsFact.valueString) : ""
             visible:    !controller.vehicle.multiRotor
         }
 
         VehicleSummaryRow {
             labelText: qsTr("Aux1")
-            valueText: mapAux1Fact ? (mapAux1Fact.value === 0 ? qsTr("Disabled") : mapAux1Fact.valueString) : ""
+            valueText: mapAux1Fact ? (mapAux1Fact.value === 0 ? qsTr("已禁用") : mapAux1Fact.valueString) : ""
         }
 
         VehicleSummaryRow {
             labelText: qsTr("Aux2")
-            valueText: mapAux2Fact ? (mapAux2Fact.value === 0 ? qsTr("Disabled") : mapAux2Fact.valueString) : ""
+            valueText: mapAux2Fact ? (mapAux2Fact.value === 0 ? qsTr("已禁用") : mapAux2Fact.valueString) : ""
         }
     }
 }

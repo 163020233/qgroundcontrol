@@ -59,7 +59,7 @@ Rectangle {
                 Layout.fillWidth:   true
                 wrapMode:           Text.WordWrap
                 horizontalAlignment:    Text.AlignHCenter
-                text:               qsTr("Use the Polygon Tools to create the polygon which outlines the structure.")
+                text:               qsTr("使用多边形工具创建多边形，该多边形表示结构的轮廓。")
                 visible:        !missionItem.structurePolygon.isValid || missionItem.wizardMode
             }
 
@@ -74,8 +74,8 @@ Rectangle {
 
                 Component.onCompleted: currentIndex = 0
 
-                QGCTabButton { text: qsTr("Grid") }
-                QGCTabButton { text: qsTr("Camera") }
+                QGCTabButton { text: qsTr("网格") }
+                QGCTabButton { text: qsTr("相机") }
             }
 
             ColumnLayout {
@@ -85,14 +85,14 @@ Rectangle {
 
                 QGCLabel {
                     Layout.fillWidth:   true
-                    text:           qsTr("Note: Polygon respresents structure surface not vehicle flight path.")
+                    text:           qsTr("注意：多边形表示结构表面，而不是设备飞行路径。")
                     wrapMode:       Text.WordWrap
                     font.pointSize: ScreenTools.smallFontPointSize
                 }
 
                 QGCLabel {
                     Layout.fillWidth:   true
-                    text:           qsTr("WARNING: Photo interval is below minimum interval (%1 secs) supported by camera.").arg(_cameraMinTriggerInterval.toFixed(1))
+                    text:           qsTr("警告：照片间隔低于相机支持的最小间隔（%1 秒）。").arg(_cameraMinTriggerInterval.toFixed(1))
                     wrapMode:       Text.WordWrap
                     color:          qgcPal.warningText
                     visible:        missionItem.cameraShots > 0 && _cameraMinTriggerInterval !== 0 && _cameraMinTriggerInterval > missionItem.timeBetweenShots
@@ -102,15 +102,15 @@ Rectangle {
                     Layout.fillWidth:   true
                     cameraCalc:                     missionItem.cameraCalc
                     vehicleFlightIsFrontal:         false
-                    distanceToSurfaceLabel:         qsTr("Scan Distance")
-                    frontalDistanceLabel:           qsTr("Layer Height")
-                    sideDistanceLabel:              qsTr("Trigger Distance")
+                    distanceToSurfaceLabel:         qsTr("扫描距离")
+                    frontalDistanceLabel:           qsTr("层高")
+                    sideDistanceLabel:              qsTr("触发距离")
                 }
 
                 SectionHeader {
                     id:             scanHeader
                     Layout.fillWidth:   true
-                    text:           qsTr("Scan")
+                    text:           qsTr("扫描")
                 }
 
                 ColumnLayout {
@@ -127,27 +127,27 @@ Rectangle {
                         FactComboBox {
                             fact:               missionItem.startFromTop
                             indexModel:         true
-                            model:              [ qsTr("Start Scan From Bottom"), qsTr("Start Scan From Top") ]
+                            model:              [ qsTr("从底部开始扫描"), qsTr("从顶部开始扫描") ]
                             Layout.columnSpan:  2
                             Layout.fillWidth:   true
                         }
 
                         QGCLabel {
-                            text:       qsTr("Structure Height")
+                            text:       qsTr("结构高度")
                         }
                         FactTextField {
                             fact:               missionItem.structureHeight
                             Layout.fillWidth:   true
                         }
 
-                        QGCLabel { text: qsTr("Scan Bottom Alt") }
+                        QGCLabel { text: qsTr("扫描底部高度") }
                         AltitudeFactTextField {
                             fact:               missionItem.scanBottomAlt
                             altitudeMode:       QGroundControl.AltitudeModeRelative
                             Layout.fillWidth:   true
                         }
 
-                        QGCLabel { text: qsTr("Entrance/Exit Alt") }
+                        QGCLabel { text: qsTr("入口/出口高度") }
                         AltitudeFactTextField {
                             fact:               missionItem.entranceAlt
                             altitudeMode:       QGroundControl.AltitudeModeRelative
@@ -155,7 +155,7 @@ Rectangle {
                         }
 
                         QGCLabel {
-                            text:       qsTr("Gimbal Pitch")
+                            text:       qsTr("相机俯仰角")
                             visible:    missionItem.cameraCalc.isManualCamera
                         }
                         FactTextField {
@@ -171,7 +171,7 @@ Rectangle {
                     }
 
                     QGCButton {
-                        text:       qsTr("Rotate entry point")
+                        text:       qsTr("旋转入口点")
                         onClicked:  missionItem.rotateEntryPoint()
                     }
                 } // Column - Scan
@@ -179,7 +179,7 @@ Rectangle {
                 SectionHeader {
                     id:             statsHeader
                     Layout.fillWidth:   true
-                    text:           qsTr("Statistics")
+                    text:           qsTr("统计信息")
                 }
 
                 Grid {
@@ -187,25 +187,25 @@ Rectangle {
                     columnSpacing:  ScreenTools.defaultFontPixelWidth
                     visible:        statsHeader.checked
 
-                    QGCLabel { text: qsTr("Layers") }
+                    QGCLabel { text: qsTr("层数") }
                     QGCLabel { text: missionItem.layers.valueString }
 
-                    QGCLabel { text: qsTr("Layer Height") }
+                    QGCLabel { text: qsTr("层高度") }
                     QGCLabel { text: missionItem.cameraCalc.adjustedFootprintFrontal.valueString + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString }
 
-                    QGCLabel { text: qsTr("Top Layer Alt") }
+                    QGCLabel { text: qsTr("顶部层高度") }
                     QGCLabel { text: QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(missionItem.topFlightAlt).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString }
 
-                    QGCLabel { text: qsTr("Bottom Layer Alt") }
+                    QGCLabel { text: qsTr("底部层高度") }
                     QGCLabel { text: QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(missionItem.bottomFlightAlt).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString }
 
-                    QGCLabel { text: qsTr("Photo Count") }
+                    QGCLabel { text: qsTr("照片数量") }
                     QGCLabel { text: missionItem.cameraShots }
 
-                    QGCLabel { text: qsTr("Photo Interval") }
-                    QGCLabel { text: missionItem.timeBetweenShots.toFixed(1) + " " + qsTr("secs") }
+                    QGCLabel { text: qsTr("照片间隔") }
+                    QGCLabel { text: missionItem.timeBetweenShots.toFixed(1) + " " + qsTr("秒") }
 
-                    QGCLabel { text: qsTr("Trigger Distance") }
+                    QGCLabel { text: qsTr("触发距离") }
                     QGCLabel { text: missionItem.cameraCalc.adjustedFootprintSide.valueString + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString }
                 }
             } // Grid Column

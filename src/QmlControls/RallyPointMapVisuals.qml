@@ -69,7 +69,7 @@ Item {
 
             sourceItem: MissionItemIndexLabel {
                 id:                 itemIndexLabel
-                label:              qsTr("R", "rally point map item label")
+                label:              qsTr("R", "集合点地图物品标签")
                 checked:            _editingLayer == _layerRallyPoints ? rallyPointObject === myRallyPointController.currentRallyPoint : false
                 highlightSelected:  true
                 onClicked:          myRallyPointController.currentRallyPoint = rallyPointObject

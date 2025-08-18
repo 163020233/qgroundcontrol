@@ -34,7 +34,7 @@ Item {
         anchors.left:    parent.left
         columns: 3
         Text {
-            text:   qsTr("Qt Platform:")
+            text:   qsTr("Qt 平台:")
             color:  qgcPal.text
             font.family:    ScreenTools.normalFontFamily
         }
@@ -44,13 +44,13 @@ Item {
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:   qsTr("Font Point Size 10")
+            text:   qsTr("字体点大小 10")
             color:  qgcPal.text
             font.pointSize: 10
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:   qsTr("Default font width:")
+            text:   qsTr("默认字体宽度:")
             color:  qgcPal.text
             font.family:    ScreenTools.normalFontFamily
         }
@@ -60,13 +60,13 @@ Item {
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:   qsTr("Font Point Size 10.5")
+            text:   qsTr("字体点大小 10.5")
             color:  qgcPal.text
             font.pointSize: 10.5
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:   qsTr("Default font height:")
+            text:   qsTr("默认字体高度:")
             color:  qgcPal.text
             font.family:    ScreenTools.normalFontFamily
         }
@@ -76,13 +76,13 @@ Item {
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:   qsTr("Font Point Size 11")
+            text:   qsTr("字体点大小 11")
             color:  qgcPal.text
             font.pointSize: 11
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:   qsTr("Default font pixel size:")
+            text:   qsTr("默认字体像素大小:")
             color:  qgcPal.text
             font.family:    ScreenTools.normalFontFamily
         }
@@ -92,13 +92,13 @@ Item {
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:   qsTr("Font Point Size 11.5")
+            text:   qsTr("字体点大小 11.5")
             color:  qgcPal.text
             font.pointSize: 11.5
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:   qsTr("Default font point size:")
+            text:   qsTr("默认字体像素大小:")
             color:  qgcPal.text
             font.family:    ScreenTools.normalFontFamily
         }
@@ -108,13 +108,13 @@ Item {
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:   qsTr("Font Point Size 12")
+            text:   qsTr("字体点大小 12")
             color:  qgcPal.text
             font.pointSize: 12
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:   qsTr("QML Screen Desktop:")
+            text:   qsTr("QML 桌面可用宽度:")
             color:  qgcPal.text
             font.family:    ScreenTools.normalFontFamily
         }
@@ -124,13 +124,13 @@ Item {
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:   qsTr("Font Point Size 12.5")
+            text:   qsTr("字体点大小 12.5")
             color:  qgcPal.text
             font.pointSize: 12.5
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:   qsTr("QML Screen Size:")
+            text:   qsTr("QML 桌面可用宽度:")
             color:  qgcPal.text
             font.family:    ScreenTools.normalFontFamily
         }
@@ -140,13 +140,13 @@ Item {
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:   qsTr("Font Point Size 13")
+            text:   qsTr("字体点大小 13")
             color:  qgcPal.text
             font.pointSize: 13
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:   qsTr("QML Pixel Density:")
+            text:   qsTr("QML 像素密度:")
             color:  qgcPal.text
             font.family:    ScreenTools.normalFontFamily
         }
@@ -156,13 +156,13 @@ Item {
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:           qsTr("Font Point Size 13.5")
+            text:           qsTr("字体点大小 13.5")
             color:          qgcPal.text
             font.pointSize: 13.5
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:           qsTr("QML Pixel Ratio:")
+            text:           qsTr("QML 设备像素比:")
             color:          qgcPal.text
             font.family:    ScreenTools.normalFontFamily
         }
@@ -172,13 +172,13 @@ Item {
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:           qsTr("Font Point Size 14")
+            text:           qsTr("字体点大小 14")
             color:          qgcPal.text
             font.pointSize: 14
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:           qsTr("Default Point:")
+            text:           qsTr("默认字体点大小:")
             color:          qgcPal.text
             font.family:    ScreenTools.normalFontFamily
         }
@@ -188,13 +188,13 @@ Item {
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:           qsTr("Font Point Size 14.5")
+            text:           qsTr("字体点大小 14.5")
             color:          qgcPal.text
             font.pointSize: 14.5
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:           qsTr("Computed Font Height:")
+            text:           qsTr("默认字体像素高度:")
             color:          qgcPal.text
             font.family:    ScreenTools.normalFontFamily
         }
@@ -204,13 +204,13 @@ Item {
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:           qsTr("Font Point Size 15")
+            text:           qsTr("字体点大小 15")
             color:          qgcPal.text
             font.pointSize: 15
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:           qsTr("Computed Screen Height:")
+            text:           qsTr("屏幕高度:")
             color:          qgcPal.text
             font.family:    ScreenTools.normalFontFamily
         }
@@ -220,13 +220,13 @@ Item {
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:           qsTr("Font Point Size 15.5")
+            text:           qsTr("字体点大小 15.5")
             color:          qgcPal.text
             font.pointSize: 15.5
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:           qsTr("Computed Screen Width:")
+            text:           qsTr("屏幕宽度:")
             color:          qgcPal.text
             font.family:    ScreenTools.normalFontFamily
         }
@@ -236,13 +236,13 @@ Item {
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:           qsTr("Font Point Size 16")
+            text:           qsTr("字体点大小 16")
             color:          qgcPal.text
             font.pointSize: 16
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:           qsTr("Desktop Available Width:")
+            text:           qsTr("屏幕可用宽度:")
             color:          qgcPal.text
             font.family:    ScreenTools.normalFontFamily
         }
@@ -252,13 +252,13 @@ Item {
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:           qsTr("Font Point Size 16.5")
+            text:           qsTr("字体点大小 16.5")
             color:          qgcPal.text
             font.pointSize: 16.5
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:           qsTr("Desktop Available Height:")
+            text:           qsTr("屏幕可用高度:")
             color:          qgcPal.text
             font.family:    ScreenTools.normalFontFamily
         }
@@ -268,7 +268,7 @@ Item {
             font.family:    ScreenTools.normalFontFamily
         }
         Text {
-            text:           qsTr("Font Point Size 17")
+            text:           qsTr("字体点大小 17")
             color:          qgcPal.text
             font.pointSize: 17
             font.family:    ScreenTools.normalFontFamily

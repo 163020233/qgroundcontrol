@@ -167,7 +167,7 @@ Item {
             opacity:        _root.opacity
 
             sourceItem: MissionItemIndexLabel {
-                label:      qsTr("B", "Breach Return Point item indicator")
+                label:      qsTr("B", "突破返回点物品指示器")
                 checked:    true
             }
         }

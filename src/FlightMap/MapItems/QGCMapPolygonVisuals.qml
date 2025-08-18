@@ -48,8 +48,8 @@ Item {
     property real _zorderSplitHandle:   QGroundControl.zOrderMapItems + 2
     property real _zorderCenterHandle:  QGroundControl.zOrderMapItems + 1   // Lowest such that drag or split takes precedence
 
-    readonly property string _polygonToolsText: qsTr("Polygon Tools")
-    readonly property string _traceText:        qsTr("Click in the map to add vertices. Click 'Done Tracing' when finished.")
+    readonly property string _polygonToolsText: qsTr("多边形工具")
+    readonly property string _traceText:        qsTr("点击地图添加顶点。完成后点击“完成绘制”。")
 
     function addCommonVisuals() {
         if (_objMgrCommonVisuals.empty) {
@@ -221,7 +221,7 @@ Item {
 
     KMLOrSHPFileDialog {
         id:             kmlOrSHPLoadDialog
-        title:          qsTr("Select Polygon File")
+        title:          qsTr("选择多边形文件")
 
         onAcceptedForLoad: (file) => {
             mapPolygon.loadKMLOrSHPFile(file)
@@ -248,7 +248,7 @@ Item {
         QGCMenuItem {
             id:             removeVertexItem
             visible:        !_circleMode
-            text:           qsTr("Remove vertex")
+            text:           qsTr("移除顶点")
             onTriggered: {
                 if (menu._editingVertexIndex >= 0) {
                     mapPolygon.removeVertex(menu._editingVertexIndex)
@@ -261,19 +261,19 @@ Item {
         }
 
         QGCMenuItem {
-            text:           qsTr("Set radius..." )
+            text:           qsTr("设置半径...")
             visible:        _circleMode
             onTriggered:    _editCircleRadius = true
         }
 
         QGCMenuItem {
-            text:           qsTr("Edit position..." )
+            text:           qsTr("编辑位置...")
             visible:        _circleMode
             onTriggered:    editCenterPositionDialog.createObject(mainWindow).open()
         }
 
         QGCMenuItem {
-            text:           qsTr("Edit position..." )
+            text:           qsTr("编辑位置...")
             visible:        !_circleMode && menu._editingVertexIndex >= 0
             onTriggered:    editVertexPositionDialog.createObject(mainWindow).open()
         }
@@ -521,7 +521,7 @@ Item {
         id: editCenterPositionDialog
 
         EditPositionDialog {
-            title:      qsTr("Edit Center Position")
+            title:      qsTr("编辑中心位置")
             coordinate: mapPolygon.center
             onCoordinateChanged: {
                 // Prevent spamming signals on vertex changes by setting centerDrag = true when changing center position.
@@ -537,7 +537,7 @@ Item {
         id: editVertexPositionDialog
 
         EditPositionDialog {
-            title:      qsTr("Edit Vertex Position")
+            title:      qsTr("编辑顶点位置")
             coordinate: mapPolygon.vertexCoordinate(menu._editingVertexIndex)
             onCoordinateChanged: {
                 mapPolygon.adjustVertex(menu._editingVertexIndex, coordinate)
@@ -590,21 +590,21 @@ Item {
 
             QGCButton {
                 _horizontalPadding: 0
-                text:               qsTr("Basic")
+                text:               qsTr("基础")
                 visible:            !mapPolygon.traceMode
                 onClicked:          _resetPolygon()
             }
 
             QGCButton {
                 _horizontalPadding: 0
-                text:               qsTr("Circular")
+                text:               qsTr("圆形")
                 visible:            !mapPolygon.traceMode
                 onClicked:          _resetCircle()
             }
 
             QGCButton {
                 _horizontalPadding: 0
-                text:               mapPolygon.traceMode ? qsTr("Done Tracing") : qsTr("Trace")
+                text:               mapPolygon.traceMode ? qsTr("完成绘制") : qsTr("绘制")
                 onClicked: {
                     if (mapPolygon.traceMode) {
                         if (mapPolygon.count < 3) {
@@ -622,7 +622,7 @@ Item {
 
             QGCButton {
                 _horizontalPadding: 0
-                text:               qsTr("Load KML/SHP...")
+                text:               qsTr("加载KML/SHP...")
                 onClicked:          kmlOrSHPLoadDialog.openForLoad()
                 visible:            !mapPolygon.traceMode
             }

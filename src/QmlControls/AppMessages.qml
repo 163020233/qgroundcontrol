@@ -85,8 +85,8 @@ Item {
             QGCFileDialog {
                 id:             writeDialog
                 folder:         QGroundControl.settingsManager.appSettings.logSavePath
-                nameFilters:    [qsTr("Log files (*.txt)"), qsTr("All Files (*)")]
-                title:          qsTr("Select log save file")
+                nameFilters:    [qsTr("应用日志文件 (*.txt)"), qsTr("所有文件 (*)")]
+                title:          qsTr("选择日志保存文件")
                 onAcceptedForSave: (file) => {
                     debugMessageModel.writeMessages(file);
                     visible = false;
@@ -104,7 +104,7 @@ Item {
                 anchors.bottom:  parent.bottom
                 anchors.left:    parent.left
                 onClicked:       writeDialog.openForSave()
-                text:            qsTr("Save App Log")
+                text:            qsTr("保存应用日志")
             }
 
             QGCLabel {
@@ -112,7 +112,7 @@ Item {
                 anchors.left:           writeButton.right
                 anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
                 anchors.verticalCenter: gstCombo.verticalCenter
-                text:                   qsTr("GStreamer Debug Level")
+                text:                   qsTr("GStreamer 调试级别")
                 visible:                QGroundControl.settingsManager.appSettings.gstDebugLevel.visible
             }
 
@@ -131,7 +131,7 @@ Item {
                 anchors.right:          filterButton.left
                 anchors.rightMargin:    ScreenTools.defaultFontPixelWidth
                 anchors.bottom:         parent.bottom
-                text:                   qsTr("Show Latest")
+                text:                   qsTr("显示最新")
                 checkable:              true
                 checked:                true
 
@@ -146,7 +146,7 @@ Item {
                 id:             filterButton
                 anchors.bottom: parent.bottom
                 anchors.right:  parent.right
-                text:           qsTr("Set Logging")
+                text:           qsTr("设置日志")
                 onClicked:      filtersDialogComponent.createObject(mainWindow).open()
             }
         }
@@ -156,7 +156,7 @@ Item {
         id: filtersDialogComponent
 
         QGCPopupDialog {
-            title:      qsTr("Logging categories")
+            title:      qsTr("日志类别")
             buttons:    Dialog.Close
 
             property int enabledCategoryCount: 0
@@ -194,7 +194,7 @@ Item {
                     Layout.fillWidth: true
 
                     QGCLabel {
-                        text: qsTr("Search:")
+                        text: qsTr("搜索:")
                     }
 
                     QGCTextField {
@@ -205,7 +205,7 @@ Item {
                     }
 
                     QGCButton {
-                        text:       qsTr("Clear")
+                        text:       qsTr("清空")
                         onClicked:  searchText.text = ""
                     }
                 }
@@ -228,7 +228,7 @@ Item {
                     }
 
                     QGCButton {
-                        text:       qsTr("Clear All")
+                        text:       qsTr("清空所有")
                         visible:    enabledCategoryCount > 0
                         onClicked:  clearAllLogging()
                     }

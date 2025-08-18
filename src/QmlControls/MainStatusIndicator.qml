@@ -43,13 +43,13 @@ RowLayout {
         text:               mainStatusText()
         font.pointSize:     ScreenTools.largeFontPointSize
 
-        property string _commLostText:      qsTr("Comms Lost")
-        property string _readyToFlyText:    qsTr("Ready To Fly")
-        property string _notReadyToFlyText: qsTr("Not Ready")
-        property string _disconnectedText:  qsTr("Disconnected - Click to manually connect")
-        property string _armedText:         qsTr("Armed")
-        property string _flyingText:        qsTr("Flying")
-        property string _landingText:       qsTr("Landing")
+        property string _commLostText:      qsTr("通讯中断")
+        property string _readyToFlyText:    qsTr("准备起飞")
+        property string _notReadyToFlyText: qsTr("未准备")
+        property string _disconnectedText:  qsTr("未连接 - 点击手动连接")
+        property string _armedText:         qsTr("已解锁")
+        property string _flyingText:        qsTr("正在飞行")
+        property string _landingText:       qsTr("正在降落")
 
         function mainStatusText() {
             var statusText
@@ -192,7 +192,7 @@ RowLayout {
             QGCButton {
                 // FIXME: forceArm is not possible anymore if _healthAndArmingChecksSupported == true
                 enabled:            _armed || !_healthAndArmingChecksSupported || _activeVehicle.healthAndArmingCheckReport.canArm
-                text:               _armed ?  qsTr("Disarm") : (forceArm ? qsTr("Force Arm") : qsTr("Arm"))
+                text:               _armed ?  qsTr("已上锁") : (forceArm ? qsTr("力臂") : qsTr("手臂"))
                 Layout.alignment:   Qt.AlignLeft
 
                 property bool forceArm: false
@@ -216,7 +216,7 @@ RowLayout {
 
             SettingsGroupLayout {
                 //Layout.fillWidth:   true
-                heading:            qsTr("Vehicle Messages")
+                heading:            qsTr("设备消息")
                 visible:            !vehicleMessageList.noMessages
 
                 VehicleMessageList { 
@@ -226,7 +226,7 @@ RowLayout {
 
             SettingsGroupLayout {
                 //Layout.fillWidth:   true
-                heading:            qsTr("Sensor Status")
+                heading:            qsTr("传感器状态")  
                 visible:            !_healthAndArmingChecksSupported
 
                 GridLayout {
@@ -249,7 +249,7 @@ RowLayout {
 
             SettingsGroupLayout {
                 //Layout.fillWidth:   true
-                heading:            qsTr("Overall Status")
+                heading:            qsTr("总体状况")
                 visible:            _healthAndArmingChecksSupported && _activeVehicle.healthAndArmingCheckReport.problemsForCurrentMode.count > 0
 
                 // List health and arming checks
@@ -324,7 +324,7 @@ RowLayout {
                             id: paramEditorDialogComponent
 
                             ParameterEditorDialog {
-                                title:          qsTr("Edit Parameter")
+                                title:          qsTr("编辑参数")
                                 fact:           description.fact
                                 destroyOnClose: true
                             }
@@ -358,18 +358,18 @@ RowLayout {
                     columnSpacing:      ScreenTools.defaultFontPixelWidth *2
                     Layout.fillWidth:   true
 
-                    QGCLabel { Layout.fillWidth: true; text: qsTr("Vehicle Parameters") }
+                    QGCLabel { Layout.fillWidth: true; text: qsTr("设备参数") }
                     QGCButton {
-                        text: qsTr("Configure")
+                        text: qsTr("配置")
                         onClicked: {                            
                             mainWindow.showVehicleConfigParametersPage()
                             mainWindow.closeIndicatorDrawer()
                         }
                     }
 
-                    QGCLabel { Layout.fillWidth: true; text: qsTr("Vehicle Configuration") }
+                    QGCLabel { Layout.fillWidth: true; text: qsTr("设备配置") }
                     QGCButton {
-                        text: qsTr("Configure")
+                        text: qsTr("配置")
                         onClicked: {                            
                             mainWindow.showVehicleConfig()
                             mainWindow.closeIndicatorDrawer()
@@ -386,7 +386,7 @@ RowLayout {
         ToolIndicatorPage {
             contentComponent: Component {
                 QGCButton {
-                    text: _vtolInFWDFlight ? qsTr("Transition to Multi-Rotor") : qsTr("Transition to Fixed Wing")
+                    text: _vtolInFWDFlight ? qsTr("转换为多旋翼") : qsTr("转换为固定翼")
 
                     onClicked: {
                         if (_vtolInFWDFlight) {

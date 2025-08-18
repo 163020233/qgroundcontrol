@@ -49,7 +49,7 @@ SetupPage {
 
                 QGCLabel {
                     id:         failsafeLabel
-                    text:       qsTr("Failsafe Triggers")
+                    text:       qsTr("故障安全触发器")
                     font.bold:   true
                 }
 
@@ -64,7 +64,7 @@ SetupPage {
                         anchors.margins:    _margins
                         anchors.left:       parent.left
                         anchors.baseline:   gcsEnableCombo.baseline
-                        text:               qsTr("Ground Station failsafe:")
+                        text:               qsTr("地面站故障保险:")
                     }
 
                     FactComboBox {
@@ -83,7 +83,7 @@ SetupPage {
                         anchors.margins:    _margins
                         anchors.left:       parent.left
                         anchors.baseline:   throttleEnableCombo.baseline
-                        text:               qsTr("Throttle failsafe:")
+                        text:               qsTr("油门故障保险:")
                     }
 
                     FactComboBox {
@@ -101,7 +101,7 @@ SetupPage {
                         anchors.margins:    _margins
                         anchors.left:       parent.left
                         anchors.baseline:   throttlePWMField.baseline
-                        text:               qsTr("PWM threshold:")
+                        text:               qsTr("油门PWM阈值:")
                     }
 
                     FactTextField {
@@ -118,7 +118,7 @@ SetupPage {
                         anchors.margins:    _margins
                         anchors.left:       parent.left
                         anchors.baseline:   crashCheckCombo.baseline
-                        text:               qsTr("Failsafe Crash Check:")
+                        text:               qsTr("故障安全崩溃检查:")
                     }
 
                     QGCComboBox {
@@ -127,7 +127,7 @@ SetupPage {
                         anchors.left:       gcsEnableCombo.left
                         anchors.top:        throttlePWMField.bottom
                         width:              throttlePWMField.width
-                        model:              [qsTr("Disabled"), qsTr("Hold"), qsTr("Hold and Disarm")]
+                        model:              [qsTr("禁用"), qsTr("保持"), qsTr("保持并解除")]
                         currentIndex:       _failsafeCrashCheck.value
 
                         onActivated: (index) => { _failsafeCrashCheck.value = index }
@@ -139,7 +139,7 @@ SetupPage {
                 spacing: _margins / 2
 
                 QGCLabel {
-                    text:           qsTr("Arming Checks")
+                    text:           qsTr("设备检查")
                     font.bold:      true
                 }
 
@@ -170,7 +170,7 @@ SetupPage {
                             anchors.right:  parent.right
                             wrapMode:       Text.WordWrap
                             color:          qgcPal.warningText
-                            text:            qsTr("Warning: Turning off arming checks can lead to loss of Vehicle control.")
+                            text:            qsTr("警告: 关闭设备检查可能会导致设备控制丢失。")
                             visible:        _armingCheck.value != 1
                         }
                     }

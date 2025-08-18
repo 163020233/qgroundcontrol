@@ -16,6 +16,6 @@ import QGroundControl.ShapeFileHelper
 QGCFileDialog {
     id:             kmlOrSHPLoadDialog
     folder:         QGroundControl.settingsManager.appSettings.missionSavePath
-    title:          qsTr("Select File")
+    title:          qsTr("选择文件")
     nameFilters:    ShapeFileHelper.fileDialogKMLOrSHPFilters
 }

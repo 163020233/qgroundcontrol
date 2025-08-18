@@ -80,17 +80,17 @@ SetupPage {
             property Fact _hColYaw:         controller.getParameterFact(-1, "H_COLYAW")
 
             QGCGroupBox {
-                title: qsTr("Servo Setup")
+                title: qsTr("舵机设置")
 
                 GridLayout {
                     columns: 6
 
-                    QGCLabel { text: qsTr("Servo") }
-                    QGCLabel { text: qsTr("Function") }
-                    QGCLabel { text: qsTr("Min") }
-                    QGCLabel { text: qsTr("Max") }
-                    QGCLabel { text: qsTr("Trim") }
-                    QGCLabel { text: qsTr("Reversed") }
+                    QGCLabel { text: qsTr("舵机") }
+                    QGCLabel { text: qsTr("功能") }
+                    QGCLabel { text: qsTr("最小值") }
+                    QGCLabel { text: qsTr("最大值") }
+                    QGCLabel { text: qsTr("调整") }
+                    QGCLabel { text: qsTr("反转") }
 
                     QGCLabel { text: qsTr("1") }
                     FactComboBox {
@@ -279,7 +279,7 @@ SetupPage {
             }
 
             QGCGroupBox {
-                title: qsTr("Swashplate Setup")
+                title: qsTr("舵机模板设置")
 
                 GridLayout {
                     columns: 2
@@ -338,7 +338,7 @@ SetupPage {
             }
 
             QGCGroupBox {
-                title: qsTr("Throttle Settings")
+                title: qsTr("油门设置")
 
                 GridLayout {
                     columns: 2
@@ -385,7 +385,7 @@ SetupPage {
             }
 
             QGCGroupBox {
-                title: qsTr("Governor Settings")
+                title: qsTr("调速器设置")
 
                 GridLayout {
                     columns: 2
@@ -411,12 +411,12 @@ SetupPage {
             }
 
             QGCGroupBox {
-                title: qsTr("Miscellaneous Settings")
+                title: qsTr("其他设置")
 
                 GridLayout {
                     columns: 2
 
-                    QGCLabel { text: qsTr("* Stabilize Collective Curve *") }
+                    QGCLabel { text: qsTr("* Collective 曲线 *") }
                     QGCLabel { text: qsTr("") }
 
                     QGCLabel { text: _imStbCol1.shortDescription }
@@ -431,7 +431,7 @@ SetupPage {
                     QGCLabel { text: _imStbCol4.shortDescription }
                     FactTextField { fact: _imStbCol4 }
 
-                    QGCLabel { text: qsTr("* Tail & Gyros *") }
+                    QGCLabel { text: qsTr("* 尾翼和陀螺仪 *") }
                     QGCLabel { text: qsTr("") }
 
                     QGCLabel { text: _hTailType.shortDescription }

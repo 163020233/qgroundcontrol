@@ -59,7 +59,7 @@ Item {
 
     property string _distanceText:                  isNaN(_distance) ?                  "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_distance).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
     property string _altDifferenceText:             isNaN(_altDifference) ?             "-.-" : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_altDifference).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
-    property string _gradientText:                  isNaN(_gradient) ?                  "-.-" : _gradient.toFixed(0) + qsTr(" deg")
+    property string _gradientText:                  isNaN(_gradient) ?                  "-.-" : _gradient.toFixed(0) + qsTr(" 度")
     property string _azimuthText:                   isNaN(_azimuth) ?                   "-.-" : Math.round(_azimuth) % 360
     property string _headingText:                   isNaN(_azimuth) ?                   "-.-" : Math.round(_heading) % 360
     property string _missionPlannedDistanceText:    isNaN(_missionPlannedDistance) ?    "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionPlannedDistance).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
@@ -99,7 +99,7 @@ Item {
 
         QGCButton {
             id:          uploadButton
-            text:        _controllerDirty ? qsTr("Upload Required") : qsTr("Upload")
+            text:        _controllerDirty ? qsTr("必需上传") : qsTr("上传")
             enabled:     _utmspEnabled ? !_controllerSyncInProgress && UTMSPStateStorage.enableMissionUploadButton : !_controllerSyncInProgress
             visible:     !_controllerOffline && !_controllerSyncInProgress
             primary:     _controllerDirty
@@ -129,12 +129,12 @@ Item {
             columnSpacing:          _labelToValueSpacing
 
             QGCLabel {
-                text:               qsTr("Selected Waypoint")
+                text:               qsTr("当前航点")
                 Layout.columnSpan:  8
                 font.pointSize:     ScreenTools.smallFontPointSize
             }
 
-            QGCLabel { text: qsTr("Alt diff:"); font.pointSize: _dataFontSize; }
+            QGCLabel { text: qsTr("高度差:"); font.pointSize: _dataFontSize; }
             QGCLabel {
                 text:                   _altDifferenceText
                 font.pointSize:         _dataFontSize
@@ -143,7 +143,7 @@ Item {
 
             Item { width: 1; height: 1 }
 
-            QGCLabel { text: qsTr("Azimuth:"); font.pointSize: _dataFontSize; }
+            QGCLabel { text: qsTr("方位:"); font.pointSize: _dataFontSize; }
             QGCLabel {
                 text:                   _azimuthText
                 font.pointSize:         _dataFontSize
@@ -152,14 +152,14 @@ Item {
 
             Item { width: 1; height: 1 }
 
-            QGCLabel { text: qsTr("Dist prev WP:"); font.pointSize: _dataFontSize; }
+            QGCLabel { text: qsTr("距离前一个航点:"); font.pointSize: _dataFontSize; }
             QGCLabel {
                 text:                   _distanceText
                 font.pointSize:         _dataFontSize
                 Layout.minimumWidth:    _largeValueWidth
             }
 
-            QGCLabel { text: qsTr("Gradient:"); font.pointSize: _dataFontSize; }
+            QGCLabel { text: qsTr("坡度:"); font.pointSize: _dataFontSize; }
             QGCLabel {
                 text:                   _gradientText
                 font.pointSize:         _dataFontSize
@@ -168,7 +168,7 @@ Item {
 
             Item { width: 1; height: 1 }
 
-            QGCLabel { text: qsTr("Heading:"); font.pointSize: _dataFontSize; }
+            QGCLabel { text: qsTr("航向:"); font.pointSize: _dataFontSize; }
             QGCLabel {
                 text:                   _headingText
                 font.pointSize:         _dataFontSize
@@ -182,12 +182,12 @@ Item {
             columnSpacing:          _labelToValueSpacing
 
             QGCLabel {
-                text:               qsTr("Total Mission")
+                text:               qsTr("总距离")
                 Layout.columnSpan:  5
                 font.pointSize:     ScreenTools.smallFontPointSize
             }
 
-            QGCLabel { text: qsTr("Distance:"); font.pointSize: _dataFontSize; }
+            QGCLabel { text: qsTr("距离:"); font.pointSize: _dataFontSize; }
             QGCLabel {
                 text:                   _missionPlannedDistanceText
                 font.pointSize:         _dataFontSize
@@ -196,14 +196,14 @@ Item {
 
             Item { width: 1; height: 1 }
 
-            QGCLabel { text: qsTr("Max telem dist:"); font.pointSize: _dataFontSize; }
+            QGCLabel { text: qsTr("最大遥测距离:"); font.pointSize: _dataFontSize; }
             QGCLabel {
                 text:                   _missionMaxTelemetryText
                 font.pointSize:         _dataFontSize
                 Layout.minimumWidth:    _largeValueWidth
             }
 
-            QGCLabel { text: qsTr("Time:"); font.pointSize: _dataFontSize; }
+            QGCLabel { text: qsTr("时间:"); font.pointSize: _dataFontSize; }
             QGCLabel {
                 text:                   getMissionTime()
                 font.pointSize:         _dataFontSize
@@ -218,12 +218,12 @@ Item {
             visible:                _batteryInfoAvailable
 
             QGCLabel {
-                text:               qsTr("Battery")
+                text:               qsTr("电池")
                 Layout.columnSpan:  3
                 font.pointSize:     ScreenTools.smallFontPointSize
             }
 
-            QGCLabel { text: qsTr("Batteries required:"); font.pointSize: _dataFontSize; }
+            QGCLabel { text: qsTr("电池要求:"); font.pointSize: _dataFontSize; }
             QGCLabel {
                 text:                   _batteriesRequiredText
                 font.pointSize:         _dataFontSize

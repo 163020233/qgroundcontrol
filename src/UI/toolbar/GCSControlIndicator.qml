@@ -107,12 +107,12 @@ Item {
                 // Action label
                 QGCLabel {
                     font.pointSize:     ScreenTools.defaultFontPointSize * 1.1
-                    text:               qsTr("GCS ") + requestSysIdRequestingControl + qsTr(" is requesting control")
+                    text:               qsTr("GCS ") + requestSysIdRequestingControl + qsTr(" 正在请求控制")
                     font.bold:          true
                     Layout.columnSpan:  2
                 }
                 QGCButton {
-                    text:                   qsTr("Allow <br> takeover")
+                    text:                   qsTr("允许 <br> 接管")
                     Layout.rowSpan:         2
                     Layout.leftMargin:      margins * 2
                     Layout.alignment:       Qt.AlignBottom
@@ -129,11 +129,11 @@ Item {
                 // Action label
                 QGCLabel {
                     font.pointSize:         ScreenTools.defaultFontPointSize * 1.1
-                    text:                   qsTr("Ignoring automatically in ") + requestProgressTracker.progressLabel + qsTr(" seconds")
+                    text:                   qsTr("忽略自动在 ") + requestProgressTracker.progressLabel + qsTr(" 秒后")
                 }
                 QGCButton {
                     id:                     ignoreButton
-                    text:                   qsTr("Ignore")
+                    text:                   qsTr("忽略")
                     onClicked:              mainWindow.closeIndicatorDrawer()
                     Layout.alignment:       Qt.AlignHCenter
                 }
@@ -184,13 +184,13 @@ Item {
                 // Action label
                 QGCLabel {
                     font.pointSize:         ScreenTools.defaultFontPointSize * 1.1
-                    text:                   qsTr("Reverting back to takeover not allowed if GCS ") + requestSysIdRequestingControl + 
-                                            qsTr(" doesn't take control in ") + revertTakeoverProgressTracker.progressLabel + 
-                                            qsTr(" seconds ...")
+                    text:                   qsTr("如果 GCS ") + requestSysIdRequestingControl + 
+                                            qsTr(" 不接管控制，将在 ") + revertTakeoverProgressTracker.progressLabel + 
+                                            qsTr(" 秒后自动恢复接管不允许")
                 }
                 QGCButton {
                     id:                     ignoreButton
-                    text:                   qsTr("Ignore")
+                    text:                   qsTr("忽略")
                     onClicked:              mainWindow.closeIndicatorDrawer()
                     Layout.alignment:       Qt.AlignHCenter
                 }
@@ -235,11 +235,11 @@ Item {
                 columns:            2
 
                 QGCLabel {
-                    text:                   qsTr("System in control: ")
+                    text:                   qsTr("当前控制系统: ")
                     font.bold:              true
                 }
                 QGCLabel {
-                    text:                   isThisGCSinControl ? (qsTr("This GCS") + " (" + sysidInControl + ")" ) : sysidInControl
+                    text:                   isThisGCSinControl ? (qsTr("当前GCS") + " (" + sysidInControl + ")" ) : sysidInControl
                     font.bold:              isThisGCSinControl
                     color:                  isThisGCSinControl ? qgcPal.colorGreen : qgcPal.text
                     Layout.alignment:       Qt.AlignRight
@@ -247,7 +247,7 @@ Item {
                     horizontalAlignment:    Text.AlignRight
                 }
                 QGCLabel {
-                    text:                   gcsControlStatusFlags_TakeoverAllowed ? qsTr("Takeover allowed") : qsTr("Takeover NOT allowed")
+                    text:                   gcsControlStatusFlags_TakeoverAllowed ? qsTr("接管已允许") : qsTr("接管未允许")
                     Layout.columnSpan:      2         
                     Layout.alignment:       Qt.AlignRight
                     Layout.fillWidth:       true
@@ -263,28 +263,28 @@ Item {
                     height:                 outdoorPalette ? 1 : 2
                 }
                 QGCLabel {
-                    text:                   qsTr("Send Control Request:")
+                    text:                   qsTr("发送控制请求:")
                     Layout.columnSpan:      2
                     visible:                !isThisGCSinControl
                 }
                 QGCLabel {
-                    text:                   qsTr("Change takeover condition:")
+                    text:                   qsTr("更改接管条件:")
                     Layout.columnSpan:      2
                     visible:                isThisGCSinControl
                 }
                 QGCLabel {
                     id:                     requestSentTimeoutLabel
-                    text:                   qsTr("Request sent: ") + sendRequestProgressTracker.progressLabel
+                    text:                   qsTr("发送请求: ") + sendRequestProgressTracker.progressLabel
                     Layout.columnSpan:      2
                     visible:                sendRequestProgressTracker.running
                 }
                 FactCheckBox {
-                    text:                   qsTr("Allow takeover")
+                    text:                   qsTr("允许接管")
                     fact:                   requestControlAllowTakeoverFact
                     enabled:                gcsControlStatusFlags_TakeoverAllowed || isThisGCSinControl
                 }
                 QGCButton {
-                    text:                   gcsControlStatusFlags_TakeoverAllowed ? qsTr("Adquire Control") : qsTr("Send Request")
+                    text:                   gcsControlStatusFlags_TakeoverAllowed ? qsTr("获取控制权") : qsTr("发送请求")
                     onClicked: {
                         var timeout = gcsControlStatusFlags_TakeoverAllowed ? 0 : QGroundControl.settingsManager.flyViewSettings.requestControlTimeout.rawValue
                         control.activeVehicle.requestOperatorControl(requestControlAllowTakeoverFact.rawValue, timeout)
@@ -298,7 +298,7 @@ Item {
                     enabled:                !sendRequestProgressTracker.running
                 }
                 QGCLabel {
-                    text:                   qsTr("Request Timeout (sec):")
+                    text:                   qsTr("请求超时 (秒):")
                     visible:                !isThisGCSinControl && !gcsControlStatusFlags_TakeoverAllowed
                 }
                 FactTextField {
@@ -308,7 +308,7 @@ Item {
                     Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 7
                 }
                 QGCButton {
-                    text:                   qsTr("Change")
+                    text:                   qsTr("更改")
                     onClicked:              control.activeVehicle.requestOperatorControl(requestControlAllowTakeoverFact.rawValue)
                     visible:                isThisGCSinControl
                     Layout.alignment:       Qt.AlignRight
@@ -325,7 +325,7 @@ Item {
                 LabelledFactTextField {
                     Layout.fillWidth:       true
                     Layout.columnSpan:      2
-                    label:                  qsTr("This GCS Mavlink System ID: ")
+                    label:                  qsTr("当前GCS Mavlink系统ID: ")
                     fact:                   QGroundControl.settingsManager.mavlinkSettings.gcsMavlinkSystemID
                 }
             }

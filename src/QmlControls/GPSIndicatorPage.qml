@@ -24,8 +24,8 @@ ToolIndicatorPage {
     showExpand: true
 
     property var    activeVehicle:      QGroundControl.multiVehicleManager.activeVehicle
-    property string na:                 qsTr("N/A", "No data to display")
-    property string valueNA:            qsTr("--.--", "No data to display")
+    property string na:                 qsTr("N/A", "没有可显示的数据")
+    property string valueNA:            qsTr("--.--", "没有可显示的数据")
     property var    rtkSettings:        QGroundControl.settingsManager.rtkSettings
     property bool   useFixedPosition:   rtkSettings.useFixedBasePosition.rawValue
 
@@ -34,16 +34,16 @@ ToolIndicatorPage {
             spacing: ScreenTools.defaultFontPixelHeight / 2
 
             SettingsGroupLayout {
-                heading: qsTr("Vehicle GPS Status")
+                heading: qsTr("GPS状态")
                 visible: activeVehicle
 
                 LabelledLabel {
-                    label:      qsTr("Satellites")
+                    label:      qsTr("卫星数")
                     labelText:  activeVehicle ? activeVehicle.gps.count.valueString : na
                 }
 
                 LabelledLabel {
-                    label:      qsTr("GPS Lock")
+                    label:      qsTr("GPS锁")
                     labelText:  activeVehicle ? activeVehicle.gps.lock.enumStringValue : na
                 }
 
@@ -58,31 +58,31 @@ ToolIndicatorPage {
                 }
 
                 LabelledLabel {
-                    label:      qsTr("Course Over Ground")
+                    label:      qsTr("地面航向")
                     labelText:  activeVehicle ? activeVehicle.gps.courseOverGround.valueString : valueNA
                 }
             }
 
             SettingsGroupLayout {
-                heading:    qsTr("RTK GPS Status")
+                heading:    qsTr("RTK GPS状态")
                 visible:    QGroundControl.gpsRtk.connected.value
 
                 QGCLabel {
-                    text: (QGroundControl.gpsRtk.active.value) ? qsTr("Survey-in Active") : qsTr("RTK Streaming")
+                    text: (QGroundControl.gpsRtk.active.value) ? qsTr("调查活动") : qsTr("RTK 流媒体")
                 }
 
                 LabelledLabel {
-                    label:      qsTr("Satellites")
+                    label:      qsTr("卫星")
                     labelText:  QGroundControl.gpsRtk.numSatellites.value
                 }
 
                 LabelledLabel {
-                    label:      qsTr("Duration")
+                    label:      qsTr("持续时间")
                     labelText:  QGroundControl.gpsRtk.currentDuration.value + ' s'
                 }
 
                 LabelledLabel {
-                    label:      QGroundControl.gpsRtk.valid.value ? qsTr("Accuracy") : qsTr("Current Accuracy")
+                    label:      QGroundControl.gpsRtk.valid.value ? qsTr("精度") : qsTr("当前精度")
                     labelText:  QGroundControl.gpsRtk.currentAccuracy.valueString + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
                     visible:    QGroundControl.gpsRtk.currentAccuracy.value > 0
                 }
@@ -92,13 +92,13 @@ ToolIndicatorPage {
 
     expandedComponent: Component {
         SettingsGroupLayout {
-            heading:        qsTr("RTK GPS Settings")
+            heading:        qsTr("RTK GPS 设置")
 
             property real sliderWidth: ScreenTools.defaultFontPixelWidth * 40
 
             FactCheckBoxSlider {
                 Layout.fillWidth:   true
-                text:               qsTr("AutoConnect")
+                text:               qsTr("自动连接")
                 fact:               QGroundControl.settingsManager.autoConnectSettings.autoConnectRTKGPS
                 visible:            fact.visible
             }
@@ -107,13 +107,13 @@ ToolIndicatorPage {
                 visible: rtkSettings.useFixedBasePosition.visible
 
                 QGCRadioButton {
-                    text:       qsTr("Survey-In")
+                    text:       qsTr("调查")
                     checked:    !useFixedPosition
                     onClicked:  rtkSettings.useFixedBasePosition.rawValue = false
                 }
 
                 QGCRadioButton {
-                    text: qsTr("Specify position")
+                    text: qsTr("指定位置")
                     checked:    useFixedPosition
                     onClicked:  rtkSettings.useFixedBasePosition.rawValue = true
                 }
@@ -122,7 +122,7 @@ ToolIndicatorPage {
             FactSlider {
                 Layout.fillWidth:       true
                 Layout.preferredWidth:  sliderWidth
-                label:                  qsTr("Accuracy (u-blox only)")
+                label:                  qsTr("精度 (仅u-blox)")
                 fact:                   QGroundControl.settingsManager.rtkSettings.surveyInAccuracyLimit
                 majorTickStepSize:      0.1
                 visible:                !useFixedPosition && rtkSettings.surveyInAccuracyLimit.visible
@@ -131,7 +131,7 @@ ToolIndicatorPage {
             FactSlider {
                 Layout.fillWidth:       true
                 Layout.preferredWidth:  sliderWidth
-                label:                  qsTr("Min Duration")
+                label:                  qsTr("最短持续时间")
                 fact:                   rtkSettings.surveyInMinObservationDuration
                 majorTickStepSize:      10
                 visible:                !useFixedPosition && rtkSettings.surveyInMinObservationDuration.visible
@@ -162,8 +162,8 @@ ToolIndicatorPage {
             }
 
             LabelledButton {
-                label:              qsTr("Current Base Position")
-                buttonText:         enabled ? qsTr("Save") : qsTr("Not Yet Valid")
+                label:              qsTr("当前位置")
+                buttonText:         enabled ? qsTr("保存") : qsTr("未验证")
                 visible:            useFixedPosition
                 enabled:            QGroundControl.gpsRtk.valid.value
 

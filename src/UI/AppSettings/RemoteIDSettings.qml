@@ -161,7 +161,7 @@ SettingsPage {
 
                         QGCLabel {
                             anchors.fill:           parent
-                            text:                   qsTr("ARM STATUS")
+                            text:                   qsTr("ARM 状态")
                             wrapMode:               Text.WordWrap
                             horizontalAlignment:    Text.AlignHCenter
                             verticalAlignment:      Text.AlignVCenter
@@ -214,7 +214,7 @@ SettingsPage {
 
                         QGCLabel {
                             anchors.fill:           parent
-                            text:                   qsTr("BASIC ID")
+                            text:                   qsTr("基础 ID")
                             wrapMode:               Text.WordWrap
                             horizontalAlignment:    Text.AlignHCenter
                             verticalAlignment:      Text.AlignVCenter
@@ -232,7 +232,7 @@ SettingsPage {
 
                         QGCLabel {
                             anchors.fill:           parent
-                            text:                   qsTr("OPERATOR ID")
+                            text:                   qsTr("操作员 ID")
                             wrapMode:               Text.WordWrap
                             horizontalAlignment:    Text.AlignHCenter
                             verticalAlignment:      Text.AlignVCenter
@@ -278,16 +278,16 @@ SettingsPage {
                 visible:            armStatusLabel.labelText !== ""
                 LabelledLabel {
                     id :                armStatusLabel
-                    label:              qsTr("Arm Status Error")
-                    labelText:          _remoteIDManager?_remoteIDManager.armStatusError:"Vehicle Not Connected"
+                    label:              qsTr("ARM 状态错误")
+                    labelText:          _remoteIDManager?_remoteIDManager.armStatusError:"未连接设备"
                     visible:            labelText !== ""
                     Layout.fillWidth:   true
                 }
             }
 
             SettingsGroupLayout {
-                heading:                qsTr("Basic ID")
-                headingDescription:     qsTr("If Basic ID is already set on the RID device, this will be registered as Basic ID 2")
+                heading:                qsTr("基础 ID")
+                headingDescription:     qsTr("如果 RID 设备上已设置基本 ID，则将注册为基本 ID 2")
                 Layout.fillWidth:       true
                 Layout.preferredWidth:  textLabelWidth
                 outerBorderColor:       _activeRID ? (_remoteIDManager.basicIDGood ? defaultBorderColor : qgcPal.colorRed) : defaultBorderColor
@@ -295,7 +295,7 @@ SettingsPage {
 
                 FactCheckBoxSlider {
                     id:                 sendBasicIDSlider
-                    text:               qsTr("Broadcast")
+                    text:               qsTr("广播")
                     fact:               _fact
                     visible:            _fact.visible
                     Layout.fillWidth:   true
@@ -340,11 +340,11 @@ SettingsPage {
             }
 
             SettingsGroupLayout {
-                heading:            qsTr("Operator ID")
+                heading:            qsTr("操作员 ID")
                 Layout.fillWidth:   true
 
                 FactCheckBoxSlider {
-                    text:               qsTr("Broadcast%1").arg(isEURegion ? " (EU Required)" : "")
+                    text:               qsTr("广播%1").arg(isEURegion ? " (EU Required)" : "")
                     fact:               sendOperatorIdFact
                     visible:            sendOperatorIdFact.visible
                     enabled:            isFAARegion
@@ -385,7 +385,7 @@ SettingsPage {
 
                         onOperatorIDInvalidChanged: {
                             if (operatorIDInvalid) {
-                                operatorIDTextField.showValidationError(qsTr("Invalid Operator ID"), operatorIDFact.valueString, false /* preventViewSwitch */)
+                                operatorIDTextField.showValidationError(qsTr("操作员 ID 无效"), operatorIDFact.valueString, false /* preventViewSwitch */)
                             } else {
                                 operatorIDTextField.clearValidationError(false /* preventViewSwitch */)
                             }
@@ -412,14 +412,14 @@ SettingsPage {
             }
 
             SettingsGroupLayout {
-                heading:                qsTr("Self ID")
-                headingDescription:     qsTr("If an emergency is declared, Emergency Text will be broadcast even if Broadcast setting is not enabled.")
+                heading:                qsTr("ID")
+                headingDescription:     qsTr("如果声明了紧急情况，即使未启用广播设置，也会广播紧急文本。")
                 Layout.fillWidth:       true
                 Layout.preferredWidth:  textLabelWidth
 
                 FactCheckBoxSlider {
                     id:                 sendSelfIDSlider
-                    text:               qsTr("Broadcast")
+                    text:               qsTr("广播")
                     fact:               _fact
                     visible:            _fact.visible
                     Layout.fillWidth:   true
@@ -429,7 +429,7 @@ SettingsPage {
 
                 LabelledFactComboBox {
                     id:                 selfIDTypeCombo
-                    label:              qsTr("Broadcast Message")
+                    label:              qsTr("广播消息")
                     fact:               _fact
                     indexModel:         false
                     visible:            _fact.visible
@@ -480,7 +480,7 @@ SettingsPage {
             spacing:            ScreenTools.defaultFontPixelHeight / 2
             Layout.alignment:   Qt.AlignTop
             SettingsGroupLayout {
-                heading:            qsTr("GroundStation Location")
+                heading:            qsTr("地面站位置")
                 Layout.fillWidth:   true
                 outerBorderColor : _activeRID ? (_remoteIDManager.gcsGPSGood ? defaultBorderColor : qgcPal.colorRed) : defaultBorderColor
                 LabelledFactComboBox {
@@ -536,7 +536,7 @@ SettingsPage {
                     Layout.alignment:           Qt.AlignHCenter
 
                     QGCLabel {
-                        text: qsTr("NMEA External GPS Device")
+                        text: qsTr("NMEA 外部 GPS 设备")
                     }
                     QGCComboBox {
                         id:                     nmeaPortCombo
@@ -567,7 +567,7 @@ SettingsPage {
 
                     QGCLabel {
                         visible:          nmeaPortCombo.currentText !== gpsUdpPort && nmeaPortCombo.currentText !== gpsDisabled
-                        text:             qsTr("NMEA GPS Baudrate")
+                        text:             qsTr("NMEA GPS 波特率")
                     }
                     QGCComboBox {
                         visible:                nmeaPortCombo.currentText !== gpsUdpPort && nmeaPortCombo.currentText !== gpsDisabled
@@ -587,7 +587,7 @@ SettingsPage {
                     }
 
                     QGCLabel {
-                        text:       qsTr("NMEA stream UDP port")
+                        text:       qsTr("NMEA 流 UDP 端口")
                         visible:    nmeaPortCombo.currentText === gpsUdpPort
                     }
                     FactTextField {
@@ -600,13 +600,13 @@ SettingsPage {
 
 
             SettingsGroupLayout {
-                heading:            qsTr("EU Vehicle Info")
+                heading:            qsTr("EU 设备信息")
                 visible:            isEURegion
                 Layout.fillWidth:   true
 
                 QGCCheckBoxSlider {
                     id:                 euProvideInfoSlider
-                    text:               qsTr("Provide Information")
+                    text:               qsTr("提供信息")
                     checked:            _fact.rawValue === RemoteIDSettings.ClassificationType.EU
                     visible:            _fact.visible
                     Layout.fillWidth:   true

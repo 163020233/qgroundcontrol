@@ -66,7 +66,7 @@ Item {
         anchors.fill:           parent
         horizontalAlignment:    Text.AlignHCenter
         verticalAlignment:      Text.AlignVCenter
-        text:                   qsTr("Not Mapped")
+        text:                   qsTr("未映射")
         visible:                !mapped
     }
 

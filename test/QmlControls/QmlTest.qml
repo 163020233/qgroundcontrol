@@ -298,7 +298,7 @@ Rectangle {
                             width: editRoot.cellSize.width; height: editRoot.cellSize.height
                             color: "black"
                             horizontalAlignment: Text.AlignHCenter
-                            text: qsTr("Disabled")
+                            text: qsTr("已禁用")
                         }
                         Text {
                             width: editRoot.cellSize.width; height: editRoot.cellSize.height
@@ -398,7 +398,7 @@ Rectangle {
                             height: ctlPrevColumn._height
                             color: "black"
                             horizontalAlignment: Text.AlignHCenter
-                            text: qsTr("Disabled")
+                            text: qsTr("已禁用")
                         }
 
                         // QGCLabel

@@ -47,18 +47,18 @@ SettingsPage {
 
     function mavlinkActionList() {
         var fileModel = fileController.getFiles(_settingsManager.appSettings.mavlinkActionsSavePath, "*.json")
-        fileModel.unshift(qsTr("<None>"))
+        fileModel.unshift(qsTr("无"))
         return fileModel
     }
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
-        heading:            qsTr("General")
+        heading:            qsTr("一般")
 
         FactCheckBoxSlider {
             id:                 useCheckList
             Layout.fillWidth:   true
-            text:               qsTr("Use Preflight Checklist")
+            text:               qsTr("使用预检查列表")
             fact:               _useChecklist
             visible:            _useChecklist.visible && QGroundControl.corePlugin.options.preFlightChecklistUrl.toString().length
             property Fact _useChecklist:      _settingsManager.appSettings.useChecklist
@@ -66,7 +66,7 @@ SettingsPage {
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Enforce Preflight Checklist")
+            text:               qsTr("强制预检查列表")
             fact:               _enforceChecklist
             enabled:            _settingsManager.appSettings.useChecklist.value
             visible:            useCheckList.visible && _enforceChecklist.visible
@@ -75,14 +75,14 @@ SettingsPage {
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Enable Multi-Vehicle Panel")
+            text:               qsTr("启用多设备面板")
             fact:               _enableMultiVehiclePanel
             visible:            _enableMultiVehiclePanel.visible
         }
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Keep Map Centered On Vehicle")
+            text:               qsTr("保持地图中心在设备上")
             fact:               _keepMapCenteredOnVehicle
             visible:            _keepMapCenteredOnVehicle.visible
             property Fact _keepMapCenteredOnVehicle: _flyViewSettings.keepMapCenteredOnVehicle
@@ -90,7 +90,7 @@ SettingsPage {
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Show Telemetry Log Replay Status Bar")
+            text:               qsTr("显示遥测日志重放状态条")
             fact:               _showLogReplayStatusBar
             visible:            _showLogReplayStatusBar.visible
             property Fact _showLogReplayStatusBar: _flyViewSettings.showLogReplayStatusBar
@@ -98,7 +98,7 @@ SettingsPage {
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Show simple camera controls (DIGICAM_CONTROL)")
+            text:               qsTr("显示简单的相机控制 (DIGICAM_CONTROL)")
             visible:            _showDumbCameraControl.visible
             fact:               _showDumbCameraControl
 
@@ -107,7 +107,7 @@ SettingsPage {
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Update return to home position based on device location.")
+            text:               qsTr("根据设备位置更新返回原点位置")
             fact:               _updateHomePosition
             visible:            _updateHomePosition.visible
             property Fact _updateHomePosition: _flyViewSettings.updateHomePosition
@@ -116,42 +116,42 @@ SettingsPage {
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
-        heading:            qsTr("Guided Commands")
+        heading:            qsTr("导航命令")
         visible:            _guidedMinimumAltitude.visible || _guidedMaximumAltitude.visible ||
                             _maxGoToLocationDistance.visible || _forwardFlightGoToLocationLoiterRad.visible ||
                             _goToLocationRequiresConfirmInGuided.visible
 
         LabelledFactTextField {
             Layout.fillWidth:   true
-            label:              qsTr("Minimum Altitude")
+            label:              qsTr("最小高度")
             fact:               _guidedMinimumAltitude
             visible:            fact.visible
         }
 
         LabelledFactTextField {
             Layout.fillWidth:   true
-            label:              qsTr("Maximum Altitude")
+            label:              qsTr("最大高度")
             fact:               _guidedMaximumAltitude
             visible:            fact.visible
         }
 
         LabelledFactTextField {
             Layout.fillWidth:   true
-            label:              qsTr("Go To Location Max Distance")
+            label:              qsTr("目标位置最大距离")
             fact:               _maxGoToLocationDistance
             visible:            fact.visible
         }
 
         LabelledFactTextField {
             Layout.fillWidth:   true
-            label:              qsTr("Loiter Radius in Forward Flight Guided Mode")
+            label:              qsTr("前飞引导模式下的徘徊半径")
             fact:               _forwardFlightGoToLocationLoiterRad
             visible:            fact.visible
         }
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Require Confirmation for Go To Location in Guided Mode")
+            text:               qsTr("在引导模式下需要确认前往位置")
             fact:               _goToLocationRequiresConfirmInGuided
             visible:            fact.visible
         }
@@ -160,12 +160,12 @@ SettingsPage {
     SettingsGroupLayout {
         Layout.fillWidth:       true
         Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 35
-        heading:                qsTr("MAVLink Actions")
-        headingDescription:     qsTr("Action JSON files should be created in the '%1' folder.").arg(QGroundControl.settingsManager.appSettings.mavlinkActionsSavePath)
+        heading:                qsTr("MAVLink 操作")
+        headingDescription:     qsTr("操作 JSON 文件应该在 '%1' 文件夹中创建.").arg(QGroundControl.settingsManager.appSettings.mavlinkActionsSavePath)
 
         LabelledComboBox {
             Layout.fillWidth:   true
-            label:              qsTr("Fly View Actions")
+            label:              qsTr("飞行视图操作")
             model:              mavlinkActionList()
             onActivated:        (index) => index == 0 ? _mavlinkActionsSettings.flyViewActionsFile.rawValue = "" : _mavlinkActionsSettings.flyViewActionsFile.rawValue = comboBox.currentText
             enabled:            model.length > 1
@@ -178,7 +178,7 @@ SettingsPage {
 
         LabelledComboBox {
             Layout.fillWidth:   true
-            label:              qsTr("Joystick Actions")
+            label:              qsTr("摇杆操作")
             model:              mavlinkActionList()
             onActivated:        (index) => index == 0 ? _mavlinkActionsSettings.joystickActionsFile.rawValue = "" : _mavlinkActionsSettings.joystickActionsFile.rawValue = comboBox.currentText
             enabled:            model.length > 1
@@ -192,19 +192,19 @@ SettingsPage {
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
-        heading:            qsTr("Virtual Joystick")
+        heading:            qsTr("虚拟摇杆")
         visible:            _virtualJoystick.visible || _virtualJoystickAutoCenterThrottle.visible || _virtualJoystickLeftHandedMode.visible
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Enabled")
+            text:               qsTr("启用虚拟摇杆")
             visible:            _virtualJoystick.visible
             fact:               _virtualJoystick
         }
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Auto-Center Throttle")
+            text:               qsTr("自动居中油门")
             visible:            _virtualJoystickAutoCenterThrottle.visible
             enabled:            _virtualJoystick.rawValue
             fact:               _virtualJoystickAutoCenterThrottle
@@ -212,7 +212,7 @@ SettingsPage {
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Left-Handed Mode (swap sticks)")
+            text:               qsTr("左撇子模式 (交换摇杆)")
             visible:            _virtualJoystickLeftHandedMode.visible
             enabled:            _virtualJoystick.rawValue
             fact:               _virtualJoystickLeftHandedMode
@@ -221,19 +221,19 @@ SettingsPage {
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
-        heading:            qsTr("Instrument Panel")
+        heading:            qsTr("仪表板")
         visible:            _showAdditionalIndicatorsCompass.visible || _lockNoseUpCompass.visible
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Show additional heading indicators on Compass")
+            text:               qsTr("显示额外的航向指示器")
             visible:            _showAdditionalIndicatorsCompass.visible
             fact:               _showAdditionalIndicatorsCompass
         }
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Lock Compass Nose-Up")
+            text:               qsTr("锁定罗盘朝北")
             visible:            _lockNoseUpCompass.visible
             fact:               _lockNoseUpCompass
         }
@@ -241,12 +241,12 @@ SettingsPage {
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
-        heading:            qsTr("3D View")
+        heading:            qsTr("3D 视图")
         visible:            _viewer3DSettings.visible
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Enabled")
+            text:               qsTr("启用 3D 视图")
             fact:               _viewer3DEnabled
             visible:            _viewer3DEnabled.visible
         }
@@ -264,7 +264,7 @@ SettingsPage {
                 QGCLabel {
                     wrapMode:   Text.WordWrap
                     visible:    true
-                    text:       qsTr("3D Map File:")
+                    text:       qsTr("3D 地图文件:")
                 }
 
                 QGCTextField {
@@ -284,7 +284,7 @@ SettingsPage {
                 spacing:            ScreenTools.defaultFontPixelWidth
 
                 QGCButton {
-                    text: qsTr("Clear")
+                    text: qsTr("清除")
 
                     onClicked: {
                         osmFileTextField.text = "Please select an OSM file"
@@ -293,7 +293,7 @@ SettingsPage {
                 }
 
                 QGCButton {
-                    text: qsTr("Select File")
+                    text: qsTr("选择文件")
 
                     onClicked: {
                         var filename = _viewer3DOsmFilePath.rawValue;
@@ -307,8 +307,8 @@ SettingsPage {
 
                     QGCFileDialog {
                         id:             fileDialog
-                        nameFilters:    [qsTr("OpenStreetMap files (*.osm)")]
-                        title:          qsTr("Select map file")
+                        nameFilters:    [qsTr("开放街道地图文件 (*.osm)")]
+                        title:          qsTr("选择地图文件")
 
                         onAcceptedForLoad: (file) => {
                                                osmFileTextField.text = file
@@ -321,7 +321,7 @@ SettingsPage {
 
         LabelledFactTextField {
             Layout.fillWidth:   true
-            label:              qsTr("Average Building Level Height")
+            label:              qsTr("平均建筑高度")
             fact:               _viewer3DBuildingLevelHeight
             enabled:            _viewer3DEnabled.rawValue
             visible:            _viewer3DBuildingLevelHeight.visible
@@ -329,7 +329,7 @@ SettingsPage {
 
         LabelledFactTextField {
             Layout.fillWidth:   true
-            label:              qsTr("Vehicles Altitude Bias")
+            label:              qsTr("设备高度偏移")
             fact:               _viewer3DAltitudeBias
             enabled:            _viewer3DEnabled.rawValue
             visible:            _viewer3DAltitudeBias.visible

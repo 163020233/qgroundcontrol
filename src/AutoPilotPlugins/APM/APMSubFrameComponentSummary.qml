@@ -41,18 +41,18 @@ Item {
         anchors.fill:       parent
         VehicleSummaryRow {
             id: nameRow;
-            labelText: qsTr("Frame Type")
+            labelText: qsTr("框架类型")
             valueText: frameName()
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Firmware Version")
-            valueText: globals.activeVehicle.firmwareMajorVersion == -1 ? qsTr("Unknown") : globals.activeVehicle.firmwareMajorVersion + "." + globals.activeVehicle.firmwareMinorVersion + "." + globals.activeVehicle.firmwarePatchVersion + " " + globals.activeVehicle.firmwareVersionTypeString
+            labelText: qsTr("固件版本")
+            valueText: globals.activeVehicle.firmwareMajorVersion == -1 ? qsTr("未知") : globals.activeVehicle.firmwareMajorVersion + "." + globals.activeVehicle.firmwareMinorVersion + "." + globals.activeVehicle.firmwarePatchVersion + " " + globals.activeVehicle.firmwareVersionTypeString
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Git Revision")
-            valueText: globals.activeVehicle.gitHash == -1 ? qsTr("Unknown") : globals.activeVehicle.gitHash
+            labelText: qsTr("Git 版本")
+            valueText: globals.activeVehicle.gitHash == -1 ? qsTr("未知") : globals.activeVehicle.gitHash
         }
     }
 }

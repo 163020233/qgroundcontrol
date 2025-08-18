@@ -47,7 +47,7 @@ SetupPage {
             spacing: ScreenTools.defaultFontPixelHeight
 
             QGCLabel {
-                text:       qsTr("Warning: Unable to determine motor count")
+                text:       qsTr("警告：无法确定电机数量")
                 color:      qgcPal.warningText
                 visible:    controller.vehicle.motorCount == -1
             }
@@ -60,7 +60,7 @@ SetupPage {
                 ValueSlider {
                     id:                 sliderThrottle
                     width:              motorButtons.width
-                    label:              qsTr("Throttle")
+                    label:              qsTr("油门")
                     from:               0
                     to:                 100
                     majorTickStepSize:  5
@@ -73,7 +73,7 @@ SetupPage {
                 anchors.left:   parent.left
                 anchors.right:  parent.right
                 wrapMode:       Text.WordWrap
-                text:           qsTr("Make sure you remove all props.")
+                text:           qsTr("确保您已卸下所有道具。")
             }
 
             Row {
@@ -97,7 +97,7 @@ SetupPage {
 
                 QGCButton {
                     id:         allButton
-                    text:       qsTr("All")
+                    text:       qsTr("全部")
                     onClicked:  {
                         for (var motorIndex=0; motorIndex<buttonRepeater.count; motorIndex++) {
                             controller.vehicle.motorTest(motorIndex + 1, sliderThrottle.value, sliderThrottle.value === 0 ? 0 : _motorTimeoutSecs, true)
@@ -107,7 +107,7 @@ SetupPage {
 
                 QGCButton {
                     id:         allStopButton
-                    text:       qsTr("Stop")
+                    text:       qsTr("停止")
                     onClicked:  {
                         for (var motorIndex=0; motorIndex<buttonRepeater.count; motorIndex++) {
                             controller.vehicle.motorTest(motorIndex + 1, 0, 0, true)
@@ -131,7 +131,7 @@ SetupPage {
                 QGCLabel {
                     anchors.verticalCenter:     parent.verticalCenter
                     color:  qgcPal.warningText
-                    text:   safetySwitch.checked ? qsTr("Careful : Motors are enabled") : qsTr("Propellers are removed - Enable slider and motors")
+                    text:   safetySwitch.checked ? qsTr("小心：电机已启用") : qsTr("已卸下道具 - 启用滑块和电机")
                 }
             } // Row
         } // Column

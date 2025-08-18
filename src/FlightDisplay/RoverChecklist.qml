@@ -22,11 +22,11 @@ Item {
     PreFlightCheckModel {
         id:     listModel
         PreFlightCheckGroup {
-            name: qsTr("Rover Initial Checks")
+            name: qsTr("Rover 初始化检查")
 
             PreFlightCheckButton {
-                name:           qsTr("Hardware")
-                manualText:     qsTr("Battery mounted and secured?")
+                name:           qsTr("硬件检查")
+                manualText:     qsTr("电池已安装并安全？")
             }
 
             PreFlightBatteryCheck {
@@ -47,11 +47,11 @@ Item {
         }
 
         PreFlightCheckGroup {
-            name: qsTr("Please arm the vehicle here")
+            name: qsTr("请先启动设备")
 
             PreFlightCheckButton {
-                name:           qsTr("Mission")
-                manualText:     qsTr("Please confirm mission is valid (waypoints valid, no terrain collision).")
+                name:           qsTr("任务")
+                manualText:     qsTr("请确认任务有效（航点有效，无地形碰撞）。")
             }
 
             PreFlightSoundCheck {
@@ -59,22 +59,22 @@ Item {
         }
 
         PreFlightCheckGroup {
-            name: qsTr("Last preparations before launch")
+            name: qsTr("起飞前准备")
 
             // Check list item group 2 - Final checks before launch
             PreFlightCheckButton {
-                name:           qsTr("Payload")
-                manualText:     qsTr("Configured and started? Payload lid closed?")
+                name:           qsTr("载荷")
+                manualText:     qsTr("配置完毕并启动？有效载荷盖关好了吗？")
             }
 
             PreFlightCheckButton {
-                name:           qsTr("Wind & weather")
-                manualText:     qsTr("OK for your platform?")
+                name:           qsTr("风、天气")
+                manualText:     qsTr("平台是否适合飞行？")
             }
 
             PreFlightCheckButton {
-                name:           qsTr("Mission area")
-                manualText:     qsTr("Mission area and path free of obstacles/people?")
+                name:           qsTr("任务区域")
+                manualText:     qsTr("任务区域和路径是否无障碍物/人？")
             }
         }
     }

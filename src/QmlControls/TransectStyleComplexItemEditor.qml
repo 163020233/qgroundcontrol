@@ -32,7 +32,7 @@ Rectangle {
     property real   _fieldWidth:                ScreenTools.defaultFontPixelWidth * 10.5
     property var    _vehicle:                   QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle : QGroundControl.multiVehicleManager.offlineEditingVehicle
     property real   _cameraMinTriggerInterval:  _missionItem.cameraCalc.minTriggerInterval.rawValue
-    property string _doneAdjusting:             qsTr("Done")
+    property string _doneAdjusting:             qsTr("完成")
     property bool   _presetsAvailable:          _missionItem.presetNames.length !== 0
 
     function polygonCaptureStarted() {
@@ -88,7 +88,7 @@ Rectangle {
 
                 QGCLabel {
                     Layout.fillWidth:   true
-                    text:               qsTr("WARNING: Photo interval is below minimum interval (%1 secs) supported by camera.").arg(_cameraMinTriggerInterval.toFixed(1))
+                    text:               qsTr("警告：照片间隔低于相机支持的最小间隔 (%1 秒)。").arg(_cameraMinTriggerInterval.toFixed(1))
                     wrapMode:           Text.WordWrap
                     color:              qgcPal.warningText
                     visible:            _missionItem.cameraShots > 0 && _cameraMinTriggerInterval !== 0 && _cameraMinTriggerInterval > _missionItem.timeBetweenShots
@@ -98,9 +98,9 @@ Rectangle {
                     Layout.fillWidth:               true
                     cameraCalc:                     _missionItem.cameraCalc
                     vehicleFlightIsFrontal:         true
-                    distanceToSurfaceLabel:         qsTr("Altitude")
-                    frontalDistanceLabel:           qsTr("Trigger Dist")
-                    sideDistanceLabel:              qsTr("Spacing")
+                    distanceToSurfaceLabel:         qsTr("高度")
+                    frontalDistanceLabel:           qsTr("触发距离")
+                    sideDistanceLabel:              qsTr("间距")
                 }
 
                 SectionHeader {
@@ -119,7 +119,7 @@ Rectangle {
 
                 QGCButton {
                     Layout.alignment:   Qt.AlignHCenter
-                    text:               qsTr("Rotate Entry Point")
+                    text:               qsTr("旋转入口点")
                     onClicked:          _missionItem.rotateEntryPoint()
                     visible:            transectValuesHeader.checked
                 }
@@ -127,7 +127,7 @@ Rectangle {
                 SectionHeader {
                     id:                 statsHeader
                     Layout.fillWidth:   true
-                    text:               qsTr("Statistics")
+                    text:               qsTr("统计信息")
                 }
 
                 TransectStyleComplexItemStats {
@@ -159,7 +159,7 @@ Rectangle {
 
                 QGCLabel {
                     Layout.fillWidth:   true
-                    text:               qsTr("Presets")
+                    text:               qsTr("预设")
                     wrapMode:           Text.WordWrap
                 }
 
@@ -174,14 +174,14 @@ Rectangle {
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("Apply Preset")
+                        text:               qsTr("应用预设")
                         enabled:            _missionItem.presetNames.length != 0
                         onClicked:          _missionItem.loadPreset(presetCombo.textAt(presetCombo.currentIndex))
                     }
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("Delete Preset")
+                        text:               qsTr("删除预设")
                         enabled:            _missionItem.presetNames.length != 0
                         onClicked:          deletePresetDialog.createObject(mainWindow, { presetName: presetCombo.textAt(presetCombo.currentIndex) }).open()
 
@@ -189,8 +189,8 @@ Rectangle {
                             id: deletePresetDialog
 
                             QGCSimpleMessageDialog {
-                                title:      qsTr("Delete Preset")
-                                text:       qsTr("Are you sure you want to delete '%1' preset?").arg(presetName)
+                                title:      qsTr("删除预设")
+                                text:       qsTr("确定要删除 '%1' 预设吗？").arg(presetName)
                                 buttons:    Dialog.Yes | Dialog.No
 
                                 property string presetName
@@ -206,7 +206,7 @@ Rectangle {
                 QGCButton {
                     Layout.alignment:   Qt.AlignCenter
                     Layout.fillWidth:   true
-                    text:               qsTr("Save Settings As New Preset")
+                    text:               qsTr("保存设置为新预设")
                     onClicked:          savePresetDialog.createObject(mainWindow).open()
                 }
 
@@ -228,7 +228,7 @@ Rectangle {
                 SectionHeader {
                     id:                 presetsStatsHeader
                     Layout.fillWidth:   true
-                    text:               qsTr("Statistics")
+                    text:               qsTr("统计信息")
                 }
 
                 TransectStyleComplexItemStats {
@@ -243,7 +243,7 @@ Rectangle {
 
             QGCPopupDialog {
                 id:         popupDialog
-                title:      qsTr("Save Preset")
+                title:      qsTr("保存预设")
                 buttons:    Dialog.Save | Dialog.Cancel
 
                 onAccepted: {
@@ -260,28 +260,28 @@ Rectangle {
 
                     QGCLabel {
                         Layout.fillWidth:   true
-                        text:               qsTr("Save the current settings as a named preset.")
+                        text:               qsTr("保存当前设置为命名预设。")
                         wrapMode:           Text.WordWrap
                     }
 
                     QGCLabel {
-                        text: qsTr("Preset Name")
+                        text: qsTr("预设名称")
                     }
 
                     QGCTextField {
                         id:                 presetNameField
                         Layout.fillWidth:   true
-                        placeholderText:    qsTr("Enter preset name")
+                        placeholderText:    qsTr("输入预设名称")
 
                         Component.onCompleted:  validateText(presetNameField.text)
                         onTextChanged:          validateText(text)
 
                         function validateText(text) {
                             if (text.trim() === "") {
-                                nameError.text = qsTr("Preset name cannot be blank.")
+                                nameError.text = qsTr("预设名称不能为空。")
                                 popupDialog.acceptButtonEnabled = false
                             } else if (text.includes("/")) {
-                                nameError.text = qsTr("Preset name cannot include the \"/\" character.")
+                                nameError.text = qsTr("预设名称不能包含 \"/\" 字符。")
                                 popupDialog.acceptButtonEnabled = false
                             } else {
                                 nameError.text = ""

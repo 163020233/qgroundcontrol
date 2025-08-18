@@ -36,7 +36,7 @@ SetupPage {
                     width:                      _leftColumnWidth
                     visible:                    actuators.mixer.groups.count > 0
                     QGCLabel {
-                        text:                   qsTr("Geometry") + (actuators.mixer.title ? ": " + actuators.mixer.title : "")
+                        text:                   qsTr("几何") + (actuators.mixer.title ? ": " + actuators.mixer.title : "")
                         font.pointSize:         ScreenTools.mediumFontPointSize
                         Layout.fillWidth:       true
                     }
@@ -178,7 +178,7 @@ SetupPage {
 
                 // actuator testing
                 QGCLabel {
-                    text:               qsTr("Actuator Testing")
+                    text:               qsTr("输出测试")
                     font.pointSize:     ScreenTools.mediumFontPointSize
                 }
 
@@ -197,7 +197,7 @@ SetupPage {
                         }
 
                         QGCLabel {
-                            text: qsTr("Configure some outputs in order to test them.")
+                            text: qsTr("配置一些输出以测试它们.")
                             visible: actuators.actuatorTest.actuators.count == 0
                         }
 
@@ -234,7 +234,7 @@ SetupPage {
 
                             QGCLabel {
                                 color:  qgcPal.warningText
-                                text: safetySwitch.checked ? qsTr("Careful: Actuator sliders are enabled") : qsTr("Propellers are removed - Enable sliders")
+                                text: safetySwitch.checked ? qsTr("小心: 输出滑块已启用") : qsTr("电机已移除 - 启用滑块")
                             }
                         } // Row
 
@@ -323,12 +323,12 @@ SetupPage {
             // Right column
             Column {
                 QGCLabel {
-                    text:               qsTr("Actuator Outputs")
+                    text:               qsTr("输出")
                     font.pointSize:     ScreenTools.mediumFontPointSize
                     bottomPadding:      ScreenTools.defaultFontPixelHeight
                 }
                 QGCLabel {
-                    text:          qsTr("One or more actuator still needs to be assigned to an output.")
+                    text:          qsTr("一个或多个输出仍未分配.")
                     visible:       actuators.hasUnsetRequiredFunctions
                     color:         qgcPal.warningText
                     bottomPadding: ScreenTools.defaultFontPixelHeight
@@ -370,7 +370,7 @@ SetupPage {
                             anchors.right:     parent.right
                             spacing:           _margins
                             QGCButton {
-                                text:          qsTr("Identify & Assign Motors")
+                                text:          qsTr("识别 & 分配电机")
                                 visible:       !actuators.motorAssignmentActive && selActuatorOutput.actuatorOutput.groupsVisible
                                 enabled:       actuators.motorAssignmentEnabled
                                 onClicked: {
@@ -386,7 +386,7 @@ SetupPage {
                                     visible:    false
                                     //icon:       StandardIcon.Warning
                                     buttons:    MessageDialog.Yes | MessageDialog.No
-                                    title:      qsTr("Motor Order Identification and Assignment")
+                                    title:      qsTr("电机顺序识别和分配")
                                     text:       actuators.motorAssignmentMessage
                                     onButtonClicked: function (button, role) {
                                         switch (button) {
@@ -401,19 +401,19 @@ SetupPage {
                                     visible:    false
                                     //icon:       StandardIcon.Critical
                                     buttons:    MessageDialog.Ok
-                                    title:      qsTr("Error")
+                                    title:      qsTr("电机顺序识别和分配失败")
                                     text:       actuators.motorAssignmentMessage
                                 }
                             }
                             QGCButton {
-                                text:          qsTr("Spin Motor Again")
+                                text:          qsTr("再次旋转电机")
                                 visible:       actuators.motorAssignmentActive
                                 onClicked: {
                                     actuators.spinCurrentMotor()
                                 }
                             }
                             QGCButton {
-                                text:          qsTr("Abort")
+                                text:          qsTr("中止")
                                 visible:       actuators.motorAssignmentActive
                                 onClicked: {
                                     actuators.abortMotorAssignment()

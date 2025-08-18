@@ -45,7 +45,7 @@ FlightModeIndicator {
                 FactSlider {
                     Layout.fillWidth:       true
                     Layout.preferredWidth:  sliderWidth
-                    label:                  qsTr("RTL Altitude")
+                    label:                  qsTr("返航高度")
                     fact:                   controller.getParameterFact(-1, "RTL_RETURN_ALT")
                     to:                     fact.maxIsDefaultForType ? QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(121.92) : fact.max
                     majorTickStepSize:      10
@@ -54,18 +54,18 @@ FlightModeIndicator {
 
             SettingsGroupLayout {
                 Layout.fillWidth:   true
-                heading:            qsTr("GeoFence")
+                heading:            qsTr("地理围栏")
 
                 LabelledFactComboBox {
                     Layout.fillWidth:       true
-                    label:                  qsTr("Breach Action")
+                    label:                  qsTr("突破操作")
                     fact:                   controller.getParameterFact(-1, "GF_ACTION")
                 }
 
                 ColumnLayout {
                     QGCCheckBoxSlider {
                         Layout.fillWidth:   true
-                        text:               qsTr("Max Distance")
+                        text:               qsTr("最大距离")
                         checked:            maxDistanceSlider.value > 0
 
                         onClicked: {
@@ -93,7 +93,7 @@ FlightModeIndicator {
                 ColumnLayout {
                     QGCCheckBoxSlider {
                         Layout.fillWidth:   true
-                        text:               qsTr("Max Altitude")
+                        text:               qsTr("最大高度")
                         checked:            maxAltitudeSlider.value > 0
 
                         onClicked: {

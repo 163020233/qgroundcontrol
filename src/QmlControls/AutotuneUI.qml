@@ -28,17 +28,18 @@ ColumnLayout {
     QGCButton {
         id:        autotuneButton
         primary:   true
-        text:      qsTr("Start AutoTune")
+        text:      qsTr("开始自动调参")
         enabled:   _activeVehicle.flying && !_activeVehicle.landing && !_autotuneManager.autotuneInProgress
 
         onClicked: mainWindow.showMessageDialog(autotuneButton.text,
-                                                qsTr("WARNING!\
-        \n\nThe auto-tuning procedure should be executed with caution and requires the vehicle to fly stable enough before attempting the procedure! \
-        \n\nBefore starting the auto-tuning process, make sure that: \
-        \n1. You have read the auto-tuning guide and have followed the preliminary steps \
-        \n2. The current control gains are good enough to stabilize the drone in presence of medium disturbances \
-        \n3. You are ready to abort the auto-tuning sequence by moving the RC sticks, if anything unexpected happens. \
-        \n\nClick Ok to start the auto-tuning process.\n"),
+                                                qsTr("警告!\
+        \n\n自动调参过程应该谨慎执行，要求飞行器在执行过程中保持稳定。\
+        \n\n在开始自动调参过程之前，请确保您已经阅读了自动调参指南并按照初步步骤进行了操作。\
+        \n\n在开始自动调参过程之前，请确保您已经阅读了自动调参指南并按照初步步骤进行了操作。\
+        \n1. 您已经阅读了自动调参指南并按照初步步骤进行了操作 \
+        \n2. 当前的控制增益足够好，能够在存在中 medium 扰动的情况下稳定飞行器 \
+        \n3. 您已经准备好在任何时候通过移动 RC 摇杆来中止自动调参过程。\
+        \n\n点击 Ok 开始自动调参过程。\n"),
                                                 Dialog.Ok | Dialog.Cancel,
                                                 function() { _autotuneManager.autotuneRequest() })
     }

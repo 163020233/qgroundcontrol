@@ -47,7 +47,7 @@ SetupPage {
             property bool _escCalibrationAvailable: controller.parameterExists(-1, "ESC_CALIBRATION")
             property Fact _escCalibration:          controller.getParameterFact(-1, "ESC_CALIBRATION", false /* reportMissing */)
 
-            property string _restartRequired: qsTr("Requires vehicle reboot")
+            property string _restartRequired: qsTr("需要重新启动")
 
             QGCPalette { id: ggcPal; colorGroupEnabled: true }
 
@@ -57,7 +57,7 @@ SetupPage {
                 visible: !_batt1MonitorEnabled || !_batt1ParamsAvailable
 
                 QGCLabel {
-                    text:       qsTr("Battery 1")
+                    text:       qsTr("电池 1")
                     font.bold:   true
                 }
 
@@ -77,7 +77,7 @@ SetupPage {
                             id:                 batt1MonitorRow
                             spacing:            ScreenTools.defaultFontPixelWidth
 
-                            QGCLabel { text: qsTr("Battery1 monitor:") }
+                            QGCLabel { text: qsTr("电池 1 监控:") }
                             FactComboBox {
                                 id:         monitor1Combo
                                 fact:       _batt1Monitor
@@ -92,7 +92,7 @@ SetupPage {
                         }
 
                         QGCButton {
-                            text:       qsTr("Reboot vehicle")
+                            text:       qsTr("重新启动")
                             visible:    _showBatt1Reboot
                             onClicked:  controller.vehicle.rebootVehicle()
                         }
@@ -107,7 +107,7 @@ SetupPage {
                 visible:    _batt1MonitorEnabled && _batt1ParamsAvailable
 
                 QGCLabel {
-                    text:       qsTr("Battery 1")
+                    text:       qsTr("电池 1")
                     font.bold:   true
                 }
 
@@ -144,7 +144,7 @@ SetupPage {
                 visible: !_batt2MonitorEnabled || !_batt2ParamsAvailable
 
                 QGCLabel {
-                    text:       qsTr("Battery 2")
+                    text:       qsTr("电池 2")
                     font.bold:   true
                 }
 
@@ -164,7 +164,7 @@ SetupPage {
                             id:                 batt2MonitorRow
                             spacing:            ScreenTools.defaultFontPixelWidth
 
-                            QGCLabel { text: qsTr("Battery2 monitor:") }
+                            QGCLabel { text: qsTr("电池 2 监控:") }
                             FactComboBox {
                                 id:         monitor2Combo
                                 fact:       _batt2Monitor
@@ -179,7 +179,7 @@ SetupPage {
                         }
 
                         QGCButton {
-                            text:       qsTr("Reboot vehicle")
+                            text:       qsTr("重新启动")
                             visible:    _showBatt2Reboot
                             onClicked:  controller.vehicle.rebootVehicle()
                         }
@@ -194,7 +194,7 @@ SetupPage {
                 visible:    _batt2MonitorEnabled && _batt2ParamsAvailable
 
                 QGCLabel {
-                    text:       qsTr("Battery 2")
+                    text:       qsTr("电池 2")
                     font.bold:   true
                 }
 
@@ -230,7 +230,7 @@ SetupPage {
                 visible:    _escCalibrationAvailable
 
                 QGCLabel {
-                    text:       qsTr("ESC Calibration")
+                    text:       qsTr("ESC 校准")
                     font.bold:   true
                 }
 
@@ -249,7 +249,7 @@ SetupPage {
                             spacing: _margins
 
                             QGCLabel {
-                                text:   qsTr("WARNING: Remove props prior to calibration!")
+                                text:   qsTr("警告：校准前请移除道具！")
                                 color:  qgcPal.warningText
                             }
 
@@ -257,22 +257,22 @@ SetupPage {
                                 spacing: _margins
 
                                 QGCButton {
-                                    text: qsTr("Calibrate")
+                                    text: qsTr("校准")
                                     enabled:    _escCalibration && _escCalibration.rawValue === 0
                                     onClicked:  if(_escCalibration) _escCalibration.rawValue = 3
                                 }
 
                                 Column {
                                     enabled: _escCalibration && _escCalibration.rawValue === 3
-                                    QGCLabel { text:   _escCalibration ? (_escCalibration.rawValue === 3 ? qsTr("Now perform these steps:") : qsTr("Click Calibrate to start, then:")) : "" }
-                                    QGCLabel { text:   qsTr("- Disconnect USB and battery so flight controller powers down") }
-                                    QGCLabel { text:   qsTr("- Connect the battery") }
-                                    QGCLabel { text:   qsTr("- The arming tone will be played (if the vehicle has a buzzer attached)") }
-                                    QGCLabel { text:   qsTr("- If using a flight controller with a safety button press it until it displays solid red") }
-                                    QGCLabel { text:   qsTr("- You will hear a musical tone then two beeps") }
-                                    QGCLabel { text:   qsTr("- A few seconds later you should hear a number of beeps (one for each battery cell you're using)") }
-                                    QGCLabel { text:   qsTr("- And finally a single long beep indicating the end points have been set and the ESC is calibrated") }
-                                    QGCLabel { text:   qsTr("- Disconnect the battery and power up again normally") }
+                                    QGCLabel { text:   _escCalibration ? (_escCalibration.rawValue === 3 ? qsTr("现在请执行以下步骤:") : qsTr("点击校准开始，然后:")) : "" }
+                                    QGCLabel { text:   qsTr("- 断开USB和电池，使飞控关闭") }
+                                    QGCLabel { text:   qsTr("- 连接电池") }
+                                    QGCLabel { text:   qsTr("- 播放蜂鸣音 (如果飞控有蜂鸣器)") }
+                                    QGCLabel { text:   qsTr("- 如果使用有安全按钮的飞控，按下按钮直到显示为红色") }
+                                    QGCLabel { text:   qsTr("- 听到音乐然后两个嘟嘟声") }
+                                    QGCLabel { text:   qsTr("- 稍后你应该听到一个数字的 嘟嘟声 (每个电池单元格一个)") }
+                                    QGCLabel { text:   qsTr("- 最后你应该听到一个长的 嘟嘟声 指示校准完成") }
+                                    QGCLabel { text:   qsTr("- 断开电池并正常启动") }
                                 }
                             }
                         }
@@ -314,7 +314,7 @@ SetupPage {
                 id: sensorModel
 
                 ListElement {
-                    text:       qsTr("Power Module 90A")
+                    text:       qsTr("电源模块 90A")
                     voltPin:    2
                     currPin:    3
                     voltMult:   10.1
@@ -323,7 +323,7 @@ SetupPage {
                 }
 
                 ListElement {
-                    text:       qsTr("Power Module HV")
+                    text:       qsTr("电源模块 HV")
                     voltPin:    2
                     currPin:    3
                     voltMult:   12.02
@@ -341,7 +341,7 @@ SetupPage {
                 }
 
                 ListElement {
-                    text:       qsTr("Blue Robotics Power Sense Module")
+                    text:       qsTr("蓝色机器人电源感应模块")
                     voltPin:    2
                     currPin:    3
                     voltMult:   11.000
@@ -350,7 +350,7 @@ SetupPage {
                 }
 
                 ListElement {
-                    text:       qsTr("Navigator w/ Blue Robotics Power Sense Module")
+                    text:       qsTr("带蓝色机器人电源感应模块的导航器")
                     voltPin:    5
                     currPin:    4
                     voltMult:   11.000
@@ -359,7 +359,7 @@ SetupPage {
                 }
 
                 ListElement {
-                    text:       qsTr("Other")
+                    text:       qsTr("其他")
                 }
             }
 
@@ -369,7 +369,7 @@ SetupPage {
                 rowSpacing:     _margins
                 columnSpacing:  _margins
 
-                QGCLabel { text: qsTr("Battery monitor:") }
+                QGCLabel { text: qsTr("电池监控:") }
 
                 FactComboBox {
                     id:         monitorCombo
@@ -381,7 +381,7 @@ SetupPage {
                 QGCLabel {
                     Layout.row:     1
                     Layout.column:  0
-                    text:           qsTr("Battery capacity:")
+                    text:           qsTr("电池容量:")
                 }
 
                 FactTextField {
@@ -393,7 +393,7 @@ SetupPage {
                 QGCLabel {
                     Layout.row:     2
                     Layout.column:  0
-                    text:           qsTr("Minimum arming voltage:")
+                    text:           qsTr("最小启动电压:")
                 }
 
                 FactTextField {
@@ -405,7 +405,7 @@ SetupPage {
                 QGCLabel {
                     Layout.row:     3
                     Layout.column:  0
-                    text:           qsTr("Power sensor:")
+                    text:           qsTr("电源传感器:")
                 }
 
                 QGCComboBox {
@@ -430,7 +430,7 @@ SetupPage {
                 QGCLabel {
                     Layout.row:     4
                     Layout.column:  0
-                    text:           qsTr("Current pin:")
+                    text:           qsTr("电流引脚:") 
                     visible:        _showAdvanced
                 }
 
@@ -445,7 +445,7 @@ SetupPage {
                 QGCLabel {
                     Layout.row:     5
                     Layout.column:  0
-                    text:           qsTr("Voltage pin:")
+                    text:           qsTr("电压引脚:")
                     visible:        _showAdvanced
                 }
 
@@ -460,7 +460,7 @@ SetupPage {
                 QGCLabel {
                     Layout.row:     6
                     Layout.column:  0
-                    text:           qsTr("Voltage multiplier:")
+                    text:           qsTr("电压倍增器:")
                     visible:        _showAdvanced
                 }
 
@@ -471,7 +471,7 @@ SetupPage {
                 }
 
                 QGCButton {
-                    text:       qsTr("Calculate")
+                    text:       qsTr("计算")
                     visible:    _showAdvanced
                     onClicked:  calcVoltageMultiplierDlgComponent.createObject(mainWindow, { vehicleVoltageFact: vehicleVoltage, battVoltMultFact: battVoltMult }).open()
                 }
@@ -481,12 +481,12 @@ SetupPage {
                     Layout.fillWidth:   true
                     font.pointSize:     ScreenTools.smallFontPointSize
                     wrapMode:           Text.WordWrap
-                    text:               qsTr("If the battery voltage reported by the vehicle is largely different than the voltage read externally using a voltmeter you can adjust the voltage multiplier value to correct this. Click the Calculate button for help with calculating a new value.")
+                    text:               qsTr("如果您使用电池监测器，可以调整电压倍增器来校正报告的电池电压。如果车辆报告的电池电压与使用电压表从外部读取的电压差异较大，您可以调整电压倍增器的值来校正差异。点击“计算”按钮以获取计算新值的帮助。")
                     visible:            _showAdvanced
                 }
 
                 QGCLabel {
-                    text:       qsTr("Amps per volt:")
+                    text:       qsTr("电流/电压:")
                     visible:    _showAdvanced
                 }
 
@@ -497,7 +497,7 @@ SetupPage {
                 }
 
                 QGCButton {
-                    text:       qsTr("Calculate")
+                    text:       qsTr("计算")
                     visible:    _showAdvanced
                     onClicked:  calcAmpsPerVoltDlgComponent.createObject(mainWindow, { vehicleCurrentFact: vehicleCurrent, battAmpPerVoltFact: battAmpPerVolt }).open()
                 }
@@ -507,12 +507,12 @@ SetupPage {
                     Layout.fillWidth:   true
                     font.pointSize:     ScreenTools.smallFontPointSize
                     wrapMode:           Text.WordWrap
-                    text:               qsTr("If the current draw reported by the vehicle is largely different than the current read externally using a current meter you can adjust the amps per volt value to correct this. Click the Calculate button for help with calculating a new value.")
+                    text:               qsTr("如果车辆报告的电流消耗与使用电流表外部读取的电流值差异很大，您可以调整每伏安培值来纠正。点击“计算”按钮以获取计算新值的帮助。")
                     visible:            _showAdvanced
                 }
 
                 QGCLabel {
-                    text:       qsTr("Amps Offset:")
+                    text:       qsTr("电流偏移:")
                     visible:    _showAdvanced
                 }
 
@@ -527,7 +527,7 @@ SetupPage {
                     Layout.fillWidth:   true
                     font.pointSize:     ScreenTools.smallFontPointSize
                     wrapMode:           Text.WordWrap
-                    text:               qsTr("If the vehicle reports a high current read when there is little or no current going through it, adjust the Amps Offset. It should be equal to the voltage reported by the sensor when the current is zero.")
+                    text:               qsTr("如果车辆报告的电流消耗与使用电流表外部读取的电流值差异很大，您可以调整电流偏移值来纠正。它应该等于传感器报告的电流为零时的电压值。")
                     visible:            _showAdvanced
                 }
 
@@ -539,7 +539,7 @@ SetupPage {
         id: calcVoltageMultiplierDlgComponent
 
         QGCPopupDialog {
-            title:      qsTr("Calculate Voltage Multiplier")
+            title:      qsTr("计算电压倍增器")
             buttons:    Dialog.Close
 
             property Fact vehicleVoltageFact
@@ -551,7 +551,7 @@ SetupPage {
                 QGCLabel {
                     Layout.preferredWidth:  gridLayout.width
                     wrapMode:               Text.WordWrap
-                    text:                   qsTr("Measure battery voltage using an external voltmeter and enter the value below. Click Calculate to set the new adjusted voltage multiplier.")
+                    text:                   qsTr("使用外部电压表测量电池电压并输入值。点击“计算”按钮设置新的调整后的电压倍增器。")
                 }
 
                 GridLayout {
@@ -559,19 +559,19 @@ SetupPage {
                     columns:    2
 
                     QGCLabel {
-                        text: qsTr("Measured voltage:")
+                        text: qsTr("测量电压:")
                     }
                     QGCTextField { id: measuredVoltage }
 
-                    QGCLabel { text: qsTr("Vehicle voltage:") }
+                    QGCLabel { text: qsTr("电压:") }
                     FactLabel { fact: vehicleVoltageFact }
 
-                    QGCLabel { text: qsTr("Voltage multiplier:") }
+                    QGCLabel { text: qsTr("电压倍增器:") }
                     FactLabel { fact: battVoltMultFact }
                 }
 
                 QGCButton {
-                    text: qsTr("Calculate And Set")
+                    text: qsTr("计算并设置")
 
                     onClicked:  {
                         var measuredVoltageValue = parseFloat(measuredVoltage.text)
@@ -592,7 +592,7 @@ SetupPage {
         id: calcAmpsPerVoltDlgComponent
 
         QGCPopupDialog {
-            title:      qsTr("Calculate Amps per Volt")
+            title:      qsTr("计算每伏安培")
             buttons:    Dialog.Close
 
             property Fact vehicleCurrentFact
@@ -604,7 +604,7 @@ SetupPage {
                 QGCLabel {
                     Layout.preferredWidth:  gridLayout.width
                     wrapMode:               Text.WordWrap
-                    text:                   qsTr("Measure current draw using an external current meter and enter the value below. Click Calculate to set the new amps per volt value.")
+                    text:                   qsTr("使用外部电流表测量电流消耗并输入值。点击“计算”按钮设置新的每伏安培值。")
                 }
 
                 GridLayout {
@@ -612,19 +612,19 @@ SetupPage {
                     columns:    2
 
                     QGCLabel {
-                        text: qsTr("Measured current:")
+                        text: qsTr("测量电流:")
                     }
                     QGCTextField { id: measuredCurrent }
 
-                    QGCLabel { text: qsTr("Vehicle current:") }
+                    QGCLabel { text: qsTr("电流:") }
                     FactLabel { fact: vehicleCurrentFact }
 
-                    QGCLabel { text: qsTr("Amps per volt:") }
+                    QGCLabel { text: qsTr("每伏安培:") }
                     FactLabel { fact: battAmpPerVoltFact }
                 }
 
                 QGCButton {
-                    text: qsTr("Calculate And Set")
+                    text: qsTr("计算并设置")
 
                     onClicked:  {
                         var measuredCurrentValue = parseFloat(measuredCurrent.text)

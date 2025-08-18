@@ -25,7 +25,7 @@ import QGroundControl.FactControls
 SetupPage {
     id:                 joystickPage
     pageComponent:      pageComponent
-    pageName:           qsTr("Joystick")
+    pageName:           qsTr("摇杆")
     pageDescription:    "" // qsTr("Joystick Setup is used to configure and calibrate joysticks.")
 
     readonly property real  _maxButtons:         64
@@ -76,18 +76,18 @@ SetupPage {
                 }
                 anchors.top:    parent.top
                 QGCTabButton {
-                    text:       qsTr("General")
+                    text:       qsTr("一般")
                     visible:    _allowJoystickSelection
                 }
                 QGCTabButton {
-                    text:       qsTr("Button Assigment")
+                    text:       qsTr("按钮分配")
                 }
                 QGCTabButton {
-                    text:       qsTr("Calibration")
+                    text:       qsTr("校准")
                     visible:    _activeJoystick.axisCount != 0
                 }
                 QGCTabButton {
-                    text:       qsTr("Advanced")
+                    text:       qsTr("高级")
                     visible:    _activeJoystick.axisCount != 0
                 }
             }

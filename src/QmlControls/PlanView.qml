@@ -67,7 +67,7 @@ Item {
     readonly property int       _layerGeoFence:             2
     readonly property int       _layerRallyPoints:          3
     readonly property int       _layerUTMSP:                4 // Additional Tab button when UTMSP is enabled
-    readonly property string    _armedVehicleUploadPrompt:  qsTr("Vehicle is currently armed. Do you want to upload the mission to the vehicle?")
+    readonly property string    _armedVehicleUploadPrompt:  qsTr("设备当前已启动。您是否要将计划上传到设备？")
 
 
     function mapCenter() {
@@ -104,8 +104,8 @@ Item {
         target: _appSettings ? _appSettings.defaultMissionItemAltitude : null
         function onRawValueChanged() {
             if (_visualItems.count > 1) {
-                mainWindow.showMessageDialog(qsTr("Apply new altitude"),
-                                             qsTr("You have changed the default altitude for mission items. Would you like to apply that altitude to all the items in the current mission?"),
+                mainWindow.showMessageDialog(qsTr("应用新的高度"),
+                                             qsTr("您已更改了计划项目的默认高度。是否要将该高度应用于当前计划中的所有项目？"),
                                              Dialog.Yes | Dialog.No,
                                              function() { _missionController.applyDefaultMissionAltitude() })
             }
@@ -115,7 +115,7 @@ Item {
     Component {
         id: promptForPlanUsageOnVehicleChangePopupComponent
         QGCPopupDialog {
-            title:      _planMasterController.managerVehicle.isOfflineEditingVehicle ? qsTr("Plan View - Vehicle Disconnected") : qsTr("Plan View - Vehicle Changed")
+            title:      _planMasterController.managerVehicle.isOfflineEditingVehicle ? qsTr("计划视图 - 设备已断开") : qsTr("计划视图 - 设备已更改")
             buttons:    Dialog.NoButton
 
             ColumnLayout {
@@ -123,17 +123,17 @@ Item {
                     Layout.maximumWidth:    parent.width
                     wrapMode:               QGCLabel.WordWrap
                     text:                   _planMasterController.managerVehicle.isOfflineEditingVehicle ?
-                                                qsTr("The vehicle associated with the plan in the Plan View is no longer available. What would you like to do with that plan?") :
-                                                qsTr("The plan being worked on in the Plan View is not from the current vehicle. What would you like to do with that plan?")
+                                                qsTr("与计划视图中的计划关联的设备不再可用。您想对该计划做什么？") :
+                                                qsTr("计划视图中正在处理的计划不是当前设备的计划。您想对该计划做什么？")
                 }
 
                 QGCButton {
                     Layout.fillWidth:   true
                     text:               _planMasterController.dirty ?
                                             (_planMasterController.managerVehicle.isOfflineEditingVehicle ?
-                                                 qsTr("Discard Unsaved Changes") :
-                                                 qsTr("Discard Unsaved Changes, Load New Plan From Vehicle")) :
-                                            qsTr("Load New Plan From Vehicle")
+                                                 qsTr("放弃未保存的更改") :
+                                                 qsTr("放弃未保存的更改，从设备加载新计划")) :
+                                            qsTr("从设备加载新计划")
                     onClicked: {
                         _planMasterController.showPlanFromManagerVehicle()
                         _promptForPlanUsageShowing = false
@@ -144,8 +144,8 @@ Item {
                 QGCButton {
                     Layout.fillWidth:   true
                     text:               _planMasterController.managerVehicle.isOfflineEditingVehicle ?
-                                            qsTr("Keep Current Plan") :
-                                            qsTr("Keep Current Plan, Don't Update From Vehicle")
+                                            qsTr("保留当前计划") :
+                                            qsTr("保留当前计划，不从设备更新")
                     onClicked: {
                         if (!_planMasterController.managerVehicle.isOfflineEditingVehicle) {
                             _planMasterController.dirty = true
@@ -175,13 +175,13 @@ Item {
         }
 
         function waitingOnIncompleteDataMessage(save) {
-            var saveOrUpload = save ? qsTr("Save") : qsTr("Upload")
-            mainWindow.showMessageDialog(qsTr("Unable to %1").arg(saveOrUpload), qsTr("Plan has incomplete items. Complete all items and %1 again.").arg(saveOrUpload))
+            var saveOrUpload = save ? qsTr("保存") : qsTr("上传")
+            mainWindow.showMessageDialog(qsTr("无法 %1").arg(saveOrUpload), qsTr("计划包含不完整的项目。完成所有项目后再次 %1。").arg(saveOrUpload))
         }
 
         function waitingOnTerrainDataMessage(save) {
-            var saveOrUpload = save ? qsTr("Save") : qsTr("Upload")
-            mainWindow.showMessageDialog(qsTr("Unable to %1").arg(saveOrUpload), qsTr("Plan is waiting on terrain data from server for correct altitude values."))
+            var saveOrUpload = save ? qsTr("保存") : qsTr("上传")
+            mainWindow.showMessageDialog(qsTr("无法 %1").arg(saveOrUpload), qsTr("计划正在等待服务器的地形数据以获取正确的高度值。"))
         }
 
         function checkReadyForSaveUpload(save) {
@@ -204,14 +204,14 @@ Item {
                     sendToVehicle()
                     break
                 case MissionController.SendToVehiclePreCheckStateActiveMission:
-                    mainWindow.showMessageDialog(qsTr("Send To Vehicle"), qsTr("Current mission must be paused prior to uploading a new Plan"))
+                    mainWindow.showMessageDialog(qsTr("上传"), qsTr("当前计划必须先暂停，才能上传新计划"))
                     break
                 case MissionController.SendToVehiclePreCheckStateFirwmareVehicleMismatch:
-                    mainWindow.showMessageDialog(qsTr("Plan Upload"),
-                                                 qsTr("This Plan was created for a different firmware or vehicle type than the firmware/vehicle type of vehicle you are uploading to. " +
-                                                      "This can lead to errors or incorrect behavior. " +
-                                                      "It is recommended to recreate the Plan for the correct firmware/vehicle type.\n\n" +
-                                                      "Click 'Ok' to upload the Plan anyway."),
+                    mainWindow.showMessageDialog(qsTr("计划上传"),
+                                                 qsTr("此计划是为不同的固件或设备类型创建的，与您要上传到的设备的固件/设备类型不匹配。 " +
+                                                      "这可能会导致错误或不正确的行为。 " +
+                                                      "建议重新创建计划以匹配正确的固件/设备类型。\n\n" +
+                                                      "点击 '确定' 继续上传计划。"),
                                                  Dialog.Ok | Dialog.Cancel,
                                                  function() { _planMasterController.sendToVehicle() })
                     break
@@ -219,7 +219,7 @@ Item {
         }
 
         function loadFromSelectedFile() {
-            fileDialog.title =          qsTr("Select Plan File")
+            fileDialog.title =          qsTr("选择计划文件")
             fileDialog.planFiles =      true
             fileDialog.nameFilters =    _planMasterController.loadNameFilters
             fileDialog.openForLoad()
@@ -229,7 +229,7 @@ Item {
             if (!checkReadyForSaveUpload(true /* save */)) {
                 return
             }
-            fileDialog.title =          qsTr("Save Plan")
+            fileDialog.title =          qsTr("保存计划")
             fileDialog.planFiles =      true
             fileDialog.nameFilters =    _planMasterController.saveNameFilters
             fileDialog.openForSave()
@@ -243,7 +243,7 @@ Item {
             if (!checkReadyForSaveUpload(true /* save */)) {
                 return
             }
-            fileDialog.title =          qsTr("Save KML")
+            fileDialog.title =          qsTr("保存KML")
             fileDialog.planFiles =      false
             fileDialog.nameFilters =    ShapeFileHelper.fileDialogKMLFilters
             fileDialog.openForSave()
@@ -574,7 +574,7 @@ Item {
                 id: toolStripActionList
                 model: [
                     ToolStripAction {
-                        text:                   qsTr("File")
+                        text:                   qsTr("文件")
                         enabled:                !_planMasterController.syncInProgress
                         visible:                true
                         showAlternateIcon:      _planMasterController.dirty
@@ -583,7 +583,7 @@ Item {
                         dropPanelComponent:     syncDropPanel
                     },
                     ToolStripAction {
-                        text:       qsTr("Takeoff")
+                        text:       qsTr("起飞")
                         iconSource: "/res/takeoff.svg"
                         enabled:    _missionController.isInsertTakeoffValid
                         visible:    (toolStrip._isMissionLayer || toolStrip._isUtmspLayer) && !_planMasterController.controllerVehicle.rover
@@ -595,14 +595,14 @@ Item {
                     },
                     ToolStripAction {
                         id:                 addWaypointRallyPointAction
-                        text:               _editingLayer == _layerRallyPoints ? qsTr("Rally Point") : qsTr("Waypoint")
+                        text:               _editingLayer == _layerRallyPoints ? qsTr("集合点") : qsTr("航点")
                         iconSource:         "/qmlimages/MapAddMission.svg"
                         enabled:            toolStrip._isRallyLayer ? true : _missionController.flyThroughCommandsAllowed
                         visible:            toolStrip._isRallyLayer || toolStrip._isMissionLayer || toolStrip._isUtmspLayer
                         checkable:          true
                     },
                     ToolStripAction {
-                        text:               _missionController.isROIActive ? qsTr("Cancel ROI") : qsTr("ROI")
+                        text:               _missionController.isROIActive ? qsTr("取消ROI") : qsTr("ROI")
                         iconSource:         "/qmlimages/MapAddMission.svg"
                         enabled:            !_missionController.onlyInsertTakeoffValid
                         visible:            toolStrip._isMissionLayer && _planMasterController.controllerVehicle.roiModeSupported
@@ -618,7 +618,7 @@ Item {
                         onMyAddROIOnClickChanged: checked = _addROIOnClick
                     },
                     ToolStripAction {
-                        text:               _singleComplexItem ? _missionController.complexMissionItemNames[0] : qsTr("Pattern")
+                        text:               _singleComplexItem ? _missionController.complexMissionItemNames[0] : qsTr("模式")
                         iconSource:         "/qmlimages/MapDrawShape.svg"
                         enabled:            _missionController.flyThroughCommandsAllowed
                         visible:            toolStrip._isMissionLayer
@@ -632,10 +632,10 @@ Item {
                     },
                     ToolStripAction {
                         text:       _planMasterController.controllerVehicle.multiRotor
-                                    ? qsTr("Return")
+                                    ? qsTr("返航")
                                     : _missionController.isInsertLandValid && _missionController.hasLandItem
-                                      ? qsTr("Alt Land")
-                                      : qsTr("Land")
+                                      ? qsTr("低悬降落")
+                                      : qsTr("降落")
                         iconSource: "/res/rtl.svg"
                         enabled:    _missionController.isInsertLandValid
                         visible:    toolStrip._isMissionLayer || toolStrip._isUtmspLayer
@@ -645,7 +645,7 @@ Item {
                         }
                     },
                     ToolStripAction {
-                        text:               qsTr("Center")
+                        text:               qsTr("中心")
                         iconSource:         "/qmlimages/MapCenter.svg"
                         enabled:            true
                         visible:            true
@@ -705,14 +705,14 @@ Item {
                     visible:    QGroundControl.corePlugin.options.enablePlanViewSelector  && !_utmspEnabled
                     Component.onCompleted: currentIndex = 0
                     QGCTabButton {
-                        text:       qsTr("Mission")
+                        text:       qsTr("任务")
                     }
                     QGCTabButton {
-                        text:       qsTr("Fence")
+                        text:       qsTr("围栏")
                         enabled:    _geoFenceController.supported
                     }
                     QGCTabButton {
-                        text:       qsTr("Rally")
+                        text:       qsTr("集合点")
                         enabled:    _rallyPointController.supported
                     }
                 }
@@ -722,15 +722,15 @@ Item {
                     width:      parent.width
                     visible:    QGroundControl.corePlugin.options.enablePlanViewSelector && _utmspEnabled
                     QGCTabButton {
-                        text:       qsTr("Mission")
+                        text:       qsTr("任务")
                     }
                     QGCTabButton {
-                        text:       qsTr("Rally")
+                        text:       qsTr("集合点")
                         enabled:    _rallyPointController.supported
                     }
                     QGCTabButton {
                         id: utmspbutton
-                        text:       qsTr("UTM-Adapter")
+                        text:       qsTr("UTM-适配器")
                         visible: _utmspEnabled
                     }
                 }
@@ -835,7 +835,7 @@ Item {
             anchors.horizontalCenter:   terrainStatus.horizontalCenter
             anchors.bottomMargin:       ScreenTools.defaultFontPixelWidth * 0.5
             font.pointSize:             ScreenTools.smallFontPointSize
-            text:                       qsTr("Powered by %1").arg(_licenseString)
+            text:                       qsTr("由 %1 提供").arg(_licenseString)
         }
 
         TerrainStatus {
@@ -874,7 +874,7 @@ Item {
 
     function showLoadFromFileOverwritePrompt(title) {
         mainWindow.showMessageDialog(title,
-                                     qsTr("You have unsaved/unsent changes. Loading from a file will lose these changes. Are you sure you want to load from a file?"),
+                                     qsTr("您有未保存/未发送的更改。从文件加载将丢失这些更改。您确定要从文件加载吗？"),
                                      Dialog.Yes | Dialog.Cancel,
                                      function() { _planMasterController.loadFromSelectedFile() } )
     }
@@ -883,8 +883,8 @@ Item {
         id: createPlanRemoveAllPromptDialog
 
         QGCSimpleMessageDialog {
-            title:      qsTr("Create Plan")
-            text:       qsTr("Are you sure you want to remove current plan and create a new plan? ")
+            title:      qsTr("创建计划")
+            text:       qsTr("您确定要删除当前计划并创建新计划吗？")
             buttons:    Dialog.Yes | Dialog.No
 
             property var mapCenter
@@ -895,8 +895,8 @@ Item {
     }
 
     function clearButtonClicked() {
-        mainWindow.showMessageDialog(qsTr("Clear"),
-                                     qsTr("Are you sure you want to remove all mission items and clear the mission from the vehicle?"),
+        mainWindow.showMessageDialog(qsTr("清除"),
+                                     qsTr("您确定要删除所有任务项并清除设备的任务吗？"),
                                      Dialog.Yes | Dialog.Cancel,
                                      function() { _planMasterController.removeAllFromVehicle();
                                                   _missionController.setCurrentPlanViewSeqNum(0, true);
@@ -930,7 +930,7 @@ Item {
         ColumnLayout {
             spacing:    ScreenTools.defaultFontPixelWidth * 0.5
 
-            QGCLabel { text: qsTr("Create complex pattern:") }
+            QGCLabel { text: qsTr("创建复杂模式:") }
 
             Repeater {
                 model: _missionController.complexMissionItemNames
@@ -951,7 +951,7 @@ Item {
     function downloadClicked(title) {
         if (_planMasterController.dirty) {
             mainWindow.showMessageDialog(title,
-                                         qsTr("You have unsaved/unsent changes. Loading from the Vehicle will lose these changes. Are you sure you want to load from the Vehicle?"),
+                                         qsTr("您有未保存/未发送的更改。从设备加载将丢失这些更改。您确定要从设备加载吗？"),
                                          Dialog.Yes | Dialog.Cancel,
                                          function() { _planMasterController.loadFromVehicle() })
         } else {
@@ -966,22 +966,22 @@ Item {
             id:         columnHolder
             spacing:    _margin
 
-            property string _overwriteText: qsTr("Plan overwrite")
+            property string _overwriteText: qsTr("计划重写")
 
             QGCLabel {
                 id:                 unsavedChangedLabel
                 Layout.fillWidth:   true
                 wrapMode:           Text.WordWrap
                 text:               globals.activeVehicle ?
-                                        qsTr("You have unsaved changes. You should upload to your vehicle, or save to a file.") :
-                                        qsTr("You have unsaved changes.")
+                                        qsTr("您有未保存的更改。您应该上传到您的设备，或保存到文件。") :
+                                        qsTr("您有未保存的更改。")
                 visible:            _planMasterController.dirty
             }
 
             SectionHeader {
                 id:                 createSection
                 Layout.fillWidth:   true
-                text:               qsTr("Create Plan")
+                text:               qsTr("创建计划")
                 showSpacer:         false
             }
 
@@ -1050,7 +1050,7 @@ Item {
             SectionHeader {
                 id:                 storageSection
                 Layout.fillWidth:   true
-                text:               qsTr("Storage")
+                text:               qsTr("存储")
             }
 
             GridLayout {
@@ -1060,7 +1060,7 @@ Item {
                 visible:            storageSection.checked
 
                 QGCButton {
-                    text:               qsTr("Open...")
+                    text:               qsTr("打开...")
                     Layout.fillWidth:   true
                     enabled:            !_planMasterController.syncInProgress
                     onClicked: {
@@ -1074,7 +1074,7 @@ Item {
                 }
 
                 QGCButton {
-                    text:               qsTr("Save")
+                    text:               qsTr("保存")
                     Layout.fillWidth:   true
                     enabled:            !_planMasterController.syncInProgress && _planMasterController.currentPlanFile !== ""
                     onClicked: {
@@ -1088,7 +1088,7 @@ Item {
                 }
 
                 QGCButton {
-                    text:               qsTr("Save As...")
+                    text:               qsTr("另存为...")
                     Layout.fillWidth:   true
                     enabled:            !_planMasterController.syncInProgress && _planMasterController.containsItems
                     onClicked: {
@@ -1100,12 +1100,12 @@ Item {
                 QGCButton {
                     Layout.columnSpan:  3
                     Layout.fillWidth:   true
-                    text:               qsTr("Save Mission Waypoints As KML...")
+                    text:               qsTr("保存任务点为KML...")
                     enabled:            !_planMasterController.syncInProgress && _visualItems.count > 1
                     onClicked: {
                         // First point does not count
                         if (_visualItems.count < 2) {
-                            mainWindow.showMessageDialog(qsTr("KML"), qsTr("You need at least one item to create a KML."))
+                            mainWindow.showMessageDialog(qsTr("KML"), qsTr("您需要至少一个项目才能创建KML。"))
                             return
                         }
                         dropPanel.hide()
@@ -1117,7 +1117,7 @@ Item {
             SectionHeader {
                 id:                 vehicleSection
                 Layout.fillWidth:   true
-                text:               qsTr("Vehicle")
+                text:               qsTr("设备")
             }
 
             RowLayout {
@@ -1126,7 +1126,7 @@ Item {
                 visible:            vehicleSection.checked
 
                 QGCButton {
-                    text:               qsTr("Upload")
+                    text:               qsTr("上传")
                     Layout.fillWidth:   true
                     enabled:            !_planMasterController.offline && !_planMasterController.syncInProgress && _planMasterController.containsItems
                     visible:            !QGroundControl.corePlugin.options.disableVehicleConnection
@@ -1137,7 +1137,7 @@ Item {
                 }
 
                 QGCButton {
-                    text:               qsTr("Download")
+                    text:               qsTr("下载")
                     Layout.fillWidth:   true
                     enabled:            !_planMasterController.offline && !_planMasterController.syncInProgress
                     visible:            !QGroundControl.corePlugin.options.disableVehicleConnection
@@ -1149,7 +1149,7 @@ Item {
                 }
 
                 QGCButton {
-                    text:               qsTr("Clear")
+                    text:               qsTr("清除")
                     Layout.fillWidth:   true
                     Layout.columnSpan:  2
                     enabled:            !_planMasterController.offline && !_planMasterController.syncInProgress
