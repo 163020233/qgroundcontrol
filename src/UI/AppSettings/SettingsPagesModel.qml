@@ -14,7 +14,7 @@ import QGroundControl.ScreenTools
 
 ListModel {
     ListElement {
-        name: qsTr("一般")
+        name: qsTr("通用")
         url: "qrc:/qml/QGroundControl/AppSettings/GeneralSettings.qml"
         iconUrl: "qrc:/res/QGCLogoWhite.svg"
         pageVisible: function() { return true }

@@ -192,7 +192,7 @@ RowLayout {
             QGCButton {
                 // FIXME: forceArm is not possible anymore if _healthAndArmingChecksSupported == true
                 enabled:            _armed || !_healthAndArmingChecksSupported || _activeVehicle.healthAndArmingCheckReport.canArm
-                text:               _armed ?  qsTr("已上锁") : (forceArm ? qsTr("力臂") : qsTr("手臂"))
+                text:               _armed ?  qsTr("已上锁") : (forceArm ? qsTr("无人机") : qsTr("无人机"))
                 Layout.alignment:   Qt.AlignLeft
 
                 property bool forceArm: false
@@ -348,35 +348,35 @@ RowLayout {
                 source: _activeVehicle.mainStatusIndicatorContentItem
             }
 
-            SettingsGroupLayout {
-                Layout.fillWidth:   true
-                visible:            QGroundControl.corePlugin.showAdvancedUI
-
-                GridLayout {
-                    columns:            2
-                    rowSpacing:         ScreenTools.defaultFontPixelHeight / 2
-                    columnSpacing:      ScreenTools.defaultFontPixelWidth *2
-                    Layout.fillWidth:   true
-
-                    QGCLabel { Layout.fillWidth: true; text: qsTr("设备参数") }
-                    QGCButton {
-                        text: qsTr("配置")
-                        onClicked: {                            
-                            mainWindow.showVehicleConfigParametersPage()
-                            mainWindow.closeIndicatorDrawer()
-                        }
-                    }
-
-                    QGCLabel { Layout.fillWidth: true; text: qsTr("设备配置") }
-                    QGCButton {
-                        text: qsTr("配置")
-                        onClicked: {                            
-                            mainWindow.showVehicleConfig()
-                            mainWindow.closeIndicatorDrawer()
-                        }
-                    }
-                }
-            }
+            // SettingsGroupLayout {
+            //     Layout.fillWidth:   true
+            //     visible:            QGroundControl.corePlugin.showAdvancedUI
+            //
+            //     GridLayout {
+            //         columns:            2
+            //         rowSpacing:         ScreenTools.defaultFontPixelHeight / 2
+            //         columnSpacing:      ScreenTools.defaultFontPixelWidth *2
+            //         Layout.fillWidth:   true
+            //
+            //         QGCLabel { Layout.fillWidth: true; text: qsTr("设备参数") }
+            //         QGCButton {
+            //             text: qsTr("配置")
+            //             onClicked: {
+            //                 mainWindow.showVehicleConfigParametersPage()
+            //                 mainWindow.closeIndicatorDrawer()
+            //             }
+            //         }
+            //
+            //         QGCLabel { Layout.fillWidth: true; text: qsTr("设备配置") }
+            //         QGCButton {
+            //             text: qsTr("配置")
+            //             onClicked: {
+            //                 mainWindow.showVehicleConfig()
+            //                 mainWindow.closeIndicatorDrawer()
+            //             }
+            //         }
+            //     }
+            // }
         }
     }
 

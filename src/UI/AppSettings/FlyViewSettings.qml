@@ -53,7 +53,7 @@ SettingsPage {
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
-        heading:            qsTr("一般")
+        heading:            qsTr("通用")
 
         FactCheckBoxSlider {
             id:                 useCheckList
@@ -161,6 +161,8 @@ SettingsPage {
         Layout.fillWidth:       true
         Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 35
         heading:                qsTr("MAVLink 操作")
+
+        visible: false
         headingDescription:     qsTr("操作 JSON 文件应该在 '%1' 文件夹中创建.").arg(QGroundControl.settingsManager.appSettings.mavlinkActionsSavePath)
 
         LabelledComboBox {
@@ -193,7 +195,8 @@ SettingsPage {
     SettingsGroupLayout {
         Layout.fillWidth:   true
         heading:            qsTr("虚拟摇杆")
-        visible:            _virtualJoystick.visible || _virtualJoystickAutoCenterThrottle.visible || _virtualJoystickLeftHandedMode.visible
+        //visible:            _virtualJoystick.visible || _virtualJoystickAutoCenterThrottle.visible || _virtualJoystickLeftHandedMode.visible
+        visible: false
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
@@ -242,7 +245,8 @@ SettingsPage {
     SettingsGroupLayout {
         Layout.fillWidth:   true
         heading:            qsTr("3D 视图")
-        visible:            _viewer3DSettings.visible
+        //visible:            _viewer3DSettings.visible
+        visible: false
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true

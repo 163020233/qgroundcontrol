@@ -50,7 +50,7 @@ SettingsPage {
         }
 
         LabelledFactComboBox {
-            label:       qsTr("流 GCS 位置")
+            label:       qsTr("实时位置数据")
             fact:       _appSettings.followTarget
             indexModel: false
             visible:    _appSettings.followTarget.visible
@@ -166,7 +166,13 @@ SettingsPage {
         visible:            QGroundControl.settingsManager.unitsSettings.visible
 
         Repeater {
-            model: [ QGroundControl.settingsManager.unitsSettings.horizontalDistanceUnits, QGroundControl.settingsManager.unitsSettings.verticalDistanceUnits, QGroundControl.settingsManager.unitsSettings.areaUnits, QGroundControl.settingsManager.unitsSettings.speedUnits, QGroundControl.settingsManager.unitsSettings.temperatureUnits ]
+            model: QGroundControl.settingsManager.unitsSettings.speedUnits
+                //[
+                // QGroundControl.settingsManager.unitsSettings.horizontalDistanceUnits,
+                // QGroundControl.settingsManager.unitsSettings.verticalDistanceUnits,
+                // QGroundControl.settingsManager.unitsSettings.areaUnits,
+                // QGroundControl.settingsManager.unitsSettings.speedUnits,
+                // QGroundControl.settingsManager.unitsSettings.temperatureUnits]
 
             LabelledFactComboBox {
                 label:                  modelData.shortDescription

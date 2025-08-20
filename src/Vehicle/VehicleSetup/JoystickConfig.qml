@@ -76,7 +76,7 @@ SetupPage {
                 }
                 anchors.top:    parent.top
                 QGCTabButton {
-                    text:       qsTr("一般")
+                    text:       qsTr("通用")
                     visible:    _allowJoystickSelection
                 }
                 QGCTabButton {

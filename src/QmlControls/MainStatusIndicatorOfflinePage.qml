@@ -40,7 +40,7 @@ ToolIndicatorPage {
 
     contentComponent: Component {
         SettingsGroupLayout { 
-            heading: qsTr("选择连接的链接")
+            heading: qsTr("选择链接")
 
             QGCLabel {
                 text:       qsTr("没有配置的链接")
@@ -73,7 +73,7 @@ ToolIndicatorPage {
             SettingsGroupLayout {
                 LabelledButton {
                     label:      qsTr("通信链接")
-                    buttonText: qsTr("配置")
+                    buttonText: qsTr("设置")
 
                     onClicked: {
                         mainWindow.showSettingsTool(qsTr("通讯链接"))
@@ -91,14 +91,14 @@ ToolIndicatorPage {
 
                     model: [
                         autoConnectSettings.autoConnectPixhawk,
-                        autoConnectSettings.autoConnectSiKRadio,
-                        autoConnectSettings.autoConnectLibrePilot,
+                        // autoConnectSettings.autoConnectSiKRadio,
+                        // autoConnectSettings.autoConnectLibrePilot,
                         autoConnectSettings.autoConnectUDP,
-                        autoConnectSettings.autoConnectZeroConf,
+                        // autoConnectSettings.autoConnectZeroConf,
                         autoConnectSettings.autoConnectRTKGPS,
                     ]
 
-                    property var names: [ qsTr("Pixhawk"), qsTr("SiK Radio"), qsTr("LibrePilot"), qsTr("UDP"), qsTr("Zero-Conf"), qsTr("RTK") ]
+                    property var names: [ qsTr("Pixhawk"), qsTr("UDP"), qsTr("RTK") ]
       
                     FactCheckBoxSlider {
                         Layout.fillWidth:   true
