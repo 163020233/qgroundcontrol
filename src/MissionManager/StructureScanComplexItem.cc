@@ -22,7 +22,8 @@
 
 QGC_LOGGING_CATEGORY(StructureScanComplexItemLog, "StructureScanComplexItemLog")
 
-const QString StructureScanComplexItem::name(StructureScanComplexItem::tr("Structure Scan"));
+//const QString StructureScanComplexItem::name(StructureScanComplexItem::tr("Structure Scan"));
+const QString StructureScanComplexItem::name(StructureScanComplexItem::tr("建筑扫描"));
 
 StructureScanComplexItem::StructureScanComplexItem(PlanMasterController* masterController, bool flyView, const QString& kmlOrShpFile)
     : ComplexMissionItem        (masterController, flyView)

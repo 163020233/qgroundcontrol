@@ -11,7 +11,7 @@
 #include "PlanMasterController.h"
 
 BlankPlanCreator::BlankPlanCreator(PlanMasterController* planMasterController, QObject* parent)
-    : PlanCreator(planMasterController, tr("Empty Plan"), QStringLiteral("/qmlimages/PlanCreator/BlankPlanCreator.png"), parent)
+    : PlanCreator(planMasterController, tr("空计划"), QStringLiteral("/qmlimages/PlanCreator/BlankPlanCreator.png"), parent)
 {
 
 }

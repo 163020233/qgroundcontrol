@@ -26,7 +26,7 @@
 
 QGC_LOGGING_CATEGORY(SurveyComplexItemLog, "SurveyComplexItemLog")
 
-const QString SurveyComplexItem::name(SurveyComplexItem::tr("Survey"));
+const QString SurveyComplexItem::name(SurveyComplexItem::tr("区域测绘"));
 
 SurveyComplexItem::SurveyComplexItem(PlanMasterController* masterController, bool flyView, const QString& kmlOrShpFile)
     : TransectStyleComplexItem  (masterController, flyView, settingsGroup)
