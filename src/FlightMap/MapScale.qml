@@ -194,7 +194,8 @@ Item {
         iconSource:         "/res/terrain.svg"
         width:              height
         opacity:            0.75
-        visible:            terrainButtonVisible
+        // visible:            terrainButtonVisible
+        visible: false
         onClicked:          terrainButtonClicked()
     }
 

@@ -221,8 +221,10 @@ RowLayout {
                     Layout.fillWidth:   true
                     label:              qsTr("飞行模式")
                     buttonText:         qsTr("配置")
-                    visible:            _activeVehicle.autopilotPlugin.knownVehicleComponentAvailable(AutoPilotPlugin.KnownFlightModesVehicleComponent) &&
-                                            QGroundControl.corePlugin.showAdvancedUI
+                    visible:false
+
+                        // visible:            _activeVehicle.autopilotPlugin.knownVehicleComponentAvailable(AutoPilotPlugin.KnownFlightModesVehicleComponent) &&
+                        //                     QGroundControl.corePlugin.showAdvancedUI
 
                     onClicked: {
                         mainWindow.showKnownVehicleComponentConfigPage(AutoPilotPlugin.KnownFlightModesVehicleComponent)

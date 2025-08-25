@@ -21,7 +21,7 @@ Rectangle {
     color:      qgcPal.window
     opacity:    0.80
     clip:       true
-
+    visible:false
     property var missionController
 
     signal setCurrentSeqNum(int seqNum)
@@ -35,10 +35,11 @@ Rectangle {
     property real _missionTotalDistance:    isNaN(missionController.missionTotalDistance) ? 100 : missionController.missionTotalDistance
     property var  _unitsConversion:         QGroundControl.unitsConversion
 
-    QGCPalette { id: qgcPal }
+    QGCPalette { id: qgcPal  }
 
     QGCLabel {
         id:                     titleLabel
+        visible:false
         anchors.top:            parent.bottom
         width:                  parent.height
         font.pointSize:         ScreenTools.smallFontPointSize
@@ -50,6 +51,7 @@ Rectangle {
 
     QGCFlickable {
         id:                 terrainProfileFlickable
+        visible:false
         anchors.top:        parent.top
         anchors.bottom:     parent.bottom
         anchors.leftMargin: titleLabel.contentHeight

@@ -46,7 +46,7 @@ RowLayout {
         property string _commLostText:      qsTr("通讯中断")
         property string _readyToFlyText:    qsTr("准备起飞")
         property string _notReadyToFlyText: qsTr("未准备")
-        property string _disconnectedText:  qsTr("未连接 - 点击手动连接")
+        property string _disconnectedText:  qsTr("连接")
         property string _armedText:         qsTr("已解锁")
         property string _flyingText:        qsTr("正在飞行")
         property string _landingText:       qsTr("正在降落")
@@ -100,14 +100,19 @@ RowLayout {
                             return mainStatusLabel._notReadyToFlyText
                         }
                     } else {
+                        // 默认配置OK,传感器OK
                         // Best we can do is determine readiness based on AutoPilot component setup and health indicators from SYS_STATUS
                         if (_activeVehicle.allSensorsHealthy && _activeVehicle.autopilotPlugin.setupComplete) {
                             _mainStatusBGColor = "green"
                             return mainStatusLabel._readyToFlyText
-                        } else {
-                            _mainStatusBGColor = "yellow"
-                            return mainStatusLabel._notReadyToFlyText
-                        }
+                        // } else {
+                        //     _mainStatusBGColor = "yellow"
+                        //     return mainStatusLabel._notReadyToFlyText
+                        // }
+                            } else {
+                                _mainStatusBGColor = "green"
+                                return mainStatusLabel._readyToFlyText
+                            }
                     }
                 }
             } else {

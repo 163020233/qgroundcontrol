@@ -48,12 +48,12 @@ ToolIndicatorPage {
                 }
 
                 LabelledLabel {
-                    label:      qsTr("HDOP")
+                    label:      qsTr("水平精度因子")
                     labelText:  activeVehicle ? activeVehicle.gps.hdop.valueString : valueNA
                 }
 
                 LabelledLabel {
-                    label:      qsTr("VDOP")
+                    label:      qsTr("垂直精度因子")
                     labelText:  activeVehicle ? activeVehicle.gps.vdop.valueString : valueNA
                 }
 
