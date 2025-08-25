@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
+add_compile_options(/utf-8)
+
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/cmake
     ${CMAKE_SOURCE_DIR}/cmake/modules
