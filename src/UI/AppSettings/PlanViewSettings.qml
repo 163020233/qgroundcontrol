@@ -30,7 +30,7 @@ SettingsPage {
             fact:               _settingsManager.appSettings.defaultMissionItemAltitude
             visible:            fact.visible
         }
-
+        // 无人机从垂直起飞模式切换到固定翼飞行模式所需的水平距离
         LabelledFactTextField {
             Layout.fillWidth:   true
             label:              qsTr("VTOL 转换距离")
@@ -40,7 +40,7 @@ SettingsPage {
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("使用 MAV_CMD_CONDITION_GATE 生成模式")
+            text:               qsTr("条件门任务")
             fact:               _planViewSettings.useConditionGate
             visible:            fact.visible
         }
@@ -54,7 +54,7 @@ SettingsPage {
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("允许配置多个降落序列")
+            text:               qsTr("允许设置多个降落点")
             fact:               _planViewSettings.allowMultipleLandingPatterns
             visible:            fact.visible
         }

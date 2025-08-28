@@ -232,7 +232,9 @@ RowLayout {
             SettingsGroupLayout {
                 //Layout.fillWidth:   true
                 heading:            qsTr("传感器状态")  
-                visible:            !_healthAndArmingChecksSupported
+                //visible:            !_healthAndArmingChecksSupported
+                visible: !_healthAndArmingChecksSupported
+                    && _activeVehicle.sysStatusSensorInfo.sensorNames.length > 0
 
                 GridLayout {
                     rowSpacing:     _spacing

@@ -107,12 +107,16 @@ Fact *FactGroup::getFact(const QString &name) const
 
 FactGroup *FactGroup::getFactGroup(const QString &name) const
 {
+    // 如果 _ignoreCamelCase 为 false，就把 name 转换为驼峰形式
     FactGroup * factGroup = nullptr;
     const QString camelCaseName = _ignoreCamelCase ? name : _camelCase(name);
 
+    // _nameToFactGroupMap 是一个 QMap<QString, FactGroup*>
+    // 用于存储 name -> FactGroup* 的映射关系
     if (_nameToFactGroupMap.contains(camelCaseName)) {
         factGroup = _nameToFactGroupMap[camelCaseName];
     } else {
+        // 如果没有找到对应的 FactGroup，就打印警告日志
         qCWarning(FactGroupLog) << "Unknown FactGroup" << camelCaseName;
     }
 

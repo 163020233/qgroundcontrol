@@ -254,10 +254,16 @@ void FactValueGrid::deleteLastColumn(void)
 
 InstrumentValueData* FactValueGrid::_createNewInstrumentValueWorker(QObject* parent)
 {
+    // 创建一个新的数据展示单元，用来绑定某个 Fact（飞行器参数/状态）
     InstrumentValueData* value = new InstrumentValueData(this, parent);
+    // 设置它要绑定的 Fact（这里绑定的是 "AltitudeRelative" 相对高度）
+    // vehicleFactGroupName 表示这个 Fact 是来自 Vehicle 的 FactGroup
     value->setFact(InstrumentValueData::vehicleFactGroupName, "AltitudeRelative");
+    // 设置显示的文字（用 Fact 的 shortDescription）
     value->setText(value->fact()->shortDescription());
+    // 连接保存/更新信号，保证 UI 跟 Fact 值同步
     _connectSaveSignals(value);
+    // 返回这个 InstrumentValueData
     return value;
 
 }

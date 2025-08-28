@@ -163,8 +163,8 @@ SettingsPage {
     SettingsGroupLayout {
         Layout.fillWidth:   true
         heading:            qsTr("单位")
-        visible:            QGroundControl.settingsManager.unitsSettings.visible
-
+        //visible:            QGroundControl.settingsManager.unitsSettings.visible
+        visible:false
         Repeater {
             model: QGroundControl.settingsManager.unitsSettings.speedUnits
                 //[

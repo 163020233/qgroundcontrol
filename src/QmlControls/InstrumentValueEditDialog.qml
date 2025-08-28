@@ -22,7 +22,7 @@ import QGroundControl.Palette
 
 QGCPopupDialog {
     id:         root
-    title:      qsTr("遥测显示")
+    title:      qsTr("仪表盘设置")
     buttons:    Dialog.Close
 
     property var instrumentValueData
@@ -38,7 +38,7 @@ QGCPopupDialog {
         id: noFactComponent
 
         QGCLabel {
-            text: qsTr("遥测显示需要连接车辆。")
+            text: qsTr("仪表盘显示需要连接车辆。")
         }
     }
 
@@ -52,50 +52,124 @@ QGCPopupDialog {
                 spacing: ScreenTools.defaultFontPixelHeight / 2
 
                 SettingsGroupLayout {
-                    heading: qsTr("遥测")
-
+                    heading: qsTr("仪表盘")
                     LabelledComboBox {
-                        id:                     factGroupCombo
-                        label:                  qsTr("组")
-                        model:                  instrumentValueData.factGroupNames
-                        currentIndex:           instrumentValueData.factGroupNames.indexOf(instrumentValueData.factGroupName)
+                        id: factGroupCombo
+                        label: qsTr("类型")
+
+                        // 显示中文，但逻辑使用英文
+                        property var groupEnglishNames: ["Vehicle", "Gps"]
+                        property var groupChineseNames: ["飞行器", "卫星定位"]
+
+                        model: groupChineseNames
+                        currentIndex: groupEnglishNames.indexOf(instrumentValueData.factGroupName)
+
                         onActivated: (index) => {
-                            instrumentValueData.setFact(currentText, "")
+                            let groupName = groupEnglishNames[index] // 英文名字
+                            instrumentValueData.setFact(groupName, "")
                             instrumentValueData.icon = ""
-                            instrumentValueData.text = instrumentValueData.fact.shortDescription
+                            instrumentValueData.text = instrumentValueData.fact ? instrumentValueData.fact.shortDescription : qsTr("标签")
+
+                            // 更新 Fact Value 下拉
+                            factNamesCombo.updateModel()
                         }
+
                         Connections {
                             target: instrumentValueData
-                            onFactGroupNameChanged: factGroupCombo.currentIndex = factGroupCombo.comboBox.find(instrumentValueData.factGroupName)
+                            onFactGroupNameChanged: factGroupCombo.currentIndex = groupEnglishNames.indexOf(instrumentValueData.factGroupName)
                         }
                     }
 
+                    // --- Fact Value 下拉 ---
                     LabelledComboBox {
-                        id:                     factNamesCombo
-                        label:                  qsTr("值")
-                        model:                  instrumentValueData.factValueNames
-                        currentIndex:           instrumentValueData.factValueNames.indexOf(instrumentValueData.factName)
-                        onActivated: (index) => {
-                            instrumentValueData.setFact(instrumentValueData.factGroupName, currentText)
+                        id: factNamesCombo
+                        label: qsTr("参数")
+                        property var factValueEnglish: []
+                        property var factValueChinese: []
+
+                        function updateModel() {
+                            let groupName = factGroupCombo.groupEnglishNames[factGroupCombo.currentIndex]
+
+                            if (groupName === "Vehicle") {
+                                factValueEnglish = ["Roll", "Pitch", "Heading", "GroundSpeed","AltitudeRelative", "AltitudeAMSL","throttlePct","flightDistance","distanceToHome","climbRate"]
+                                factValueChinese = ["横滚角", "俯仰角", "航向", "飞行速度","相对高度", "海拔高度","油门比例","飞行路程","距家距离","上升下降速度"]
+                            } else if (groupName === "Gps") {
+                                factValueEnglish = ["Lon","Lat"]
+                                factValueChinese = ["经度","纬度"]
+                            }
+
+                            model = factValueChinese           // 中文显示
+                            currentIndex = 0
+
+                            // 默认选择第一个 Fact
+                            instrumentValueData.setFact(groupName, factValueEnglish[0])
                             instrumentValueData.icon = ""
-                            instrumentValueData.text = instrumentValueData.fact.shortDescription
+                            instrumentValueData.text = factValueChinese[0]   // 默认中文显示
                         }
+
+                        Component.onCompleted: updateModel()
+
+                        onActivated: (index) => {
+                            let groupName = factGroupCombo.groupEnglishNames[factGroupCombo.currentIndex]
+                            let factName = factValueEnglish[index]
+                            instrumentValueData.setFact(groupName, factName)      // 通信用英文
+                            instrumentValueData.icon = ""
+                            instrumentValueData.text = factValueChinese[index]   // 显示中文
+                        }
+
                         Connections {
                             target: instrumentValueData
-                            onFactNameChanged: factNamesCombo.currentIndex = factNamesCombo.comboBox.find(instrumentValueData.factName)
+                            onFactNameChanged: factNamesCombo.currentIndex = factValueEnglish.indexOf(instrumentValueData.factName)
                         }
                     }
                 }
+                //     LabelledComboBox {
+                //         id:                     factGroupCombo
+                //         label:                  qsTr("组")
+                //         model:                  instrumentValueData.factGroupNames
+                //         currentIndex:           instrumentValueData.factGroupNames.indexOf(instrumentValueData.factGroupName)
+                //         onActivated: (index) => {
+                //             instrumentValueData.setFact(currentText, "")
+                //             instrumentValueData.icon = ""
+                //             instrumentValueData.text = instrumentValueData.fact.shortDescription
+                //         }
+                //         Connections {
+                //             target: instrumentValueData
+                //             onFactGroupNameChanged: factGroupCombo.currentIndex = factGroupCombo.comboBox.find(instrumentValueData.factGroupName)
+                //         }
+                //     }
+                //
+                //     LabelledComboBox {
+                //         id:                     factNamesCombo
+                //         label:                  qsTr("值")
+                //         model:                  instrumentValueData.factValueNames
+                //
+                //         model: instrumentValueData.factValueNames
+                //         currentIndex:           instrumentValueData.factValueNames.indexOf(instrumentValueData.factName)
+                //         onActivated: (index) => {
+                //             instrumentValueData.setFact(instrumentValueData.factGroupName, currentText)
+                //             instrumentValueData.icon = ""
+                //             instrumentValueData.text = instrumentValueData.fact.shortDescription
+                //         }
+                //         Connections {
+                //             target: instrumentValueData
+                //             onFactNameChanged: factNamesCombo.currentIndex = factNamesCombo.comboBox.find(instrumentValueData.factName)
+                //         }
+                //     }
+                // }
 
                 SettingsGroupLayout {
                     heading: qsTr("标签")
+                    visible:false
 
                     ColumnLayout {
                         Layout.fillWidth:   true
                         spacing:            ScreenTools.defaultFontPixelHeight / 2
 
                         RowLayout {
+
                             Layout.fillWidth:  true
+                            visible:false
 
                             QGCRadioButton {
                                 id:                     iconRadio
@@ -145,41 +219,88 @@ QGCPopupDialog {
 
                         RowLayout {
                             Layout.fillWidth: true
+                            visible:false
 
                             QGCRadioButton {
-                                id:                     textRadio
-                                text:                   qsTr("文本")
-                                Layout.fillWidth:       true
-                                ButtonGroup.group:      labelTypeGroup
-                                Component.onCompleted:  checked = instrumentValueData.icon == ""
+                                id: textRadio
+                                text: qsTr("文本")
+                                Layout.fillWidth: true
+                                Component.onCompleted: checked = instrumentValueData.icon == ""
+
                                 onClicked: {
                                     instrumentValueData.icon = ""
-                                    instrumentValueData.text = instrumentValueData.fact ? instrumentValueData.fact.shortDescription : qsTr("标签")
+                                    // 获取中文名称
+                                    let index = factNamesCombo.factValueEnglish.indexOf(instrumentValueData.factName)
+                                    instrumentValueData.text = index >= 0 ? factNamesCombo.factValueChinese[index] : qsTr("标签")
                                 }
                             }
 
                             QGCTextField {
-                                enabled:                textRadio.checked
-                                Layout.minimumWidth:    iconOptionInputs.width
-                                text:                   textRadio.checked 
-                                                            ? instrumentValueData.text
-                                                            : instrumentValueData.fact ? instrumentValueData.fact.shortDescription : qsTr("标签")
-                                onEditingFinished:      instrumentValueData.text = text 
+                                enabled: textRadio.checked
+                                Layout.minimumWidth: 200
+                                text: {
+                                    if (textRadio.checked) {
+                                        // 中文显示
+                                        let index = factNamesCombo.factValueEnglish.indexOf(instrumentValueData.factName)
+                                            index >= 0 ? factNamesCombo.factValueChinese[index] : instrumentValueData.text
+                                    } else {
+                                        // 不显示时仍显示默认
+                                        instrumentValueData.text
+                                    }
+                                }
+                                onEditingFinished: instrumentValueData.text = text
                             }
                         }
+                        // RowLayout {
+                        //     Layout.fillWidth: true
+                        //     QGCRadioButton {
+                        //         id:                     textRadio
+                        //         text:                   qsTr("文本")
+                        //         Layout.fillWidth:       true
+                        //         ButtonGroup.group:      labelTypeGroup
+                        //         Component.onCompleted:  checked = instrumentValueData.icon == ""
+                        //         onClicked: {
+                        //             instrumentValueData.icon = ""
+                        //             instrumentValueData.text = instrumentValueData.fact ? instrumentValueData.fact.shortDescription : qsTr("标签")
+                        //         }
+                        //     }
+                        //
+                        //     QGCTextField {
+                        //         enabled:                textRadio.checked
+                        //         Layout.minimumWidth:    iconOptionInputs.width
+                        //         text:                   textRadio.checked
+                        //                                     ? instrumentValueData.text
+                        //                                     : instrumentValueData.fact ? instrumentValueData.fact.shortDescription : qsTr("标签")
+                        //         onEditingFinished:      instrumentValueData.text = text
+                        //     }
+                        // }
                     }
 
+                    // LabelledComboBox {
+                    //     label:          qsTr("大小")
+                    //     model:          instrumentValueData.factValueGrid.fontSizeNames
+                    //     currentIndex:   instrumentValueData.factValueGrid.fontSize
+                    //     onActivated:    (index) => { instrumentValueData.factValueGrid.fontSize = index }
+                    // }
                     LabelledComboBox {
-                        label:          qsTr("大小") 
+                        visible: false   // 隐藏
+                        enabled: false   // 禁止交互
+                        label:          qsTr("大小")
                         model:          instrumentValueData.factValueGrid.fontSizeNames
                         currentIndex:   instrumentValueData.factValueGrid.fontSize
                         onActivated:    (index) => { instrumentValueData.factValueGrid.fontSize = index }
                     }
 
+                    Component.onCompleted: {
+                        instrumentValueData.factValueGrid.fontSize = 3  // 设置默认值
+                    }
+
                     QGCCheckBoxSlider {
                         Layout.fillWidth: true
-                        text:       qsTr("显示单位") 
-                        checked:    instrumentValueData.showUnits
+                        text:       qsTr("显示单位")
+                        checked:    false
+                        //checked:    instrumentValueData.showUnits
+                        visible:    false
                         onClicked:  instrumentValueData.showUnits = checked
                     }
                 }
@@ -188,6 +309,7 @@ QGCPopupDialog {
             SettingsGroupLayout {
                 Layout.alignment:   Qt.AlignTop
                 heading:            qsTr("范围")
+                visible:            false
 
                 ColumnLayout {
                     Layout.fillWidth: true

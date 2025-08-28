@@ -247,7 +247,7 @@ Item {
                     }
 
                     LabelledLabel {
-                        label:      qsTr("剩余时间")
+                        label:      qsTr("剩余电量")
                         labelText:  object.percentRemaining.valueString + " " + object.percentRemaining.units
                         visible:    batteryValuesAvailable.percentRemainingAvailable
                     }
@@ -295,9 +295,15 @@ Item {
                     id:             editModeCheckBox
                     label:          qsTr("值")
                     fact:           _fact
-                    visible:        _fact,visible
+                    //visible:        _fact
+                    visible: false   // 隐藏选择控件
 
                     property Fact _fact: QGroundControl.settingsManager.batteryIndicatorSettings.valueDisplay
+
+                    Component.onCompleted: {
+                        _fact.setValue(2)   // 默认值：Percent And Voltage
+                    }
+
                 }
 
                 ColumnLayout {

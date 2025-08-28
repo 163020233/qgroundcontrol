@@ -191,39 +191,39 @@ void StatusTextHandler::handleHTMLEscapedTextMessage(MAV_COMPONENT compId, MAV_S
     QString severityText;
     switch (severity) {
         case MAV_SEVERITY_EMERGENCY:
-            severityText = tr("EMERGENCY");
+            severityText = tr("紧急");
             break;
 
         case MAV_SEVERITY_ALERT:
-            severityText = tr("ALERT");
+            severityText = tr("严重警告");
             break;
 
         case MAV_SEVERITY_CRITICAL:
-            severityText = tr("Critical");
+            severityText = tr("危险状态");
             break;
 
         case MAV_SEVERITY_ERROR:
-            severityText = tr("Error");
+            severityText = tr("错误");
             break;
 
         case MAV_SEVERITY_WARNING:
-            severityText = tr("Warning");
+            severityText = tr("警告");
             break;
 
         case MAV_SEVERITY_NOTICE:
-            severityText = tr("Notice");
+            severityText = tr("通知");
             break;
 
         case MAV_SEVERITY_INFO:
-            severityText = tr("Info");
+            severityText = tr("消息");
             break;
 
         case MAV_SEVERITY_DEBUG:
-            severityText = tr("Debug");
+            severityText = tr("调试信息");
             break;
 
         default:
-            qCWarning(StatusTextHandlerLog) << Q_FUNC_INFO << "Invalid MAV_SEVERITY";
+            qCWarning(StatusTextHandlerLog) << Q_FUNC_INFO << "无效严重性等级";
             break;
     }
 
@@ -363,7 +363,7 @@ void StatusTextHandler::_handleTextMessage(uint32_t newCount, MessageType messag
 
         case MessageType::MessageNone:
         default:
-            qCWarning(StatusTextHandlerLog) << Q_FUNC_INFO << "Invalid MessageType";
+            qCWarning(StatusTextHandlerLog) << Q_FUNC_INFO << "无效消息类型";
             break;
     }
 

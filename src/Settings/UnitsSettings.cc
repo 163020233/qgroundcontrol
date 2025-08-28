@@ -148,15 +148,16 @@ DECLARE_SETTINGSFACT_NO_FUNC(UnitsSettings, speedUnits)
         metaData->setEnumInfo(enumStrings, enumValues);
 
         SpeedUnits defaultSpeedUnit = SpeedUnitsMetersPerSecond;
-        switch(QLocale::system().measurementSystem()) {
-            case QLocale::MetricSystem: {
-                defaultSpeedUnit = SpeedUnitsMetersPerSecond;
-            } break;
-            case QLocale::ImperialUSSystem:
-            case QLocale::ImperialUKSystem:
-                defaultSpeedUnit = SpeedUnitsMilesPerHour;
-                break;
-        }
+        // switch(QLocale::system().measurementSystem()) {
+        //     case QLocale::MetricSystem: {
+        //         defaultSpeedUnit = SpeedUnitsMetersPerSecond;
+        //     } break;
+        //     case QLocale::ImperialUSSystem:
+        //     case QLocale::ImperialUKSystem:
+        //         defaultSpeedUnit = SpeedUnitsMilesPerHour;
+        //         break;
+        // }
+        //默认米/秒
         metaData->setRawDefaultValue(defaultSpeedUnit);
         metaData->setQGCRebootRequired(true);
         _speedUnitsFact = new SettingsFact(_settingsGroup, metaData, this);

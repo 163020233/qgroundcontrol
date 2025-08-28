@@ -33,6 +33,9 @@ BatteryIndicator {
                 label:              qsTr("设备操作")
                 fact:               controller.getParameterFact(-1, "COM_LOW_BAT_ACT")
                 indexModel:         false
+
+                visible: fact && fact.name !== ""   // 如果没有对应参数就隐藏
+                enabled: visible                    // 没有参数时不可用
             }
 
             FactSlider {

@@ -26,11 +26,12 @@ public:
     FactValueGrid(QQuickItem *parent = nullptr);
     ~FactValueGrid();
 
+    //默认初始值为3本来是0
     enum FontSize {
-        DefaultFontSize=0,
-        SmallFontSize,
-        MediumFontSize,
-        LargeFontSize,
+        DefaultFontSize=3,
+        SmallFontSize=1,
+        MediumFontSize=2,
+        LargeFontSize=3,
     };
     Q_ENUMS(FontSize)
 
