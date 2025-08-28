@@ -99,9 +99,32 @@ Rectangle {
                 spacing: ScreenTools.defaultFontPixelWidth
 
                 QGCLabel {
-                    id:     altModeLabel
-                    text:   QGroundControl.altitudeModeShortDescription(_missionController.globalAltitudeMode)
+                    id: altModeLabel
+                    text: {
+                        switch (_missionController.globalAltitudeMode) {
+                            case QGroundControl.AltitudeModeMixed:
+                                return "混合模式"
+                            case QGroundControl.AltitudeModeRelative:
+                                return "相对高度"
+                            case QGroundControl.AltitudeModeAbsolute:
+                                return "绝对高度"
+                            case QGroundControl.AltitudeModeCalcAboveTerrain:
+                                return "计算高度"
+                            case QGroundControl.AltitudeModeTerrainFrame:
+                                return "跟随地形"
+                            case QGroundControl.AltitudeModeNone:
+                                return "无高度模式"
+                            default:
+                                return "未知模式"
+                        }
+                    }
                 }
+
+                //
+                // QGCLabel {
+                //     id:     altModeLabel
+                //     text:   QGroundControl.altitudeModeShortDescription(_missionController.globalAltitudeMode)
+                // }
                 QGCColoredImage {
                     height:     ScreenTools.defaultFontPixelHeight / 2
                     width:      height

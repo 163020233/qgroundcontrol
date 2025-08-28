@@ -48,23 +48,23 @@ QGCPopupDialog {
         id: buttonModel
 
         ListElement {
-            modeName:   qsTr("相对起飞高度")
+            modeName:   qsTr("相对高度")
             help:       qsTr("指定高度是相对于起飞位置高度的。")
             modeValue:  QGroundControl.AltitudeModeRelative
         }
         ListElement {
-            modeName:   qsTr("AMSL")
+            modeName:   qsTr("绝对高度")
             help:       qsTr("指定高度是海平面高度。")
             modeValue:  QGroundControl.AltitudeModeAbsolute
         }
         ListElement {
             modeName:   qsTr("计算高度")
-            help:       qsTr("指定高度是相对于地形高度的。")
+            help:       qsTr("指定高度是相对于地形高度，离线/地图计算")
             modeValue:  QGroundControl.AltitudeModeCalcAboveTerrain
         }
         ListElement {
             modeName:   qsTr("地形框架")
-            help:       qsTr("指定高度是指高于地形的距离。实际飞行高度由飞行器根据地形高度图或距离传感器控制。")
+            help:       qsTr("地形框架，飞行中实时跟随地形，依赖地形数据或传感器。")
             modeValue:  QGroundControl.AltitudeModeTerrainFrame
         }
         ListElement {

@@ -35,11 +35,14 @@ ColumnLayout {
             QGCLabel {
                 Layout.fillWidth:   true;
                 text:               qsTr("设备操作")
+                visible: false
             }
             FactComboBox {
                 id:                     failsafeActionCombo
                 fact:                   controller.getParameterFact(-1, "NAV_DLL_ACT")
                 indexModel:             false
+
+                visible: false
             }
         }
 
