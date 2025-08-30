@@ -55,6 +55,7 @@ FlightModeIndicator {
             SettingsGroupLayout {
                 Layout.fillWidth:   true
                 heading:            qsTr("地理围栏")
+                visible:false
 
                 LabelledFactComboBox {
                     Layout.fillWidth:       true

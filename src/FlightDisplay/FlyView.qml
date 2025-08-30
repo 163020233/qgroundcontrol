@@ -29,10 +29,10 @@ import QGroundControl.Vehicle
 
 // 3D Viewer modules
 import Viewer3D
-
+import QtPositioning
 Item {
     id: _root
-
+    property var homePoint: null
     // These should only be used by MainRootWindow
     property var planController:    _planController
     property var guidedController:  _guidedController
@@ -84,6 +84,32 @@ Item {
         visible:    !QGroundControl.videoManager.fullScreen
     }
 
+    Component.onCompleted: {
+        homeTimer.start()
+    }
+    Timer {
+        interval: 500
+        running: true
+        repeat: true
+        onTriggered: {
+            var av = _root.activeVehicle
+            if (av) {
+                if (av.gps && av.gps.positionValid) {
+                    var pos = av.gps.position
+                    console.log("飞控 GPS 已初始化:", pos.latitude, pos.longitude, pos.altitude)
+                    _root.homePoint = pos
+                    mapControl.center = pos
+                    mapControl.zoomLevel = 18
+                    running = false
+                } else {
+                    console.log("飞控 GPS 无效")
+                }
+            } else {
+                console.log("activeVehicle 未连接")
+            }
+        }
+    }
+
     Item {
         id:                 mapHolder
         anchors.top:        toolbar.bottom
@@ -100,6 +126,35 @@ Item {
             toolInsets:             customOverlay.totalToolInsets
             mapName:                "FlightDisplayView"
             enabled:                !viewer3DWindow.isOpen
+        }
+
+
+        // 临时设置点位
+        // Component.onCompleted: {
+        //
+        //
+        //     _root.homePoint = QtPositioning.coordinate(30.813901,104.096312)
+        //     mapControl.center = _root.homePoint
+        //     mapControl.zoomLevel = 18
+        // }
+
+        // 定位按钮，放右边中间
+        QGCToolBarButton {
+            width: 48
+            height: 48
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: 16
+            icon.source: "/res/locate.svg"
+
+            onClicked: {
+                if (_root.homePoint && _root.homePoint.isValid) {
+                    mapControl.center = _root.homePoint
+                    mapControl.zoomLevel = 18
+                } else {
+                    console.log("Home 点未初始化")
+                }
+            }
         }
 
         FlyViewVideo {

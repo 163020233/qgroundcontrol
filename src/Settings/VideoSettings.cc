@@ -27,6 +27,7 @@ DECLARE_SETTINGGROUP(Video, "Video")
     // Setup enum values for videoSource settings into meta data
     QVariantList videoSourceList;
 #if defined(QGC_GST_STREAMING) || defined(QGC_QT_STREAMING)
+
     videoSourceList.append(videoSourceRTSP);
     videoSourceList.append(videoSourceUDPH264);
     videoSourceList.append(videoSourceUDPH265);
@@ -72,7 +73,7 @@ void VideoSettings::_setDefaults()
     if (_noVideo) {
         _nameToMetaDataMap[videoSourceName]->setRawDefaultValue(videoSourceNoVideo);
     } else {
-        _nameToMetaDataMap[videoSourceName]->setRawDefaultValue(videoDisabled);
+        _nameToMetaDataMap[videoSourceName]->setRawDefaultValue(videoSourceRTSP);
     }
 }
 

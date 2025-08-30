@@ -718,7 +718,9 @@ FlightMap {
                     QGCButton {
                         Layout.fillWidth:   true
                         text:               qsTr("设置此位置为原点")
-                        visible:            globals.guidedControllerFlyView.showSetHome
+                        //visible:            globals.guidedControllerFlyView.showSetHome
+                        visible:false
+
                         onClicked: {
                             mapClickDropPanel.close()
                             globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionSetHome, mapClickCoord)
@@ -728,7 +730,8 @@ FlightMap {
                     QGCButton {
                         Layout.fillWidth:   true
                         text:               qsTr("设置此位置为估计器原点")
-                        visible:            globals.guidedControllerFlyView.showSetEstimatorOrigin
+                        //visible:            globals.guidedControllerFlyView.showSetEstimatorOrigin
+                        visible:false
                         onClicked: {
                             mapClickDropPanel.close()
                             globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionSetEstimatorOrigin, mapClickCoord)

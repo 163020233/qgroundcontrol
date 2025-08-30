@@ -269,10 +269,56 @@ ApplicationWindow {
     }
 
     FlyView {
-        id:                     flyView
-        anchors.fill:           parent
-        utmspSendActTrigger:    _utmspSendActTrigger
+        id: flyView
+        anchors.fill: parent
+        utmspSendActTrigger: _utmspSendActTrigger
+
+        // // 监听 GCS 位置变化，用于初始化地图中心
+        // Connections {
+        //     target: PositionManager
+        //     function onGcsPositionChanged(newPos) {
+        //         console.log("GCS pos changed:", newPos.latitude(), newPos.longitude(), newPos.isValid)
+        //         if (!flyView.homePoint && newPos.isValid) {
+        //             flyView.homePoint = newPos
+        //             console.log("Home 点初始化完成:", flyView.homePoint.latitude(), flyView.homePoint.longitude())
+        //             mapControl.center = flyView.homePoint
+        //             mapControl.zoomLevel = 18
+        //         }
+        //     }
+        // }
+        //
+        //
+        // QGCToolBarButton {
+        //     id: locateButton
+        //     width: 48
+        //     height: 48
+        //     anchors.right: parent.right
+        //     anchors.verticalCenter: parent.verticalCenter
+        //     anchors.rightMargin: 16
+        //     icon.source: "/res/locate.svg"
+        //
+        //     onClicked: {
+        //         if (flyView.homePoint && flyView.homePoint.isValid) {
+        //             console.log("移动地图到 home:", flyView.homePoint.latitude(), flyView.homePoint.longitude())
+        //             mapControl.center = flyView.homePoint
+        //             mapControl.zoomLevel = 18
+        //         } else {
+        //             console.log("Home 点未初始化")
+        //         }
+        //     }
+        // }
     }
+
+
+
+
+
+    // FlyView {
+    //     id:                     flyView
+    //     anchors.fill:           parent
+    //     utmspSendActTrigger:    _utmspSendActTrigger
+    //
+    // }
 
     PlanView {
         id:             planView
@@ -390,7 +436,7 @@ ApplicationWindow {
                             height:             toolSelectDialog._toolButtonHeight
                             Layout.fillWidth:   true
                             text:               qsTr("系统设置")
-                            imageResource:      "/res/QGCLogoFull.svg"
+                            imageResource:      "/res/QJKJ.png"
                             imageColor:         "transparent"
                             visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
                             onClicked: {

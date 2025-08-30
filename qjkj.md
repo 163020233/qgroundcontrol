@@ -37,3 +37,7 @@ TestPlugin/	测试框架
 UI/	旧版 QtWidgets 界面
 UTMSP/	无人机通管理协议
 Viewer3D/	3D 可视化
+
+
+更改logo  路径D:\work\work_qt\qgroundcontrol\src\FirmwarePlugin\PX4\PX4BrandImage.png按照尺寸大小获取本公司logo更改文件
+D:\work\work_qt\qgroundcontrol\src\FlightMap  更改地图图标按照我们公司确定方式更改

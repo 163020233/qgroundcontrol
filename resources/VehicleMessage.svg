@@ -1,0 +1,28 @@
+<!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 216 216" width="216" height="216">-->
+<!--    &lt;!&ndash; 气泡主体 &ndash;&gt;-->
+<!--    <path d="M54 60h108c12 0 18 6 18 18v60c0 12-6 18-18 18H84l-30 24v-24h0c-12 0-18-6-18-18V78c0-12 6-18 18-18z"-->
+<!--          fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>-->
+
+<!--    &lt;!&ndash; 气泡内的三个点 &ndash;&gt;-->
+<!--    <circle cx="84" cy="108" r="9" fill="#FFFFFF"/>-->
+<!--    <circle cx="108" cy="108" r="9" fill="#FFFFFF"/>-->
+<!--    <circle cx="132" cy="108" r="9" fill="#FFFFFF"/>-->
+<!--</svg>-->
+
+<!--<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 1680" width="980" height="1680">-->
+<!--&lt;!&ndash; 气泡主体 &ndash;&gt;-->
+<!--<path d="M128 160h256c32 0 48 16 48 48v160c0 32-16 48-48 48H192l-72 56v-56h0c-32 0-48-16-48-48V208c0-32 16-48 48-48z"-->
+<!--      fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>-->
+
+<!--&lt;!&ndash; 气泡内文字“消息” &ndash;&gt;-->
+<!--<text x="256" y="320" font-family="SimHei, Arial, sans-serif" font-size="120" text-anchor="middle" fill="#FFFFFF">消息</text>-->
+<!--</svg>-->
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+    <!-- 气泡主体 -->
+    <path d="M32 32h448c24 0 40 24 40 56v320c0 32-16 56-40 56H96l-64 48v-48H32c-24 0-40-24-40-56V88c0-32 16-56 40-56z"
+          fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- 气泡内文字“消息” -->
+    <text x="256" y="300" font-family="SimHei, Arial, sans-serif" font-size="180" text-anchor="middle" fill="#FFFFFF">消息</text>
+</svg>

@@ -105,14 +105,10 @@ RowLayout {
                         if (_activeVehicle.allSensorsHealthy && _activeVehicle.autopilotPlugin.setupComplete) {
                             _mainStatusBGColor = "green"
                             return mainStatusLabel._readyToFlyText
-                        // } else {
-                        //     _mainStatusBGColor = "yellow"
-                        //     return mainStatusLabel._notReadyToFlyText
-                        // }
-                            } else {
-                                _mainStatusBGColor = "green"
-                                return mainStatusLabel._readyToFlyText
-                            }
+                        } else {
+                            _mainStatusBGColor = "yellow"
+                            return mainStatusLabel._notReadyToFlyText
+                        }
                     }
                 }
             } else {
@@ -127,7 +123,7 @@ RowLayout {
             anchors.right:          parent.right
             width:                  ScreenTools.defaultFontPixelWidth * 2
             height:                 width
-            source:                 "/res/VehicleMessages.png"
+            source:                 "/res/VehicleMessage.svg"
             color:                  getIconColor()
             sourceSize.width:       width
             fillMode:               Image.PreserveAspectFit

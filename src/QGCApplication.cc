@@ -318,9 +318,7 @@ void QGCApplication::init()
 #ifdef QGC_VIEWER3D
     Viewer3DManager::registerQmlTypes();
 #endif
-
     qmlRegisterUncreatableType<GimbalController>("QGroundControl.Vehicle", 1, 0, "GimbalController", "Reference only");
-
 #ifndef QGC_DISABLE_MAVLINK_INSPECTOR
     qmlRegisterUncreatableType<MAVLinkChartController>("QGroundControl", 1, 0, "MAVLinkChart", "Reference only");
     qmlRegisterType<MAVLinkInspectorController>("QGroundControl.Controllers", 1, 0, "MAVLinkInspectorController");
@@ -344,6 +342,21 @@ void QGCApplication::init()
     (void) qmlRegisterSingletonType<ShapeFileHelper>("QGroundControl.ShapeFileHelper", 1, 0, "ShapeFileHelper", [](QQmlEngine *, QJSEngine *) { return new ShapeFileHelper(); });
 
     qmlRegisterSingletonType<QGCMAVLink>("MAVLink", 1, 0, "MAVLink", mavlinkSingletonFactory);
+    // —— 新增注册 QGCPositionManager 单例 —— //
+    // QGCPositionManager* posMgr = QGCPositionManager::instance();
+    // qmlRegisterSingletonInstance<QGCPositionManager>("QGroundControl", 0, 0, "PositionManager", QGCPositionManager::instance());
+    // 获取单例
+    QGCPositionManager* posMgr = QGCPositionManager::instance();
+
+    // 注册 QML 单例，版本号 0.0，对应 QML 里 import QGroundControl
+    qmlRegisterSingletonInstance<QGCPositionManager>(
+        "QGroundControl", 0, 0, "PositionManager", posMgr);
+
+    QQmlApplicationEngine engine;
+    // 必须在注册之后再加载 QML
+    engine.load(QUrl(QStringLiteral("qrc:/qml/QGroundControl/MainWindow/MainWindow.qml")));
+
+    qDebug() << "posMgr instance:" << posMgr;
 
     // Although this should really be in _initForNormalAppBoot putting it here allowws us to create unit tests which pop up more easily
     if(QFontDatabase::addApplicationFont(":/fonts/opensans") < 0) {
