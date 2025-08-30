@@ -40,6 +40,8 @@ Item {
     // Properties of UTM adapter
     property bool utmspSendActTrigger: false
 
+    property var activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+
     PlanMasterController {
         id:                     _planController
         flyView:                true
@@ -87,28 +89,6 @@ Item {
     Component.onCompleted: {
         homeTimer.start()
     }
-    Timer {
-        interval: 500
-        running: true
-        repeat: true
-        onTriggered: {
-            var av = _root.activeVehicle
-            if (av) {
-                if (av.gps && av.gps.positionValid) {
-                    var pos = av.gps.position
-                    console.log("飞控 GPS 已初始化:", pos.latitude, pos.longitude, pos.altitude)
-                    _root.homePoint = pos
-                    mapControl.center = pos
-                    mapControl.zoomLevel = 18
-                    running = false
-                } else {
-                    console.log("飞控 GPS 无效")
-                }
-            } else {
-                console.log("activeVehicle 未连接")
-            }
-        }
-    }
 
     Item {
         id:                 mapHolder
@@ -126,19 +106,16 @@ Item {
             toolInsets:             customOverlay.totalToolInsets
             mapName:                "FlightDisplayView"
             enabled:                !viewer3DWindow.isOpen
+
         }
 
-
         // 临时设置点位
-        // Component.onCompleted: {
-        //
-        //
-        //     _root.homePoint = QtPositioning.coordinate(30.813901,104.096312)
-        //     mapControl.center = _root.homePoint
-        //     mapControl.zoomLevel = 18
-        // }
+        Component.onCompleted: {
+            _root.homePoint = QtPositioning.coordinate(30.813901,104.096312)
+            mapControl.center = _root.homePoint
+            mapControl.zoomLevel = 18
+        }
 
-        // 定位按钮，放右边中间
         QGCToolBarButton {
             width: 48
             height: 48
@@ -148,14 +125,35 @@ Item {
             icon.source: "/res/locate.svg"
 
             onClicked: {
-                if (_root.homePoint && _root.homePoint.isValid) {
-                    mapControl.center = _root.homePoint
+                if (activeVehicle && activeVehicle.coordinate.isValid) {
+                    mapControl.center = activeVehicle.coordinate
                     mapControl.zoomLevel = 18
+                    console.log("地图居中到飞行器位置:", activeVehicle.coordinate)
                 } else {
-                    console.log("Home 点未初始化")
+                    console.log("飞行器位置未准备好")
                 }
             }
         }
+
+        // // 定位按钮，放右边中间
+        // QGCToolBarButton {
+        //     width: 48
+        //     height: 48
+        //     anchors.verticalCenter: parent.verticalCenter
+        //     anchors.right: parent.right
+        //     anchors.rightMargin: 16
+        //     icon.source: "/res/locate.svg"
+        //
+        //     onClicked: {
+        //         if (mapControl.gcsPosition && mapControl.gcsPosition.isValid) {
+        //             mapControl.center = mapControl.gcsPosition
+        //             mapControl.zoomLevel = 18
+        //             console.log("地图居中到 GCS 位置")
+        //         } else {
+        //             console.log("GCS 位置未准备好")
+        //         }
+        //     }
+        // }
 
         FlyViewVideo {
             id:         videoControl

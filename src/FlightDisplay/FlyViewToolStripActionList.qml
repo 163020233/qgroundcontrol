@@ -46,11 +46,14 @@ ToolStripActionList {
         },
         PreFlightCheckListShowAction { onTriggered: displayPreFlightChecklist() },
         GuidedActionTakeoff { },
+        GuideUnlock { },
+        GuideLock {},
+        // GuidedsetHomeTitle{ },
         GuidedActionLand { },
         GuidedActionRTL { },
         GuidedActionPause { },
         FlyViewAdditionalActionsButton { },
-        GuidedActionGripper { },
-        GuideUnlock { }
+        GuidedActionGripper { }
+        // GuidedCenterMapButton {}
     ]
 }
