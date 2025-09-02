@@ -30,10 +30,10 @@ Item {
     Rectangle {
         id:         backgroundRect
         width:      control.width + extraWidth
-        height:     control.height
+        height:     control.height * 2
         color:      qgcPal.window
         radius:     ScreenTools.defaultFontPixelWidth / 2
-        opacity:    0.75
+        opacity:    0.25
     }
 
     ColumnLayout {

@@ -42,6 +42,9 @@ qt_add_qml_module(FlightDisplayModule
         GuidedToolStripAction.qml
         GuidedValueSlider.qml
         GuideUnlock.qml
+        GuideLock.qml
+#        GuidedsetHomeTitle.qml
+#        GuidedCenterMapButton.qml
         MultiRotorChecklist.qml
         MultiVehicleList.qml
         ObstacleDistanceOverlay.qml

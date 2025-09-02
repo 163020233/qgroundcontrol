@@ -64,13 +64,33 @@ ColumnLayout {
         Component.onCompleted:      updateIcon();
     }
 
-    QGCLabel {
-        Layout.alignment:   Qt.AlignVCenter
-        height:             _tightHeight
-        font.pointSize:     ScreenTools.smallFontPointSize
-        text:               instrumentValueData.text
-        color:              _color
-        opacity:            instrumentValueData.currentOpacity
-        visible:            !_iconVisible
+    ColumnLayout {
+        id: _root
+        property real userFontSize: 20   // 用户可设置的字体大小
+
+        QGCLabel {
+            Layout.alignment: Qt.AlignVCenter
+            height: _tightHeight
+            font.pointSize: instrumentValueData.text.match(/[^\x00-\x7F]/)
+                ? (_root.userFontSize > 0 ? _root.userFontSize : 20)  // 中文使用用户自定义大小
+                : ScreenTools.defaultFontPointSize                     // 英文保持默认
+            text: instrumentValueData.text
+            color: _color
+            opacity: instrumentValueData.currentOpacity
+            visible: !_iconVisible
+        }
     }
+
+
+    //
+    // QGCLabel {
+    //     Layout.alignment:   Qt.AlignVCenter
+    //     height:             _tightHeight
+    //      font.pointSize:     ScreenTools.smallFontPointSize
+    //     // font.pointSize:     instrumentValueData.text.match(/[^\x00-\x7F]/) ? 20 : ScreenTools.defaultFontPointSize
+    //     text:               instrumentValueData.text
+    //     color:              _color
+    //     opacity:            instrumentValueData.currentOpacity
+    //     visible:            !_iconVisible
+    // }
 }
