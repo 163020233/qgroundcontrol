@@ -53,7 +53,35 @@ ToolStripActionList {
         GuidedActionRTL { },
         GuidedActionPause { },
         FlyViewAdditionalActionsButton { },
-        GuidedActionGripper { }
-        // GuidedCenterMapButton {}
+        // GuidedCenterMapButton {},
+        GuidedActionGripper { },
+        ToolStripAction {
+            id: planViewAction
+            //text: qsTr("计划航线")
+            text:       qsTr("计划航线")
+            iconSource: "/qmlimages/Plan.svg"
+
+            onTriggered: {
+                if (mainWindow.allowViewSwitch()) {
+                    mainWindow.closeIndicatorDrawer()
+                    mainWindow.showPlanView()
+                }
+            }
+        },
+        ToolStripAction {
+            id: settingsAction
+            // text: qsTr("系统设置")
+            text:       qsTr("设置")
+            iconSource: "/res/gear-black.svg"
+            visible: !QGroundControl.corePlugin.options.combineSettingsAndSetup
+
+            onTriggered: {
+                console.log("系统设置按钮被触发")
+                if(mainWindow.allowViewSwitch()) {
+                    mainWindow.closeIndicatorDrawer()   // <-- 关闭工具选择抽屉
+                    mainWindow.showSettingsTool()
+                }
+            }
+        }
     ]
 }

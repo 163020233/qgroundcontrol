@@ -39,31 +39,70 @@ ToolIndicatorPage {
     }
 
     contentComponent: Component {
-        SettingsGroupLayout { 
+        SettingsGroupLayout {
             heading: qsTr("选择链接")
 
             QGCLabel {
                 text:       qsTr("没有配置的链接")
                 visible:    noLinks
             }
-        
             Repeater {
                 model: linkConfigs
 
-                delegate: QGCButton {
-                    Layout.fillWidth:   true
-                    text:               object.name + (object.link ? " (" + qsTr("已连接") + ")" : "")
-                    visible:            !object.dynamic
-                    enabled:            !object.link
-                    autoExclusive:      true
+                delegate: ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: 4
 
-                    onClicked: {
-                        QGroundControl.linkManager.createConnectedLink(object)
-                        mainWindow.closeIndicatorDrawer()
+                    // 设备名字显示
+                    QGCLabel {
+                        text: object.name       // 显示设备名字
+                        font.bold: true
+                    }
+
+                    // 连接按钮
+                    QGCButton {
+                        Layout.fillWidth: true
+                        visible: !object.dynamic
+
+                        // 根据状态切换按钮文字
+                        text: (object.link ? qsTr("断开连接") : qsTr("连接"))
+
+                        // 根据状态切换按钮颜色
+                        background: Rectangle {
+                            color: object.link ? "#E57373" : "#81C784"   // 红=已连接, 绿=未连接
+                            radius: 6
+                        }
+
+                        onClicked: {
+                            if (object.link) {
+                                object.link.disconnect()
+                            } else {
+                                QGroundControl.linkManager.createConnectedLink(object)
+                            }
+                            mainWindow.closeIndicatorDrawer()
+                        }
                     }
                 }
             }
+
         }
+
+            // Repeater {
+            //     model: linkConfigs
+            //
+            //     delegate: QGCButton {
+            //         Layout.fillWidth:   true
+            //         text:               object.name + (object.link ? " (" + qsTr("已连接") + ")" : "")
+            //         visible:            !object.dynamic
+            //         enabled:            !object.link
+            //         autoExclusive:      true
+            //
+            //         onClicked: {
+            //             QGroundControl.linkManager.createConnectedLink(object)
+            //             mainWindow.closeIndicatorDrawer()
+            //         }
+            //     }
+            // }
     }
 
     expandedComponent: Component {

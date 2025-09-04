@@ -66,13 +66,14 @@ ColumnLayout {
 
     ColumnLayout {
         id: _root
-        property real userFontSize: 20   // 用户可设置的字体大小
+        property real userFontSize: 18   // 用户可设置的字体大小
+
 
         QGCLabel {
             Layout.alignment: Qt.AlignVCenter
             height: _tightHeight
             font.pointSize: instrumentValueData.text.match(/[^\x00-\x7F]/)
-                ? (_root.userFontSize > 0 ? _root.userFontSize : 20)  // 中文使用用户自定义大小
+                ? (_root.userFontSize > 0 ? _root.userFontSize : 16)  // 中文使用用户自定义大小
                 : ScreenTools.defaultFontPointSize                     // 英文保持默认
             text: instrumentValueData.text
             color: _color

@@ -334,10 +334,10 @@ void UDPWorker::connectLink()
     qCDebug(UDPLinkLog) << "Attempting to bind to port:" << _udpConfig->localPort();
     const bool bindSuccess = _socket->bind(QHostAddress::AnyIPv4, _udpConfig->localPort(), QAbstractSocket::ReuseAddressHint | QAbstractSocket::ShareAddress);
     if (!bindSuccess) {
-        qCWarning(UDPLinkLog) << "Failed to bind UDP socket to port" << _udpConfig->localPort();
+        qCWarning(UDPLinkLog) << "绑定 UDP 端口失败" << _udpConfig->localPort();
 
         if (!_errorEmitted) {
-            emit errorOccurred(tr("Failed to bind UDP socket to port"));
+            emit errorOccurred(tr("绑定 UDP 端口失败"));
             _errorEmitted = true;
         }
 
@@ -377,7 +377,7 @@ void UDPWorker::disconnectLink()
 void UDPWorker::writeData(const QByteArray &data)
 {
     if (!isConnected()) {
-        emit errorOccurred(tr("Could Not Send Data - Link is Disconnected!"));
+        emit errorOccurred(tr("断开连接-消息发送失败!"));
         return;
     }
 
@@ -423,13 +423,13 @@ void UDPWorker::_onSocketDisconnected()
 void UDPWorker::_onSocketReadyRead()
 {
     if (!isConnected()) {
-        emit errorOccurred(tr("Could Not Read Data - Link is Disconnected!"));
+        emit errorOccurred(tr("断开连接!"));
         return;
     }
 
     const qint64 byteCount = _socket->pendingDatagramSize();
     if (byteCount <= 0) {
-        emit errorOccurred(tr("Could Not Read Data - No Data Available!"));
+        emit errorOccurred(tr("无法读取数据!"));
         return;
     }
 
@@ -622,7 +622,7 @@ void UDPLink::_onDisconnected()
 void UDPLink::_onErrorOccurred(const QString &errorString)
 {
     qCWarning(UDPLinkLog) << "Communication error:" << errorString;
-    emit communicationError(tr("UDP Link Error"), tr("Link %1: %2").arg(_udpConfig->name(), errorString));
+    emit communicationError(tr("UDP 连接错误"), tr("链接 %1: %2").arg(_udpConfig->name(), errorString));
 }
 
 void UDPLink::_onDataReceived(const QByteArray &data)

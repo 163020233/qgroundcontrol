@@ -85,7 +85,7 @@
     "name":         "instrumentQmlFile2",
     "shortDesc":    "Qml file for instrument panel",
     "type":         "string",
-    "enumStrings":  "Integrated Compass & Attitude,Horizontal Compass & Attitude,Large Vertical",
+    "enumStrings":  "全能航向仪,水平航向仪,大屏姿态仪",
     "enumValues":   "qrc:/qml/QGroundControl/FlightMap/Widgets/IntegratedCompassAttitude.qml,qrc:/qml/QGroundControl/FlightMap/Widgets/HorizontalCompassAttitude.qml,qrc:/qml/QGroundControl/FlightMap/Widgets/VerticalCompassAttitude.qml",
     "default":      "qrc:/qml/QGroundControl/FlightMap/Widgets/IntegratedCompassAttitude.qml"
 },

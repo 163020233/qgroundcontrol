@@ -238,7 +238,7 @@ void SerialWorker::connectToPort()
     const QGCSerialPortInfo portInfo(*_port);
     if (portInfo.isBootloader()) {
         qCWarning(SerialLinkLog) << "Not connecting to bootloader" << _port->portName();
-        emit errorOccurred(tr("Not connecting to a bootloader"));
+        emit errorOccurred(tr("无连接"));
         _onPortDisconnected();
         return;
     }
@@ -251,7 +251,7 @@ void SerialWorker::connectToPort()
 
         // If auto-connect is enabled, we don't want to emit an error for PermissionError from devices already in use
         if (!_errorEmitted && (!_serialConfig->isAutoConnect() || _port->error() != QSerialPort::PermissionError)) {
-            emit errorOccurred(tr("Could not open port: %1").arg(_port->errorString()));
+            emit errorOccurred(tr("不能打开端口: %1").arg(_port->errorString()));
             _errorEmitted = true;
         }
 
@@ -277,17 +277,17 @@ void SerialWorker::disconnectFromPort()
 void SerialWorker::writeData(const QByteArray &data)
 {
     if (data.isEmpty()) {
-        emit errorOccurred(tr("Data to Send is Empty"));
+        emit errorOccurred(tr("数据为空"));
         return;
     }
 
     if (!isConnected()) {
-        emit errorOccurred(tr("Port is not Connected"));
+        emit errorOccurred(tr("端口未连接"));
         return;
     }
 
     if (!_port->isWritable()) {
-        emit errorOccurred(tr("Port is not Writable"));
+        emit errorOccurred(tr("端口只读"));
         return;
     }
 
@@ -295,10 +295,10 @@ void SerialWorker::writeData(const QByteArray &data)
     while (totalBytesWritten < data.size()) {
         const qint64 bytesWritten = _port->write(data.constData() + totalBytesWritten, data.size() - totalBytesWritten);
         if (bytesWritten == -1) {
-            emit errorOccurred(tr("Could Not Send Data - Write Failed: %1").arg(_port->errorString()));
+            emit errorOccurred(tr("发送数据失败，无法写入: %1").arg(_port->errorString()));
             return;
         } else if (bytesWritten == 0) {
-            emit errorOccurred(tr("Could Not Send Data - Write Returned 0 Bytes"));
+            emit errorOccurred(tr("无法发送数据，数据返回为空"));
             return;
         }
         totalBytesWritten += bytesWritten;
@@ -457,7 +457,7 @@ void SerialLink::_onDisconnected()
 void SerialLink::_onErrorOccurred(const QString &errorString)
 {
     qCWarning(SerialLinkLog) << "Communication error:" << errorString;
-    emit communicationError(tr("Serial Link Error"), tr("Link %1: (Port: %2) %3").arg(_serialConfig->name(), _serialConfig->portName(), errorString));
+    emit communicationError(tr("链接失败"), tr("链接 %1: (端口号: %2) %3").arg(_serialConfig->name(), _serialConfig->portName(), errorString));
 }
 
 void SerialLink::_onDataReceived(const QByteArray &data)

@@ -111,12 +111,12 @@ Item {
 
         }
 
-        // 临时设置点位
-        Component.onCompleted: {
-            _root.homePoint = QtPositioning.coordinate(30.813901,104.096312)
-            mapControl.center = _root.homePoint
-            mapControl.zoomLevel = 18
-        }
+        // // 临时设置点位
+        // Component.onCompleted: {
+        //     _root.homePoint = QtPositioning.coordinate(30.813901,104.096312)
+        //     mapControl.center = _root.homePoint
+        //     mapControl.zoomLevel = 18
+        // }
 
 
         // 主按钮（点击展开/收起）
@@ -136,8 +136,68 @@ Item {
                 console.log("主按钮点击，expanded状态:", mapHolder.expanded)
             }
         }
+        PositionSource {
+            id: gcsPositionSource
+            active: false   // 默认不启用
+            updateInterval: 1000
+            onPositionChanged: {
+                if (position.coordinate.isValid) {
+                    mapControl.center = position.coordinate
+                    mapControl.zoomLevel = 18
+                    console.log("地图居中到 GCS 定位:", position.coordinate)
+                    stop()   // 获取到一次就停掉
+                }
+            }
+        }
 
-        // 隐藏在主按钮里的 locateButton
+        // GCS 定位按钮
+        QGCToolBarButton {
+            id: gcsButton
+            width: 48
+            height: 48
+            anchors.verticalCenter: mainButton.verticalCenter
+            anchors.right: mainButton.right
+            anchors.rightMargin: mapHolder.expanded ? 120 : 0
+
+            icon.source: "/InstrumentValueIcons/home.svg"
+            visible: mapHolder.expanded
+
+            Behavior on anchors.rightMargin {
+                NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
+            }
+
+            onClicked: {
+                console.log("开始获取 GCS 定位...")
+                gcsPositionSource.start()   // 点一次 → 开启定位
+            }
+        }
+        // // 新增：定位 GCS 按钮（固定点位）
+        // QGCToolBarButton {
+        //     id: gcsButton
+        //     width: 48
+        //     height: 48
+        //     anchors.verticalCenter: mainButton.verticalCenter
+        //     anchors.right: mainButton.right
+        //     anchors.rightMargin: mapHolder.expanded ? 120 : 0  // 展开时显示
+        //
+        //     icon.source: "/InstrumentValueIcons/home.svg"
+        //     visible: mapHolder.expanded
+        //
+        //     Behavior on anchors.rightMargin {
+        //         NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
+        //     }
+        //
+        //     onClicked: {
+        //         if (_root.homePoint && _root.homePoint.isValid) {
+        //             mapControl.center = _root.homePoint
+        //             mapControl.zoomLevel = 18
+        //             console.log("地图居中到固定点 GCS:", _root.homePoint)
+        //         } else {
+        //             console.log("GCS 固定点未准备好")
+        //         }
+        //     }
+        // }
+        // 飞控定位
         QGCToolBarButton {
             id: locateButton
             width: 48
@@ -145,7 +205,7 @@ Item {
             anchors.verticalCenter: mainButton.verticalCenter
             anchors.right: mainButton.right   // 默认和主按钮重合
             anchors.rightMargin: mapHolder.expanded ? 64 : 0 // 展开时右移，否则和主按钮重叠
-            icon.source: "/res/locate.svg"
+            icon.source: "/res/waypoint.svg"
             visible: mapHolder.expanded       // 收起时隐藏
 
             Behavior on anchors.rightMargin {
@@ -162,31 +222,7 @@ Item {
                 }
             }
         }
-        // 新增：定位 GCS 按钮（固定点位）
-        QGCToolBarButton {
-            id: gcsButton
-            width: 48
-            height: 48
-            anchors.verticalCenter: mainButton.verticalCenter
-            anchors.right: mainButton.right
-            anchors.rightMargin: mapHolder.expanded ? 120 : 0  // 展开时显示
-            icon.source: "/res/waypoint.svg"
-            visible: mapHolder.expanded
 
-            Behavior on anchors.rightMargin {
-                NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
-            }
-
-            onClicked: {
-                if (_root.homePoint && _root.homePoint.isValid) {
-                    mapControl.center = _root.homePoint
-                    mapControl.zoomLevel = 18
-                    console.log("地图居中到固定点 GCS:", _root.homePoint)
-                } else {
-                    console.log("GCS 固定点未准备好")
-                }
-            }
-        }
         // // 定位按钮，放右边中间
         // QGCToolBarButton {
         //     width: 48

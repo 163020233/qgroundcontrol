@@ -33,10 +33,10 @@ Item {
     property var orbitMapCircle
 
     readonly property string emergencyStopTitle:            qsTr("紧急停止")
-    readonly property string armTitle:                      qsTr("启动")
+    readonly property string armTitle:                      qsTr("解锁")
     readonly property string mvArmTitle:                    qsTr("启动 (MV)")
     readonly property string forceArmTitle:                 qsTr("强制启动")
-    readonly property string disarmTitle:                   qsTr("取消启动")
+    readonly property string disarmTitle:                   qsTr("上锁")
     readonly property string mvDisarmTitle:                 qsTr("取消启动 (MV)")
     readonly property string rtlTitle:                      qsTr("返回")
     readonly property string takeoffTitle:                  qsTr("起飞")
@@ -63,10 +63,10 @@ Item {
     readonly property string setFlightMode:                 qsTr("设置飞行模式")
     readonly property string changeHeadingTitle:            qsTr("改变航向")
 
-    readonly property string armMessage:                        qsTr("启动设备。")
+    readonly property string armMessage:                        qsTr("解锁设备。")
     readonly property string mvArmMessage:                      qsTr("启动选中的设备。")
     readonly property string forceArmMessage:                   qsTr("警告：这将强制启动设备，绕过任何安全检查。")
-    readonly property string disarmMessage:                     qsTr("取消启动设备")
+    readonly property string disarmMessage:                     qsTr("锁定设备")
     readonly property string mvDisarmMessage:                   qsTr("取消启动选中的设备。")
     readonly property string emergencyStopMessage:              qsTr("警告：这将停止所有电机。如果设备当前在空中，它将崩溃。")
     readonly property string takeoffMessage:                    qsTr("从地面起飞并保持位置。")

@@ -389,18 +389,18 @@ ApplicationWindow {
                         Layout.margins: toolSelectDialog._margins
                         spacing:        ScreenTools.defaultFontPixelWidth
 
-                        SubMenuButton {
-                            height:             toolSelectDialog._toolButtonHeight
-                            Layout.fillWidth:   true
-                            text:               qsTr("计划航线")
-                            imageResource:      "/qmlimages/Plan.svg"
-                            onClicked: {
-                                if (mainWindow.allowViewSwitch()) {
-                                    mainWindow.closeIndicatorDrawer()
-                                    mainWindow.showPlanView()
-                                }
-                            }
-                        }
+                        // SubMenuButton {
+                        //     height:             toolSelectDialog._toolButtonHeight
+                        //     Layout.fillWidth:   true
+                        //     text:               qsTr("计划航线")
+                        //     imageResource:      "/qmlimages/Plan.svg"
+                        //     onClicked: {
+                        //         if (mainWindow.allowViewSwitch()) {
+                        //             mainWindow.closeIndicatorDrawer()
+                        //             mainWindow.showPlanView()
+                        //         }
+                        //     }
+                        // }
 
                         // SubMenuButton {
                         //     id:                 analyzeButton
@@ -431,21 +431,21 @@ ApplicationWindow {
                         //     }
                         // }
 
-                        SubMenuButton {
-                            id:                 settingsButton
-                            height:             toolSelectDialog._toolButtonHeight
-                            Layout.fillWidth:   true
-                            text:               qsTr("系统设置")
-                            imageResource:      "/res/QJKJ.png"
-                            imageColor:         "transparent"
-                            visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
-                            onClicked: {
-                                if (mainWindow.allowViewSwitch()) {
-                                    drawer.close()
-                                    mainWindow.showSettingsTool()
-                                }
-                            }
-                        }
+                        // SubMenuButton {
+                        //     id:                 settingsButton
+                        //     height:             toolSelectDialog._toolButtonHeight
+                        //     Layout.fillWidth:   true
+                        //     text:               qsTr("系统设置")
+                        //     imageResource:      "/res/QJKJ.png"
+                        //     imageColor:         "transparent"
+                        //     visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
+                        //     onClicked: {
+                        //         if (mainWindow.allowViewSwitch()) {
+                        //             mainWindow.closeIndicatorDrawer()   // <-- 关闭工具选择抽屉
+                        //             mainWindow.showSettingsTool()
+                        //         }
+                        //     }
+                        // }
 
                         // SubMenuButton {
                         //     id:                 portSelector
@@ -464,7 +464,7 @@ ApplicationWindow {
                             height:             toolSelectDialog._toolButtonHeight
                             Layout.fillWidth:   true
                             text:               qsTr("关闭 %1").arg(QGroundControl.appName)
-                            imageResource:      "/res/cancel.svg"
+                            imageResource:      "/res/PowerButton.svg"
                             visible:            mainWindow.visibility === Window.FullScreen
                             onClicked: {
                                 if (mainWindow.allowViewSwitch()) {

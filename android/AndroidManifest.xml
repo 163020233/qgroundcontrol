@@ -11,7 +11,12 @@
         android:normalScreens="true"
         android:smallScreens="true" />
 
-    <!-- %%INSERT_PERMISSIONS -->
+    <!-- 必需 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <!-- 可选（如果需要后台持续定位才加） -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
     <uses-permission android:name="android.permission.USB_PERMISSION"/>
     <!-- Need MulticastLock to receive broadcast UDP packets -->
