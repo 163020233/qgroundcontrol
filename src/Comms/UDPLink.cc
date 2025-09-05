@@ -340,7 +340,7 @@ void UDPWorker::connectLink()
             emit errorOccurred(tr("绑定 UDP 端口失败"));
             _errorEmitted = true;
         }
-
+        _onSocketDisconnected();
         // Disconnecting here on autoconnect will cause continuous error popups
         /*if (!_udpConfig->isAutoConnect()) {
             _onSocketDisconnected();

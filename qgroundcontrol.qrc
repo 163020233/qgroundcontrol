@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/qml">
+        <file alias="BluetoothSettings.qml">src/UI/AppSettings/BluetoothSettings.qml</file>
+        <file alias="SerialSettings.qml">src/UI/AppSettings/SerialSettings.qml</file>
+        <file alias="TcpSettings.qml">src/UI/AppSettings/TcpSettings.qml</file>
+        <file alias="UdpSettings.qml">src/UI/AppSettings/UdpSettings.qml</file>
 <!--        <file alias="CustomControlView.qml">src/UI/CustomControlView.qml</file>-->
         <file alias="AirLinkSettings.qml">src/Comms/AirLink/AirLinkSettings.qml</file>
         <file alias="Viewer3D/Viewer3D.qml">src/Viewer3D/Viewer3DQml/Viewer3D.qml</file>

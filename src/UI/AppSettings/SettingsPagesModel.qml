@@ -101,12 +101,12 @@ ListModel {
     //     pageVisible: function() { return true }
     // }
 
-    ListElement {
-        name: qsTr("模拟链接")
-        url: "qrc:/qml/QGroundControl/AppSettings/MockLink.qml"
-        iconUrl: "qrc:/InstrumentValueIcons/drone.svg"
-        pageVisible: function() { return ScreenTools.isDebug }
-    }
+    // ListElement {
+    //     name: qsTr("模拟链接")
+    //     url: "qrc:/qml/QGroundControl/AppSettings/MockLink.qml"
+    //     iconUrl: "qrc:/InstrumentValueIcons/drone.svg"
+    //     pageVisible: function() { return ScreenTools.isDebug }
+    // }
 
     // ListElement {
     //     name: qsTr("Debug")
