@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-add_compile_options(/utf-8)
+#add_compile_options(/utf-8)
 
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/cmake
@@ -24,7 +24,7 @@ include(CustomOptions)
 
 if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/custom)
     message(STATUS "Enabling custom build")
-    set(QGC_CUSTOM_BUILD ON)
+    set(QGC_CUSTOM_BUILD OFF)
     list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/custom/cmake)
     include(CustomOverrides)
 endif()

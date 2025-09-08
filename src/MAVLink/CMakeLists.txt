@@ -35,8 +35,9 @@ message(STATUS "Building MAVLink")
 
 CPMAddPackage(
     NAME mavlink
-    GIT_REPOSITORY ${QGC_MAVLINK_GIT_REPO}
-    GIT_TAG ${QGC_MAVLINK_GIT_TAG}
+    #GIT_REPOSITORY ${QGC_MAVLINK_GIT_REPO}
+    SOURCE_DIR "D:/work/temp/c_library_v2"
+    #GIT_TAG ${QGC_MAVLINK_GIT_TAG}
 )
 
 # For QGC all dialects means common and development. Though use of development mavlink code should be restricted to debug builds only.

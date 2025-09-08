@@ -27,8 +27,9 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_
 
 CPMAddPackage(
     NAME px4-gpsdrivers
-    GITHUB_REPOSITORY PX4/PX4-GPSDrivers
-    GIT_TAG main
+    #GITHUB_REPOSITORY PX4/PX4-GPSDrivers
+    SOURCE_DIR "D:/work/temp/px4-gpsdrivers"
+    #GIT_TAG main
     SOURCE_SUBDIR src
 )
 
