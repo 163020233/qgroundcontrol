@@ -140,15 +140,45 @@ Item {
             id: gcsPositionSource
             active: false   // 默认不启用
             updateInterval: 1000
+
             onPositionChanged: {
-                if (position.coordinate.isValid) {
+                // 先判断对象是否有效
+                if (!position || !position.coordinate || !position.coordinate.isValid) {
+                    console.log("GCS 定位信息无效或未准备好")
+                    // 弹窗提醒用户
+                    mainWindow.showMessageDialog(
+                        qsTr("定位提示"),
+                        qsTr("无法获取到 GCS 定位信息，请检查设备或权限"),
+                        Dialog.Ok
+                    )
+                    return
+                }
+
+                if (!mapControl) {
+                    console.log("地图控件未初始化")
+                    return
+                }
+
+                // 安全设置中心点
+                try {
                     mapControl.center = position.coordinate
                     mapControl.zoomLevel = 18
                     console.log("地图居中到 GCS 定位:", position.coordinate)
-                    stop()   // 获取到一次就停掉
+                } catch (e) {
+                    console.log("设置 mapControl 失败:", e)
+                    return
                 }
+
+                // 延迟停止
+                Qt.callLater(() => {
+                    if (gcsPositionSource && gcsPositionSource.active) {
+                        gcsPositionSource.active = false
+                        console.log("定位已停止")
+                    }
+                })
             }
         }
+
 
         // GCS 定位按钮
         QGCToolBarButton {
@@ -171,32 +201,6 @@ Item {
                 gcsPositionSource.start()   // 点一次 → 开启定位
             }
         }
-        // // 新增：定位 GCS 按钮（固定点位）
-        // QGCToolBarButton {
-        //     id: gcsButton
-        //     width: 48
-        //     height: 48
-        //     anchors.verticalCenter: mainButton.verticalCenter
-        //     anchors.right: mainButton.right
-        //     anchors.rightMargin: mapHolder.expanded ? 120 : 0  // 展开时显示
-        //
-        //     icon.source: "/InstrumentValueIcons/home.svg"
-        //     visible: mapHolder.expanded
-        //
-        //     Behavior on anchors.rightMargin {
-        //         NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
-        //     }
-        //
-        //     onClicked: {
-        //         if (_root.homePoint && _root.homePoint.isValid) {
-        //             mapControl.center = _root.homePoint
-        //             mapControl.zoomLevel = 18
-        //             console.log("地图居中到固定点 GCS:", _root.homePoint)
-        //         } else {
-        //             console.log("GCS 固定点未准备好")
-        //         }
-        //     }
-        // }
         // 飞控定位
         QGCToolBarButton {
             id: locateButton
