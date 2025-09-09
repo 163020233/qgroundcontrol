@@ -191,6 +191,7 @@ Item {
 
             icon.source: "/InstrumentValueIcons/home.svg"
             visible: mapHolder.expanded
+            z: 1000
 
             Behavior on anchors.rightMargin {
                 NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
@@ -211,6 +212,7 @@ Item {
             anchors.rightMargin: mapHolder.expanded ? 64 : 0 // 展开时右移，否则和主按钮重叠
             icon.source: "/res/waypoint.svg"
             visible: mapHolder.expanded       // 收起时隐藏
+            z: 1000
 
             Behavior on anchors.rightMargin {
                 NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
@@ -261,7 +263,7 @@ Item {
             item1:                  mapControl
             item2:                  QGroundControl.videoManager.hasVideo ? videoControl : null
             show:                   QGroundControl.videoManager.hasVideo && !QGroundControl.videoManager.fullScreen &&
-                                        (videoControl.pipState.state === videoControl.pipState.pipState || mapControl.pipState.state === mapControl.pipState.pipState)
+                (videoControl.pipState.state === videoControl.pipState.pipState || mapControl.pipState.state === mapControl.pipState.pipState)
             z:                      QGroundControl.zOrderWidgets
 
             property real leftEdgeBottomInset: visible ? width + anchors.margins : 0

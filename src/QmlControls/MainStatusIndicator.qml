@@ -183,35 +183,56 @@ RowLayout {
         }
     }
 
+
     Component {
         id: mainStatusContentComponent
 
         ColumnLayout {
-            id:         mainLayout
-            spacing:    _spacing
+            id: mainLayout
+            spacing: _spacing
 
-            QGCButton {
-                // FIXME: forceArm is not possible anymore if _healthAndArmingChecksSupported == true
-                enabled:            _armed || !_healthAndArmingChecksSupported || _activeVehicle.healthAndArmingCheckReport.canArm
-                text:               _armed ?  qsTr("已上锁") : (forceArm ? qsTr("无人机") : qsTr("无人机"))
-                Layout.alignment:   Qt.AlignLeft
+            // 水平排列：无人机按钮 + 断开连接按钮
+            RowLayout {
+                spacing: ScreenTools.defaultFontPixelWidth / 2
 
-                property bool forceArm: false
+                // Arm / Disarm 按钮
+                QGCButton {
+                    enabled: _armed || !_healthAndArmingChecksSupported || _activeVehicle.healthAndArmingCheckReport.canArm
+                    text: _armed ? qsTr("已上锁") : (forceArm ? qsTr("无人机") : qsTr("无人机"))
+                    Layout.alignment: Qt.AlignLeft
 
-                onPressAndHold: forceArm = true
+                    property bool forceArm: false
 
-                onClicked: {
-                    if (_armed) {
-                        mainWindow.disarmVehicleRequest()
-                    } else {
-                        if (forceArm) {
-                            mainWindow.forceArmVehicleRequest()
+                    onPressAndHold: forceArm = true
+
+                    onClicked: {
+                        if (_armed) {
+                            mainWindow.disarmVehicleRequest()
                         } else {
-                            mainWindow.armVehicleRequest()
+                            if (forceArm) {
+                                mainWindow.forceArmVehicleRequest()
+                            } else {
+                                mainWindow.armVehicleRequest()
+                            }
+                        }
+                        forceArm = false
+                        mainWindow.closeIndicatorDrawer()
+                    }
+                }
+
+                // 断开连接按钮
+                QGCButton {
+                    text: qsTr("断开连接")
+                    enabled: _activeVehicle != null  // 只要有活动无人机就允许点击
+                    visible: _activeVehicle != null
+                    onClicked: {
+                        if (_activeVehicle) {
+                            _activeVehicle.closeVehicle()   // 安全断开
+                            mainWindow.closeIndicatorDrawer()  // 关闭当前控件/抽屉
+                        } else {
+                            console.log("无活动无人机")
                         }
                     }
-                    forceArm = false
-                    mainWindow.closeIndicatorDrawer()
                 }
             }
 

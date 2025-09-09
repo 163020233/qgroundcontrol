@@ -146,7 +146,7 @@
     "units":                "pt",
     "min":                  6,
     "max":                  48,
-    "default":         7.9
+    "default":         10
 },
 {
     "name":             "indoorPalette",
