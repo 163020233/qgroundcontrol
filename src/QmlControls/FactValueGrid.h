@@ -18,11 +18,27 @@
 
 class InstrumentValueData;
 
+class SmartLayoutManager {
+public:
+    /// 根据仪表盘数据个数生成布局 (不超过12个)
+    /// 返回：每个控件的 (row, col) 坐标
+    /// 如果超出12个，返回空数组，并输出警告
+    static QVector<QPair<int,int>> optimizeLayout(int itemCount,
+                                                  int defaultRows = 4,
+                                                  int defaultCols = 3);
+};
 class FactValueGrid : public QQuickItem
 {
     Q_OBJECT
 
 public:
+    // FactValueGrid.h
+    Q_INVOKABLE void removeFactByName(const QString &factName);
+    // 新增函数：删除重复数据，只保留一个
+    void removeDuplicates();
+    void rearrangeLayout();
+    QList<InstrumentValueData*> allFacts() const;
+
     FactValueGrid(QQuickItem *parent = nullptr);
     ~FactValueGrid();
 

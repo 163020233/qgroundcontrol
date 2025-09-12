@@ -376,3 +376,183 @@ void FactValueGrid::_resetFromSettings(void)
 
     _preventSaveSettings = false;
 }
+
+
+// 优化布局函数，4x3 最大布局行4，列3
+static QList<std::pair<int,int>> optimizeLayout(int totalCount, const int maxRow = 4, const int maxCol = 3)
+{
+    QList<std::pair<int,int>> positions;
+
+    if (totalCount > maxRow * maxCol) {
+        qWarning() << "Item count exceeds maximum allowed (12)";
+        totalCount = maxRow * maxCol; // 超过12个只显示前12个
+    }
+
+    int rowCount = qMin(totalCount, maxRow);                       // 行数 ≤ maxRow
+    int colCount = (totalCount + rowCount - 1) / rowCount;         // 向上取整保证行优先
+
+    int index = 0;
+    for (int r = 0; r < rowCount; ++r) {
+        for (int c = 0; c < colCount; ++c) {
+            if (index >= totalCount) break;
+            positions.append(std::make_pair(r, c));
+            index++;
+        }
+    }
+
+    qDebug() << "New layout positions:" << positions;
+    return positions;
+}
+
+void FactValueGrid::removeDuplicates()
+{
+    QSet<QString> seenFacts;
+
+    for (int i = _columns->count() - 1; i >= 0; --i) {
+        QmlObjectListModel* model = qobject_cast<QmlObjectListModel*>(_columns->get(i));
+        if (!model) continue;
+
+        for (int j = model->count() - 1; j >= 0; --j) {
+            InstrumentValueData* val = qobject_cast<InstrumentValueData*>(model->get(j));
+            if (!val) continue;
+
+            QString name = val->factName();
+            if (seenFacts.contains(name)) {
+                model->removeAt(j);
+                qWarning() << "Removed duplicate fact:" << name << "at row" << i << "index" << j;
+            } else {
+                seenFacts.insert(name);
+            }
+        }
+    }
+}
+
+// === 删除数据并自动优化布局 ===
+void FactValueGrid::removeFactByName(const QString &factName)
+{
+    // 1. 删除匹配的数据
+    for (int i = _columns->count() - 1; i >= 0; --i) {
+        QmlObjectListModel* model = qobject_cast<QmlObjectListModel*>(_columns->get(i));
+        if (!model) continue;
+
+        for (int j = model->count() - 1; j >= 0; --j) {
+            InstrumentValueData* val = qobject_cast<InstrumentValueData*>(model->get(j));
+            if (!val) continue;
+
+            qDebug() << "Checking" << j
+                     << "factName:" << val->factName()
+                     << "text:" << val->text();
+
+            if (val->factName() == factName) {
+                model->removeAt(j);
+                qDebug() << "Removed fact" << factName << "at model" << i << "index" << j;
+            }
+        }
+    }
+
+    // 2. 删除重复数据，保留每个 factName 的第一个
+    removeDuplicates();
+
+    // 3. 收集所有数据（最多12个）
+    QList<InstrumentValueData*> allFacts;
+    for (int i = 0; i < _columns->count(); ++i) {
+        QmlObjectListModel* model = qobject_cast<QmlObjectListModel*>(_columns->get(i));
+        if (!model) continue;
+
+        for (int j = 0; j < model->count() && allFacts.size() < 12; ++j) {
+            InstrumentValueData* val = qobject_cast<InstrumentValueData*>(model->get(j));
+            if (val) allFacts.append(val);
+        }
+    }
+
+    // 3. 获取新的紧凑布局坐标
+    QList<std::pair<int,int>> newLayout = optimizeLayout(allFacts.size());
+
+    // 4. 清空原 _columns
+    _columns->clear();
+
+    // 5. 按行重新生成模型，每行一个 QmlObjectListModel
+    int currentRow = -1;
+    QmlObjectListModel* rowModel = nullptr;
+    for (int i = 0; i < allFacts.size(); ++i) {
+        if (i >= newLayout.size()) break; // 安全保护
+        int row = newLayout[i].first;
+
+        if (row != currentRow) {
+            rowModel = new QmlObjectListModel(this);
+            _columns->append(rowModel);
+            currentRow = row;
+        }
+        rowModel->append(allFacts[i]);
+    }
+
+    qDebug() << "Layout rearranged. Total rows:" << _columns->count();
+}
+
+
+// 优化布局函数
+// static QList<std::pair<int,int>> optimizeLayout(int totalCount, const int maxRow = 4, const int maxCol = 3)
+// {
+//     // const int maxRow = 4;
+//     // const int maxCol = 3;
+//     QList<std::pair<int,int>> positions;
+//
+//     if (totalCount > maxRow * maxCol) {
+//         qWarning() << "Item count exceeds maximum allowed (12)";
+//         return positions;
+//     }
+//
+//     int colCount = qMin(totalCount, maxCol);       // 列数 ≤ 3
+//     int rowCount = (totalCount + colCount - 1) / colCount; // ceil(N / colCount)
+//
+//     // 生成紧凑坐标
+//     int index = 0;
+//     for (int r = 0; r < rowCount; ++r) {
+//         for (int c = 0; c < colCount; ++c) {
+//             if (index >= totalCount) break;
+//             positions.append(std::make_pair(r, c));
+//             index++;
+//         }
+//     }
+//
+//     qDebug() << "New layout positions:" << positions;
+//     return positions;
+// }
+//
+// void FactValueGrid::removeFactByName(const QString &factName)
+// {
+//     for (int i = _columns->count() - 1; i >= 0; --i) {
+//         QmlObjectListModel* model = qobject_cast<QmlObjectListModel*>(_columns->get(i));
+//         if (!model) continue;
+//
+//         for (int j = model->count() - 1; j >= 0; --j) {
+//             InstrumentValueData* val = qobject_cast<InstrumentValueData*>(model->get(j));
+//             if (!val) continue;
+//             qDebug() << "Checking" << j
+//                      << "factName:" << val->factName()
+//                      << "text:" << val->text();
+//
+//             if (val->factName() == factName) {
+//                 model->removeAt(j);
+//                 qDebug() << "Removed fact" << factName << "at model" << i << "index" << j;
+//             }
+//         }
+//     }
+//
+//     // === 自动调整布局 ===
+//     int totalFacts = 0;
+//     for (int i = 0; i < _columns->count(); ++i) {
+//         QmlObjectListModel* model = qobject_cast<QmlObjectListModel*>(_columns->get(i));
+//         if (model) totalFacts += model->count();
+//     }
+//
+//     QList<std::pair<int,int>> newLayout = optimizeLayout(totalFacts);
+//     qDebug() << "New layout positions:" << newLayout;
+//     // TODO: 根据 newLayout 实际重新排列 _columns 中的模型
+//
+// }
+
+
+
+
+

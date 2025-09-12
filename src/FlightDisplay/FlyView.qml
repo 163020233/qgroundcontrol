@@ -140,42 +140,13 @@ Item {
             id: gcsPositionSource
             active: false   // 默认不启用
             updateInterval: 1000
-
             onPositionChanged: {
-                // 先判断对象是否有效
-                if (!position || !position.coordinate || !position.coordinate.isValid) {
-                    console.log("GCS 定位信息无效或未准备好")
-                    // 弹窗提醒用户
-                    mainWindow.showMessageDialog(
-                        qsTr("定位提示"),
-                        qsTr("无法获取到 GCS 定位信息，请检查设备或权限"),
-                        Dialog.Ok
-                    )
-                    return
-                }
-
-                if (!mapControl) {
-                    console.log("地图控件未初始化")
-                    return
-                }
-
-                // 安全设置中心点
-                try {
+                if (position.coordinate.isValid) {
                     mapControl.center = position.coordinate
                     mapControl.zoomLevel = 18
                     console.log("地图居中到 GCS 定位:", position.coordinate)
-                } catch (e) {
-                    console.log("设置 mapControl 失败:", e)
-                    return
+                    stop()   // 获取到一次就停掉
                 }
-
-                // 延迟停止
-                Qt.callLater(() => {
-                    if (gcsPositionSource && gcsPositionSource.active) {
-                        gcsPositionSource.active = false
-                        console.log("定位已停止")
-                    }
-                })
             }
         }
 
@@ -189,7 +160,7 @@ Item {
             anchors.right: mainButton.right
             anchors.rightMargin: mapHolder.expanded ? 120 : 0
 
-            icon.source: "/InstrumentValueIcons/home.svg"
+            icon.source: "/res/QGCLogoFull.png"
             visible: mapHolder.expanded
             z: 1000
 
@@ -210,7 +181,7 @@ Item {
             anchors.verticalCenter: mainButton.verticalCenter
             anchors.right: mainButton.right   // 默认和主按钮重合
             anchors.rightMargin: mapHolder.expanded ? 64 : 0 // 展开时右移，否则和主按钮重叠
-            icon.source: "/res/waypoint.svg"
+            icon.source: "/res/vehi.png"
             visible: mapHolder.expanded       // 收起时隐藏
             z: 1000
 

@@ -17,7 +17,8 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_
 CPMAddPackage(
     NAME Shapelib
     VERSION 1.6.1
-    GITHUB_REPOSITORY OSGeo/shapelib
+#    GITHUB_REPOSITORY OSGeo/shapelib
+    SOURCE_DIR "D:/work/temp/shapelib-1.6.1/shapelib-1.6.1"
     OPTIONS
         "BUILD_SHAPELIB_CONTRIB OFF"
         "BUILD_APPS OFF"

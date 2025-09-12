@@ -34,6 +34,7 @@
 
 #include <QtCore/private/qthread_p.h>
 
+#include "FactValueGrid.h"
 #include "QGCLogging.h"
 #include "AudioOutput.h"
 #include "AutoPilotPlugin.h"
@@ -352,9 +353,12 @@ void QGCApplication::init()
     qmlRegisterSingletonInstance<QGCPositionManager>(
         "QGroundControl", 0, 0, "PositionManager", posMgr);
 
+    qmlRegisterType<FactValueGrid>("QGroundControl", 1, 0, "FactValueGrid");
+
     QQmlApplicationEngine engine;
     // 必须在注册之后再加载 QML
     engine.load(QUrl(QStringLiteral("qrc:/qml/QGroundControl/MainWindow/MainWindow.qml")));
+    // 加载你的主 QML 文件，这里可以是 TelemetryValuesBar.qml 的路径
 
     qDebug() << "posMgr instance:" << posMgr;
 

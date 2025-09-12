@@ -38,7 +38,7 @@ QGCPopupDialog {
         id: noFactComponent
 
         QGCLabel {
-            text: qsTr("仪表盘显示需要连接车辆。")
+            text: qsTr("仪表盘显示需要连接设备。")
         }
     }
 
