@@ -197,17 +197,30 @@ void FactValueGrid::_connectSaveSignals(InstrumentValueData* value)
     connect(value, &InstrumentValueData::rangeIconsChanged,     this, &FactValueGrid::_saveSettings);
 }
 
+
 void FactValueGrid::appendRow(void)
 {
-    for (int colIndex=0; colIndex<_columns->count(); colIndex++) {
-        QmlObjectListModel* list = _columns->value<QmlObjectListModel*>(colIndex);
-        list->append(_createNewInstrumentValueWorker(list));
-
+    // 最大行数限制
+    if (_rowCount >= 4) {
+        qDebug() << "已达到最大行数，无法添加新行";
+        return;
     }
+
+    // 遍历每列，向每个列的 QmlObjectListModel 添加新元素
+    for (int colIndex = 0; colIndex < _columns->count(); colIndex++) {
+        QmlObjectListModel* list = _columns->value<QmlObjectListModel*>(colIndex);
+        if (list) {
+            list->append(_createNewInstrumentValueWorker(list));
+        }
+    }
+
+    // 更新行数
     _rowCount++;
     emit rowCountChanged(_rowCount);
+
     _saveSettings();
 }
+
 
 void FactValueGrid::deleteLastRow(void)
 {
@@ -225,11 +238,16 @@ void FactValueGrid::deleteLastRow(void)
 
 QmlObjectListModel* FactValueGrid::appendColumn(void)
 {
+    if (_columns->count() >= 3)  // 最大列数3
+        return nullptr;
+
     QmlObjectListModel* newList = new QmlObjectListModel(_columns);
     _columns->append(newList);
 
-    // If this is the first row then we automatically add the first column as well
     int cRowsToAdd = qMax(_rowCount, 1);
+    if (cRowsToAdd > 4)  // 最大行数4
+        cRowsToAdd = 4;
+
     for (int i=0; i<cRowsToAdd; i++) {
         newList->append(_createNewInstrumentValueWorker(newList));
     }
@@ -240,7 +258,6 @@ QmlObjectListModel* FactValueGrid::appendColumn(void)
     }
 
     _saveSettings();
-
     return newList;
 }
 
@@ -258,7 +275,7 @@ InstrumentValueData* FactValueGrid::_createNewInstrumentValueWorker(QObject* par
     InstrumentValueData* value = new InstrumentValueData(this, parent);
     // 设置它要绑定的 Fact（这里绑定的是 "AltitudeRelative" 相对高度）
     // vehicleFactGroupName 表示这个 Fact 是来自 Vehicle 的 FactGroup
-    value->setFact(InstrumentValueData::vehicleFactGroupName, "AltitudeRelative");
+    value->setFact(InstrumentValueData::vehicleFactGroupName, "airSpeed");
     // 设置显示的文字（用 Fact 的 shortDescription）
     value->setText(value->fact()->shortDescription());
     // 连接保存/更新信号，保证 UI 跟 Fact 值同步
@@ -439,18 +456,13 @@ void FactValueGrid::removeFactByName(const QString &factName)
             InstrumentValueData* val = qobject_cast<InstrumentValueData*>(model->get(j));
             if (!val) continue;
 
-            qDebug() << "Checking" << j
-                     << "factName:" << val->factName()
-                     << "text:" << val->text();
-
             if (val->factName() == factName) {
                 model->removeAt(j);
-                qDebug() << "Removed fact" << factName << "at model" << i << "index" << j;
             }
         }
     }
 
-    // 2. 删除重复数据，保留每个 factName 的第一个
+    // 2. 去重，保留每个 factName 第一个
     removeDuplicates();
 
     // 3. 收集所有数据（最多12个）
@@ -465,17 +477,17 @@ void FactValueGrid::removeFactByName(const QString &factName)
         }
     }
 
-    // 3. 获取新的紧凑布局坐标
+    // 4. 获取新的紧凑布局坐标
     QList<std::pair<int,int>> newLayout = optimizeLayout(allFacts.size());
 
-    // 4. 清空原 _columns
+    // 5. 清空原 _columns
     _columns->clear();
 
-    // 5. 按行重新生成模型，每行一个 QmlObjectListModel
+    // 6. 按行重新生成模型，每行一个 QmlObjectListModel
     int currentRow = -1;
     QmlObjectListModel* rowModel = nullptr;
     for (int i = 0; i < allFacts.size(); ++i) {
-        if (i >= newLayout.size()) break; // 安全保护
+        if (i >= newLayout.size()) break;
         int row = newLayout[i].first;
 
         if (row != currentRow) {
@@ -486,8 +498,24 @@ void FactValueGrid::removeFactByName(const QString &factName)
         rowModel->append(allFacts[i]);
     }
 
-    qDebug() << "Layout rearranged. Total rows:" << _columns->count();
+    // 7. 更新行数和列数
+    _rowCount = 0;
+    for (int i = 0; i < _columns->count(); ++i) {
+        QmlObjectListModel* model = qobject_cast<QmlObjectListModel*>(_columns->get(i));
+        if (model && model->count() > _rowCount) {
+            _rowCount = model->count();
+        }
+    }
+    emit rowCountChanged(_rowCount);
+
+    // 8. 更新列数
+    int colCount = _columns->count();
+    emit columnCountChanged(colCount);
+
+    _saveSettings();
 }
+
+
 
 
 // 优化布局函数

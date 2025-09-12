@@ -84,6 +84,7 @@ signals:
     void fontSizeChanged(FontSize fontSize);
     void columnsChanged (QmlObjectListModel* model);
     void rowCountChanged(int rowCount);
+    void columnCountChanged(int columnCount);
     void settingsGroupChanged(QString settingsGroup);
     void specificVehicleForCardChanged(Vehicle* vehicle);
 

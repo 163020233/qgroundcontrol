@@ -64,7 +64,7 @@ Item {
                     // onClicked: factValueGrid.settingsUnlocked = false
                     onClicked: {
                         console.log("Lock icon clicked!")
-                        factValueGrid.removeFactByName("AltitudeRelative")
+                        factValueGrid.removeFactByName("airSpeed")
                         factValueGrid.settingsUnlocked = false
                     }
                 }
@@ -81,7 +81,7 @@ Item {
         target: factValueGrid
         onSettingsUnlockedChanged: {
             if (!factValueGrid.settingsUnlocked) {
-                factValueGrid.removeFactByName("AltitudeRelative")
+                factValueGrid.removeFactByName("airSpeed")
             }
         }
     }
