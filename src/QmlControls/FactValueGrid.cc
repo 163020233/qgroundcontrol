@@ -94,12 +94,12 @@ void FactValueGrid::_activeVehicleChanged(Vehicle* activeVehicle)
     _initForNewVehicle(activeVehicle);
 }
 
-FactValueGrid::~FactValueGrid() 
+FactValueGrid::~FactValueGrid()
 {
     _vehicleCardInstanceList.removeAll(this);
 }
 
-QGCMAVLink::VehicleClass_t FactValueGrid::vehicleClass(void) const 
+QGCMAVLink::VehicleClass_t FactValueGrid::vehicleClass(void) const
 {
     return QGCMAVLink::vehicleClass(currentVehicle()->vehicleType());
 }
@@ -271,19 +271,65 @@ void FactValueGrid::deleteLastColumn(void)
 
 InstrumentValueData* FactValueGrid::_createNewInstrumentValueWorker(QObject* parent)
 {
-    // 创建一个新的数据展示单元，用来绑定某个 Fact（飞行器参数/状态）
+    // 创建一个新的 InstrumentValueData，用来显示某个飞控参数
     InstrumentValueData* value = new InstrumentValueData(this, parent);
-    // 设置它要绑定的 Fact（这里绑定的是 "AltitudeRelative" 相对高度）
-    // vehicleFactGroupName 表示这个 Fact 是来自 Vehicle 的 FactGroup
-    value->setFact(InstrumentValueData::vehicleFactGroupName, "airSpeed");
-    // 设置显示的文字（用 Fact 的 shortDescription）
-    value->setText(value->fact()->shortDescription());
-    // 连接保存/更新信号，保证 UI 跟 Fact 值同步
-    _connectSaveSignals(value);
-    // 返回这个 InstrumentValueData
-    return value;
 
+    // 默认要绑定的参数名
+    QString factName = _nextFactToAdd.isEmpty() ? "airSpeed" : _nextFactToAdd;
+    _nextFactToAdd.clear();
+
+    QString groupName = InstrumentValueData::vehicleFactGroupName; // 默认所属 FactGroup
+    // --- 新增条件判断，如果是经纬度就用 gps group ---
+    if (factName == "lon" || factName == "lat") {
+        groupName = InstrumentValueData::gpsFactGroupName;
+    }
+
+    QString displayName = factName; // 默认显示名称
+
+    // 直接从 Vehicle 获取对应的 FactGroup
+    Fact* fact = nullptr;
+    if (_activeVehicle) {
+        FactGroup* fg = _activeVehicle->getFactGroup(groupName);
+        if (fg) {
+            fact = fg->getFact(factName); // 获取单个 Fact
+            if (!fact) {
+                qWarning() << "在 FactGroup 中未找到对应 Fact:" << groupName << factName;
+            }
+        } else {
+            qWarning() << "未找到对应的 FactGroup:" << groupName;
+        }
+    }
+
+    // 使用双参数的 setFact 来绑定 Fact，保证单位可以正常显示
+    value->setFact(groupName, factName);
+
+    // 设置显示文字：如果找到 Fact，就用 Fact 的 shortDescription，否则显示参数名
+    value->setText(fact ? fact->shortDescription() : displayName);
+
+    // 设置是否显示单位：找到了 Fact 就显示单位，找不到就不显示
+    value->setShowUnits(fact != nullptr);
+
+    // 连接信号，保证 UI 可以跟随 Fact 值变化
+    _connectSaveSignals(value);
+
+    return value;
 }
+
+// InstrumentValueData* FactValueGrid::_createNewInstrumentValueWorker(QObject* parent)
+// {
+//     // 创建一个新的数据展示单元，用来绑定某个 Fact（飞行器参数/状态）
+//     InstrumentValueData* value = new InstrumentValueData(this, parent);
+//     // 设置它要绑定的 Fact（这里绑定的是 "AltitudeRelative" 相对高度）
+//     // vehicleFactGroupName 表示这个 Fact 是来自 Vehicle 的 FactGroup
+//     value->setFact(InstrumentValueData::vehicleFactGroupName, "airSpeed");
+//     // 设置显示的文字（用 Fact 的 shortDescription）
+//     value->setText(value->fact()->shortDescription());
+//     // 连接保存/更新信号，保证 UI 跟 Fact 值同步
+//     _connectSaveSignals(value);
+//     // 返回这个 InstrumentValueData
+//     return value;
+//
+// }
 
 void FactValueGrid::_saveSettings(void)
 {
@@ -357,7 +403,7 @@ void FactValueGrid::_resetFromSettings(void)
             QGCCorePlugin::instance()->factValueGridCreateDefaultSettings(this);
         }
         _fontSize = settings.value(_fontSizeKey, DefaultFontSize).value<FontSize>();
-    
+
         // Initial setup of empty items
         int cRows       = settings.value(_rowCountKey).toInt();
         int cModelLists = settings.beginReadArray(_columnsKey);
@@ -370,7 +416,7 @@ void FactValueGrid::_resetFromSettings(void)
                 appendColumn();
             }
         }
-    
+
         // Fill in the items from settings
         for (int colIndex=0; colIndex<cModelLists; colIndex++) {
             settings.setArrayIndex(colIndex);
@@ -514,6 +560,133 @@ void FactValueGrid::removeFactByName(const QString &factName)
 
     _saveSettings();
 }
+
+QStringList FactValueGrid::facts() const {
+    QStringList list;
+    for (int i = 0; i < _columns->count(); i++) {
+        QmlObjectListModel* col = qobject_cast<QmlObjectListModel*>(_columns->get(i));
+        if (!col) continue;
+
+        for (int j = 0; j < col->count(); j++) {
+            InstrumentValueData* val = qobject_cast<InstrumentValueData*>(col->get(j));
+            if (val)
+                list.append(val->factName());
+        }
+    }
+    return list;
+}
+
+void FactValueGrid::appendFact(const QString& factName)
+{
+    if (factName.isEmpty() || facts().contains(factName))
+        return; // 空或已存在则跳过
+
+    _nextFactToAdd = factName;
+    InstrumentValueData* value = _createNewInstrumentValueWorker(this);
+
+    // 收集现有所有 fact
+    QList<InstrumentValueData*> allFacts;
+    for (int i = 0; i < _columns->count(); ++i) {
+        QmlObjectListModel* col = qobject_cast<QmlObjectListModel*>(_columns->get(i));
+        if (!col) continue;
+        for (int j = 0; j < col->count(); ++j) {
+            InstrumentValueData* val = qobject_cast<InstrumentValueData*>(col->get(j));
+            if (val) allFacts.append(val);
+        }
+    }
+    allFacts.append(value); // 添加新 fact
+
+    // 重新生成紧凑布局
+    QList<std::pair<int,int>> newLayout = optimizeLayout(allFacts.size());
+
+    // 清空列
+    _columns->clear();
+
+    int currentRow = -1;
+    QmlObjectListModel* rowModel = nullptr;
+    for (int i = 0; i < allFacts.size(); ++i) {
+        int row = newLayout[i].first;
+        if (row != currentRow) {
+            rowModel = new QmlObjectListModel(this);
+            _columns->append(rowModel);
+            currentRow = row;
+        }
+        rowModel->append(allFacts[i]);
+    }
+
+    // 更新行/列数
+    _rowCount = 0;
+    for (int i = 0; i < _columns->count(); ++i) {
+        QmlObjectListModel* col = qobject_cast<QmlObjectListModel*>(_columns->get(i));
+        if (col && col->count() > _rowCount)
+            _rowCount = col->count();
+    }
+    emit rowCountChanged(_rowCount);
+    emit columnCountChanged(_columns->count());
+
+    _nextFactToAdd.clear();
+    emit factsChanged();
+    _saveSettings();
+}
+
+
+void FactValueGrid::removeFact(const QString& factName)
+{
+    if (factName.isEmpty()) return;
+
+    // 1. 删除指定 fact
+    for (int i = _columns->count() - 1; i >= 0; --i) {
+        QmlObjectListModel* col = qobject_cast<QmlObjectListModel*>(_columns->get(i));
+        if (!col) continue;
+        for (int j = col->count() - 1; j >= 0; --j) {
+            InstrumentValueData* val = qobject_cast<InstrumentValueData*>(col->get(j));
+            if (val && val->factName() == factName)
+                col->removeAt(j);
+        }
+    }
+
+    // 2. 收集剩余所有 fact 并重新紧凑布局
+    QList<InstrumentValueData*> allFacts;
+    for (int i = 0; i < _columns->count(); ++i) {
+        QmlObjectListModel* col = qobject_cast<QmlObjectListModel*>(_columns->get(i));
+        if (!col) continue;
+        for (int j = 0; j < col->count(); ++j) {
+            InstrumentValueData* val = qobject_cast<InstrumentValueData*>(col->get(j));
+            if (val) allFacts.append(val);
+        }
+    }
+
+    QList<std::pair<int,int>> newLayout = optimizeLayout(allFacts.size());
+    _columns->clear();
+
+    int currentRow = -1;
+    QmlObjectListModel* rowModel = nullptr;
+    for (int i = 0; i < allFacts.size(); ++i) {
+        int row = newLayout[i].first;
+        if (row != currentRow) {
+            rowModel = new QmlObjectListModel(this);
+            _columns->append(rowModel);
+            currentRow = row;
+        }
+        rowModel->append(allFacts[i]);
+    }
+
+    // 更新行/列数
+    _rowCount = 0;
+    for (int i = 0; i < _columns->count(); ++i) {
+        QmlObjectListModel* col = qobject_cast<QmlObjectListModel*>(_columns->get(i));
+        if (col && col->count() > _rowCount)
+            _rowCount = col->count();
+    }
+
+    emit rowCountChanged(_rowCount);
+    emit columnCountChanged(_columns->count());
+    emit factsChanged();
+    _saveSettings();
+}
+
+
+
 
 
 

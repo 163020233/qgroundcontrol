@@ -30,8 +30,13 @@ public:
 class FactValueGrid : public QQuickItem
 {
     Q_OBJECT
-
+    Q_PROPERTY(QStringList facts READ facts NOTIFY factsChanged)
 public:
+    /// 增量添加用户勾选的参数到仪表盘
+    Q_INVOKABLE void appendFact(const QString& factName);
+    Q_INVOKABLE void removeFact(const QString& factName);
+
+    QStringList facts() const;
     // FactValueGrid.h
     Q_INVOKABLE void removeFactByName(const QString &factName);
     // 新增函数：删除重复数据，只保留一个
@@ -81,6 +86,7 @@ public:
     void componentComplete(void) final;
 
 signals:
+    void factsChanged();
     void fontSizeChanged(FontSize fontSize);
     void columnsChanged (QmlObjectListModel* model);
     void rowCountChanged(int rowCount);
@@ -90,7 +96,8 @@ signals:
 
 protected:
     Q_DISABLE_COPY(FactValueGrid)
-
+    QStringList m_facts;  // 当前显示的 fact 列表
+    QString _nextFactToAdd;  // 临时缓存下一次要添加的 Fact
     QString                     _settingsGroup;
     FontSize                    _fontSize               = DefaultFontSize;
     bool                        _preventSaveSettings    = false;

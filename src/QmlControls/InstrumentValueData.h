@@ -80,8 +80,8 @@ public:
     void            setRangeIcons           (const QVariantList& rangeIcons);
     void            setRangeOpacities       (const QVariantList& rangeOpacities);
 
-    static constexpr const char*  vehicleFactGroupName =   "Vehicle";
-
+    static constexpr const char*  vehicleFactGroupName =   "vehicle";
+    static constexpr const char* gpsFactGroupName = "gps";
 signals:
     void factChanged            (Fact* fact);
     void factNameChanged        (const QString& factName);

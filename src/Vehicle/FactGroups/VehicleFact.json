@@ -1,168 +1,30 @@
 {
-    "version":      1,
-    "fileType":  "FactMetaData",
-    "QGC.MetaData.Facts":
-[
-{
-    "name":             "roll",
-    "shortDesc": "Roll",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "deg"
-},
-{
-    "name":             "pitch",
-    "shortDesc": "Pitch",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "deg"
-},
-{
-    "name":             "heading",
-    "shortDesc": "Heading",
-    "type":             "double",
-    "decimalPlaces":    0,
-    "units":            "deg"
-},
-{
-    "name":             "rollRate",
-    "shortDesc": "Roll Rate",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "deg/s"
-},
-{
-    "name":             "pitchRate",
-    "shortDesc": "Pitch Rate",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "deg/s"
-},
-{
-    "name":             "yawRate",
-    "shortDesc": "Yaw Rate",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "deg/s"
-},
-{
-    "name":             "groundSpeed",
-    "shortDesc": "Ground Speed",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "m/s"
-},
-{
-    "name":             "airSpeed",
-    "shortDesc": "Air Speed",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "m/s"
-},
-{
-    "name":             "climbRate",
-    "shortDesc": "Climb Rate",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "m/s"
-},
-{
-    "name":             "altitudeRelative",
-    "shortDesc": "Alt (Rel)",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "m"
-},
-{
-    "name":             "altitudeAMSL",
-    "shortDesc": "Alt (AMSL)",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "m"
-},
-{
-    "name":             "altitudeAboveTerr",
-    "shortDesc": "Alt (Above Terrain)",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "m"
-},
-{
-    "name":             "flightDistance",
-    "shortDesc": "Flight Distance",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "m"
-},
-{
-    "name":             "distanceToHome",
-    "shortDesc": "Distance to Home",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "m"
-},
-{
-    "name":             "timeToHome",
-    "shortDesc": "Time to Home",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "s"
-},
-{
-    "name":             "headingToHome",
-    "shortDesc": "Heading to Home",
-    "type":             "double",
-    "decimalPlaces":    0,
-    "units":            "deg"
-},
-{
-    "name":             "distanceToGCS",
-    "shortDesc": "Distance to GCS",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "m"
-},
-{
-    "name":             "missionItemIndex",
-    "shortDesc": "Mission Item Index",
-    "type":             "uint16"
-},
-{
-    "name":             "headingToNextWP",
-    "shortDesc": "Next WP Heading",
-    "type":             "double",
-    "decimalPlaces":    0,
-    "units":            "deg"
-},
-{
-    "name":             "distanceToNextWP",
-    "shortDesc": "Next WP distance",
-    "type":             "double",
-    "decimalPlaces":    0,
-    "units":            "m"
-},
-{
-    "name":             "flightTime",
-    "shortDesc": "Flight Time",
-    "type":             "elapsedSeconds",
-    "decimalPlaces":    1
-},
-{
-    "name":             "hobbs",
-    "shortDesc": "Hobbs Meter",
-    "type":             "string"
-},
-{
-    "name":             "throttlePct",
-    "shortDesc": "Throttle %",
-    "type":             "uint16",
-    "units":            "%"
-},
-{
-    "name":             "imuTemp",
-    "shortDesc": "Imu temperature",
-    "type":             "int16",
-    "units":            "°C"
-}
-]
+    "version": 1,
+    "fileType": "FactMetaData",
+    "QGC.MetaData.Facts": [
+        { "name": "roll", "shortDesc": "横滚角", "type": "double", "decimalPlaces": 1, "units": "度" },
+        { "name": "pitch", "shortDesc": "俯仰角", "type": "double", "decimalPlaces": 1, "units": "度" },
+        { "name": "heading", "shortDesc": "航向", "type": "double", "decimalPlaces": 0, "units": "度" },
+        { "name": "rollRate", "shortDesc": "横滚角速率", "type": "double", "decimalPlaces": 1, "units": "度/秒" },
+        { "name": "pitchRate", "shortDesc": "俯仰角速率", "type": "double", "decimalPlaces": 1, "units": "度/秒" },
+        { "name": "yawRate", "shortDesc": "偏航角速率", "type": "double", "decimalPlaces": 1, "units": "度/秒" },
+        { "name": "groundSpeed", "shortDesc": "地速", "type": "double", "decimalPlaces": 1, "units": "米/秒" },
+        { "name": "airSpeed", "shortDesc": "空速", "type": "double", "decimalPlaces": 1, "units": "米/秒" },
+        { "name": "climbRate", "shortDesc": "升降速度", "type": "double", "decimalPlaces": 1, "units": "米/秒" },
+        { "name": "altitudeRelative", "shortDesc": "相对高度", "type": "double", "decimalPlaces": 1, "units": "米" },
+        { "name": "altitudeAMSL", "shortDesc": "海拔高度", "type": "double", "decimalPlaces": 1, "units": "米" },
+        { "name": "altitudeAboveTerr", "shortDesc": "地面以上高度", "type": "double", "decimalPlaces": 1, "units": "米" },
+        { "name": "flightDistance", "shortDesc": "飞行路程", "type": "double", "decimalPlaces": 1, "units": "米" },
+        { "name": "distanceToHome", "shortDesc": "距家距离", "type": "double", "decimalPlaces": 1, "units": "米" },
+        { "name": "timeToHome", "shortDesc": "回家时间", "type": "double", "decimalPlaces": 1, "units": "秒" },
+        { "name": "headingToHome", "shortDesc": "回家航向", "type": "double", "decimalPlaces": 0, "units": "度" },
+        { "name": "distanceToGCS", "shortDesc": "距地面站距离", "type": "double", "decimalPlaces": 1, "units": "米" },
+        { "name": "missionItemIndex", "shortDesc": "任务点索引", "type": "uint16" },
+        { "name": "headingToNextWP", "shortDesc": "下个航点航向", "type": "double", "decimalPlaces": 0, "units": "度" },
+        { "name": "distanceToNextWP", "shortDesc": "下个航点距离", "type": "double", "decimalPlaces": 0, "units": "米" },
+        { "name": "flightTime", "shortDesc": "飞行时间", "type": "elapsedSeconds", "decimalPlaces": 1, "units": "秒" },
+        { "name": "hobbs", "shortDesc": "霍布斯计时器", "type": "string" },
+        { "name": "throttlePct", "shortDesc": "油门百分比", "type": "uint16", "units": "%" },
+        { "name": "imuTemp", "shortDesc": "IMU 温度", "type": "int16", "units": "°C" }
+    ]
 }

@@ -1,56 +1,55 @@
 {
-    "version":      1,
-    "fileType":  "FactMetaData",
-    "QGC.MetaData.Facts":
-[
-{
-    "name":             "lat",
-    "shortDesc": "Latitude",
-    "type":             "double",
-    "decimalPlaces":    7
-},
-{
-    "name":             "lon",
-    "shortDesc": "Longitude",
-    "type":             "double",
-    "decimalPlaces":    7
-},
-{
-    "name":             "mgrs",
-    "shortDesc": "MGRS Position",
-    "type":             "string"
-},
-{
-    "name":             "hdop",
-    "shortDesc": "HDOP",
-    "type":             "double",
-    "decimalPlaces":    1
-},
-{
-    "name":             "vdop",
-    "shortDesc": "VDOP",
-    "type":             "double",
-    "decimalPlaces":    1
-},
-{
-    "name":             "courseOverGround",
-    "shortDesc": "Course Over Ground",
-    "type":             "double",
-    "decimalPlaces":    1,
-    "units":            "deg"
-},
-{
-    "name":             "lock",
-    "shortDesc": "GPS Lock",
-    "type":             "uint32",
-    "enumStrings":      "None,None,2D Lock,3D Lock,3D DGPS Lock,3D RTK GPS Lock (float),3D RTK GPS Lock (fixed),Static (fixed)",
-    "enumValues":       "0,1,2,3,4,5,6,7",
-    "decimalPlaces":    0
-},
-{
-    "name":             "count",
-    "shortDesc": "Sat Count",
-    "type":             "uint32"
-}
-]
+    "version": 1,
+    "fileType": "FactMetaData",
+    "QGC.MetaData.Facts": [
+        {
+            "name": "lat",
+            "shortDesc": "纬度",
+            "type": "double",
+            "decimalPlaces": 7
+        },
+        {
+            "name": "lon",
+            "shortDesc": "经度",
+            "type": "double",
+            "decimalPlaces": 7
+        },
+        {
+            "name": "mgrs",
+            "shortDesc": "MGRS 坐标",
+            "type": "string"
+        },
+        {
+            "name": "hdop",
+            "shortDesc": "水平精度 HDOP",
+            "type": "double",
+            "decimalPlaces": 1
+        },
+        {
+            "name": "vdop",
+            "shortDesc": "垂直精度 VDOP",
+            "type": "double",
+            "decimalPlaces": 1
+        },
+        {
+            "name": "courseOverGround",
+            "shortDesc": "航向",
+            "type": "double",
+            "decimalPlaces": 1,
+            "units": "deg"
+        },
+        {
+            "name": "lock",
+            "shortDesc": "GPS 锁定状态",
+            "type": "uint32",
+            "enumStrings": "None,None,2D 锁定,3D 锁定,3D DGPS 锁定,3D RTK GPS 锁定 (float),3D RTK GPS 锁定 (fixed),静态 (fixed)",
+            "enumValues": "0,1,2,3,4,5,6,7",
+            "decimalPlaces": 0
+        },
+        {
+            "name": "count",
+            "shortDesc": "卫星数量",
+            "type": "uint32"
+        }
+    ]
 }

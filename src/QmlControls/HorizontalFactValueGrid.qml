@@ -112,12 +112,13 @@ T.HorizontalFactValueGrid {
 
             ColumnLayout {
                 spacing: 1
-                visible: settingsUnlocked
+                // visible: settingsUnlocked
+                visible:false
 
                 QGCButton {
                     Layout.preferredWidth:  ScreenTools.minTouchPixels
                     Layout.fillHeight:      true
-                    topPadding:             0                
+                    topPadding:             0
                     bottomPadding:          0
                     leftPadding:            0
                     rightPadding:           0
@@ -129,7 +130,7 @@ T.HorizontalFactValueGrid {
                 QGCButton {
                     Layout.preferredWidth:  ScreenTools.minTouchPixels
                     Layout.fillHeight:      true
-                    topPadding:             0                
+                    topPadding:             0
                     bottomPadding:          0
                     leftPadding:            0
                     rightPadding:           0
@@ -148,7 +149,7 @@ T.HorizontalFactValueGrid {
             QGCButton {
                 Layout.fillWidth:       true
                 Layout.preferredHeight: ScreenTools.minTouchPixels
-                topPadding:             0                
+                topPadding:             0
                 bottomPadding:          0
                 leftPadding:            0
                 rightPadding:           0
