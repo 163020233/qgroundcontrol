@@ -79,7 +79,6 @@ public:
     void            setRangeColors          (const QVariantList& rangeColors);
     void            setRangeIcons           (const QVariantList& rangeIcons);
     void            setRangeOpacities       (const QVariantList& rangeOpacities);
-
     static constexpr const char*  vehicleFactGroupName =   "vehicle";
     static constexpr const char* gpsFactGroupName = "gps";
 signals:

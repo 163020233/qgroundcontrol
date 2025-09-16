@@ -319,7 +319,6 @@ void Vehicle::_commonInit()
     _createImageProtocolManager();
     _createStatusTextHandler();
     _createMAVLinkLogManager();
-
     _addFactGroup(_vehicleFactGroup,            _vehicleFactGroupName);
     _addFactGroup(&_gpsFactGroup,               _gpsFactGroupName);
     _addFactGroup(&_gps2FactGroup,              _gps2FactGroupName);

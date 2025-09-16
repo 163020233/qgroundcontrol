@@ -81,7 +81,6 @@ public:
     Vehicle*                    specificVehicleForCard  (void) const { return _specificVehicleForCard; }
 
     void setFontSize(FontSize fontSize);
-
     // Override from QQmlParserStatus
     void componentComplete(void) final;
 

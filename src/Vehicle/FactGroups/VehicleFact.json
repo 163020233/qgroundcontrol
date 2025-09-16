@@ -8,7 +8,7 @@
         { "name": "rollRate", "shortDesc": "横滚角速率", "type": "double", "decimalPlaces": 1, "units": "度/秒" },
         { "name": "pitchRate", "shortDesc": "俯仰角速率", "type": "double", "decimalPlaces": 1, "units": "度/秒" },
         { "name": "yawRate", "shortDesc": "偏航角速率", "type": "double", "decimalPlaces": 1, "units": "度/秒" },
-        { "name": "groundSpeed", "shortDesc": "地速", "type": "double", "decimalPlaces": 1, "units": "米/秒" },
+        { "name": "groundSpeed", "shortDesc": "飞行速度", "type": "double", "decimalPlaces": 1, "units": "米/秒" },
         { "name": "airSpeed", "shortDesc": "空速", "type": "double", "decimalPlaces": 1, "units": "米/秒" },
         { "name": "climbRate", "shortDesc": "升降速度", "type": "double", "decimalPlaces": 1, "units": "米/秒" },
         { "name": "altitudeRelative", "shortDesc": "相对高度", "type": "double", "decimalPlaces": 1, "units": "米" },
@@ -24,7 +24,7 @@
         { "name": "distanceToNextWP", "shortDesc": "下个航点距离", "type": "double", "decimalPlaces": 0, "units": "米" },
         { "name": "flightTime", "shortDesc": "飞行时间", "type": "elapsedSeconds", "decimalPlaces": 1, "units": "秒" },
         { "name": "hobbs", "shortDesc": "霍布斯计时器", "type": "string" },
-        { "name": "throttlePct", "shortDesc": "油门百分比", "type": "uint16", "units": "%" },
+        { "name": "throttlePct", "shortDesc": "油门比例", "type": "uint16", "units": "%" },
         { "name": "imuTemp", "shortDesc": "IMU 温度", "type": "int16", "units": "°C" }
     ]
 }

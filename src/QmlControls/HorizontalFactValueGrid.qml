@@ -145,6 +145,7 @@ T.HorizontalFactValueGrid {
             Layout.fillWidth:   true
             spacing:            1
             visible:            settingsUnlocked
+            visible:false
 
             QGCButton {
                 Layout.fillWidth:       true

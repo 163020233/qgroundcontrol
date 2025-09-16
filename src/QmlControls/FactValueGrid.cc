@@ -578,6 +578,10 @@ QStringList FactValueGrid::facts() const {
 
 void FactValueGrid::appendFact(const QString& factName)
 {
+    if (facts().size() >= 12) {
+        qWarning() << "仪表盘最多只能添加 12 个参数，忽略:" << factName;
+        return;
+    }
     if (factName.isEmpty() || facts().contains(factName))
         return; // 空或已存在则跳过
 

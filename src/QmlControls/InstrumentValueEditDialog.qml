@@ -49,13 +49,13 @@ QGCPopupDialog {
 
             property var factValueEnglish: [
                 "roll", "pitch", "heading", "groundSpeed",
-                "altitudeRelative", "altitudeAMSL", "airSpeed",
+                "altitudeRelative", "altitudeAMSL","flightTime",
                 "flightDistance", "distanceToHome", "climbRate",
                 "lon", "lat"
             ]
             property var factValueChinese: [
-                "横滚角", "俯仰角", "航向", "地速",
-                "相对高度", "海拔高度", "空速",
+                "横滚角", "俯仰角", "航向", "飞行速度",
+                "相对高度", "海拔高度","飞行时间",
                 "飞行路程", "距家距离", "升降速度",
                 "经度", "纬度"
             ]
@@ -114,6 +114,8 @@ QGCPopupDialog {
                         checkedFlags[i] = factValueGrid.facts.indexOf(factValueEnglish[i]) !== -1
                     }
                     additionalFacts = factValueGrid.facts.slice()
+
+                    saveCheckedFlags()  // 每次仪表盘更新时同步保存
                 }
             }
         }
