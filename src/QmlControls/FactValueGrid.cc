@@ -689,6 +689,97 @@ void FactValueGrid::removeFact(const QString& factName)
     _saveSettings();
 }
 
+// FactValueGrid.cpp
+void FactValueGrid::setCheckedFacts(const QStringList& facts)
+{
+    _checkedFacts = facts;
+    saveCheckedFacts();   // 持久化保存
+    emit factsChanged();
+}
+
+void FactValueGrid::saveCheckedFacts()
+{
+    QFile file("checkedFacts.json");
+    if (!file.open(QIODevice::WriteOnly)) return;
+    QJsonArray arr;
+    for (const QString& f : _checkedFacts) arr.append(f);
+    QJsonObject obj;
+    obj["checkedFacts"] = arr;
+    file.write(QJsonDocument(obj).toJson());
+    file.close();
+}
+
+// FactValueGrid.cpp
+
+void FactValueGrid::clearAllFacts()
+{
+    for (int i = 0; i < _columns->count(); ++i) {
+        QmlObjectListModel* columnModel = qobject_cast<QmlObjectListModel*>(_columns->get(i));
+        if (!columnModel) continue;
+
+        // 先删除模型里的 InstrumentValueData 对象
+        for (int j = columnModel->count() - 1; j >= 0; --j) {
+            InstrumentValueData* val = qobject_cast<InstrumentValueData*>(columnModel->get(j));
+            if (val) {
+                val->deleteLater();   // 延迟删除，安全
+            }
+        }
+
+        columnModel->clear();   // 清空模型
+    }
+
+    _rowCount = 0;
+    emit rowCountChanged(_rowCount);
+    emit columnCountChanged(_columns->count());
+    emit factsChanged();
+
+    _saveSettings();
+}
+
+
+void FactValueGrid::loadCheckedFacts()
+{
+    QFile file("checkedFacts.json");
+    QStringList restored;
+
+    if (file.exists() && file.open(QIODevice::ReadOnly)) {
+        QByteArray data = file.readAll();
+        file.close();
+
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        if (doc.isObject()) {
+            QJsonArray arr = doc.object().value("checkedFacts").toArray();
+            for (auto v : arr) {
+                restored.append(v.toString());
+            }
+        }
+    }
+
+    // 如果没有保存的配置，使用默认参数（第一次启动）
+    if (restored.isEmpty()) {
+        restored = {
+            "AltitudeRelative",
+            "DistanceToHome",
+            "ClimbRate",
+            "GroundSpeed",
+            "FlightTime",
+            "FlightDistance"
+        };
+    }
+
+    _checkedFacts = restored;
+
+    // 清空现有仪表盘，防止重复
+    clearAllFacts();
+
+    // 根据 _checkedFacts 重建仪表盘
+    for (const QString& factName : _checkedFacts) {
+        appendFact(factName);
+    }
+
+    emit factsChanged();
+}
+
 
 
 

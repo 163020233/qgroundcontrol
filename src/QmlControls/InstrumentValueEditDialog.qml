@@ -49,73 +49,65 @@ QGCPopupDialog {
 
             property var factValueEnglish: [
                 "roll", "pitch", "heading", "groundSpeed",
-                "altitudeRelative", "altitudeAMSL","flightTime",
+                "altitudeRelative", "altitudeAMSL", "flightTime",
                 "flightDistance", "distanceToHome", "climbRate",
                 "lon", "lat"
             ]
             property var factValueChinese: [
                 "横滚角", "俯仰角", "航向", "飞行速度",
-                "相对高度", "海拔高度","飞行时间",
+                "相对高度", "海拔高度", "飞行时间",
                 "飞行路程", "距家距离", "升降速度",
                 "经度", "纬度"
             ]
 
-            property var checkedFlags: Array(factValueEnglish.length).fill(false)
-            property var additionalFacts: []
-
             Column {
                 spacing: 4
-
                 Repeater {
                     model: factValueChinese.length
 
                     CheckBox {
                         text: factValueChinese[index]
-                        checked: checkedFlags[index]
 
-                        onCheckedChanged: {
-                            checkedFlags[index] = checked
+                        // ✅ 单向绑定（从 C++ -> QML）
+                        checked: factValueGrid.checkedFacts.indexOf(factValueEnglish[index]) !== -1
 
-                            if (!factValueGrid) return
-
+                        onClicked: {
+                            // ✅ 用 onClicked，而不是 onCheckedChanged
+                            let updated = factValueGrid.checkedFacts.slice()
                             let factName = factValueEnglish[index]
-                            let groupName = "vehicle"  // 默认 FactGroup，如果有下拉可以改为选中的 group
-                            // 如果是经纬度，改为 gps group
-                            if (factName === "lon" || factName === "lat") {
-                                groupName = "gps"
-                            }
-                            if (checked) {
-                                if (additionalFacts.indexOf(factName) === -1) {
-                                    additionalFacts.push(factName)
+                            let groupName = (factName === "lon" || factName === "lat") ? "gps" : "vehicle"
 
-                                    // appendFact 返回新建的 InstrumentValueData
+                            if (checked) {
+                                if (updated.indexOf(factName) === -1) {
+                                    updated.push(factName)
                                     let newValue = factValueGrid.appendFact(factName)
                                     if (newValue) {
-                                        newValue.setFact(groupName, factName)      // 绑定 Fact
-                                        newValue.text = factValueChinese[index]    // 中文显示
+                                        newValue.setFact(groupName, factName)
+                                        newValue.text = factValueChinese[index]
                                     }
                                 }
                             } else {
-                                let idx = additionalFacts.indexOf(factName)
-                                if (idx !== -1) {
-                                    additionalFacts.splice(idx, 1)
-                                    factValueGrid.removeFact(factName)
-                                }
+                                updated = updated.filter(f => f !== factName)
+                                factValueGrid.removeFact(factName)
                             }
+
+                            factValueGrid.setCheckedFacts(updated)
                         }
                     }
                 }
             }
-
-            Connections {
-                target: factValueGrid
-                onFactsChanged: {
-                    for (let i = 0; i < factValueEnglish.length; i++) {
-                        checkedFlags[i] = factValueGrid.facts.indexOf(factValueEnglish[i]) !== -1
+            // ✅ 启动时恢复勾选状态并填充仪表盘
+            Component.onCompleted: {
+                for (let factName of factValueGrid.checkedFacts) {
+                    let idx = factValueEnglish.indexOf(factName)
+                    if (idx !== -1) {
+                        let groupName = (factName === "lon" || factName === "lat") ? "gps" : "vehicle"
+                        let newValue = factValueGrid.appendFact(factName)
+                        if (newValue) {
+                            newValue.setFact(groupName, factName)
+                            newValue.text = factValueChinese[idx]
+                        }
                     }
-                    additionalFacts = factValueGrid.facts.slice()
-
-                    saveCheckedFlags()  // 每次仪表盘更新时同步保存
                 }
             }
         }
