@@ -42,9 +42,13 @@ public:
 
 
     Q_INVOKABLE void setCheckedFacts(const QStringList& facts);
-    Q_INVOKABLE void loadCheckedFacts();
+    Q_INVOKABLE bool loadCheckedFacts();
+
+    Q_INVOKABLE void InitialFacts();
+    void load_facts();
     Q_INVOKABLE void saveCheckedFacts();
     Q_INVOKABLE void clearAllFacts();
+    void _saveLayoutToJson();
     // FactValueGrid.h
     Q_INVOKABLE void removeFactByName(const QString &factName);
     // 新增函数：删除重复数据，只保留一个

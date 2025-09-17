@@ -59,7 +59,9 @@ QGCPopupDialog {
                 "飞行路程", "距家距离", "升降速度",
                 "经度", "纬度"
             ]
-
+            Component.onCompleted: {
+                factValueGrid.InitialFacts()  // 初始化 checkedFacts
+            }
             Column {
                 spacing: 4
                 Repeater {
@@ -96,358 +98,344 @@ QGCPopupDialog {
                     }
                 }
             }
-            // ✅ 启动时恢复勾选状态并填充仪表盘
-            Component.onCompleted: {
-                for (let factName of factValueGrid.checkedFacts) {
-                    let idx = factValueEnglish.indexOf(factName)
-                    if (idx !== -1) {
-                        let groupName = (factName === "lon" || factName === "lat") ? "gps" : "vehicle"
-                        let newValue = factValueGrid.appendFact(factName)
-                        if (newValue) {
-                            newValue.setFact(groupName, factName)
-                            newValue.text = factValueChinese[idx]
-                        }
-                    }
-                }
-            }
         }
     }
 
 
 
 
-        // RowLayout {
-        //     visible:false
-        //     spacing: ScreenTools.defaultFontPixelWidth
-        //
-        //     ColumnLayout {
-        //         spacing: ScreenTools.defaultFontPixelHeight / 2
-        //
-        //         SettingsGroupLayout {
-        //             heading: qsTr("仪表盘")
-        //             LabelledComboBox {
-        //                 id: factGroupCombo
-        //                 label: qsTr("类型")
-        //
-        //                 // 显示中文，但逻辑使用英文
-        //                 property var groupEnglishNames: ["Vehicle", "Gps"]
-        //                 property var groupChineseNames: ["飞行器", "卫星定位"]
-        //
-        //                 model: groupChineseNames
-        //                 currentIndex: groupEnglishNames.indexOf(instrumentValueData.factGroupName)
-        //
-        //                 onActivated: (index) => {
-        //                     let groupName = groupEnglishNames[index] // 英文名字
-        //                     instrumentValueData.setFact(groupName, "")
-        //                     instrumentValueData.icon = ""
-        //                     instrumentValueData.text = instrumentValueData.fact ? instrumentValueData.fact.shortDescription : qsTr("标签")
-        //
-        //                     // 更新 Fact Value 下拉
-        //                     factNamesCombo.updateModel()
-        //                 }
-        //
-        //                 Connections {
-        //                     target: instrumentValueData
-        //                     onFactGroupNameChanged: factGroupCombo.currentIndex = groupEnglishNames.indexOf(instrumentValueData.factGroupName)
-        //                 }
-        //             }
-        //
-        //             // --- Fact Value 下拉 ---
-        //             LabelledComboBox {
-        //                 id: factNamesCombo
-        //                 label: qsTr("参数")
-        //                 property var factValueEnglish: []
-        //                 property var factValueChinese: []
-        //
-        //                 function updateModel() {
-        //                     let groupName = factGroupCombo.groupEnglishNames[factGroupCombo.currentIndex]
-        //
-        //                     if (groupName === "Vehicle") {
-        //                         factValueEnglish = ["Roll", "Pitch", "Heading", "GroundSpeed","AltitudeRelative", "AltitudeAMSL","throttlePct","flightDistance","distanceToHome","climbRate"]
-        //                         factValueChinese = ["横滚角", "俯仰角", "航向", "飞行速度","相对高度", "海拔高度","油门比例","飞行路程","距家距离","上升下降速度"]
-        //                     } else if (groupName === "Gps") {
-        //                         factValueEnglish = ["Lon","Lat"]
-        //                         factValueChinese = ["经度","纬度"]
-        //                     }
-        //
-        //                     model = factValueChinese           // 中文显示
-        //                     currentIndex = 0
-        //
-        //                     // 默认选择第一个 Fact
-        //                     instrumentValueData.setFact(groupName, factValueEnglish[0])
-        //                     instrumentValueData.icon = ""
-        //                     instrumentValueData.text = factValueChinese[0]   // 默认中文显示
-        //                 }
-        //
-        //                 Component.onCompleted: updateModel()
-        //
-        //                 onActivated: (index) => {
-        //                     let groupName = factGroupCombo.groupEnglishNames[factGroupCombo.currentIndex]
-        //                     let factName = factValueEnglish[index]
-        //                     instrumentValueData.setFact(groupName, factName)      // 通信用英文
-        //                     instrumentValueData.icon = ""
-        //                     instrumentValueData.text = factValueChinese[index]   // 显示中文
-        //                 }
-        //
-        //                 Connections {
-        //                     target: instrumentValueData
-        //                     onFactNameChanged: factNamesCombo.currentIndex = factValueEnglish.indexOf(instrumentValueData.factName)
-        //                 }
-        //             }
-        //         }
-        //         //     LabelledComboBox {
-        //         //         id:                     factGroupCombo
-        //         //         label:                  qsTr("组")
-        //         //         model:                  instrumentValueData.factGroupNames
-        //         //         currentIndex:           instrumentValueData.factGroupNames.indexOf(instrumentValueData.factGroupName)
-        //         //         onActivated: (index) => {
-        //         //             instrumentValueData.setFact(currentText, "")
-        //         //             instrumentValueData.icon = ""
-        //         //             instrumentValueData.text = instrumentValueData.fact.shortDescription
-        //         //         }
-        //         //         Connections {
-        //         //             target: instrumentValueData
-        //         //             onFactGroupNameChanged: factGroupCombo.currentIndex = factGroupCombo.comboBox.find(instrumentValueData.factGroupName)
-        //         //         }
-        //         //     }
-        //         //
-        //         //     LabelledComboBox {
-        //         //         id:                     factNamesCombo
-        //         //         label:                  qsTr("值")
-        //         //         model:                  instrumentValueData.factValueNames
-        //         //
-        //         //         model: instrumentValueData.factValueNames
-        //         //         currentIndex:           instrumentValueData.factValueNames.indexOf(instrumentValueData.factName)
-        //         //         onActivated: (index) => {
-        //         //             instrumentValueData.setFact(instrumentValueData.factGroupName, currentText)
-        //         //             instrumentValueData.icon = ""
-        //         //             instrumentValueData.text = instrumentValueData.fact.shortDescription
-        //         //         }
-        //         //         Connections {
-        //         //             target: instrumentValueData
-        //         //             onFactNameChanged: factNamesCombo.currentIndex = factNamesCombo.comboBox.find(instrumentValueData.factName)
-        //         //         }
-        //         //     }
-        //         // }
-        //
-        //         SettingsGroupLayout {
-        //             heading: qsTr("标签")
-        //             visible:false
-        //
-        //             ColumnLayout {
-        //                 Layout.fillWidth:   true
-        //                 spacing:            ScreenTools.defaultFontPixelHeight / 2
-        //
-        //                 RowLayout {
-        //
-        //                     Layout.fillWidth:  true
-        //                     visible:false
-        //
-        //                     QGCRadioButton {
-        //                         id:                     iconRadio
-        //                         text:                   qsTr("图标")
-        //                         Layout.fillWidth:       true
-        //                         Component.onCompleted:  checked = instrumentValueData.icon != ""
-        //                         onClicked: {
-        //                             instrumentValueData.text = ""
-        //                             instrumentValueData.icon = instrumentValueData.factValueGrid.iconNames[0]
-        //                         }
-        //                         ButtonGroup.group:      labelTypeGroup
-        //                         ButtonGroup { id: labelTypeGroup }
-        //                     }
-        //
-        //                     RowLayout {
-        //                         id:         iconOptionInputs
-        //                         Rectangle {
-        //                             width:      height
-        //                             height:     changeIconBtn.height
-        //                             color:      qgcPal.windowShade
-        //                             opacity:    iconRadio.checked ? 1 : .3
-        //
-        //                             QGCColoredImage {
-        //                                 id:                 valueIcon
-        //                                 anchors.centerIn:   parent
-        //                                 height:             ScreenTools.defaultFontPixelHeight
-        //                                 width:              height
-        //                                 source:             "/InstrumentValueIcons/" + (instrumentValueData.icon ? instrumentValueData.icon : instrumentValueData.factValueGrid.iconNames[0])
-        //                                 sourceSize.height:  height
-        //                                 fillMode:           Image.PreserveAspectFit
-        //                                 mipmap:             true
-        //                                 smooth:             true
-        //                                 color:              valueIcon.status === Image.Error ? "red" : qgcPal.text
-        //                             }
-        //                         }
-        //                         QGCButton {
-        //                             id:         changeIconBtn
-        //                             text:       qsTr("切换图标")
-        //                             enabled:    iconRadio.checked
-        //                             onClicked: {
-        //                                 var updateFunction = function(icon){ instrumentValueData.icon = icon }
-        //                                 iconPickerDialog.createObject(mainWindow, { iconNames: instrumentValueData.factValueGrid.iconNames, icon: instrumentValueData.icon, updateIconFunction: updateFunction }).open()
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //
-        //                 RowLayout {
-        //                     Layout.fillWidth: true
-        //                     visible:false
-        //
-        //                     QGCRadioButton {
-        //                         id: textRadio
-        //                         text: qsTr("文本")
-        //                         Layout.fillWidth: true
-        //                         Component.onCompleted: checked = instrumentValueData.icon == ""
-        //
-        //                         onClicked: {
-        //                             instrumentValueData.icon = ""
-        //                             // 获取中文名称
-        //                             let index = factNamesCombo.factValueEnglish.indexOf(instrumentValueData.factName)
-        //                             instrumentValueData.text = index >= 0 ? factNamesCombo.factValueChinese[index] : qsTr("标签")
-        //                         }
-        //                     }
-        //
-        //                     QGCTextField {
-        //                         enabled: textRadio.checked
-        //                         Layout.minimumWidth: 200
-        //                         text: {
-        //                             if (textRadio.checked) {
-        //                                 // 中文显示
-        //                                 let index = factNamesCombo.factValueEnglish.indexOf(instrumentValueData.factName)
-        //                                     index >= 0 ? factNamesCombo.factValueChinese[index] : instrumentValueData.text
-        //                             } else {
-        //                                 // 不显示时仍显示默认
-        //                                 instrumentValueData.text
-        //                             }
-        //                         }
-        //                         onEditingFinished: instrumentValueData.text = text
-        //                     }
-        //                 }
-        //                 // RowLayout {
-        //                 //     Layout.fillWidth: true
-        //                 //     QGCRadioButton {
-        //                 //         id:                     textRadio
-        //                 //         text:                   qsTr("文本")
-        //                 //         Layout.fillWidth:       true
-        //                 //         ButtonGroup.group:      labelTypeGroup
-        //                 //         Component.onCompleted:  checked = instrumentValueData.icon == ""
-        //                 //         onClicked: {
-        //                 //             instrumentValueData.icon = ""
-        //                 //             instrumentValueData.text = instrumentValueData.fact ? instrumentValueData.fact.shortDescription : qsTr("标签")
-        //                 //         }
-        //                 //     }
-        //                 //
-        //                 //     QGCTextField {
-        //                 //         enabled:                textRadio.checked
-        //                 //         Layout.minimumWidth:    iconOptionInputs.width
-        //                 //         text:                   textRadio.checked
-        //                 //                                     ? instrumentValueData.text
-        //                 //                                     : instrumentValueData.fact ? instrumentValueData.fact.shortDescription : qsTr("标签")
-        //                 //         onEditingFinished:      instrumentValueData.text = text
-        //                 //     }
-        //                 // }
-        //             }
-        //
-        //             // LabelledComboBox {
-        //             //     label:          qsTr("大小")
-        //             //     model:          instrumentValueData.factValueGrid.fontSizeNames
-        //             //     currentIndex:   instrumentValueData.factValueGrid.fontSize
-        //             //     onActivated:    (index) => { instrumentValueData.factValueGrid.fontSize = index }
-        //             // }
-        //             LabelledComboBox {
-        //                 visible: false   // 隐藏
-        //                 enabled: false   // 禁止交互
-        //                 label:          qsTr("大小")
-        //                 model:          instrumentValueData.factValueGrid.fontSizeNames
-        //                 currentIndex:   instrumentValueData.factValueGrid.fontSize
-        //                 onActivated:    (index) => { instrumentValueData.factValueGrid.fontSize = index }
-        //             }
-        //
-        //             Component.onCompleted: {
-        //                 instrumentValueData.factValueGrid.fontSize = 3  // 设置默认值
-        //             }
-        //
-        //             QGCCheckBoxSlider {
-        //                 Layout.fillWidth: true
-        //                 text:       qsTr("显示单位")
-        //                 checked:    false
-        //                 //checked:    instrumentValueData.showUnits
-        //                 visible:    false
-        //                 onClicked:  instrumentValueData.showUnits = checked
-        //             }
-        //         }
-        //     }
-        //
-        //     SettingsGroupLayout {
-        //         Layout.alignment:   Qt.AlignTop
-        //         heading:            qsTr("范围")
-        //         visible:            false
-        //
-        //         ColumnLayout {
-        //             Layout.fillWidth: true
-        //
-        //             RowLayout {
-        //                 Layout.fillWidth:   true
-        //                 spacing:            ScreenTools.defaultFontPixelWidth * 2
-        //
-        //                 QGCLabel {
-        //                     Layout.fillWidth:       true
-        //                     text:                   qsTr("类型")
-        //                 }
-        //
-        //                 QGCComboBox {
-        //                     id:                 rangeTypeCombo
-        //                     model:              instrumentValueData.rangeTypeNames
-        //                     currentIndex:       instrumentValueData.rangeType
-        //                     sizeToContents:     true
-        //                     onActivated: (index) => { instrumentValueData.rangeType = index }
-        //                 }
-        //             }
-        //
-        //             Loader {
-        //                 id:                     rangeLoader
-        //                 visible:                sourceComponent
-        //                 Layout.columnSpan:      2
-        //                 Layout.alignment:       Qt.AlignHCenter
-        //                 Layout.margins:         ScreenTools.defaultFontPixelWidth
-        //                 Layout.preferredWidth:  item ? item.width : 0
-        //                 Layout.preferredHeight: item ? item.height : 0
-        //
-        //                 property var instrumentValueData: root.instrumentValueData
-        //
-        //                 function updateSourceComponent() {
-        //                     switch (instrumentValueData.rangeType) {
-        //                     case InstrumentValueData.NoRangeInfo:
-        //                         sourceComponent = undefined
-        //                         break
-        //                     case InstrumentValueData.ColorRange:
-        //                         sourceComponent = colorRangeDialog
-        //                         break
-        //                     case InstrumentValueData.OpacityRange:
-        //                         sourceComponent = opacityRangeDialog
-        //                         break
-        //                     case InstrumentValueData.IconSelectRange:
-        //                         sourceComponent = iconRangeDialog
-        //                         break
-        //                     }
-        //                 }
-        //
-        //                 Component.onCompleted: {
-        //                     updateSourceComponent()
-        //                     if (sourceComponent) {
-        //                         height = item.childrenRect.height
-        //                         width = item.childrenRect.width
-        //                     }
-        //                 }
-        //
-        //                 Connections {
-        //                     target:             instrumentValueData
-        //                     onRangeTypeChanged: rangeLoader.updateSourceComponent()
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+    // RowLayout {
+    //     visible:false
+    //     spacing: ScreenTools.defaultFontPixelWidth
+    //
+    //     ColumnLayout {
+    //         spacing: ScreenTools.defaultFontPixelHeight / 2
+    //
+    //         SettingsGroupLayout {
+    //             heading: qsTr("仪表盘")
+    //             LabelledComboBox {
+    //                 id: factGroupCombo
+    //                 label: qsTr("类型")
+    //
+    //                 // 显示中文，但逻辑使用英文
+    //                 property var groupEnglishNames: ["Vehicle", "Gps"]
+    //                 property var groupChineseNames: ["飞行器", "卫星定位"]
+    //
+    //                 model: groupChineseNames
+    //                 currentIndex: groupEnglishNames.indexOf(instrumentValueData.factGroupName)
+    //
+    //                 onActivated: (index) => {
+    //                     let groupName = groupEnglishNames[index] // 英文名字
+    //                     instrumentValueData.setFact(groupName, "")
+    //                     instrumentValueData.icon = ""
+    //                     instrumentValueData.text = instrumentValueData.fact ? instrumentValueData.fact.shortDescription : qsTr("标签")
+    //
+    //                     // 更新 Fact Value 下拉
+    //                     factNamesCombo.updateModel()
+    //                 }
+    //
+    //                 Connections {
+    //                     target: instrumentValueData
+    //                     onFactGroupNameChanged: factGroupCombo.currentIndex = groupEnglishNames.indexOf(instrumentValueData.factGroupName)
+    //                 }
+    //             }
+    //
+    //             // --- Fact Value 下拉 ---
+    //             LabelledComboBox {
+    //                 id: factNamesCombo
+    //                 label: qsTr("参数")
+    //                 property var factValueEnglish: []
+    //                 property var factValueChinese: []
+    //
+    //                 function updateModel() {
+    //                     let groupName = factGroupCombo.groupEnglishNames[factGroupCombo.currentIndex]
+    //
+    //                     if (groupName === "Vehicle") {
+    //                         factValueEnglish = ["Roll", "Pitch", "Heading", "GroundSpeed","AltitudeRelative", "AltitudeAMSL","throttlePct","flightDistance","distanceToHome","climbRate"]
+    //                         factValueChinese = ["横滚角", "俯仰角", "航向", "飞行速度","相对高度", "海拔高度","油门比例","飞行路程","距家距离","上升下降速度"]
+    //                     } else if (groupName === "Gps") {
+    //                         factValueEnglish = ["Lon","Lat"]
+    //                         factValueChinese = ["经度","纬度"]
+    //                     }
+    //
+    //                     model = factValueChinese           // 中文显示
+    //                     currentIndex = 0
+    //
+    //                     // 默认选择第一个 Fact
+    //                     instrumentValueData.setFact(groupName, factValueEnglish[0])
+    //                     instrumentValueData.icon = ""
+    //                     instrumentValueData.text = factValueChinese[0]   // 默认中文显示
+    //                 }
+    //
+    //                 Component.onCompleted: updateModel()
+    //
+    //                 onActivated: (index) => {
+    //                     let groupName = factGroupCombo.groupEnglishNames[factGroupCombo.currentIndex]
+    //                     let factName = factValueEnglish[index]
+    //                     instrumentValueData.setFact(groupName, factName)      // 通信用英文
+    //                     instrumentValueData.icon = ""
+    //                     instrumentValueData.text = factValueChinese[index]   // 显示中文
+    //                 }
+    //
+    //                 Connections {
+    //                     target: instrumentValueData
+    //                     onFactNameChanged: factNamesCombo.currentIndex = factValueEnglish.indexOf(instrumentValueData.factName)
+    //                 }
+    //             }
+    //         }
+    //         //     LabelledComboBox {
+    //         //         id:                     factGroupCombo
+    //         //         label:                  qsTr("组")
+    //         //         model:                  instrumentValueData.factGroupNames
+    //         //         currentIndex:           instrumentValueData.factGroupNames.indexOf(instrumentValueData.factGroupName)
+    //         //         onActivated: (index) => {
+    //         //             instrumentValueData.setFact(currentText, "")
+    //         //             instrumentValueData.icon = ""
+    //         //             instrumentValueData.text = instrumentValueData.fact.shortDescription
+    //         //         }
+    //         //         Connections {
+    //         //             target: instrumentValueData
+    //         //             onFactGroupNameChanged: factGroupCombo.currentIndex = factGroupCombo.comboBox.find(instrumentValueData.factGroupName)
+    //         //         }
+    //         //     }
+    //         //
+    //         //     LabelledComboBox {
+    //         //         id:                     factNamesCombo
+    //         //         label:                  qsTr("值")
+    //         //         model:                  instrumentValueData.factValueNames
+    //         //
+    //         //         model: instrumentValueData.factValueNames
+    //         //         currentIndex:           instrumentValueData.factValueNames.indexOf(instrumentValueData.factName)
+    //         //         onActivated: (index) => {
+    //         //             instrumentValueData.setFact(instrumentValueData.factGroupName, currentText)
+    //         //             instrumentValueData.icon = ""
+    //         //             instrumentValueData.text = instrumentValueData.fact.shortDescription
+    //         //         }
+    //         //         Connections {
+    //         //             target: instrumentValueData
+    //         //             onFactNameChanged: factNamesCombo.currentIndex = factNamesCombo.comboBox.find(instrumentValueData.factName)
+    //         //         }
+    //         //     }
+    //         // }
+    //
+    //         SettingsGroupLayout {
+    //             heading: qsTr("标签")
+    //             visible:false
+    //
+    //             ColumnLayout {
+    //                 Layout.fillWidth:   true
+    //                 spacing:            ScreenTools.defaultFontPixelHeight / 2
+    //
+    //                 RowLayout {
+    //
+    //                     Layout.fillWidth:  true
+    //                     visible:false
+    //
+    //                     QGCRadioButton {
+    //                         id:                     iconRadio
+    //                         text:                   qsTr("图标")
+    //                         Layout.fillWidth:       true
+    //                         Component.onCompleted:  checked = instrumentValueData.icon != ""
+    //                         onClicked: {
+    //                             instrumentValueData.text = ""
+    //                             instrumentValueData.icon = instrumentValueData.factValueGrid.iconNames[0]
+    //                         }
+    //                         ButtonGroup.group:      labelTypeGroup
+    //                         ButtonGroup { id: labelTypeGroup }
+    //                     }
+    //
+    //                     RowLayout {
+    //                         id:         iconOptionInputs
+    //                         Rectangle {
+    //                             width:      height
+    //                             height:     changeIconBtn.height
+    //                             color:      qgcPal.windowShade
+    //                             opacity:    iconRadio.checked ? 1 : .3
+    //
+    //                             QGCColoredImage {
+    //                                 id:                 valueIcon
+    //                                 anchors.centerIn:   parent
+    //                                 height:             ScreenTools.defaultFontPixelHeight
+    //                                 width:              height
+    //                                 source:             "/InstrumentValueIcons/" + (instrumentValueData.icon ? instrumentValueData.icon : instrumentValueData.factValueGrid.iconNames[0])
+    //                                 sourceSize.height:  height
+    //                                 fillMode:           Image.PreserveAspectFit
+    //                                 mipmap:             true
+    //                                 smooth:             true
+    //                                 color:              valueIcon.status === Image.Error ? "red" : qgcPal.text
+    //                             }
+    //                         }
+    //                         QGCButton {
+    //                             id:         changeIconBtn
+    //                             text:       qsTr("切换图标")
+    //                             enabled:    iconRadio.checked
+    //                             onClicked: {
+    //                                 var updateFunction = function(icon){ instrumentValueData.icon = icon }
+    //                                 iconPickerDialog.createObject(mainWindow, { iconNames: instrumentValueData.factValueGrid.iconNames, icon: instrumentValueData.icon, updateIconFunction: updateFunction }).open()
+    //                             }
+    //                         }
+    //                     }
+    //                 }
+    //
+    //                 RowLayout {
+    //                     Layout.fillWidth: true
+    //                     visible:false
+    //
+    //                     QGCRadioButton {
+    //                         id: textRadio
+    //                         text: qsTr("文本")
+    //                         Layout.fillWidth: true
+    //                         Component.onCompleted: checked = instrumentValueData.icon == ""
+    //
+    //                         onClicked: {
+    //                             instrumentValueData.icon = ""
+    //                             // 获取中文名称
+    //                             let index = factNamesCombo.factValueEnglish.indexOf(instrumentValueData.factName)
+    //                             instrumentValueData.text = index >= 0 ? factNamesCombo.factValueChinese[index] : qsTr("标签")
+    //                         }
+    //                     }
+    //
+    //                     QGCTextField {
+    //                         enabled: textRadio.checked
+    //                         Layout.minimumWidth: 200
+    //                         text: {
+    //                             if (textRadio.checked) {
+    //                                 // 中文显示
+    //                                 let index = factNamesCombo.factValueEnglish.indexOf(instrumentValueData.factName)
+    //                                     index >= 0 ? factNamesCombo.factValueChinese[index] : instrumentValueData.text
+    //                             } else {
+    //                                 // 不显示时仍显示默认
+    //                                 instrumentValueData.text
+    //                             }
+    //                         }
+    //                         onEditingFinished: instrumentValueData.text = text
+    //                     }
+    //                 }
+    //                 // RowLayout {
+    //                 //     Layout.fillWidth: true
+    //                 //     QGCRadioButton {
+    //                 //         id:                     textRadio
+    //                 //         text:                   qsTr("文本")
+    //                 //         Layout.fillWidth:       true
+    //                 //         ButtonGroup.group:      labelTypeGroup
+    //                 //         Component.onCompleted:  checked = instrumentValueData.icon == ""
+    //                 //         onClicked: {
+    //                 //             instrumentValueData.icon = ""
+    //                 //             instrumentValueData.text = instrumentValueData.fact ? instrumentValueData.fact.shortDescription : qsTr("标签")
+    //                 //         }
+    //                 //     }
+    //                 //
+    //                 //     QGCTextField {
+    //                 //         enabled:                textRadio.checked
+    //                 //         Layout.minimumWidth:    iconOptionInputs.width
+    //                 //         text:                   textRadio.checked
+    //                 //                                     ? instrumentValueData.text
+    //                 //                                     : instrumentValueData.fact ? instrumentValueData.fact.shortDescription : qsTr("标签")
+    //                 //         onEditingFinished:      instrumentValueData.text = text
+    //                 //     }
+    //                 // }
+    //             }
+    //
+    //             // LabelledComboBox {
+    //             //     label:          qsTr("大小")
+    //             //     model:          instrumentValueData.factValueGrid.fontSizeNames
+    //             //     currentIndex:   instrumentValueData.factValueGrid.fontSize
+    //             //     onActivated:    (index) => { instrumentValueData.factValueGrid.fontSize = index }
+    //             // }
+    //             LabelledComboBox {
+    //                 visible: false   // 隐藏
+    //                 enabled: false   // 禁止交互
+    //                 label:          qsTr("大小")
+    //                 model:          instrumentValueData.factValueGrid.fontSizeNames
+    //                 currentIndex:   instrumentValueData.factValueGrid.fontSize
+    //                 onActivated:    (index) => { instrumentValueData.factValueGrid.fontSize = index }
+    //             }
+    //
+    //             Component.onCompleted: {
+    //                 instrumentValueData.factValueGrid.fontSize = 3  // 设置默认值
+    //             }
+    //
+    //             QGCCheckBoxSlider {
+    //                 Layout.fillWidth: true
+    //                 text:       qsTr("显示单位")
+    //                 checked:    false
+    //                 //checked:    instrumentValueData.showUnits
+    //                 visible:    false
+    //                 onClicked:  instrumentValueData.showUnits = checked
+    //             }
+    //         }
+    //     }
+    //
+    //     SettingsGroupLayout {
+    //         Layout.alignment:   Qt.AlignTop
+    //         heading:            qsTr("范围")
+    //         visible:            false
+    //
+    //         ColumnLayout {
+    //             Layout.fillWidth: true
+    //
+    //             RowLayout {
+    //                 Layout.fillWidth:   true
+    //                 spacing:            ScreenTools.defaultFontPixelWidth * 2
+    //
+    //                 QGCLabel {
+    //                     Layout.fillWidth:       true
+    //                     text:                   qsTr("类型")
+    //                 }
+    //
+    //                 QGCComboBox {
+    //                     id:                 rangeTypeCombo
+    //                     model:              instrumentValueData.rangeTypeNames
+    //                     currentIndex:       instrumentValueData.rangeType
+    //                     sizeToContents:     true
+    //                     onActivated: (index) => { instrumentValueData.rangeType = index }
+    //                 }
+    //             }
+    //
+    //             Loader {
+    //                 id:                     rangeLoader
+    //                 visible:                sourceComponent
+    //                 Layout.columnSpan:      2
+    //                 Layout.alignment:       Qt.AlignHCenter
+    //                 Layout.margins:         ScreenTools.defaultFontPixelWidth
+    //                 Layout.preferredWidth:  item ? item.width : 0
+    //                 Layout.preferredHeight: item ? item.height : 0
+    //
+    //                 property var instrumentValueData: root.instrumentValueData
+    //
+    //                 function updateSourceComponent() {
+    //                     switch (instrumentValueData.rangeType) {
+    //                     case InstrumentValueData.NoRangeInfo:
+    //                         sourceComponent = undefined
+    //                         break
+    //                     case InstrumentValueData.ColorRange:
+    //                         sourceComponent = colorRangeDialog
+    //                         break
+    //                     case InstrumentValueData.OpacityRange:
+    //                         sourceComponent = opacityRangeDialog
+    //                         break
+    //                     case InstrumentValueData.IconSelectRange:
+    //                         sourceComponent = iconRangeDialog
+    //                         break
+    //                     }
+    //                 }
+    //
+    //                 Component.onCompleted: {
+    //                     updateSourceComponent()
+    //                     if (sourceComponent) {
+    //                         height = item.childrenRect.height
+    //                         width = item.childrenRect.width
+    //                     }
+    //                 }
+    //
+    //                 Connections {
+    //                     target:             instrumentValueData
+    //                     onRangeTypeChanged: rangeLoader.updateSourceComponent()
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
     // }
 
     Component {
