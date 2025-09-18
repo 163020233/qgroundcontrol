@@ -218,7 +218,7 @@ void FactValueGrid::appendRow(void)
     _rowCount++;
     emit rowCountChanged(_rowCount);
 
-    // _saveSettings();
+    _saveSettings();
 }
 
 
@@ -233,7 +233,7 @@ void FactValueGrid::deleteLastRow(void)
     }
     _rowCount--;
     emit rowCountChanged(_rowCount);
-    // _saveSettings();
+    _saveSettings();
 }
 
 QmlObjectListModel* FactValueGrid::appendColumn(void)
@@ -257,7 +257,7 @@ QmlObjectListModel* FactValueGrid::appendColumn(void)
         emit rowCountChanged(_rowCount);
     }
 
-    // _saveSettings();
+    _saveSettings();
     return newList;
 }
 
@@ -265,55 +265,44 @@ void FactValueGrid::deleteLastColumn(void)
 {
     if (_columns->count() > 1) {
         _columns->removeAt(_columns->count() - 1)->deleteLater();
-        // _saveSettings();
+        _saveSettings();
     }
 }
 
 InstrumentValueData* FactValueGrid::_createNewInstrumentValueWorker(QObject* parent)
 {
-    // 创建一个新的 InstrumentValueData，用来显示某个飞控参数
+    // 如果没有指定要绑定的参数，就不创建任何 InstrumentValueData
+    if (_nextFactToAdd.isEmpty())
+        return nullptr;
+
     InstrumentValueData* value = new InstrumentValueData(this, parent);
 
-    // 默认要绑定的参数名
-    QString factName = _nextFactToAdd.isEmpty() ? "airSpeed" : _nextFactToAdd;
+    QString factName = _nextFactToAdd;
     _nextFactToAdd.clear();
 
-    QString groupName = InstrumentValueData::vehicleFactGroupName; // 默认所属 FactGroup
-    // --- 新增条件判断，如果是经纬度就用 gps group ---
+    QString groupName = InstrumentValueData::vehicleFactGroupName;
     if (factName == "lon" || factName == "lat") {
         groupName = InstrumentValueData::gpsFactGroupName;
     }
 
-    QString displayName = factName; // 默认显示名称
-
-    // 直接从 Vehicle 获取对应的 FactGroup
     Fact* fact = nullptr;
     if (_activeVehicle) {
         FactGroup* fg = _activeVehicle->getFactGroup(groupName);
-        if (fg) {
-            fact = fg->getFact(factName); // 获取单个 Fact
-            if (!fact) {
-                qWarning() << "在 FactGroup 中未找到对应 Fact:" << groupName << factName;
-            }
-        } else {
-            qWarning() << "未找到对应的 FactGroup:" << groupName;
-        }
+        if (fg)
+            fact = fg->getFact(factName);
+        else
+            qWarning() << "未找到对应 FactGroup:" << groupName;
     }
 
-    // 使用双参数的 setFact 来绑定 Fact，保证单位可以正常显示
     value->setFact(groupName, factName);
-
-    // 设置显示文字：如果找到 Fact，就用 Fact 的 shortDescription，否则显示参数名
-    value->setText(fact ? fact->shortDescription() : displayName);
-
-    // 设置是否显示单位：找到了 Fact 就显示单位，找不到就不显示
+    value->setText(fact ? fact->shortDescription() : factName);
     value->setShowUnits(fact != nullptr);
 
-    // 连接信号，保证 UI 可以跟随 Fact 值变化
     _connectSaveSignals(value);
 
     return value;
 }
+
 
 // InstrumentValueData* FactValueGrid::_createNewInstrumentValueWorker(QObject* parent)
 // {
@@ -442,35 +431,37 @@ void FactValueGrid::_resetFromSettings(void)
 
 
 // 优化布局函数，4x3 最大布局行4，列3
-static QList<std::pair<int,int>> optimizeLayout(int totalCount, const int maxRow = 4, const int maxCol = 3)
+static QList<std::pair<int,int>> optimizeLayout(const QList<QPair<int,int>>& existingPositions,
+                                                int maxRow = 4, int maxCol = 3)
 {
     QList<std::pair<int,int>> positions;
 
+    int totalCount = existingPositions.size();
     if (totalCount > maxRow * maxCol) {
-        qWarning() << "Item count exceeds maximum allowed (12)";
-        totalCount = maxRow * maxCol; // 超过12个只显示前12个
+        qWarning() << "Item count exceeds maximum allowed (" << maxRow*maxCol << ")";
+        totalCount = maxRow * maxCol;
     }
 
-    int rowCount = qMin(totalCount, maxRow);                       // 行数 ≤ maxRow
-    int colCount = (totalCount + rowCount - 1) / rowCount;         // 向上取整保证行优先
-
+    // 按已有顺序遍历数据，按行优先重新生成坐标
     int index = 0;
-    for (int r = 0; r < rowCount; ++r) {
-        for (int c = 0; c < colCount; ++c) {
-            if (index >= totalCount) break;
+    for (int r = 0; r < maxRow && index < totalCount; ++r) {
+        for (int c = 0; c < maxCol && index < totalCount; ++c) {
             positions.append(std::make_pair(r, c));
             index++;
         }
     }
 
-    qDebug() << "New layout positions:" << positions;
+    qDebug() << "Sorted positions based on existing order:" << positions;
     return positions;
 }
 
-void FactValueGrid::removeDuplicates()
-{
-    QSet<QString> seenFacts;
 
+// === 删除数据并自动优化布局 ===
+void FactValueGrid::removeFactByName(const QString &factName)
+{
+    if (factName.isEmpty()) return;
+
+    // 1. 删除匹配的数据
     for (int i = _columns->count() - 1; i >= 0; --i) {
         QmlObjectListModel* model = qobject_cast<QmlObjectListModel*>(_columns->get(i));
         if (!model) continue;
@@ -479,94 +470,53 @@ void FactValueGrid::removeDuplicates()
             InstrumentValueData* val = qobject_cast<InstrumentValueData*>(model->get(j));
             if (!val) continue;
 
-            QString name = val->factName();
-            if (seenFacts.contains(name)) {
+            if (val->factName() == factName) {
                 model->removeAt(j);
-                qWarning() << "Removed duplicate fact:" << name << "at row" << i << "index" << j;
-            } else {
-                seenFacts.insert(name);
-            }
-        }
-    }
-}
-
-// === 删除数据并自动优化布局 ===
-void FactValueGrid::removeFactByName(const QString &factName)
-{
-    if (factName.isEmpty()) return;
-
-    // 1. 删除匹配的数据
-    bool removed = false;
-    for (int col = 0; col < _columns->count(); ++col) {
-        QmlObjectListModel* colModel = qobject_cast<QmlObjectListModel*>(_columns->get(col));
-        if (!colModel) continue;
-
-        for (int row = colModel->count() - 1; row >= 0; --row) {
-            InstrumentValueData* val = qobject_cast<InstrumentValueData*>(colModel->get(row));
-            if (val && val->factName() == factName) {
-                colModel->removeAt(row);
-                removed = true;
             }
         }
     }
 
-    if (!removed) return; // 如果没删除，不做排序
-
-    // 2. 判断是否需要重新排序
-    bool needReorder = false;
-    int maxRows = 0;
-    for (int col = 0; col < _columns->count(); ++col) {
-        QmlObjectListModel* colModel = qobject_cast<QmlObjectListModel*>(_columns->get(col));
-        if (!colModel) continue;
-
-        if (colModel->count() > maxRows)
-            maxRows = colModel->count();
-
-        // 检查是否存在空洞或乱序
-        for (int i = 0; i < colModel->count(); ++i) {
-            if (!colModel->get(i)) {
-                needReorder = true;
-                break;
-            }
-        }
-        if (needReorder) break;
-    }
-
-    // 3. 如果需要，按行优先重新填充
-    if (needReorder) {
-        QList<InstrumentValueData*> allFacts;
+    // 2. 遍历所有数据，将中间空位补齐
+    QList<InstrumentValueData*> remainingData;
+    for (int row = 0; row < 4; ++row) {
         for (int col = 0; col < _columns->count(); ++col) {
-            QmlObjectListModel* colModel = qobject_cast<QmlObjectListModel*>(_columns->get(col));
-            if (!colModel) continue;
-            for (int i = 0; i < colModel->count(); ++i) {
-                InstrumentValueData* val = qobject_cast<InstrumentValueData*>(colModel->get(i));
-                if (val) allFacts.append(val);
-            }
-        }
+            QmlObjectListModel* model = qobject_cast<QmlObjectListModel*>(_columns->get(col));
+            if (!model) continue;
 
-        _columns->clear();
-        int index = 0;
-        const int maxCols = 3; // 最大列数
-        for (int row = 0; row < maxRows && index < allFacts.size(); ++row) {
-            for (int col = 0; col < maxCols && index < allFacts.size(); ++col) {
-                QmlObjectListModel* colModel = nullptr;
-                if (col < _columns->count()) {
-                    colModel = qobject_cast<QmlObjectListModel*>(_columns->get(col));
-                } else {
-                    colModel = new QmlObjectListModel(this);
-                    _columns->append(colModel);
-                }
-                colModel->append(allFacts[index++]);
+            if (row < model->count()) {
+                InstrumentValueData* val = qobject_cast<InstrumentValueData*>(model->get(row));
+                if (val) remainingData.append(val);
             }
         }
     }
 
-    // 4. 更新行列数
+    // 3. 清空所有列
+    _columns->clear();
+
+    // 4. 按行优先填充空位
+    int index = 0;
+    const int maxCols = 3;
+    const int maxRows = 4;
+    for (int row = 0; row < maxRows && index < remainingData.size(); ++row) {
+        for (int col = 0; col < maxCols && index < remainingData.size(); ++col) {
+            QmlObjectListModel* colModel = nullptr;
+            if (col < _columns->count()) {
+                colModel = qobject_cast<QmlObjectListModel*>(_columns->get(col));
+            } else {
+                colModel = new QmlObjectListModel(this);
+                _columns->append(colModel);
+            }
+            colModel->append(remainingData[index++]);
+        }
+    }
+
+    // 5. 更新行数
     _rowCount = 0;
-    for (int col = 0; col < _columns->count(); ++col) {
-        QmlObjectListModel* colModel = qobject_cast<QmlObjectListModel*>(_columns->get(col));
-        if (colModel && colModel->count() > _rowCount)
-            _rowCount = colModel->count();
+    for (int i = 0; i < _columns->count(); ++i) {
+        QmlObjectListModel* model = qobject_cast<QmlObjectListModel*>(_columns->get(i));
+        if (model && model->count() > _rowCount) {
+            _rowCount = model->count();
+        }
     }
 
     emit rowCountChanged(_rowCount);
@@ -574,9 +524,6 @@ void FactValueGrid::removeFactByName(const QString &factName)
     emit factsChanged();
     _saveSettings();
 }
-
-
-
 
 
 QStringList FactValueGrid::facts() const {
@@ -607,39 +554,44 @@ void FactValueGrid::appendFact(const QString& factName)
 
     _nextFactToAdd = factName;
     InstrumentValueData* value = _createNewInstrumentValueWorker(this);
+    if (!value) return;  // 如果创建失败，直接返回
 
-    bool added = false;
+    // --- 1. 收集已有参数 ---
+    QList<InstrumentValueData*> allFacts;
+    for (int col = 0; col < _columns->count(); ++col) {
+        QmlObjectListModel* colModel = qobject_cast<QmlObjectListModel*>(_columns->get(col));
+        if (!colModel) continue;
 
-    // 行优先遍历
-    for (int row = 0; row < 4 && !added; ++row) {          // 最大4行
-        for (int col = 0; col < _columns->count(); ++col) { // 遍历已有列
-            QmlObjectListModel* colModel = qobject_cast<QmlObjectListModel*>(_columns->get(col));
-            if (!colModel) continue;
+        for (int row = 0; row < colModel->count(); ++row) {
+            InstrumentValueData* val = qobject_cast<InstrumentValueData*>(colModel->get(row));
+            if (val) allFacts.append(val);
+        }
+    }
 
-            // 如果当前列第 row 行为空，则添加
-            if (colModel->count() <= row) {
-                colModel->append(value);
-                added = true;
-                break;
+    // --- 2. 添加新参数到末尾 ---
+    allFacts.append(value);
+
+    // --- 3. 清空原列 ---
+    _columns->clear();
+
+    // --- 4. 按行优先重新填充，最多3列、4行 ---
+    int index = 0;
+    const int maxCols = 3;
+    const int maxRows = 4;
+    for (int row = 0; row < maxRows && index < allFacts.size(); ++row) {
+        for (int col = 0; col < maxCols && index < allFacts.size(); ++col) {
+            QmlObjectListModel* colModel = nullptr;
+            if (col < _columns->count()) {
+                colModel = qobject_cast<QmlObjectListModel*>(_columns->get(col));
+            } else {
+                colModel = new QmlObjectListModel(this);
+                _columns->append(colModel);
             }
-        }
-
-        // 如果当前行所有列都满了，但列数未达到最大（3列），则新建列添加
-        if (!added && _columns->count() < 3) {
-            QmlObjectListModel* newCol = new QmlObjectListModel(this);
-            newCol->append(value);
-            _columns->append(newCol);
-            added = true;
-            break;
+            colModel->append(allFacts[index++]);
         }
     }
 
-    if (!added) {
-        qWarning() << "所有格子已满，无法添加:" << factName;
-        return;
-    }
-
-    // 更新行数
+    // --- 5. 更新行数 ---
     _rowCount = 0;
     for (int i = 0; i < _columns->count(); ++i) {
         QmlObjectListModel* col = qobject_cast<QmlObjectListModel*>(_columns->get(i));
@@ -654,7 +606,6 @@ void FactValueGrid::appendFact(const QString& factName)
 
     _nextFactToAdd.clear();
 }
-
 
 
 
@@ -701,8 +652,6 @@ void FactValueGrid::removeFact(const QString& factName)
 
 
 // FactValueGrid.cpp
-
-
 void FactValueGrid::saveCheckedFacts()
 {
     QString dirPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
@@ -724,30 +673,6 @@ void FactValueGrid::saveCheckedFacts()
 
     file.write(QJsonDocument(obj).toJson());
     file.close();
-}
-
-
-
-// FactValueGrid.cpp
-
-void FactValueGrid::clearAllFacts() {
-    for (int i = 0; i < _columns->count(); ++i) {
-        QmlObjectListModel* col = qobject_cast<QmlObjectListModel*>(_columns->get(i));
-        if (!col) continue;
-        for (int j = col->count() - 1; j >= 0; --j) {
-            InstrumentValueData* val = qobject_cast<InstrumentValueData*>(col->get(j));
-            if (val) val->deleteLater();
-        }
-        col->clear();
-    }
-
-    _columns->clear();
-    _rowCount = 0;
-    emit rowCountChanged(_rowCount);
-    emit columnCountChanged(_columns->count());
-    emit factsChanged();
-
-    // _saveSettings();
 }
 
 bool FactValueGrid::loadCheckedFacts()
@@ -824,19 +749,15 @@ void FactValueGrid::load_facts()
             appendFact(factName);
         }
 
-        _saveSettings();
+        // _saveSettings();
     } else {
 
-        // 已有 JSON 配置，按保存顺序加载参数
+        // 已有 配置，按保存顺序加载参数
         for (const QString& factName : _checkedFacts) {
             appendFact(factName);
         }
     }
 }
-
-
-
-
 
 
 // 优化布局函数
@@ -900,8 +821,3 @@ void FactValueGrid::load_facts()
 //     // TODO: 根据 newLayout 实际重新排列 _columns 中的模型
 //
 // }
-
-
-
-
-
