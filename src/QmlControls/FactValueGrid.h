@@ -47,7 +47,6 @@ public:
     Q_INVOKABLE void InitialFacts();
     void load_facts();
     Q_INVOKABLE void saveCheckedFacts();
-    Q_INVOKABLE void clearAllFacts();
     void _saveLayoutToJson();
     // FactValueGrid.h
     Q_INVOKABLE void removeFactByName(const QString &factName);

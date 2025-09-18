@@ -304,6 +304,7 @@ InstrumentValueData* FactValueGrid::_createNewInstrumentValueWorker(QObject* par
 }
 
 
+
 // InstrumentValueData* FactValueGrid::_createNewInstrumentValueWorker(QObject* parent)
 // {
 //     // 创建一个新的数据展示单元，用来绑定某个 Fact（飞行器参数/状态）
@@ -374,60 +375,75 @@ void FactValueGrid::_resetFromSettings(void)
     _preventSaveSettings = true;
 
     _columns->deleteLater();
+    _columns = new QmlObjectListModel(this);
+    _rowCount = 0;
 
-    _columns    = new QmlObjectListModel(this);
-    _rowCount   = 0;
-
-    QSettings   settings;
-    QString     groupNameFormat("%1-%2");
+    QSettings settings;
 
     if (settings.childGroups().contains(_settingsKey())) {
-        // Load from settings
         settings.beginGroup(_settingsKey());
 
         int version = settings.value(_versionKey, 0).toInt();
         if (version != 1) {
-            qgcApp()->showAppMessage(tr("Settings version %1 for %2 is not supported. Setup will be reset to defaults.").arg(version).arg(_settingsGroup), tr("Load Settings"));
+            qgcApp()->showAppMessage(
+                tr("Settings version %1 for %2 is not supported. Setup will be reset to defaults.")
+                    .arg(version)
+                    .arg(_settingsGroup),
+                tr("Load Settings")
+            );
             settings.remove("");
             QGCCorePlugin::instance()->factValueGridCreateDefaultSettings(this);
+            _preventSaveSettings = false;
+            return;
         }
+
         _fontSize = settings.value(_fontSizeKey, DefaultFontSize).value<FontSize>();
 
-        // Initial setup of empty items
-        int cRows       = settings.value(_rowCountKey).toInt();
+        // --- 读取列数组 ---
         int cModelLists = settings.beginReadArray(_columnsKey);
-        if (cModelLists && cRows) {
-            appendColumn();
-            for (int rowIndex=1; rowIndex<cRows; rowIndex++) {
-                appendRow();
-            }
-            for (int colIndex=1; colIndex<cModelLists; colIndex++) {
-                appendColumn();
-            }
-        }
-
-        // Fill in the items from settings
-        for (int colIndex=0; colIndex<cModelLists; colIndex++) {
+        for (int colIndex = 0; colIndex < cModelLists; ++colIndex) {
             settings.setArrayIndex(colIndex);
+
+            QmlObjectListModel* colModel = new QmlObjectListModel(this);
+            _columns->append(colModel);
+
             int cItems = settings.beginReadArray(_rowsKey);
-            for (int itemIndex=0; itemIndex<cItems; itemIndex++) {
-                QmlObjectListModel* list = _columns->value<QmlObjectListModel*>(colIndex);
-                InstrumentValueData* value = list->value<InstrumentValueData*>(itemIndex);
+            for (int itemIndex = 0; itemIndex < cItems; ++itemIndex) {
                 settings.setArrayIndex(itemIndex);
-                _loadValueData(settings, value);
+
+                // 获取保存的 factName
+                QString factName = settings.value("factName").toString();
+                if (factName.isEmpty())
+                    continue;
+
+                _nextFactToAdd = factName;
+                InstrumentValueData* value = _createNewInstrumentValueWorker(colModel);
+                if (value)
+                    colModel->append(value);
             }
             settings.endArray();
         }
         settings.endArray();
     } else {
-        // Default settings are added directly to this FactValueGrid
+        // 没有保存设置，加载默认
         QGCCorePlugin::instance()->factValueGridCreateDefaultSettings(this);
     }
 
+    // 更新行数
+    _rowCount = 0;
+    for (int i = 0; i < _columns->count(); ++i) {
+        QmlObjectListModel* col = qobject_cast<QmlObjectListModel*>(_columns->get(i));
+        if (col && col->count() > _rowCount)
+            _rowCount = col->count();
+    }
+
+    emit rowCountChanged(_rowCount);
+    emit columnCountChanged(_columns->count());
     emit columnsChanged(_columns);
 
     _preventSaveSettings = false;
 }
+
 
 
 // 优化布局函数，4x3 最大布局行4，列3
@@ -646,7 +662,7 @@ void FactValueGrid::removeFact(const QString& factName)
     emit columnCountChanged(_columns->count());
     emit factsChanged();
 
-    // 保存到 JSON
+    // 保存到 S
     _saveSettings();
 }
 
@@ -751,7 +767,6 @@ void FactValueGrid::load_facts()
 
         // _saveSettings();
     } else {
-
         // 已有 配置，按保存顺序加载参数
         for (const QString& factName : _checkedFacts) {
             appendFact(factName);
