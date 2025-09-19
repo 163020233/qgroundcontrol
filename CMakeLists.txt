@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
 
-#add_compile_options(/utf-8)
-
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/cmake
     ${CMAKE_SOURCE_DIR}/cmake/modules
@@ -433,10 +431,18 @@ elseif(APPLE)
         qt_add_ios_ffmpeg_libraries(${CMAKE_PROJECT_NAME})
     endif()
 elseif(ANDROID)
-    CPMAddPackage(
-        NAME android_openssl
-        URL https://github.com/KDAB/android_openssl/archive/refs/heads/master.zip
-    )
+    if(DEFINED ANDROID_OPENSSL_ROOT)
+        set(android_openssl_SOURCE_DIR "${ANDROID_OPENSSL_ROOT}")
+        include(${android_openssl_SOURCE_DIR}/android_openssl.cmake)
+        add_android_openssl_libraries(${CMAKE_PROJECT_NAME})
+    else()
+        CPMAddPackage(
+            NAME android_openssl
+            URL https://github.com/KDAB/android_openssl/archive/refs/heads/master.zip
+        )
+        include(${android_openssl_SOURCE_DIR}/android_openssl.cmake)
+        add_android_openssl_libraries(${CMAKE_PROJECT_NAME})
+    endif()
     include(${android_openssl_SOURCE_DIR}/android_openssl.cmake)
     add_android_openssl_libraries(${CMAKE_PROJECT_NAME})
 

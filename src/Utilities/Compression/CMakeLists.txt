@@ -21,8 +21,9 @@ endif()
 
 CPMAddPackage(
     NAME zlib
-    GITHUB_REPOSITORY madler/zlib
-    GIT_TAG develop
+    SOURCE_DIR "D:/work/temp/zlib"
+    # GITHUB_REPOSITORY madler/zlib
+    # GIT_TAG develop
     OPTIONS
         "ZLIB_BUILD_TESTING OFF"
         "ZLIB_BUILD_SHARED OFF"
@@ -40,7 +41,8 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ZLIB::ZLIBSTATIC)
 CPMAddPackage(
     NAME xz-embedded
     VERSION 2024-12-30
-    GITHUB_REPOSITORY tukaani-project/xz-embedded
+    SOURCE_DIR "D:/work/temp/xz-embedded-master/xz-embedded-master"
+    # GITHUB_REPOSITORY tukaani-project/xz-embedded
     OPTIONS
         "BUILD_SHAPELIB_CONTRIB OFF"
         "BUILD_APPS OFF"

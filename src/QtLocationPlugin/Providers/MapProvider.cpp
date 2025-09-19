@@ -28,8 +28,11 @@ MapProvider::MapProvider(
     , _imageFormat(imageFormat)
     , _averageSize(averageSize)
     , _mapStyle(mapStyle)
-    , _language(!QLocale::system().uiLanguages().isEmpty() ? QLocale::system().uiLanguages().constFirst() : "en")
+    // , _language(!QLocale::system().uiLanguages().isEmpty() ? QLocale::system().uiLanguages().constFirst() : "en")
+    // , _mapId(_mapIdIndex++)
+    , _language("zh-CN")
     , _mapId(_mapIdIndex++)
+
 {
     // qCDebug(MapProviderLog) << Q_FUNC_INFO << this << _mapId;
 }

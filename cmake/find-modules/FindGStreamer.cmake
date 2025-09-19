@@ -98,15 +98,16 @@ elseif(LINUX)
 
     set(ENV{PKG_CONFIG_PATH} "${GSTREAMER_LIB_PATH}/pkgconfig:$ENV{PKG_CONFIG_PATH}")
 elseif(ANDROID)
-    # https://gstreamer.freedesktop.org/data/pkg/android/${GStreamer_FIND_VERSION}/gstreamer-1.0-android-universal-${GStreamer_FIND_VERSION}.tar.xz.sha256sum
-    CPMAddPackage(
-        NAME gstreamer
-        VERSION ${GStreamer_FIND_VERSION}
-        URL "https://gstreamer.freedesktop.org/data/pkg/android/${GStreamer_FIND_VERSION}/gstreamer-1.0-android-universal-${GStreamer_FIND_VERSION}.tar.xz"
-        # URL_HASH be92cf477d140c270b480bd8ba0e26b1e01c8db042c46b9e234d87352112e485
-    )
-
+    # 优先使用用户设置的本地 GStreamer 路径
     if(NOT DEFINED GStreamer_ROOT_DIR)
+        message(STATUS "GStreamer_ROOT_DIR not set, fallback to CPM download")
+
+        CPMAddPackage(
+                NAME gstreamer
+                VERSION ${GStreamer_FIND_VERSION}
+                URL "https://gstreamer.freedesktop.org/data/pkg/android/${GStreamer_FIND_VERSION}/gstreamer-1.0-android-universal-${GStreamer_FIND_VERSION}.tar.xz"
+        )
+
         if(CMAKE_ANDROID_ARCH_ABI STREQUAL "armeabi-v7a")
             set(GStreamer_ROOT_DIR "${gstreamer_SOURCE_DIR}/armv7")
         elseif(CMAKE_ANDROID_ARCH_ABI STREQUAL "arm64-v8a")
@@ -117,7 +118,6 @@ elseif(ANDROID)
             set(GStreamer_ROOT_DIR "${gstreamer_SOURCE_DIR}/x86_64")
         endif()
     endif()
-
     cmake_path(CONVERT "${GStreamer_ROOT_DIR}" TO_CMAKE_PATH_LIST GStreamer_ROOT_DIR NORMALIZE)
     if(NOT EXISTS "${GStreamer_ROOT_DIR}")
         message(FATAL_ERROR "Could not locate GStreamer - check installation or set environment/cmake variables")

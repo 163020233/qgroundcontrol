@@ -33,6 +33,14 @@ const QList<SharedMapProvider> UrlFactory::_providers = {
     std::make_shared<GoogleHybridMapProvider>(),
     std::make_shared<GoogleLabelsMapProvider>(),
 #endif
+    // -------------------- 新增高德地图 --------------------
+    std::make_shared<GaodeRoadMapProvider>(),
+    std::make_shared<GaodeSatelliteMapProvider>(),
+
+
+    // std::make_shared<TiandituRoadMapProvider>(),
+    // std::make_shared<TiandituSatelliteMapProvider>(),
+
     std::make_shared<BingRoadMapProvider>(),
     std::make_shared<BingSatelliteMapProvider>(),
     std::make_shared<BingHybridMapProvider>(),
@@ -73,7 +81,7 @@ const QList<SharedMapProvider> UrlFactory::_providers = {
 
     std::make_shared<OpenStreetMapProvider>(),
 
-    std::make_shared<CustomURLMapProvider>(),
+    // std::make_shared<CustomURLMapProvider>(),
 
     std::make_shared<CopernicusElevationProvider>()
 };

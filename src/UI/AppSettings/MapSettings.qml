@@ -278,12 +278,12 @@ Item {
             id: importDialogComponent
 
             QGCPopupDialog {
-                title:      qsTr("Import TileSets")
+                title:      qsTr("导入文件设置")
                 buttons:    Dialog.Ok | Dialog.Cancel
 
                 onAccepted: {
                     close()
-                    fileDialog.title = qsTr("Import Tiles")
+                    fileDialog.title = qsTr("导入文件")
                     fileDialog.openForLoad()
                 }
 
@@ -291,12 +291,12 @@ Item {
                     spacing: ScreenTools.defaultFontPixelWidth / 2
 
                     QGCRadioButton {
-                        text:           qsTr("Append to existing sets")
+                        text:           qsTr("添加离线地图")
                         checked:        !_mapEngineManager.importReplace
                         onClicked:      _mapEngineManager.importReplace = !checked
                     }
                     QGCRadioButton {
-                        text:           qsTr("Replace existing sets")
+                        text:           qsTr("替换离线地图")
                         checked:        _mapEngineManager.importReplace
                         onClicked:      _mapEngineManager.importReplace = checked
                     }
@@ -309,7 +309,7 @@ Item {
 
             QGCSimpleMessageDialog {
 
-                title:      qsTr("Error Message")
+                title:      qsTr("错误消息")
                 text:       _mapEngineManager.errorMessage
                 buttons:    Dialog.Close
             }

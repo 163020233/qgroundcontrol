@@ -281,3 +281,35 @@ public:
             AVERAGE_TILE_SIZE,
             QGeoMapType::SatelliteMapDay) {}
 };
+
+class GaodeMapProvider : public MapProvider
+{
+protected:
+    GaodeMapProvider(const QString &mapName, const QString &mapTypeId, const QString &imageFormat, quint32 averageSize, QGeoMapType::MapStyle mapStyle)
+        : MapProvider(mapName, QStringLiteral("https://www.amap.com/"), imageFormat, averageSize, mapStyle)
+        , _mapTypeId(mapTypeId) {}
+
+private:
+    QString _getURL(int x, int y, int zoom) const final;
+
+    const QString _mapTypeId;
+    const QString _roadMapUrl = QStringLiteral("https://webrd0%1.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x=%2&y=%3&z=%4");
+    const QString _satMapUrl  = QStringLiteral("https://webst0%1.is.autonavi.com/appmaptile?style=6&x=%2&y=%3&z=%4");
+};
+
+// --- 道路图 ---
+class GaodeRoadMapProvider : public GaodeMapProvider
+{
+public:
+    GaodeRoadMapProvider()
+        : GaodeMapProvider(QStringLiteral("Gaode Road"), QStringLiteral("road"), QStringLiteral("png"), AVERAGE_TILE_SIZE, QGeoMapType::StreetMap) {}
+};
+
+// --- 卫星图 ---
+class GaodeSatelliteMapProvider : public GaodeMapProvider
+{
+public:
+    GaodeSatelliteMapProvider()
+        : GaodeMapProvider(QStringLiteral("Gaode Satellite"), QStringLiteral("satellite"), QStringLiteral("jpg"), AVERAGE_TILE_SIZE, QGeoMapType::SatelliteMapDay) {}
+};
+

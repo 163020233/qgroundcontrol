@@ -79,3 +79,15 @@ QString VWorldMapProvider::_getURL(int x, int y, int zoom) const
     const QString VWorldMapToken = SettingsManager::instance()->appSettings()->vworldToken()->rawValue().toString();
     return _mapUrl.arg(VWorldMapToken, _mapName).arg(zoom).arg(y).arg(x).arg(_imageFormat);
 }
+
+// ----------------- GaodeMapProvider 实现 -----------------
+
+QString GaodeMapProvider::_getURL(int x, int y, int zoom) const {
+    int server = x % 4; // 轮询服务器 0~3
+
+    if (_mapTypeId == "road") {
+        return _roadMapUrl.arg(server).arg(x).arg(y).arg(zoom);
+    } else {
+        return _satMapUrl.arg(server).arg(x).arg(y).arg(zoom);
+    }
+}

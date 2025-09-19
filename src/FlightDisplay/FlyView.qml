@@ -190,12 +190,15 @@ Item {
             }
 
             onClicked: {
-                if (activeVehicle && activeVehicle.coordinate.isValid) {
-                    mapControl.center = activeVehicle.coordinate
+                var vehicle = QGroundControl.multiVehicleManager.activeVehicle
+                if (vehicle && vehicle.coordinate && vehicle.coordinate.isValid) {
+                    mapControl.center = vehicle.coordinate
                     mapControl.zoomLevel = 18
-                    console.log("地图居中到飞行器位置:", activeVehicle.coordinate)
+                    console.log("地图居中到飞行器位置:", vehicle.coordinate)
                 } else {
-                    console.log("飞行器位置未准备好")
+                    Qt.callLater(() => {
+                        console.log("飞行器位置未准备好")
+                    })
                 }
             }
         }
