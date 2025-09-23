@@ -37,14 +37,10 @@ const QList<SharedMapProvider> UrlFactory::_providers = {
     std::make_shared<GaodeRoadMapProvider>(),
     std::make_shared<GaodeSatelliteMapProvider>(),
 
-
-    // std::make_shared<TiandituRoadMapProvider>(),
-    // std::make_shared<TiandituSatelliteMapProvider>(),
-
     std::make_shared<BingRoadMapProvider>(),
     std::make_shared<BingSatelliteMapProvider>(),
     std::make_shared<BingHybridMapProvider>(),
-
+    //
     std::make_shared<StatkartTopoMapProvider>(),
     std::make_shared<StatkartBaseMapProvider>(),
     std::make_shared<SvalbardMapProvider>(),

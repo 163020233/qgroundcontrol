@@ -215,21 +215,21 @@ Rectangle {
                     // We use a Loader to load the photoVideoControlComponent only when the active vehicle is not null
                     // This make it easier to implement PhotoVideoControl without having to check for the mavlink camera
                     // to be null all over the place
-
-                    Loader {
-                        id:                         photoVideoControlLoader
-                        anchors.horizontalCenter:   parent.horizontalCenter
-                        sourceComponent:            globals.activeVehicle ? photoVideoControlComponent : undefined
-
-                        property real rightEdgeCenterInset: visible ? parent.width - x : 0
-
-                        Component {
-                            id: photoVideoControlComponent
-
-                            PhotoVideoControl {
-                            }
-                        }
-                    }
+                    // 取消主界面显示相机控值按钮
+                    // Loader {
+                    //     id:                         photoVideoControlLoader
+                    //     anchors.horizontalCenter:   parent.horizontalCenter
+                    //     sourceComponent:            globals.activeVehicle ? photoVideoControlComponent : undefined
+                    //
+                    //     property real rightEdgeCenterInset: visible ? parent.width - x : 0
+                    //
+                    //     Component {
+                    //         id: photoVideoControlComponent
+                    //
+                    //         PhotoVideoControl {
+                    //         }
+                    //     }
+                    // }
                 } // Page 2
             } // QGCSwipeView
 

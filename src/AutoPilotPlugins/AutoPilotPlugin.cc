@@ -71,7 +71,7 @@ void AutoPilotPlugin::parametersReadyPreChecks()
         // Take the user to Vehicle Config Summary
         qgcApp()->showVehicleConfig();
         QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-        qgcApp()->showAppMessage(tr("One or more vehicle components require setup prior to flight."));
+        // qgcApp()->showAppMessage(tr("One or more vehicle components require setup prior to flight."));
     }
 }
 

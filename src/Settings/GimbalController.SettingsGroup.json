@@ -1,68 +1,68 @@
 {
-    "version":      1,
-    "fileType":  "FactMetaData",
-    "QGC.MetaData.Facts":
-[
-{
-    "name":              "EnableOnScreenControl",
-    "shortDesc":         "Enable on Screen Camera Control",
-    "type":              "bool",
-    "default":           false
-},
-{
-    "name":              "ControlType",
-    "shortDesc":         "Type of on-screen control",
-    "type":              "uint32",
-    "enumStrings":       "Click to point, click and drag",
-    "enumValues":        "0, 1",
-    "default":           0
-},
-{
-    "name":              "CameraVFov",
-    "shortDesc":         "Vertical camera field of view",
-    "type":              "uint32",
-    "default":           70,
-    "units":             "deg"
-},
-{
-    "name":              "CameraHFov",
-    "shortDesc":         "Horizontal camera field of view",
-    "type":              "uint32",
-    "default":           70,
-    "units":             "deg"
-},
-{
-    "name":              "CameraSlideSpeed",
-    "shortDesc":         "Maximum gimbal speed on click and drag (deg/sec)",
-    "type":              "uint32",
-    "default":           30,
-    "units":             "deg/s"
-},
-{
-    "name":              "showAzimuthIndicatorOnMap",
-    "shortDesc":         "Show gimbal Azimuth indicator over vehicle icon in map",
-    "type":              "bool",
-    "default":           true
-},
-{
-    "name":              "toolbarIndicatorShowAzimuth",
-    "shortDesc":         "Show Azimuth instead of local yaw on top toolbar gimbal indicator",
-    "type":              "bool",
-    "default":           true
-},
-{
-    "name":              "toolbarIndicatorShowAcquireReleaseControl",
-    "shortDesc":         "Show Azimuth Acquire/release buttons in the gimbal buttons panel",
-    "type":              "bool",
-    "default":           false
-},
-{
-    "name":              "joystickButtonsSpeed",
-    "shortDesc":         "Rate used for joystick button control (deg/sec)",
-    "longDesc":          "When a joystick button is set to gimbal left/right/up/down, it will send this rate when pressed, and it will stop moving when button is released",
-    "type":              "uint32",
-    "default":           20,
-    "units":             "deg/s"
-}
-]
+    "version": 1,
+    "fileType": "FactMetaData",
+    "QGC.MetaData.Facts": [
+        {
+            "name": "EnableOnScreenControl",
+            "shortDesc": "启用屏幕云台控制",
+            "type": "bool",
+            "default": false
+        },
+        {
+            "name": "ControlType",
+            "shortDesc": "屏幕控制类型",
+            "type": "uint32",
+            "enumStrings": "点击指向, 点击拖动",
+            "enumValues": "0, 1",
+            "default": 0
+        },
+        {
+            "name": "CameraVFov",
+            "shortDesc": "垂直视角",
+            "type": "uint32",
+            "default": 70,
+            "units": "度"
+        },
+        {
+            "name": "CameraHFov",
+            "shortDesc": "水平视角",
+            "type": "uint32",
+            "default": 70,
+            "units": "度"
+        },
+        {
+            "name": "CameraSlideSpeed",
+            "shortDesc": "最大云台速度（点击拖动）",
+            "longDesc": "当使用点击拖动控制云台时，按下按钮发送此速度值，松开按钮停止移动",
+            "type": "uint32",
+            "default": 30,
+            "units": "度/秒"
+        },
+        {
+            "name": "showAzimuthIndicatorOnMap",
+            "shortDesc": "在地图上显示云台方位指示器",
+            "type": "bool",
+            "default": true
+        },
+        {
+            "name": "toolbarIndicatorShowAzimuth",
+            "shortDesc": "顶部工具栏显示方位而非本地偏航",
+            "type": "bool",
+            "default": true
+        },
+        {
+            "name": "toolbarIndicatorShowAcquireReleaseControl",
+            "shortDesc": "显示获取/释放控制按钮",
+            "type": "bool",
+            "default": false
+        },
+        {
+            "name": "joystickButtonsSpeed",
+            "shortDesc": "摇杆按钮速度",
+            "longDesc": "当摇杆按钮设置为云台左/右/上/下时，按下按钮发送此速度，松开按钮停止移动",
+            "type": "uint32",
+            "default": 20,
+            "units": "度/秒"
+        }
+    ]
 }

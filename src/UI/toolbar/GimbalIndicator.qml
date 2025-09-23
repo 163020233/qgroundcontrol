@@ -25,12 +25,21 @@ Item {
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
-    property var    activeVehicle:              QGroundControl.multiVehicleManager.activeVehicle
-    property var    gimbalController:           activeVehicle.gimbalController
-    property bool   showIndicator:              gimbalController && gimbalController.gimbals.count
-    property var    activeGimbal:               gimbalController.activeGimbal
-    property var    multiGimbalSetup:           gimbalController.gimbals.count > 1
-    property bool   joystickButtonsAvailable:   activeVehicle.joystickEnabled
+    // property var    activeVehicle:              QGroundControl.multiVehicleManager.activeVehicle
+    // property var    gimbalController:           activeVehicle.gimbalController
+    // property bool   showIndicator:              gimbalController && gimbalController.gimbals.count
+    // property var    activeGimbal:               gimbalController.activeGimbal
+    // property var    multiGimbalSetup:           gimbalController.gimbals.count > 1
+    // property bool   joystickButtonsAvailable:   activeVehicle.joystickEnabled
+
+
+    property var activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+    property var gimbalController: activeVehicle && activeVehicle.gimbalController ? activeVehicle.gimbalController : {}
+    property var activeGimbal: gimbalController && gimbalController.activeGimbal ? gimbalController.activeGimbal : {}
+    property var multiGimbalSetup: gimbalController && gimbalController.gimbals ? gimbalController.gimbals.count > 1 : false
+    property bool joystickButtonsAvailable: activeVehicle && activeVehicle.joystickEnabled ? activeVehicle.joystickEnabled : false
+
+
 
     property var    margins:                    ScreenTools.defaultFontPixelWidth
     property var    panelRadius:                ScreenTools.defaultFontPixelWidth * 0.5
@@ -63,7 +72,7 @@ Item {
                     property var acqControlButtonEnabled: QGroundControl.settingsManager.gimbalControllerSettings.toolbarIndicatorShowAcquireReleaseControl.rawValue
 
                     model: [
-                        {id: "yawLock",   text: activeGimbal.yawLock ? qsTr("Yaw <br> Follow") : qsTr("Yaw <br> Lock")  , visible: true                    },
+                        {id: "yawLock",   text: activeGimbal.yawLock ? qsTr("偏航<br>跟随") : qsTr("偏航<br>锁定")  , visible: true                    },
                         {id: "center",    text: qsTr("居中")                                                          , visible: true                    },
                         {id: "tilt90",    text: qsTr("俯仰90")                                                         , visible: true                    },
                         {id: "pointHome", text: qsTr("指向 <br> 原点")                                                 , visible: true                    },
@@ -261,7 +270,7 @@ Item {
                     }
 
                     QGCLabel {
-                        text:               qsTr("水平FOV")
+                        text:               qsTr("水平视角")
                         visible:            enableOnScreenControlCheckbox.checked && QGroundControl.settingsManager.gimbalControllerSettings.ControlType.rawValue === 0
                     }
                     FactTextField {
@@ -270,7 +279,7 @@ Item {
                     }
 
                     QGCLabel {
-                        text:               qsTr("垂直FOV")
+                        text:               qsTr("垂直视角")
                         visible:            enableOnScreenControlCheckbox.checked && QGroundControl.settingsManager.gimbalControllerSettings.ControlType.rawValue === 0
                     }
                     FactTextField {

@@ -18,6 +18,8 @@
 
 #include "QGCApplication.h"
 
+#include <QtCore/private/qthread_p.h>
+
 #include <QtCore/QEvent>
 #include <QtCore/QFile>
 #include <QtCore/QMetaMethod>
@@ -32,18 +34,16 @@
 #include <QtQuick/QQuickWindow>
 #include <QtQuickControls2/QQuickStyle>
 
-#include <QtCore/private/qthread_p.h>
-
-#include "FactValueGrid.h"
-#include "QGCLogging.h"
+#include "AppSettings.h"
 #include "AudioOutput.h"
 #include "AutoPilotPlugin.h"
 #include "CmdLineOptParser.h"
 #include "ESP8266ComponentController.h"
+#include "FactValueGrid.h"
 #include "FollowMe.h"
+#include "GPSRtk.h"
 #include "GeoTagController.h"
 #include "GimbalController.h"
-#include "GPSRtk.h"
 #include "JoystickConfigController.h"
 #include "JoystickManager.h"
 #include "JsonHelper.h"
@@ -60,10 +60,11 @@
 #include "QGCCorePlugin.h"
 #include "QGCFileDownload.h"
 #include "QGCImageProvider.h"
+#include "QGCLogging.h"
 #include "QGCLoggingCategory.h"
+#include "QGCMapEngineManager.h"
 #include "QGroundControlQmlGlobal.h"
 #include "SettingsManager.h"
-#include "AppSettings.h"
 #include "ShapeFileHelper.h"
 #include "SyslinkComponentController.h"
 #include "UDPLink.h"
@@ -354,6 +355,9 @@ void QGCApplication::init()
         "QGroundControl", 0, 0, "PositionManager", posMgr);
 
     qmlRegisterType<FactValueGrid>("QGroundControl", 1, 0, "FactValueGrid");
+
+    // —— 在这里插入地图引擎加载 tile —— //
+    QGCMapEngineManager::instance()->loadTileSets();
 
     QQmlApplicationEngine engine;
     // 必须在注册之后再加载 QML

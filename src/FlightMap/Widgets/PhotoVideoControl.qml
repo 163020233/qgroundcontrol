@@ -28,6 +28,8 @@ Rectangle {
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
     radius:     _margins
     visible:    _camera.capturesVideo || _camera.capturesPhotos
+    // visible: false
+    property var globals: QGroundControl       // 给它一个全局上下文
 
     property real   _margins:                   ScreenTools.defaultFontPixelHeight / 2
     property real   _smallMargins:              ScreenTools.defaultFontPixelWidth / 2

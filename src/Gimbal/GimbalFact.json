@@ -2,39 +2,39 @@
     "version":      1,
     "fileType":     "FactMetaData",
     "QGC.MetaData.Facts":
-[
-{
-    "name":             "gimbalRoll",
-    "shortDesc":        "Gimbal Roll",
-    "type":             "float",
-    "decimalPlaces":    1,
-    "units":            "deg"
-},
-{
-    "name":             "gimbalPitch",
-    "shortDesc":        "Gimbal Pitch",
-    "type":             "float",
-    "decimalPlaces":    1,
-    "units":            "deg"
-},
-{
-    "name":             "gimbalYaw",
-    "shortDesc":        "Gimbal Yaw",
-    "type":             "float",
-    "decimalPlaces":    1,
-    "units":            "deg"
-},
-{
-    "name":             "gimbalAzimuth",
-    "shortDesc":        "Azimuth",
-    "type":             "float",
-    "decimalPlaces":    1,
-    "units":            "deg"
-},
-{
-    "name":             "deviceId",
-    "shortDesc":        "gimbal device Id",
-    "type":             "uint8"
-}
-]
+    [
+        {
+            "name":             "gimbalRoll",
+            "shortDesc":        "云台横滚角",
+            "type":             "float",
+            "decimalPlaces":    1,
+            "units":            "°"
+        },
+        {
+            "name":             "gimbalPitch",
+            "shortDesc":        "云台俯仰角",
+            "type":             "float",
+            "decimalPlaces":    1,
+            "units":            "°"
+        },
+        {
+            "name":             "gimbalYaw",
+            "shortDesc":        "云台偏航角",
+            "type":             "float",
+            "decimalPlaces":    1,
+            "units":            "°"
+        },
+        {
+            "name":             "gimbalAzimuth",
+            "shortDesc":        "云台方位角",
+            "type":             "float",
+            "decimalPlaces":    1,
+            "units":            "°"
+        },
+        {
+            "name":             "deviceId",
+            "shortDesc":        "云台设备ID",
+            "type":             "uint8"
+        }
+    ]
 }

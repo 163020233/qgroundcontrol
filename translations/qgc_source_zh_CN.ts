@@ -4212,7 +4212,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
       <location filename="../src/AutoPilotPlugins/AutoPilotPlugin.cc" line="74"/>
       <source>One or more vehicle components require setup prior to flight.</source>
-      <translation>一个或多个载具组件需要在飞行前设置。</translation>
+      <translation>已连接无人机，请确保载具在飞行前完成设置。</translation>
     </message>
   </context>
   <context>
