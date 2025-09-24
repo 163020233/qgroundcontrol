@@ -93,6 +93,22 @@ void FactPanelController::getMissingParameters(const QStringList &rgNames)
     _missingParametersTimer.start();
 }
 
+// void FactPanelController::_checkForMissingParameters()
+// {
+//     const QStringList waitList = _missingParameterWaitList;
+//     for (const QString &name: waitList) {
+//         if (_vehicle->parameterManager()->parameterExists(MAV_COMP_ID_AUTOPILOT1, name)) {
+//             _missingParameterWaitList.removeOne(name);
+//         } else {
+//             qDebug() << "Warning: missing parameter" << name << "ignored";
+//             _missingParameterWaitList.removeOne(name);
+//         }
+//     }
+//     emit missingParametersAvailable();
+//
+// }
+
+
 void FactPanelController::_checkForMissingParameters()
 {
     const QStringList waitList = _missingParameterWaitList;

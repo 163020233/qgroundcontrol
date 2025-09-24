@@ -74,12 +74,12 @@ Item {
                     model: [
                         {id: "yawLock",   text: activeGimbal.yawLock ? qsTr("偏航<br>跟随") : qsTr("偏航<br>锁定")  , visible: true                    },
                         {id: "center",    text: qsTr("居中")                                                          , visible: true                    },
-                        {id: "tilt90",    text: qsTr("俯仰90")                                                         , visible: true                    },
+                        {id: "tilt90",    text: qsTr("俯视90")                                                         , visible: true                    },
                         {id: "pointHome", text: qsTr("指向 <br> 原点")                                                 , visible: true                    },
-                        {id: "retract",   text: qsTr("收回")                                                         , visible: true                    },
+                        {id: "retract",   text: qsTr("收回 <br>云台")                                                         , visible: true                    },
                         {id: "acqControl",text: hasControl ? qsTr("释放 <br> 控制") : qsTr("获取 <br> 控制"), visible: acqControlButtonEnabled }
                     ]
-
+                    // 控制云台权限切换，通常用于多端共享控制时获取或释放控制权
                     QGCButton {
                         property var callbackList: [
                            {"yawLock":      function(){ gimbalController.toggleGimbalYawLock(!activeGimbal.yawLock) }   },
@@ -88,8 +88,8 @@ Item {
                            {"pointHome":    function(){ activeVehicle.guidedModeROI(activeVehicle.homePosition) }       },
                            {"retract":      function(){ gimbalController.toggleGimbalRetracted(true) }                  },
                            // This button changes its action depending on gimbal being under control or not
-                           {"acqControl":   function(){ simpleGimbalButtonsRepeater.hasControl ? 
-                                                            gimbalController.releaseGimbalControl() : 
+                           {"acqControl":   function(){ simpleGimbalButtonsRepeater.hasControl ?
+                                                            gimbalController.releaseGimbalControl() :
                                                                 gimbalController.acquireGimbalControl() }               }
                         ]
 
@@ -263,10 +263,22 @@ Item {
                         text:               qsTr("控制类型: ")
                         visible:            enableOnScreenControlCheckbox.checked
                     }
+                    // FactComboBox {
+                    //     id:                 controlTypeCombo
+                    //     fact:               QGroundControl.settingsManager.gimbalControllerSettings.ControlType
+                    //     visible:            enableOnScreenControlCheckbox.checked
+                    // }
                     FactComboBox {
-                        id:                 controlTypeCombo
-                        fact:               QGroundControl.settingsManager.gimbalControllerSettings.ControlType
-                        visible:            enableOnScreenControlCheckbox.checked
+                        id: controlTypeCombo
+                        fact: QGroundControl.settingsManager.gimbalControllerSettings.ControlType
+
+                        // 始终显示，但只能选择点击拖动
+                        Component.onCompleted: {
+                            fact.rawValue = 1   // 默认值设为 1（点击拖动）
+                        }
+
+                        enabled: false  // 禁止用户修改，只显示
+                        visible: true
                     }
 
                     QGCLabel {
@@ -287,15 +299,44 @@ Item {
                         visible:            enableOnScreenControlCheckbox.checked && QGroundControl.settingsManager.gimbalControllerSettings.ControlType.rawValue === 0
                     }
 
+                    // QGCLabel {
+                    //     text:               qsTr("最大速度:")
+                    //     visible:            enableOnScreenControlCheckbox.checked && QGroundControl.settingsManager.gimbalControllerSettings.ControlType.rawValue === 1
+                    // }
+                    // FactTextField {
+                    //     fact:               QGroundControl.settingsManager.gimbalControllerSettings.CameraSlideSpeed
+                    //     visible:            enableOnScreenControlCheckbox.checked && QGroundControl.settingsManager.gimbalControllerSettings.ControlType.rawValue === 1
+                    // }
                     QGCLabel {
                         text:               qsTr("最大速度:")
-                        visible:            enableOnScreenControlCheckbox.checked && QGroundControl.settingsManager.gimbalControllerSettings.ControlType.rawValue === 1
-                    }
-                    FactTextField {
-                        fact:               QGroundControl.settingsManager.gimbalControllerSettings.CameraSlideSpeed
-                        visible:            enableOnScreenControlCheckbox.checked && QGroundControl.settingsManager.gimbalControllerSettings.ControlType.rawValue === 1
+                        visible:            enableOnScreenControlCheckbox.checked &&
+                            QGroundControl.settingsManager.gimbalControllerSettings.ControlType.rawValue === 1
+                        Layout.columnSpan: 2
                     }
 
+                    Slider {
+                        id:                 cameraSlideSpeedSlider
+                        from:               0
+                        to:                 100
+                        stepSize:           1
+                        value:              QGroundControl.settingsManager.gimbalControllerSettings.CameraSlideSpeed.rawValue
+                        onValueChanged: {
+                            QGroundControl.settingsManager.gimbalControllerSettings.CameraSlideSpeed.rawValue = value
+                        }
+                        visible:            enableOnScreenControlCheckbox.checked &&
+                            QGroundControl.settingsManager.gimbalControllerSettings.ControlType.rawValue === 1
+                        Layout.fillWidth:   true
+                        Layout.columnSpan:  2
+                        height:             40
+                    }
+
+                    Text {
+                        text: cameraSlideSpeedSlider.value.toFixed(0) + "°/秒"
+                        visible:            enableOnScreenControlCheckbox.checked &&
+                            QGroundControl.settingsManager.gimbalControllerSettings.ControlType.rawValue === 1
+                        Layout.columnSpan: 2
+                        horizontalAlignment: Text.AlignHCenter
+                    }
                     // Separator
                     Rectangle {
                         Layout.columnSpan:       2
@@ -335,6 +376,7 @@ Item {
                     }
 
                     FactCheckBox {
+                        visible:false
                         id:                 gimbalAzimutIndicatorCheckbox
                         text:               "  " + qsTr("在顶部工具栏指示器上使用方位而不是本地偏航")
                         fact:               QGroundControl.settingsManager.gimbalControllerSettings.toolbarIndicatorShowAzimuth
@@ -393,9 +435,9 @@ Item {
 
         QGCLabel {
             id:                     statusLabel
-            text:                   activeGimbal && activeGimbal.retracted ? 
+            text:                   activeGimbal && activeGimbal.retracted ?
                                         qsTr("已收起") :
-                                        (activeGimbal && activeGimbal.yawLock ? qsTr("偏航已锁定") : qsTr("偏航跟随"))
+                                        (activeGimbal && activeGimbal.yawLock ? qsTr("云台锁定") : qsTr("云台"))
             Layout.columnSpan:      2
             Layout.alignment:       Qt.AlignHCenter
         }
@@ -405,7 +447,7 @@ Item {
         }
         QGCLabel {
             id:                     panLabel
-            text:                   activeGimbal ? 
+            text:                   activeGimbal ?
                                         gimbalTelemetryLayout.showAzimuth ? (qsTr("Az: ") + activeGimbal.absoluteYaw.rawValue.toFixed(1)) :
                                             (qsTr("Y: ") + activeGimbal.bodyYaw.rawValue.toFixed(1)) :
                                                 ""

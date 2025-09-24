@@ -145,7 +145,7 @@ ApplicationWindow {
     // function showVehicleConfig() {
     //     showTool(qsTr("设备配置"), "qrc:/qml/QGroundControl/VehicleSetup/SetupView.qml", "/qmlimages/Gears.svg")
     // }
-
+    //
     // function showVehicleConfigParametersPage() {
     //     showVehicleConfig()
     //     toolDrawerLoader.item.showParametersPanel()

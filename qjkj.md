@@ -41,3 +41,13 @@ Viewer3D/	3D 可视化
 
 更改logo  路径D:\work\work_qt\qgroundcontrol\src\FirmwarePlugin\PX4\PX4BrandImage.png按照尺寸大小获取本公司logo更改文件
 D:\work\work_qt\qgroundcontrol\src\FlightMap  更改地图图标按照我们公司确定方式更改
+
+
+qgcApp()->showVehicleConfig();弹窗提醒// qgcApp()->showAppMessage(tr("One or more vehicle components require setup prior to flight."));
+<name>AutoPilotPlugin</name>
+<message>
+<location filename="../src/AutoPilotPlugins/AutoPilotPlugin.cc" line="74"/>
+<source>One or more vehicle components require setup prior to flight.</source>
+<translation>已连接无人机，请确保载具在飞行前完成设置。</translation>
+</message>
+</context>

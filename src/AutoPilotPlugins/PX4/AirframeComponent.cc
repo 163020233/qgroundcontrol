@@ -48,6 +48,19 @@ bool AirframeComponent::setupComplete(void) const
     return _vehicle->parameterManager()->getParameter(ParameterManager::defaultComponentId, QStringLiteral("SYS_AUTOSTART"))->rawValue().toInt() != 0;
 }
 
+// bool AirframeComponent::setupComplete(void) const
+// {
+//     if (_vehicle->parameterManager()->parameterExists(
+//             ParameterManager::defaultComponentId,
+//             QStringLiteral("SYS_AUTOSTART"))) {
+//         return _vehicle->parameterManager()->getParameter(
+//             ParameterManager::defaultComponentId,
+//             QStringLiteral("SYS_AUTOSTART"))->rawValue().toInt() != 0;
+//     }
+//     // 如果没有 SYS_AUTOSTART，也认为 setup 完成，强制显示机架界面
+//     return true;
+// }
+
 QStringList AirframeComponent::setupCompleteChangedTriggerList(void) const
 {
     return QStringList(QStringLiteral("SYS_AUTOSTART"));

@@ -1538,3 +1538,14 @@ Error:
     file.close();
     return false;
 }
+
+void ParameterManager::addFakeParameter(const QString &name, Fact* fact, int componentId)
+{
+    if (!_mapCompId2FactMap.contains(componentId)) {
+        _mapCompId2FactMap[componentId] = QMap<QString, Fact*>();
+    }
+
+    _mapCompId2FactMap[componentId][name] = fact;
+
+    emit factAdded(componentId, fact);
+}

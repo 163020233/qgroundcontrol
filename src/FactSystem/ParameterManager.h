@@ -45,6 +45,8 @@ public:
     ParameterManager(Vehicle *vehicle);
     ~ParameterManager();
 
+    void addFakeParameter(const QString &name, Fact* fact, int componentId = defaultComponentId);
+
     static void registerQmlTypes();
 
     bool parametersReady() const { return _parametersReady; }

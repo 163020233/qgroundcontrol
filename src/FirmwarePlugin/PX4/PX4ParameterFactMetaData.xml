@@ -10523,15 +10523,15 @@
       <decimal>1</decimal>
       <increment>0.1</increment>
     </parameter>
-<!--    <parameter name="COM_DL_LOSS_T" default="10" type="INT32">-->
-<!--      <short_desc>GCS connection loss time threshold</short_desc>-->
-<!--      <long_desc>After this amount of seconds without datalink, the GCS connection lost mode triggers</long_desc>-->
-<!--      <min>5</min>-->
-<!--      <max>300</max>-->
-<!--      <unit>s</unit>-->
-<!--      <decimal>1</decimal>-->
-<!--      <increment>1</increment>-->
-<!--    </parameter>-->
+    <parameter name="COM_DL_LOSS_T" default="10" type="INT32">
+      <short_desc>GCS connection loss time threshold</short_desc>
+      <long_desc>After this amount of seconds without datalink, the GCS connection lost mode triggers</long_desc>
+      <min>5</min>
+      <max>300</max>
+      <unit>s</unit>
+      <decimal>1</decimal>
+      <increment>1</increment>
+    </parameter>
     <parameter name="COM_FAIL_ACT_T" default="5." type="FLOAT">
       <short_desc>Delay between failsafe condition triggered and failsafe reaction</short_desc>
       <long_desc>Before entering failsafe (RTL, Land, Hold), wait COM_FAIL_ACT_T seconds in Hold mode for the user to realize. During that time the user cannot take over control via the stick override feature (see COM_RC_OVERRIDE). Afterwards the configured failsafe action is triggered and the user may use stick override. A zero value disables the delay and the user cannot take over via stick movements (switching modes is still allowed).</long_desc>
@@ -10545,180 +10545,180 @@
       <long_desc>This number is incremented automatically after every flight on disarming in order to remember the next flight UUID. The first flight is 0.</long_desc>
       <min>0</min>
     </parameter>
-<!--    <parameter name="COM_FLTMODE1" default="-1" type="INT32">-->
-<!--      <short_desc>Mode slot 1</short_desc>-->
-<!--      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>-->
-<!--      <values>-->
-<!--        <value code="-1">Unassigned</value>-->
-<!--        <value code="0">Manual</value>-->
-<!--        <value code="1">Altitude</value>-->
-<!--        <value code="2">Position</value>-->
-<!--        <value code="3">Mission</value>-->
-<!--        <value code="4">Hold</value>-->
-<!--        <value code="5">Return</value>-->
-<!--        <value code="6">Acro</value>-->
-<!--        <value code="7">Offboard</value>-->
-<!--        <value code="8">Stabilized</value>-->
-<!--        <value code="9">Position Slow</value>-->
-<!--        <value code="10">Takeoff</value>-->
-<!--        <value code="11">Land</value>-->
-<!--        <value code="12">Follow Me</value>-->
-<!--        <value code="13">Precision Land</value>-->
-<!--        <value code="100">External Mode 1</value>-->
-<!--        <value code="101">External Mode 2</value>-->
-<!--        <value code="102">External Mode 3</value>-->
-<!--        <value code="103">External Mode 4</value>-->
-<!--        <value code="104">External Mode 5</value>-->
-<!--        <value code="105">External Mode 6</value>-->
-<!--        <value code="106">External Mode 7</value>-->
-<!--        <value code="107">External Mode 8</value>-->
-<!--      </values>-->
-<!--    </parameter>-->
-<!--    <parameter name="COM_FLTMODE2" default="-1" type="INT32">-->
-<!--      <short_desc>Mode slot 2</short_desc>-->
-<!--      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>-->
-<!--      <values>-->
-<!--        <value code="-1">Unassigned</value>-->
-<!--        <value code="0">Manual</value>-->
-<!--        <value code="1">Altitude</value>-->
-<!--        <value code="2">Position</value>-->
-<!--        <value code="3">Mission</value>-->
-<!--        <value code="4">Hold</value>-->
-<!--        <value code="5">Return</value>-->
-<!--        <value code="6">Acro</value>-->
-<!--        <value code="7">Offboard</value>-->
-<!--        <value code="8">Stabilized</value>-->
-<!--        <value code="9">Position Slow</value>-->
-<!--        <value code="10">Takeoff</value>-->
-<!--        <value code="11">Land</value>-->
-<!--        <value code="12">Follow Me</value>-->
-<!--        <value code="13">Precision Land</value>-->
-<!--        <value code="100">External Mode 1</value>-->
-<!--        <value code="101">External Mode 2</value>-->
-<!--        <value code="102">External Mode 3</value>-->
-<!--        <value code="103">External Mode 4</value>-->
-<!--        <value code="104">External Mode 5</value>-->
-<!--        <value code="105">External Mode 6</value>-->
-<!--        <value code="106">External Mode 7</value>-->
-<!--        <value code="107">External Mode 8</value>-->
-<!--      </values>-->
-<!--    </parameter>-->
-<!--    <parameter name="COM_FLTMODE3" default="-1" type="INT32">-->
-<!--      <short_desc>Mode slot 3</short_desc>-->
-<!--      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>-->
-<!--      <values>-->
-<!--        <value code="-1">Unassigned</value>-->
-<!--        <value code="0">Manual</value>-->
-<!--        <value code="1">Altitude</value>-->
-<!--        <value code="2">Position</value>-->
-<!--        <value code="3">Mission</value>-->
-<!--        <value code="4">Hold</value>-->
-<!--        <value code="5">Return</value>-->
-<!--        <value code="6">Acro</value>-->
-<!--        <value code="7">Offboard</value>-->
-<!--        <value code="8">Stabilized</value>-->
-<!--        <value code="9">Position Slow</value>-->
-<!--        <value code="10">Takeoff</value>-->
-<!--        <value code="11">Land</value>-->
-<!--        <value code="12">Follow Me</value>-->
-<!--        <value code="13">Precision Land</value>-->
-<!--        <value code="100">External Mode 1</value>-->
-<!--        <value code="101">External Mode 2</value>-->
-<!--        <value code="102">External Mode 3</value>-->
-<!--        <value code="103">External Mode 4</value>-->
-<!--        <value code="104">External Mode 5</value>-->
-<!--        <value code="105">External Mode 6</value>-->
-<!--        <value code="106">External Mode 7</value>-->
-<!--        <value code="107">External Mode 8</value>-->
-<!--      </values>-->
-<!--    </parameter>-->
-<!--    <parameter name="COM_FLTMODE4" default="-1" type="INT32">-->
-<!--      <short_desc>Mode slot 4</short_desc>-->
-<!--      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>-->
-<!--      <values>-->
-<!--        <value code="-1">Unassigned</value>-->
-<!--        <value code="0">Manual</value>-->
-<!--        <value code="1">Altitude</value>-->
-<!--        <value code="2">Position</value>-->
-<!--        <value code="3">Mission</value>-->
-<!--        <value code="4">Hold</value>-->
-<!--        <value code="5">Return</value>-->
-<!--        <value code="6">Acro</value>-->
-<!--        <value code="7">Offboard</value>-->
-<!--        <value code="8">Stabilized</value>-->
-<!--        <value code="9">Position Slow</value>-->
-<!--        <value code="10">Takeoff</value>-->
-<!--        <value code="11">Land</value>-->
-<!--        <value code="12">Follow Me</value>-->
-<!--        <value code="13">Precision Land</value>-->
-<!--        <value code="100">External Mode 1</value>-->
-<!--        <value code="101">External Mode 2</value>-->
-<!--        <value code="102">External Mode 3</value>-->
-<!--        <value code="103">External Mode 4</value>-->
-<!--        <value code="104">External Mode 5</value>-->
-<!--        <value code="105">External Mode 6</value>-->
-<!--        <value code="106">External Mode 7</value>-->
-<!--        <value code="107">External Mode 8</value>-->
-<!--      </values>-->
-<!--    </parameter>-->
-<!--    <parameter name="COM_FLTMODE5" default="-1" type="INT32">-->
-<!--      <short_desc>Mode slot 5</short_desc>-->
-<!--      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>-->
-<!--      <values>-->
-<!--        <value code="-1">Unassigned</value>-->
-<!--        <value code="0">Manual</value>-->
-<!--        <value code="1">Altitude</value>-->
-<!--        <value code="2">Position</value>-->
-<!--        <value code="3">Mission</value>-->
-<!--        <value code="4">Hold</value>-->
-<!--        <value code="5">Return</value>-->
-<!--        <value code="6">Acro</value>-->
-<!--        <value code="7">Offboard</value>-->
-<!--        <value code="8">Stabilized</value>-->
-<!--        <value code="9">Position Slow</value>-->
-<!--        <value code="10">Takeoff</value>-->
-<!--        <value code="11">Land</value>-->
-<!--        <value code="12">Follow Me</value>-->
-<!--        <value code="13">Precision Land</value>-->
-<!--        <value code="100">External Mode 1</value>-->
-<!--        <value code="101">External Mode 2</value>-->
-<!--        <value code="102">External Mode 3</value>-->
-<!--        <value code="103">External Mode 4</value>-->
-<!--        <value code="104">External Mode 5</value>-->
-<!--        <value code="105">External Mode 6</value>-->
-<!--        <value code="106">External Mode 7</value>-->
-<!--        <value code="107">External Mode 8</value>-->
-<!--      </values>-->
-<!--    </parameter>-->
-<!--    <parameter name="COM_FLTMODE6" default="-1" type="INT32">-->
-<!--      <short_desc>Mode slot 6</short_desc>-->
-<!--      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>-->
-<!--      <values>-->
-<!--        <value code="-1">Unassigned</value>-->
-<!--        <value code="0">Manual</value>-->
-<!--        <value code="1">Altitude</value>-->
-<!--        <value code="2">Position</value>-->
-<!--        <value code="3">Mission</value>-->
-<!--        <value code="4">Hold</value>-->
-<!--        <value code="5">Return</value>-->
-<!--        <value code="6">Acro</value>-->
-<!--        <value code="7">Offboard</value>-->
-<!--        <value code="8">Stabilized</value>-->
-<!--        <value code="9">Position Slow</value>-->
-<!--        <value code="10">Takeoff</value>-->
-<!--        <value code="11">Land</value>-->
-<!--        <value code="12">Follow Me</value>-->
-<!--        <value code="13">Precision Land</value>-->
-<!--        <value code="100">External Mode 1</value>-->
-<!--        <value code="101">External Mode 2</value>-->
-<!--        <value code="102">External Mode 3</value>-->
-<!--        <value code="103">External Mode 4</value>-->
-<!--        <value code="104">External Mode 5</value>-->
-<!--        <value code="105">External Mode 6</value>-->
-<!--        <value code="106">External Mode 7</value>-->
-<!--        <value code="107">External Mode 8</value>-->
-<!--      </values>-->
-<!--    </parameter>-->
+    <parameter name="COM_FLTMODE1" default="-1" type="INT32">
+      <short_desc>Mode slot 1</short_desc>
+      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
+      <values>
+        <value code="-1">Unassigned</value>
+        <value code="0">Manual</value>
+        <value code="1">Altitude</value>
+        <value code="2">Position</value>
+        <value code="3">Mission</value>
+        <value code="4">Hold</value>
+        <value code="5">Return</value>
+        <value code="6">Acro</value>
+        <value code="7">Offboard</value>
+        <value code="8">Stabilized</value>
+        <value code="9">Position Slow</value>
+        <value code="10">Takeoff</value>
+        <value code="11">Land</value>
+        <value code="12">Follow Me</value>
+        <value code="13">Precision Land</value>
+        <value code="100">External Mode 1</value>
+        <value code="101">External Mode 2</value>
+        <value code="102">External Mode 3</value>
+        <value code="103">External Mode 4</value>
+        <value code="104">External Mode 5</value>
+        <value code="105">External Mode 6</value>
+        <value code="106">External Mode 7</value>
+        <value code="107">External Mode 8</value>
+      </values>
+    </parameter>
+    <parameter name="COM_FLTMODE2" default="-1" type="INT32">
+      <short_desc>Mode slot 2</short_desc>
+      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
+      <values>
+        <value code="-1">Unassigned</value>
+        <value code="0">Manual</value>
+        <value code="1">Altitude</value>
+        <value code="2">Position</value>
+        <value code="3">Mission</value>
+        <value code="4">Hold</value>
+        <value code="5">Return</value>
+        <value code="6">Acro</value>
+        <value code="7">Offboard</value>
+        <value code="8">Stabilized</value>
+        <value code="9">Position Slow</value>
+        <value code="10">Takeoff</value>
+        <value code="11">Land</value>
+        <value code="12">Follow Me</value>
+        <value code="13">Precision Land</value>
+        <value code="100">External Mode 1</value>
+        <value code="101">External Mode 2</value>
+        <value code="102">External Mode 3</value>
+        <value code="103">External Mode 4</value>
+        <value code="104">External Mode 5</value>
+        <value code="105">External Mode 6</value>
+        <value code="106">External Mode 7</value>
+        <value code="107">External Mode 8</value>
+      </values>
+    </parameter>
+    <parameter name="COM_FLTMODE3" default="-1" type="INT32">
+      <short_desc>Mode slot 3</short_desc>
+      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
+      <values>
+        <value code="-1">Unassigned</value>
+        <value code="0">Manual</value>
+        <value code="1">Altitude</value>
+        <value code="2">Position</value>
+        <value code="3">Mission</value>
+        <value code="4">Hold</value>
+        <value code="5">Return</value>
+        <value code="6">Acro</value>
+        <value code="7">Offboard</value>
+        <value code="8">Stabilized</value>
+        <value code="9">Position Slow</value>
+        <value code="10">Takeoff</value>
+        <value code="11">Land</value>
+        <value code="12">Follow Me</value>
+        <value code="13">Precision Land</value>
+        <value code="100">External Mode 1</value>
+        <value code="101">External Mode 2</value>
+        <value code="102">External Mode 3</value>
+        <value code="103">External Mode 4</value>
+        <value code="104">External Mode 5</value>
+        <value code="105">External Mode 6</value>
+        <value code="106">External Mode 7</value>
+        <value code="107">External Mode 8</value>
+      </values>
+    </parameter>
+    <parameter name="COM_FLTMODE4" default="-1" type="INT32">
+      <short_desc>Mode slot 4</short_desc>
+      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
+      <values>
+        <value code="-1">Unassigned</value>
+        <value code="0">Manual</value>
+        <value code="1">Altitude</value>
+        <value code="2">Position</value>
+        <value code="3">Mission</value>
+        <value code="4">Hold</value>
+        <value code="5">Return</value>
+        <value code="6">Acro</value>
+        <value code="7">Offboard</value>
+        <value code="8">Stabilized</value>
+        <value code="9">Position Slow</value>
+        <value code="10">Takeoff</value>
+        <value code="11">Land</value>
+        <value code="12">Follow Me</value>
+        <value code="13">Precision Land</value>
+        <value code="100">External Mode 1</value>
+        <value code="101">External Mode 2</value>
+        <value code="102">External Mode 3</value>
+        <value code="103">External Mode 4</value>
+        <value code="104">External Mode 5</value>
+        <value code="105">External Mode 6</value>
+        <value code="106">External Mode 7</value>
+        <value code="107">External Mode 8</value>
+      </values>
+    </parameter>
+    <parameter name="COM_FLTMODE5" default="-1" type="INT32">
+      <short_desc>Mode slot 5</short_desc>
+      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
+      <values>
+        <value code="-1">Unassigned</value>
+        <value code="0">Manual</value>
+        <value code="1">Altitude</value>
+        <value code="2">Position</value>
+        <value code="3">Mission</value>
+        <value code="4">Hold</value>
+        <value code="5">Return</value>
+        <value code="6">Acro</value>
+        <value code="7">Offboard</value>
+        <value code="8">Stabilized</value>
+        <value code="9">Position Slow</value>
+        <value code="10">Takeoff</value>
+        <value code="11">Land</value>
+        <value code="12">Follow Me</value>
+        <value code="13">Precision Land</value>
+        <value code="100">External Mode 1</value>
+        <value code="101">External Mode 2</value>
+        <value code="102">External Mode 3</value>
+        <value code="103">External Mode 4</value>
+        <value code="104">External Mode 5</value>
+        <value code="105">External Mode 6</value>
+        <value code="106">External Mode 7</value>
+        <value code="107">External Mode 8</value>
+      </values>
+    </parameter>
+    <parameter name="COM_FLTMODE6" default="-1" type="INT32">
+      <short_desc>Mode slot 6</short_desc>
+      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
+      <values>
+        <value code="-1">Unassigned</value>
+        <value code="0">Manual</value>
+        <value code="1">Altitude</value>
+        <value code="2">Position</value>
+        <value code="3">Mission</value>
+        <value code="4">Hold</value>
+        <value code="5">Return</value>
+        <value code="6">Acro</value>
+        <value code="7">Offboard</value>
+        <value code="8">Stabilized</value>
+        <value code="9">Position Slow</value>
+        <value code="10">Takeoff</value>
+        <value code="11">Land</value>
+        <value code="12">Follow Me</value>
+        <value code="13">Precision Land</value>
+        <value code="100">External Mode 1</value>
+        <value code="101">External Mode 2</value>
+        <value code="102">External Mode 3</value>
+        <value code="103">External Mode 4</value>
+        <value code="104">External Mode 5</value>
+        <value code="105">External Mode 6</value>
+        <value code="106">External Mode 7</value>
+        <value code="107">External Mode 8</value>
+      </values>
+    </parameter>
     <parameter name="COM_FLTT_LOW_ACT" default="3" type="INT32">
       <short_desc>Remaining flight time low failsafe</short_desc>
       <long_desc>Action the system takes when the remaining flight time is below the estimated time it takes to reach the RTL destination.</long_desc>
@@ -11070,20 +11070,20 @@
       <decimal>1</decimal>
       <increment>0.1</increment>
     </parameter>
-<!--    <parameter name="NAV_DLL_ACT" default="0" type="INT32">-->
-<!--      <short_desc>Set GCS connection loss failsafe mode</short_desc>-->
-<!--      <long_desc>The GCS connection loss failsafe will only be entered after a timeout, set by COM_DL_LOSS_T in seconds. Once the timeout occurs the selected action will be executed.</long_desc>-->
-<!--      <min>0</min>-->
-<!--      <max>6</max>-->
-<!--      <values>-->
-<!--        <value code="0">Disabled</value>-->
-<!--        <value code="1">Hold mode</value>-->
-<!--        <value code="2">Return mode</value>-->
-<!--        <value code="3">Land mode</value>-->
-<!--        <value code="5">Terminate</value>-->
-<!--        <value code="6">Disarm</value>-->
-<!--      </values>-->
-<!--    </parameter>-->
+    <parameter name="NAV_DLL_ACT" default="0" type="INT32">
+      <short_desc>Set GCS connection loss failsafe mode</short_desc>
+      <long_desc>The GCS connection loss failsafe will only be entered after a timeout, set by COM_DL_LOSS_T in seconds. Once the timeout occurs the selected action will be executed.</long_desc>
+      <min>0</min>
+      <max>6</max>
+      <values>
+        <value code="0">Disabled</value>
+        <value code="1">Hold mode</value>
+        <value code="2">Return mode</value>
+        <value code="3">Land mode</value>
+        <value code="5">Terminate</value>
+        <value code="6">Disarm</value>
+      </values>
+    </parameter>
     <parameter name="NAV_RCL_ACT" default="2" type="INT32">
       <short_desc>Set RC loss failsafe mode</short_desc>
       <long_desc>The RC loss failsafe will only be entered after a timeout, set by COM_RC_LOSS_T in seconds. If RC input checks have been disabled by setting the COM_RC_IN_MODE param it will not be triggered.</long_desc>

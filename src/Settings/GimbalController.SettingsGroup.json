@@ -12,9 +12,9 @@
             "name": "ControlType",
             "shortDesc": "屏幕控制类型",
             "type": "uint32",
-            "enumStrings": "点击指向, 点击拖动",
-            "enumValues": "0, 1",
-            "default": 0
+            "enumStrings": "点击拖动",
+            "enumValues": "1",
+            "default": 1
         },
         {
             "name": "CameraVFov",
