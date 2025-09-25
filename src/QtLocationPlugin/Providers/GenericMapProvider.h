@@ -117,7 +117,7 @@ public:
     OpenStreetMapProvider()
         : MapProvider(
             QStringLiteral("Street Map"),
-            QStringLiteral("https://www.openstreetmap.org"),
+            QStringLiteral("https://a.tile.openstreetmap.fr/hot/"), // HOT 中文瓦片
             QStringLiteral("png"),
             AVERAGE_TILE_SIZE,
             QGeoMapType::StreetMap) {}
@@ -125,8 +125,26 @@ public:
 private:
     QString _getURL(int x, int y, int zoom) const final;
 
-    const QString _mapUrl = QStringLiteral("http://tile.openstreetmap.org/%1/%2/%3.png");
+    // 修改为 HOT 中文瓦片地址
+    const QString _mapUrl = QStringLiteral("https://a.tile.openstreetmap.fr/hot/%1/%2/%3.png");
 };
+
+// class OpenStreetMapProvider : public MapProvider
+// {
+// public:
+//     OpenStreetMapProvider()
+//         : MapProvider(
+//             QStringLiteral("Street Map"),
+//             QStringLiteral("https://www.openstreetmap.org"),
+//             QStringLiteral("png"),
+//             AVERAGE_TILE_SIZE,
+//             QGeoMapType::StreetMap) {}
+//
+// private:
+//     QString _getURL(int x, int y, int zoom) const final;
+//
+//     const QString _mapUrl = QStringLiteral("http://tile.openstreetmap.org/%1/%2/%3.png");
+// };
 
 class StatkartMapProvider : public MapProvider
 {

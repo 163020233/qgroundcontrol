@@ -26,6 +26,7 @@
 QGC_LOGGING_CATEGORY(QGCMapUrlEngineLog, "qgc.qtlocationplugin.qgcmapurlengine")
 
 const QList<SharedMapProvider> UrlFactory::_providers = {
+    std::make_shared<OpenStreetMapProvider>(),
 #ifndef QGC_NO_GOOGLE_MAPS
     std::make_shared<GoogleStreetMapProvider>(),
     std::make_shared<GoogleSatelliteMapProvider>(),
@@ -41,45 +42,45 @@ const QList<SharedMapProvider> UrlFactory::_providers = {
     std::make_shared<BingSatelliteMapProvider>(),
     std::make_shared<BingHybridMapProvider>(),
     //
-    std::make_shared<StatkartTopoMapProvider>(),
-    std::make_shared<StatkartBaseMapProvider>(),
-    std::make_shared<SvalbardMapProvider>(),
-
-    std::make_shared<EniroMapProvider>(),
-
-    std::make_shared<EsriWorldStreetMapProvider>(),
-    std::make_shared<EsriWorldSatelliteMapProvider>(),
-    std::make_shared<EsriTerrainMapProvider>(),
-
-    std::make_shared<MapboxStreetMapProvider>(),
-    std::make_shared<MapboxLightMapProvider>(),
-    std::make_shared<MapboxDarkMapProvider>(),
-    std::make_shared<MapboxSatelliteMapProvider>(),
-    std::make_shared<MapboxHybridMapProvider>(),
-    std::make_shared<MapboxStreetsBasicMapProvider>(),
-    std::make_shared<MapboxOutdoorsMapProvider>(),
-    std::make_shared<MapboxBrightMapProvider>(),
-    std::make_shared<MapboxCustomMapProvider>(),
-
-    std::make_shared<MapQuestMapMapProvider>(),
-    std::make_shared<MapQuestSatMapProvider>(),
-
-    std::make_shared<VWorldStreetMapProvider>(),
-    std::make_shared<VWorldSatMapProvider>(),
-
-    std::make_shared<JapanStdMapProvider>(),
-    std::make_shared<JapanSeamlessMapProvider>(),
-    std::make_shared<JapanAnaglyphMapProvider>(),
-    std::make_shared<JapanSlopeMapProvider>(),
-    std::make_shared<JapanReliefMapProvider>(),
-
-    std::make_shared<LINZBasemapMapProvider>(),
-
-    std::make_shared<OpenStreetMapProvider>(),
-
-    std::make_shared<CustomURLMapProvider>(),
-
-    std::make_shared<CopernicusElevationProvider>()
+    // std::make_shared<StatkartTopoMapProvider>(),
+    // std::make_shared<StatkartBaseMapProvider>(),
+    // std::make_shared<SvalbardMapProvider>(),
+    //
+    // std::make_shared<EniroMapProvider>(),
+    //
+    // std::make_shared<EsriWorldStreetMapProvider>(),
+    // std::make_shared<EsriWorldSatelliteMapProvider>(),
+    // std::make_shared<EsriTerrainMapProvider>(),
+    //
+    // std::make_shared<MapboxStreetMapProvider>(),
+    // std::make_shared<MapboxLightMapProvider>(),
+    // std::make_shared<MapboxDarkMapProvider>(),
+    // std::make_shared<MapboxSatelliteMapProvider>(),
+    // std::make_shared<MapboxHybridMapProvider>(),
+    // std::make_shared<MapboxStreetsBasicMapProvider>(),
+    // std::make_shared<MapboxOutdoorsMapProvider>(),
+    // std::make_shared<MapboxBrightMapProvider>(),
+    // std::make_shared<MapboxCustomMapProvider>(),
+    //
+    // std::make_shared<MapQuestMapMapProvider>(),
+    // std::make_shared<MapQuestSatMapProvider>(),
+    //
+    // std::make_shared<VWorldStreetMapProvider>(),
+    // std::make_shared<VWorldSatMapProvider>(),
+    //
+    // std::make_shared<JapanStdMapProvider>(),
+    // std::make_shared<JapanSeamlessMapProvider>(),
+    // std::make_shared<JapanAnaglyphMapProvider>(),
+    // std::make_shared<JapanSlopeMapProvider>(),
+    // std::make_shared<JapanReliefMapProvider>(),
+    //
+    // std::make_shared<LINZBasemapMapProvider>(),
+    //
+    // std::make_shared<OpenStreetMapProvider>(),
+    //
+    // std::make_shared<CustomURLMapProvider>(),
+    //
+    // std::make_shared<CopernicusElevationProvider>()
 };
 
 QString UrlFactory::getImageFormat(int qtMapId, QByteArrayView image)

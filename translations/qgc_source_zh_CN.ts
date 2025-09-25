@@ -10982,67 +10982,67 @@ Is this really what you want?</translation>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="36"/>
       <source>Acro</source>
-      <translation>特技Acro</translation>
+      <translation>特技模式</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="37"/>
       <source>Stabilized</source>
-      <translation>自稳Stabilized</translation>
+      <translation>稳定模式（自稳）</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="38"/>
       <source>Rattitude</source>
-      <translation>半自稳Rattitude</translation>
+      <translation>自稳+特技混合模式</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="39"/>
       <source>Altitude</source>
-      <translation>高度</translation>
+      <translation>高度保持</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="40"/>
       <source>Position</source>
-      <translation>定点Position</translation>
+      <translation>定点模式（位置保持）</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="41"/>
       <source>Offboard</source>
-      <translation>板外Offboard</translation>
+      <translation>机外控制模式（外部指令控制）</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="42"/>
       <source>Ready</source>
-      <translation>就绪</translation>
+      <translation>预备/待命模式</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="43"/>
       <source>Takeoff</source>
-      <translation>起飞</translation>
+      <translation>自动起飞</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="44"/>
       <source>Hold</source>
-      <translation>等待</translation>
+      <translation>悬停（定点等待）</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="45"/>
       <source>Mission</source>
-      <translation>任务</translation>
+      <translation>航点任务</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="46"/>
       <source>Return</source>
-      <translation>返航Return</translation>
+      <translation>自动返航</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="47"/>
       <source>Land</source>
-      <translation>降落</translation>
+      <translation>自动降落</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="48"/>
       <source>Precision Land</source>
-      <translation>精准降落</translation>
+      <translation>精确降落</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="49"/>
@@ -11052,17 +11052,17 @@ Is this really what you want?</translation>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="50"/>
       <source>Follow Me</source>
-      <translation>跟随Follow Me</translation>
+      <translation>跟随模式</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="51"/>
       <source>Simple</source>
-      <translation>简单</translation>
+      <translation>简化模式</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="52"/>
       <source>Orbit</source>
-      <translation>轨道</translation>
+      <translation>环绕模式</translation>
     </message>
     <message>
       <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="136"/>

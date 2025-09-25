@@ -90,7 +90,7 @@ Item {
             LabelledComboBox {
                 label: qsTr("地形数据提供程序")
                 model: _mapEngineManager.elevationProviderList
-
+                visible:false
                 onActivated: (index) => { _elevationProviderFact.rawValue = comboBox.textAt(index) }
 
                 Component.onCompleted: {

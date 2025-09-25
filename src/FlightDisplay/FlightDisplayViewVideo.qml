@@ -234,36 +234,36 @@ Item {
             property int zoom: 0
         }
     }
-    // 相机控制（保持和主界面一样的位置：底部居中）
-    Loader {
-        id: photoVideoControlLoader
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.topMargin: ScreenTools.defaultFontPixelHeight
-        anchors.rightMargin: ScreenTools.defaultFontPixelHeight * 8 // 控件往左移动一点
-        visible: QGroundControl.videoManager.fullScreen  // 只全屏显示
-        sourceComponent: globals.activeVehicle ? photoVideoControlComponent : undefined
-
-        Component {
-            id: photoVideoControlComponent
-            PhotoVideoControl {
-                // 根据视频缩放比例自动调整大小
-                width: parent.width * 0.25
-                height: width * (height / width) // 保持原始比例
-                anchors.top: parent.top
-                anchors.right: parent.right
-
-                // 允许点击
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.AllButtons
-                    onClicked: {
-                        console.log("PhotoVideoControl 点击")
-                    }
-                }
-            }
-        }
-    }
+    // // 相机控制（保持和主界面一样的位置：底部居中）
+    // Loader {
+    //     id: photoVideoControlLoader
+    //     anchors.top: parent.top
+    //     anchors.right: parent.right
+    //     anchors.topMargin: ScreenTools.defaultFontPixelHeight
+    //     anchors.rightMargin: ScreenTools.defaultFontPixelHeight * 8 // 控件往左移动一点
+    //     visible: QGroundControl.videoManager.fullScreen  // 只全屏显示
+    //     sourceComponent: globals.activeVehicle ? photoVideoControlComponent : undefined
+    //
+    //     Component {
+    //         id: photoVideoControlComponent
+    //         PhotoVideoControl {
+    //             // 根据视频缩放比例自动调整大小
+    //             width: parent.width * 0.25
+    //             height: width * (height / width) // 保持原始比例
+    //             anchors.top: parent.top
+    //             anchors.right: parent.right
+    //
+    //             // 允许点击
+    //             MouseArea {
+    //                 anchors.fill: parent
+    //                 acceptedButtons: Qt.AllButtons
+    //                 onClicked: {
+    //                     console.log("PhotoVideoControl 点击")
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
     // Loader {
     //     id: photoVideoControlLoader
     //     sourceComponent: globals.activeVehicle ? photoVideoControlComponent : undefined
