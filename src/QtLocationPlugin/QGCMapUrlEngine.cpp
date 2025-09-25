@@ -26,7 +26,9 @@
 QGC_LOGGING_CATEGORY(QGCMapUrlEngineLog, "qgc.qtlocationplugin.qgcmapurlengine")
 
 const QList<SharedMapProvider> UrlFactory::_providers = {
-    std::make_shared<OpenStreetMapProvider>(),
+    std::make_shared<OSMStreetMapProvider>(),
+    std::make_shared<OSMTerrainMapProvider>(),
+    std::make_shared<OSMHybridMapProvider>(),
 #ifndef QGC_NO_GOOGLE_MAPS
     std::make_shared<GoogleStreetMapProvider>(),
     std::make_shared<GoogleSatelliteMapProvider>(),
