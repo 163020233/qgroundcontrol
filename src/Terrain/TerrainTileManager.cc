@@ -58,6 +58,11 @@ bool TerrainTileManager::getAltitudesForCoordinates(const QList<QGeoCoordinate> 
 
     const QString elevationProviderName = SettingsManager::instance()->flightMapSettings()->elevationMapProvider()->rawValue().toString();
     const SharedMapProvider provider = UrlFactory::getMapProviderFromProviderType(elevationProviderName);
+    if (!provider) {
+        qCWarning(TerrainTileManagerLog) << Q_FUNC_INFO << "Invalid elevation map provider:" << elevationProviderName;
+        error = true;
+        return false;
+    }
     for (const QGeoCoordinate &coordinate: coordinates) {
         const QString tileHash = UrlFactory::getTileHash(
             provider->getMapName(),

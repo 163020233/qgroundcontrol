@@ -113,74 +113,21 @@ private:
 
 class OpenStreetMapProvider : public MapProvider
 {
-protected:
-    OpenStreetMapProvider(const QString &mapName, const QString &urlTemplate, const QString &imageFormat, QGeoMapType::MapStyle style)
-        : MapProvider(mapName, QStringLiteral(""), imageFormat, AVERAGE_TILE_SIZE, style)
-        , _urlTemplate(urlTemplate) {}
+public:
+    OpenStreetMapProvider()
+        : MapProvider(
+            QStringLiteral("Street Map"),
+            QStringLiteral("https://a.tile.openstreetmap.fr/hot/"), // HOT 中文瓦片
+            QStringLiteral("png"),
+            AVERAGE_TILE_SIZE,
+            QGeoMapType::StreetMap) {}
 
 private:
-    QString _getURL(int x, int y, int zoom) const final {
-        return _urlTemplate.arg(zoom).arg(x).arg(y);
-    }
+    QString _getURL(int x, int y, int zoom) const final;
 
-    const QString _urlTemplate;
+    // 修改为 HOT 中文瓦片地址
+    const QString _mapUrl = QStringLiteral("https://a.tile.openstreetmap.fr/hot/%1/%2/%3.png");
 };
-
-// --- 街道图 ---
-class OSMStreetMapProvider : public OpenStreetMapProvider
-{
-public:
-    OSMStreetMapProvider()
-        : OpenStreetMapProvider(
-            QStringLiteral("OpenStreetMap Street"),
-            QStringLiteral("https://tile.openstreetmap.org/%1/%2/%3.png"),
-            QStringLiteral("png"),
-            QGeoMapType::StreetMap) {}
-};
-
-// --- 地形图 ---
-class OSMTerrainMapProvider : public OpenStreetMapProvider
-{
-public:
-    OSMTerrainMapProvider()
-        : OpenStreetMapProvider(
-            QStringLiteral("OpenStreetMap Terrain"),
-            QStringLiteral("https://tile.opentopomap.org/%1/%2/%3.png"),
-            QStringLiteral("png"),
-            QGeoMapType::TerrainMap) {}
-};
-
-// --- 混合图（卫星/标注） ---
-class OSMHybridMapProvider : public OpenStreetMapProvider
-{
-public:
-    OSMHybridMapProvider()
-        : OpenStreetMapProvider(
-            QStringLiteral("OpenStreetMap Hybrid"),
-            QStringLiteral("https://mt1.google.com/vt/lyrs=y&x=%2&y=%3&z=%1"),
-            QStringLiteral("png"),
-            QGeoMapType::HybridMap) {}
-};
-
-
-//
-// class OpenStreetMapProvider : public MapProvider
-// {
-// public:
-//     OpenStreetMapProvider()
-//         : MapProvider(
-//             QStringLiteral("Street Map"),
-//             QStringLiteral("https://a.tile.openstreetmap.fr/hot/"), // HOT 中文瓦片
-//             QStringLiteral("png"),
-//             AVERAGE_TILE_SIZE,
-//             QGeoMapType::StreetMap) {}
-//
-// private:
-//     QString _getURL(int x, int y, int zoom) const final;
-//
-//     // 修改为 HOT 中文瓦片地址
-//     const QString _mapUrl = QStringLiteral("https://a.tile.openstreetmap.fr/hot/%1/%2/%3.png");
-// };
 
 // class OpenStreetMapProvider : public MapProvider
 // {
