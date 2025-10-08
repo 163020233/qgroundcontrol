@@ -348,16 +348,20 @@ QVariantList QGCCorePlugin::firstRunPromptsToShow()
     return rgVarIdsToShow;
 }
 
+
+// 首次运行提示框返回空字符串不加载首次提示
 QString QGCCorePlugin::firstRunPromptResource(int id) const
 {
-    switch (id) {
-    case kUnitsFirstRunPromptId:
-        return QStringLiteral("/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml");
-    case kOfflineVehicleFirstRunPromptId:
-        return QStringLiteral("/FirstRunPromptDialogs/OfflineVehicleFirstRunPrompt.qml");
-    default:
-        return QString();
-    }
+    // switch (id) {
+    // case kUnitsFirstRunPromptId:
+    //     return QStringLiteral("/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml");
+    // case kOfflineVehicleFirstRunPromptId:
+    //     return QStringLiteral("/FirstRunPromptDialogs/OfflineVehicleFirstRunPrompt.qml");
+    // default:
+    //     return QString();
+    // }
+    Q_UNUSED(id);
+    return QString();
 }
 
 void QGCCorePlugin::_setShowTouchAreas(bool show)

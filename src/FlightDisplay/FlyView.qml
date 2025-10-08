@@ -142,9 +142,14 @@ Item {
             anchors.topMargin: 16
             anchors.right: parent.right
             anchors.rightMargin: 16
-            icon.source: "/res/buttonLeft.svg"
             z: 1000
 
+            // 默认收起状态图标
+            property string collapsedIcon: "/res/buttonLeft_position.svg"
+            // 展开状态图标
+            property string expandedIcon: "/res/buttonRight_position.svg"
+
+            icon.source: collapsedIcon
             // 淡入淡出动画
             Behavior on opacity {
                 NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
@@ -154,6 +159,7 @@ Item {
 
             onClicked: {
                 mapHolder.expanded = !mapHolder.expanded
+                icon.source = mapHolder.expanded ? expandedIcon : collapsedIcon
                 console.log("主按钮点击，expanded状态:", mapHolder.expanded)
             }
         }

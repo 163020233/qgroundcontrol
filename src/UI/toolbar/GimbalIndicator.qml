@@ -467,8 +467,8 @@ Item {
             if(!acquirePopupConnection.isPopupOpen){
                 acquirePopupConnection.isPopupOpen = true;
                 mainWindow.showMessageDialog(
-                    "Request Gimbal Control?",
-                    "Command not sent. Another user has control of the gimbal.",
+                    "请求云台控制？",
+                    "指令未发送，已有其他用户控制该云台。",
                     Dialog.Yes | Dialog.No,
                     gimbalController.acquireGimbalControl,
                     function() { acquirePopupConnection.isPopupOpen = false }

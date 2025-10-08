@@ -1138,7 +1138,7 @@ void Vehicle::_handleBatteryStatus(mavlink_message_t& message)
         } else {
             batteryIdStr = batteryIdStr.arg("");
         }
-        _say(tr("warning"));
+        _say(tr("警告"));
         _say(QStringLiteral("%1 %2 ").arg(_vehicleIdSpeech()).arg(batteryMessage.arg(batteryIdStr)));
     }
 }
@@ -2063,7 +2063,7 @@ QString Vehicle::_vehicleIdSpeech()
 
 void Vehicle::_handleFlightModeChanged(const QString& flightMode)
 {
-    _say(tr("%1 %2 flight mode").arg(_vehicleIdSpeech()).arg(flightMode));
+    _say(tr("%1 %2 飞行模式").arg(_vehicleIdSpeech()).arg(flightMode));
     emit guidedModeChanged(_firmwarePlugin->isGuidedMode(this));
 }
 

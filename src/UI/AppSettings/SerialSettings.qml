@@ -22,54 +22,136 @@ ColumnLayout {
     function saveSettings() {
         // No Need
     }
-
     GridLayout {
         columns:        2
         rowSpacing:     _rowSpacing
         columnSpacing:  _colSpacing
 
+        // 串口选择
         QGCLabel { text: qsTr("串行端口") }
-        QGCComboBox {
-            id:                     commPortCombo
-            Layout.preferredWidth:  _secondColumnWidth
-            enabled:                QGroundControl.linkManager.serialPorts.length > 0
 
-            onActivated: (index) => {
-                if (index != -1) {
-                    if (index >= QGroundControl.linkManager.serialPortStrings.length) {
-                        // This item was adding at the end, must use added text as name
-                        subEditConfig.portName = commPortCombo.textAt(index)
-                    } else {
-                        subEditConfig.portName = QGroundControl.linkManager.serialPorts[index]
-                    }
-                }
-            }
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: 6
 
-            Component.onCompleted: {
-                var index = -1
-                var serialPorts = [ ]
-                if (QGroundControl.linkManager.serialPortStrings.length !== 0) {
+            // 下拉框
+            QGCComboBox {
+                id: commPortCombo
+                Layout.preferredWidth: _secondColumnWidth * 0.6
+
+                Component.onCompleted: {
+                    var serialPorts = []
+
                     for (var i=0; i<QGroundControl.linkManager.serialPortStrings.length; i++) {
                         serialPorts.push(QGroundControl.linkManager.serialPortStrings[i])
                     }
-                    if (subEditConfig.portDisplayName === "" && QGroundControl.linkManager.serialPorts.length > 0) {
-                        subEditConfig.portName = QGroundControl.linkManager.serialPorts[0]
-                    }
-                    index = serialPorts.indexOf(subEditConfig.portDisplayName)
-                    if (index === -1) {
+
+                    if (subEditConfig.portName && serialPorts.indexOf(subEditConfig.portName) === -1) {
                         serialPorts.push(subEditConfig.portName)
-                        index = serialPorts.indexOf(subEditConfig.portName)
+                    }
+
+                    serialPorts.push(qsTr("自定义端口…"))
+                    commPortCombo.model = serialPorts
+
+                    var index = serialPorts.indexOf(subEditConfig.portName)
+                    if (index === -1) index = 0
+                    commPortCombo.currentIndex = index
+                }
+
+                onActivated: (index) => {
+                    if (index === commPortCombo.model.length - 1) {
+                        customPortField.visible = true
+                        customPortField.forceActiveFocus()
+                    } else {
+                        subEditConfig.portName = commPortCombo.textAt(index)
+                        customPortField.visible = false
                     }
                 }
-                if (serialPorts.length === 0) {
-                    serialPorts = [ qsTr("无可用端口") ]
-                    index = 0
+            }
+
+            // 自定义输入框
+            TextField {
+                id: customPortField
+                Layout.preferredWidth: _secondColumnWidth * 0.35
+                visible: false
+                placeholderText: qsTr("请输入串口名称")
+                text: subEditConfig.portName
+
+                onTextChanged: {
+                    subEditConfig.portName = text
                 }
-                commPortCombo.model = serialPorts
-                commPortCombo.currentIndex = index
             }
         }
 
+    // GridLayout {
+    //     columns:        2
+    //     rowSpacing:     _rowSpacing
+    //     columnSpacing:  _colSpacing
+    //
+    //     // 串口选择
+    //     QGCLabel { text: qsTr("串行端口") }
+    //     Column {
+    //         Layout.preferredWidth: _secondColumnWidth
+    //         spacing: 6
+    //
+    //         QGCComboBox {
+    //             id:                     commPortCombo
+    //             Layout.preferredWidth:  _secondColumnWidth
+    //             enabled:                QGroundControl.linkManager.serialPorts.length > 0
+    //
+    //             onActivated: (index) => {
+    //                 if (index !== -1) {
+    //                     if (index >= QGroundControl.linkManager.serialPortStrings.length) {
+    //                         // 选择了额外添加的条目
+    //                         subEditConfig.portName = commPortCombo.textAt(index)
+    //                     } else {
+    //                         subEditConfig.portName = QGroundControl.linkManager.serialPorts[index]
+    //                     }
+    //                 }
+    //             }
+    //
+    //             Component.onCompleted: {
+    //                 var index = -1
+    //                 var serialPorts = []
+    //                 if (QGroundControl.linkManager.serialPortStrings.length !== 0) {
+    //                     for (var i=0; i<QGroundControl.linkManager.serialPortStrings.length; i++) {
+    //                         serialPorts.push(QGroundControl.linkManager.serialPortStrings[i])
+    //                     }
+    //                     if (subEditConfig.portDisplayName === "" &&
+    //                         QGroundControl.linkManager.serialPorts.length > 0) {
+    //                         subEditConfig.portName = QGroundControl.linkManager.serialPorts[0]
+    //                     }
+    //                     index = serialPorts.indexOf(subEditConfig.portDisplayName)
+    //                     if (index === -1) {
+    //                         serialPorts.push(subEditConfig.portName)
+    //                         index = serialPorts.indexOf(subEditConfig.portName)
+    //                     }
+    //                 }
+    //                 if (serialPorts.length === 0) {
+    //                     serialPorts = [ qsTr("无可用端口") ]
+    //                     index = 0
+    //                 }
+    //                 commPortCombo.model = serialPorts
+    //                 commPortCombo.currentIndex = index
+    //             }
+    //         }
+    //
+    //         // 无可用端口时显示输入框
+    //         TextField {
+    //             id: customPortField
+    //             visible: commPortCombo.model.length === 1 &&
+    //                 commPortCombo.model[0] === qsTr("无可用端口")
+    //             Layout.preferredWidth: _secondColumnWidth
+    //             placeholderText: qsTr("请输入自定义串口名，例如 ttyS1 或 ACM0")
+    //             text: subEditConfig.portName
+    //
+    //             onTextChanged: {
+    //                 subEditConfig.portName = text
+    //             }
+    //         }
+    //     }
+
+        // 波特率
         QGCLabel { text: qsTr("波特率") }
         QGCComboBox {
             id:                     baudCombo
@@ -77,14 +159,14 @@ ColumnLayout {
             model:                  QGroundControl.linkManager.serialBaudRates
 
             onActivated: (index) => {
-                if (index != -1) {
+                if (index !== -1) {
                     subEditConfig.baud = parseInt(QGroundControl.linkManager.serialBaudRates[index])
                 }
             }
 
             Component.onCompleted: {
                 var baud = "57600"
-                if(subEditConfig != null) {
+                if (subEditConfig !== null) {
                     baud = subEditConfig.baud.toString()
                 }
                 var index = baudCombo.find(baud)
@@ -96,6 +178,80 @@ ColumnLayout {
             }
         }
     }
+
+    // GridLayout {
+    //     columns:        2
+    //     rowSpacing:     _rowSpacing
+    //     columnSpacing:  _colSpacing
+    //
+    //     QGCLabel { text: qsTr("串行端口") }
+    //     QGCComboBox {
+    //         id:                     commPortCombo
+    //         Layout.preferredWidth:  _secondColumnWidth
+    //         enabled:                QGroundControl.linkManager.serialPorts.length > 0
+    //
+    //         onActivated: (index) => {
+    //             if (index != -1) {
+    //                 if (index >= QGroundControl.linkManager.serialPortStrings.length) {
+    //                     // This item was adding at the end, must use added text as name
+    //                     subEditConfig.portName = commPortCombo.textAt(index)
+    //                 } else {
+    //                     subEditConfig.portName = QGroundControl.linkManager.serialPorts[index]
+    //                 }
+    //             }
+    //         }
+    //
+    //         Component.onCompleted: {
+    //             var index = -1
+    //             var serialPorts = [ ]
+    //             if (QGroundControl.linkManager.serialPortStrings.length !== 0) {
+    //                 for (var i=0; i<QGroundControl.linkManager.serialPortStrings.length; i++) {
+    //                     serialPorts.push(QGroundControl.linkManager.serialPortStrings[i])
+    //                 }
+    //                 if (subEditConfig.portDisplayName === "" && QGroundControl.linkManager.serialPorts.length > 0) {
+    //                     subEditConfig.portName = QGroundControl.linkManager.serialPorts[0]
+    //                 }
+    //                 index = serialPorts.indexOf(subEditConfig.portDisplayName)
+    //                 if (index === -1) {
+    //                     serialPorts.push(subEditConfig.portName)
+    //                     index = serialPorts.indexOf(subEditConfig.portName)
+    //                 }
+    //             }
+    //             if (serialPorts.length === 0) {
+    //                 serialPorts = [ qsTr("无可用端口") ]
+    //                 index = 0
+    //             }
+    //             commPortCombo.model = serialPorts
+    //             commPortCombo.currentIndex = index
+    //         }
+    //     }
+    //
+    //     QGCLabel { text: qsTr("波特率") }
+    //     QGCComboBox {
+    //         id:                     baudCombo
+    //         Layout.preferredWidth:  _secondColumnWidth
+    //         model:                  QGroundControl.linkManager.serialBaudRates
+    //
+    //         onActivated: (index) => {
+    //             if (index != -1) {
+    //                 subEditConfig.baud = parseInt(QGroundControl.linkManager.serialBaudRates[index])
+    //             }
+    //         }
+    //
+    //         Component.onCompleted: {
+    //             var baud = "57600"
+    //             if(subEditConfig != null) {
+    //                 baud = subEditConfig.baud.toString()
+    //             }
+    //             var index = baudCombo.find(baud)
+    //             if (index === -1) {
+    //                 console.warn(qsTr("波特率不在组合框中"), baud)
+    //             } else {
+    //                 baudCombo.currentIndex = index
+    //             }
+    //         }
+    //     }
+    // }
 
     QGCCheckBox {
         id:         advancedSettings
