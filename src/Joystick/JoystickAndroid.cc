@@ -278,7 +278,7 @@ void JoystickAndroid::setNativeMethods()
         {"nativeUpdateAvailableJoysticks", "()V", reinterpret_cast<void*>(jniUpdateAvailableJoysticks)}
     };
 
-    static constexpr const char *kJniClassName = "org/mavlink/qgroundcontrol/QGCUsbSerialManager";
+    static constexpr const char *kJniClassName = "org/qjkj/gcs/QGCUsbSerialManager";
 
     (void) AndroidInterface::cleanJavaException();
 

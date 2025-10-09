@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.mavlink.qgroundcontrol"
+    package="org.qjkj.gcs"
     android:installLocation="auto"
     android:versionCode="-- %%INSERT_VERSION_CODE%% --"
     android:versionName="-- %%INSERT_VERSION_NAME%% --">
@@ -46,7 +46,7 @@
 
         <!-- <meta-data android:name="android.app.system_libs_prefix" android:value="/system/lib/" /> -->
 
-        <activity android:name="org.mavlink.qgroundcontrol.QGCActivity" android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:label="庆军科技" android:launchMode="singleTop" android:screenOrientation="sensorLandscape" android:exported="true">
+        <activity android:name="org.qjkj.gcs.QGCActivity" android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density" android:label="庆军科技" android:launchMode="singleTop" android:screenOrientation="sensorLandscape" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
