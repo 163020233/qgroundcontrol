@@ -386,10 +386,10 @@ void FactValueGrid::_resetFromSettings(void)
         int version = settings.value(_versionKey, 0).toInt();
         if (version != 1) {
             qgcApp()->showAppMessage(
-                tr("Settings version %1 for %2 is not supported. Setup will be reset to defaults.")
+                tr("%2 的设置版本 %1 不受支持。设置将重置为默认值。")
                     .arg(version)
                     .arg(_settingsGroup),
-                tr("Load Settings")
+                tr("加载设置")
             );
             settings.remove("");
             QGCCorePlugin::instance()->factValueGridCreateDefaultSettings(this);

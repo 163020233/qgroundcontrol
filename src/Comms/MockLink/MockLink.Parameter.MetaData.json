@@ -2201,22 +2201,22 @@
       "type": "Int32",
       "default": 0,
       "group": "Commander",
-      "shortDesc": "Battery failsafe mode",
-      "longDesc": "Action the system takes at critical battery. See also BAT_CRIT_THR and BAT_EMERGEN_THR for definition of battery states.",
+      "shortDesc": "电池低电量保护模式",
+      "longDesc": "系统在电池处于临界状态时采取的动作。参见 BAT_CRIT_THR 和 BAT_EMERGEN_THR，用于定义电池状态。",
       "decimalPlaces": 0,
       "increment": 1,
       "values": [
         {
           "value": 0,
-          "description": "Warning"
+          "description": "警告"
         },
         {
           "value": 2,
-          "description": "Land mode"
+          "description": "降落模式"
         },
         {
           "value": 3,
-          "description": "Return at critical level, land at emergency level"
+          "description": "在临界电量时返航，在紧急电量时降落"
         }
       ]
     },

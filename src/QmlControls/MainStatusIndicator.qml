@@ -46,31 +46,37 @@ RowLayout {
         property string _commLostText:      qsTr("通讯中断")
         property string _readyToFlyText:    qsTr("准备起飞")
         property string _notReadyToFlyText: qsTr("未准备")
-        property string _disconnectedText:  qsTr("连接")
+        property string _disconnectedText:  qsTr("未连接")
         property string _armedText:         qsTr("已解锁")
         property string _flyingText:        qsTr("正在飞行")
         property string _landingText:       qsTr("正在降落")
 
         function mainStatusText() {
-            var statusText
+            // 默认初始颜色为浅灰
+            _mainStatusBGColor = "#C0C0C0"  // light gray
+
             if (_activeVehicle) {
+
+                // 通讯丢失
                 if (_communicationLost) {
-                    _mainStatusBGColor = "red"
+                    _mainStatusBGColor = "#FF0000"  // red
                     return mainStatusLabel._commLostText
                 }
-                if (_activeVehicle.armed) {
-                    _mainStatusBGColor = "green"
 
+                // 已解锁状态
+                if (_activeVehicle.armed) {
+                    _mainStatusBGColor = "#00FF00"  // green
+
+                    // 支持健康检查的警告覆盖
                     if (_healthAndArmingChecksSupported) {
-                        if (_activeVehicle.healthAndArmingCheckReport.canArm) {
-                            if (_activeVehicle.healthAndArmingCheckReport.hasWarningsOrErrors) {
-                                _mainStatusBGColor = "yellow"
-                            }
-                        } else {
-                            _mainStatusBGColor = "red"
+                        if (!_activeVehicle.healthAndArmingCheckReport.canArm) {
+                            _mainStatusBGColor = "#FF0000"  // red
+                        } else if (_activeVehicle.healthAndArmingCheckReport.hasWarningsOrErrors) {
+                            _mainStatusBGColor = "#FFFF00"  // yellow
                         }
                     }
 
+                    // 飞行状态覆盖文本
                     if (_activeVehicle.flying) {
                         return mainStatusLabel._flyingText
                     } else if (_activeVehicle.landing) {
@@ -78,44 +84,46 @@ RowLayout {
                     } else {
                         return mainStatusLabel._armedText
                     }
-                } else {
+
+                } else { // 未解锁状态
                     if (_healthAndArmingChecksSupported) {
-                        if (_activeVehicle.healthAndArmingCheckReport.canArm) {
-                            if (_activeVehicle.healthAndArmingCheckReport.hasWarningsOrErrors) {
-                                _mainStatusBGColor = "yellow"
-                            } else {
-                                _mainStatusBGColor = "green"
-                            }
+                        if (!_activeVehicle.healthAndArmingCheckReport.canArm) {
+                            _mainStatusBGColor = "#FF0000"  // red
+                            return mainStatusLabel._notReadyToFlyText
+                        } else if (_activeVehicle.healthAndArmingCheckReport.hasWarningsOrErrors) {
+                            _mainStatusBGColor = "#FFFF00"  // yellow
                             return mainStatusLabel._readyToFlyText
                         } else {
-                            _mainStatusBGColor = "red"
-                            return mainStatusLabel._notReadyToFlyText
+                            _mainStatusBGColor = "#00FF00"  // green
+                            return mainStatusLabel._readyToFlyText
                         }
                     } else if (_activeVehicle.readyToFlyAvailable) {
                         if (_activeVehicle.readyToFly) {
-                            _mainStatusBGColor = "green"
+                            _mainStatusBGColor = "#00FF00"  // green
                             return mainStatusLabel._readyToFlyText
                         } else {
-                            _mainStatusBGColor = "yellow"
+                            _mainStatusBGColor = "#FFFF00"  // yellow
                             return mainStatusLabel._notReadyToFlyText
                         }
                     } else {
-                        // 默认配置OK,传感器OK
-                        // Best we can do is determine readiness based on AutoPilot component setup and health indicators from SYS_STATUS
+                        // 默认判断：传感器健康 && 飞控初始化完成
                         if (_activeVehicle.allSensorsHealthy && _activeVehicle.autopilotPlugin.setupComplete) {
-                            _mainStatusBGColor = "green"
+                            _mainStatusBGColor = "#00FF00"  // green
                             return mainStatusLabel._readyToFlyText
                         } else {
-                            _mainStatusBGColor = "yellow"
+                            _mainStatusBGColor = "#FFFF00"  // yellow
                             return mainStatusLabel._notReadyToFlyText
                         }
                     }
                 }
+
             } else {
-                _mainStatusBGColor = qgcPal.brandingPurple
+                // 未连接
+                _mainStatusBGColor = "#333333"  // deep gray
                 return mainStatusLabel._disconnectedText
             }
         }
+
 
         QGCColoredImage {
             id:                     vehicleMessagesIcon
@@ -241,14 +249,14 @@ RowLayout {
                 heading:            qsTr("设备消息")
                 visible:            !vehicleMessageList.noMessages
 
-                VehicleMessageList { 
+                VehicleMessageList {
                     id: vehicleMessageList
                 }
             }
 
             SettingsGroupLayout {
                 //Layout.fillWidth:   true
-                heading:            qsTr("传感器状态")  
+                heading:            qsTr("传感器状态")
                 //visible:            !_healthAndArmingChecksSupported
                 visible: !_healthAndArmingChecksSupported
                     && _activeVehicle.sysStatusSensorInfo.sensorNames.length > 0
@@ -329,7 +337,7 @@ RowLayout {
                         textFormat:         TextEdit.RichText
                         clip:               true
                         visible:            object.expanded
-                        
+
                         property var fact:  null
 
                         onLinkActivated: (link) => {

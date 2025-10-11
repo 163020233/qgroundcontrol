@@ -31,7 +31,7 @@ Item {
 
     QGCLabel {
         anchors.centerIn:   parent
-        text:               "N"
+        text:               "北"
 
         transform: Translate {
             x: translateCenterToAngleX(control.offsetRadius, 0)
@@ -41,7 +41,7 @@ Item {
 
     QGCLabel {
         anchors.centerIn:   parent
-        text:               "E"
+        text:               "东"
 
         transform: Translate {
             x: translateCenterToAngleX(control.offsetRadius, 90)
@@ -51,7 +51,7 @@ Item {
 
     QGCLabel {
         anchors.centerIn:   parent
-        text:               "S"
+        text:               "南"
 
         transform: Translate {
             x: translateCenterToAngleX(control.offsetRadius, 180)
@@ -61,7 +61,7 @@ Item {
 
     QGCLabel {
         anchors.centerIn:   parent
-        text:               "W"
+        text:               "西"
 
         transform: Translate {
             x: translateCenterToAngleX(control.offsetRadius, 270)
