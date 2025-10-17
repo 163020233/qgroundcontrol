@@ -555,6 +555,7 @@ Item {
             anchors.margins:    _toolsMargin
             anchors.left:       parent.left
             anchors.top:        parent.top
+            color: "transparent"
             z:                  QGroundControl.zOrderWidgets
             maxHeight:          parent.height - toolStrip.y
 
@@ -677,7 +678,8 @@ Item {
                      _rightPanelWidth
                  }
              }
-            color:              qgcPal.window
+            // color:              qgcPal.window
+            color: "transparent"
             opacity:            layerTabBar.visible ? 0.2 : 0
             anchors.bottom:     parent.bottom
             anchors.right:      parent.right
@@ -1023,6 +1025,7 @@ Item {
                             anchors.right:          parent.right
                             horizontalAlignment:    Text.AlignHCenter
                             text:                   object.name
+
                             color:                  button.pressed || button.highlighted ? qgcPal.buttonHighlightText : qgcPal.buttonText
                         }
 

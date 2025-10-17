@@ -15,7 +15,7 @@ import QGroundControl.FlightDisplay
 
 ToolStrip {
     id: _root
-
+    color: Qt.rgba(0, 0, 0, 0)
     signal displayPreFlightChecklist
 
     FlyViewToolStripActionList {

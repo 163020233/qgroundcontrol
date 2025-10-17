@@ -272,45 +272,7 @@ ApplicationWindow {
         id: flyView
         anchors.fill: parent
         utmspSendActTrigger: _utmspSendActTrigger
-
-        // // 监听 GCS 位置变化，用于初始化地图中心
-        // Connections {
-        //     target: PositionManager
-        //     function onGcsPositionChanged(newPos) {
-        //         console.log("GCS pos changed:", newPos.latitude(), newPos.longitude(), newPos.isValid)
-        //         if (!flyView.homePoint && newPos.isValid) {
-        //             flyView.homePoint = newPos
-        //             console.log("Home 点初始化完成:", flyView.homePoint.latitude(), flyView.homePoint.longitude())
-        //             mapControl.center = flyView.homePoint
-        //             mapControl.zoomLevel = 18
-        //         }
-        //     }
-        // }
-        //
-        //
-        // QGCToolBarButton {
-        //     id: locateButton
-        //     width: 48
-        //     height: 48
-        //     anchors.right: parent.right
-        //     anchors.verticalCenter: parent.verticalCenter
-        //     anchors.rightMargin: 16
-        //     icon.source: "/res/locate.svg"
-        //
-        //     onClicked: {
-        //         if (flyView.homePoint && flyView.homePoint.isValid) {
-        //             console.log("移动地图到 home:", flyView.homePoint.latitude(), flyView.homePoint.longitude())
-        //             mapControl.center = flyView.homePoint
-        //             mapControl.zoomLevel = 18
-        //         } else {
-        //             console.log("Home 点未初始化")
-        //         }
-        //     }
-        // }
     }
-
-
-
 
 
     // FlyView {
@@ -366,7 +328,6 @@ ApplicationWindow {
             mainWindow.showIndicatorDrawer(toolSelectComponent, null)
         }
     }
-
 
 
     Component {
@@ -754,13 +715,14 @@ ApplicationWindow {
             indicatorDrawerLoader.sourceComponent   = undefined
         }
 
+        // 工具栏点击后的选项背景框配置
         background: Item {
             Rectangle {
                 id:             backgroundRect
                 anchors.fill:   parent
                 color:          QGroundControl.globalPalette.window
                 radius:         indicatorDrawer._margins
-                opacity:        0.85
+                opacity:        0.6
             }
 
             Rectangle {
@@ -770,6 +732,7 @@ ApplicationWindow {
                 height:                     width
                 radius:                     width / 2
                 color:                      QGroundControl.globalPalette.button
+                opacity:                    0.6
                 border.color:               QGroundControl.globalPalette.buttonText
                 visible:                    indicatorDrawerLoader.item && indicatorDrawerLoader.item.showExpand && !indicatorDrawer._expanded
 

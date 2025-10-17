@@ -19,11 +19,13 @@ Row {
     id:                 indicatorRow
     anchors.top:        parent.top
     anchors.bottom:     parent.bottom
+    anchors.right:      parent.right
+
     anchors.margins:    _toolIndicatorMargins
-    spacing:            ScreenTools.defaultFontPixelWidth * 1.75
+    spacing:            ScreenTools.defaultFontPixelWidth * 1.85
 
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
-    property real _toolIndicatorMargins:    ScreenTools.defaultFontPixelHeight * 0.66
+    property real _toolIndicatorMargins:    ScreenTools.defaultFontPixelHeight * 0.64
 
     Repeater {
         id:     appRepeater
@@ -36,6 +38,7 @@ Row {
         }
     }
 
+    // 顶部图标显示这个可以进行排列
     Repeater {
         id:     toolIndicatorsRepeater
         model:  _activeVehicle ? _activeVehicle.toolIndicators : []

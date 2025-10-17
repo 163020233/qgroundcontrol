@@ -34,9 +34,12 @@ Canvas {
 
     onPaint: {
         var ctx = getContext("2d")
-        ctx.strokeStyle = simplified ? "#EE3424" : _qgcPal.text
-        ctx.fillStyle = "#EE3424"
+
+        // 根据 simplified 决定颜色，这里改成蓝色
+        ctx.strokeStyle = simplified ? "#3498db" : _qgcPal.text  // 文字颜色保持不变
+        ctx.fillStyle = "#3498db"                                 // 蓝色填充
         ctx.lineWidth = 1
+
         ctx.beginPath()
         ctx.moveTo(width / 2, 0)
         ctx.lineTo(width, height)
@@ -44,7 +47,9 @@ Canvas {
         ctx.lineTo(width / 2, 0)
         ctx.fill()
         ctx.stroke()
-        ctx.fillStyle = "#C72B27"
+
+        // 第二个箭头也改为深蓝色
+        ctx.fillStyle = "#2980b9"
         ctx.beginPath()
         ctx.moveTo(width / 2, 0)
         ctx.lineTo(0, height)

@@ -117,10 +117,11 @@ SettingsPage {
     SettingsGroupLayout {
         Layout.fillWidth:   true
         heading:            qsTr("导航命令")
-        visible:            _guidedMinimumAltitude.visible || _guidedMaximumAltitude.visible ||
-                            _maxGoToLocationDistance.visible || _forwardFlightGoToLocationLoiterRad.visible ||
-                            _goToLocationRequiresConfirmInGuided.visible
+        // visible:            _guidedMinimumAltitude.visible || _guidedMaximumAltitude.visible ||
+        //                     _maxGoToLocationDistance.visible || _forwardFlightGoToLocationLoiterRad.visible ||
+        //                     _goToLocationRequiresConfirmInGuided.visible
 
+        visible:false
         LabelledFactTextField {
             Layout.fillWidth:   true
             label:              qsTr("最小高度")
@@ -226,8 +227,9 @@ SettingsPage {
         Layout.fillWidth:   true
         heading:            qsTr("仪表板")
         visible:            _showAdditionalIndicatorsCompass.visible || _lockNoseUpCompass.visible
+        // visible:false
 
-        FactCheckBoxSlider {
+            FactCheckBoxSlider {
             Layout.fillWidth:   true
             text:               qsTr("显示额外的航向指示器")
             visible:            _showAdditionalIndicatorsCompass.visible

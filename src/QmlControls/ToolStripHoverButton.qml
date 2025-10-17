@@ -72,8 +72,8 @@ Button {
 
             Image {
                 id:                         innerImageColorful
-                height:                     contentLayoutItem.height * imageScale
-                width:                      contentLayoutItem.width  * imageScale
+                height:                     contentLayoutItem.height * 0.8
+                width:                      contentLayoutItem.width  * 0.8
                 smooth:                     true
                 mipmap:                     true
                 fillMode:                   Image.PreserveAspectFit
@@ -87,11 +87,12 @@ Button {
 
             QGCColoredImage {
                 id:                         innerImage
-                height:                     contentLayoutItem.height * imageScale
-                width:                      contentLayoutItem.width  * imageScale
+                height:                     contentLayoutItem.height * 0.8
+                width:                      contentLayoutItem.width  * 0.8
                 smooth:                     true
                 mipmap:                     true
                 color:                      _currentContentColor
+
                 fillMode:                   Image.PreserveAspectFit
                 antialiasing:               true
                 sourceSize.height:          height
@@ -102,8 +103,8 @@ Button {
                 QGCColoredImage {
                     id:                         innerImageSecondColor
                     source:                     modelData.alternateIconSource
-                    height:                     contentLayoutItem.height * imageScale
-                    width:                      contentLayoutItem.width  * imageScale
+                    height:                     contentLayoutItem.height * 0.8
+                    width:                      contentLayoutItem.width  * 0.8
                     smooth:                     true
                     mipmap:                     true
                     color:                      _currentContentColorSecondary
@@ -119,19 +120,31 @@ Button {
             QGCLabel {
                 id:                         innerText
                 text:                       control.text
-                color:                      _currentContentColor
+                // color:                      _currentContentColor
+                color:                      "black"
                 anchors.horizontalCenter:   parent.horizontalCenter
                 font.bold:                  !innerImage.visible && !innerImageColorful.visible
+                font.pointSize: ScreenTools.smallFontPointSize * 1.5   // ⬅ 放大字体 30%
                 opacity:                    !innerImage.visible ? 0.8 : 1.0
             }
         }
     }
 
+    // background: Rectangle {
+    //     id:             buttonBkRect
+    //     color:          (control.checked || control.pressed) ?
+    //                         qgcPal.buttonHighlight :
+    //                         ((control.enabled && control.hovered) ? qgcPal.toolStripHoverColor : qgcPal.toolbarBackground)
+    //     anchors.fill:   parent
+    // }
     background: Rectangle {
-        id:             buttonBkRect
-        color:          (control.checked || control.pressed) ?
-                            qgcPal.buttonHighlight :
-                            ((control.enabled && control.hovered) ? qgcPal.toolStripHoverColor : qgcPal.toolbarBackground)
-        anchors.fill:   parent
+        id: buttonBkRect
+        color: (control.checked || control.pressed) ?
+            qgcPal.buttonHighlight :
+            ((control.enabled && control.hovered) ?
+                qgcPal.toolStripHoverColor :
+                Qt.rgba(0, 0, 0, 0))   // 默认透明
+        anchors.fill: parent
     }
+
 }

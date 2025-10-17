@@ -201,6 +201,7 @@ const FirmwarePlugin::remapParamNameMajorVersionMap_t &FirmwarePlugin::paramName
     return remap;
 }
 
+// 用户可以自定义增删工具栏需要显示的qml
 const QVariantList &FirmwarePlugin::toolIndicators(const Vehicle*)
 {
     //-- Default list of indicators for all vehicles.

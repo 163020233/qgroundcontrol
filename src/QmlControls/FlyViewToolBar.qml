@@ -25,6 +25,7 @@ Rectangle {
     height: ScreenTools.toolbarHeight
     color:  qgcPal.toolbarBackground
 
+    // color: Qt.rgba(0, 0, 0, 0) // 假设紫色半透明
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
     property color  _mainStatusBGColor: qgcPal.brandingPurple
@@ -84,74 +85,87 @@ Rectangle {
         }
     }
 
-    QGCFlickable {
-        id:                     toolsFlickable
-        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
-        anchors.rightMargin:    ScreenTools.defaultFontPixelWidth / 2
-        anchors.left:           viewButtonRow.right
-        anchors.bottomMargin:   1
+    // QGCFlickable {
+    //     id:                     toolsFlickable
+    //     anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
+    //     anchors.rightMargin:    ScreenTools.defaultFontPixelWidth / 2
+    //     anchors.left:           viewButtonRow.right
+    //     anchors.bottomMargin:   1
+    //     anchors.top:            parent.top
+    //     anchors.bottom:         parent.bottom
+    //     anchors.right:          parent.right
+    //     contentWidth:           toolIndicators.width
+    //     flickableDirection:     Flickable.HorizontalFlick
+    //
+    //     FlyViewToolBarIndicators { id: toolIndicators }
+    // }
+    Row {
+        id:                     toolIndicatorsRow
+        anchors.left:           viewButtonRow.right   // 👈 如果左边有按钮组，保留这一行
+        anchors.right:          parent.right          // 👈 贴到最右边
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
-        anchors.right:          parent.right
-        contentWidth:           toolIndicators.width
-        flickableDirection:     Flickable.HorizontalFlick
+        anchors.rightMargin:    ScreenTools.defaultFontPixelWidth / 2
+        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
+        spacing:                ScreenTools.defaultFontPixelWidth * 1.85
 
-        FlyViewToolBarIndicators { id: toolIndicators }
+        FlyViewToolBarIndicators {
+            id: toolIndicators
+        }
     }
-
     //-------------------------------------------------------------------------
     //-- Branding Logo
-    Image {
-        anchors.right:          parent.right
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
-        visible:                _activeVehicle && !_communicationLost && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
-        fillMode:               Image.PreserveAspectFit
-        source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
-        mipmap:                 true
-
-        property bool   _outdoorPalette:        qgcPal.globalTheme === QGCPalette.Light
-        property bool   _corePluginBranding:    QGroundControl.corePlugin.brandImageIndoor.length != 0
-        property string _userBrandImageIndoor:  QGroundControl.settingsManager.brandImageSettings.userBrandImageIndoor.value
-        property string _userBrandImageOutdoor: QGroundControl.settingsManager.brandImageSettings.userBrandImageOutdoor.value
-        property bool   _userBrandingIndoor:    QGroundControl.settingsManager.brandImageSettings.visible && _userBrandImageIndoor.length != 0
-        property bool   _userBrandingOutdoor:   QGroundControl.settingsManager.brandImageSettings.visible && _userBrandImageOutdoor.length != 0
-        property string _brandImageIndoor:      brandImageIndoor()
-        property string _brandImageOutdoor:     brandImageOutdoor()
-
-        function brandImageIndoor() {
-            if (_userBrandingIndoor) {
-                return _userBrandImageIndoor
-            } else {
-                if (_userBrandingOutdoor) {
-                    return _userBrandImageOutdoor
-                } else {
-                    if (_corePluginBranding) {
-                        return QGroundControl.corePlugin.brandImageIndoor
-                    } else {
-                        return _activeVehicle ? _activeVehicle.brandImageIndoor : ""
-                    }
-                }
-            }
-        }
-
-        function brandImageOutdoor() {
-            if (_userBrandingOutdoor) {
-                return _userBrandImageOutdoor
-            } else {
-                if (_userBrandingIndoor) {
-                    return _userBrandImageIndoor
-                } else {
-                    if (_corePluginBranding) {
-                        return QGroundControl.corePlugin.brandImageOutdoor
-                    } else {
-                        return _activeVehicle ? _activeVehicle.brandImageOutdoor : ""
-                    }
-                }
-            }
-        }
-    }
+    // Image {
+    //     anchors.right:          parent.right
+    //     anchors.top:            parent.top
+    //     anchors.bottom:         parent.bottom
+    //     anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
+    //     visible:                _activeVehicle && !_communicationLost && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
+    //     fillMode:               Image.PreserveAspectFit
+    //     source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
+    //     mipmap:                 true
+    //
+    //     property bool   _outdoorPalette:        qgcPal.globalTheme === QGCPalette.Light
+    //     property bool   _corePluginBranding:    QGroundControl.corePlugin.brandImageIndoor.length != 0
+    //     property string _userBrandImageIndoor:  QGroundControl.settingsManager.brandImageSettings.userBrandImageIndoor.value
+    //     property string _userBrandImageOutdoor: QGroundControl.settingsManager.brandImageSettings.userBrandImageOutdoor.value
+    //     property bool   _userBrandingIndoor:    QGroundControl.settingsManager.brandImageSettings.visible && _userBrandImageIndoor.length != 0
+    //     property bool   _userBrandingOutdoor:   QGroundControl.settingsManager.brandImageSettings.visible && _userBrandImageOutdoor.length != 0
+    //     property string _brandImageIndoor:      brandImageIndoor()
+    //     property string _brandImageOutdoor:     brandImageOutdoor()
+    //
+    //     function brandImageIndoor() {
+    //         if (_userBrandingIndoor) {
+    //             return _userBrandImageIndoor
+    //         } else {
+    //             if (_userBrandingOutdoor) {
+    //                 return _userBrandImageOutdoor
+    //             } else {
+    //                 if (_corePluginBranding) {
+    //                     return QGroundControl.corePlugin.brandImageIndoor
+    //                 } else {
+    //                     return _activeVehicle ? _activeVehicle.brandImageIndoor : ""
+    //                 }
+    //             }
+    //         }
+    //     }
+    //
+    //     function brandImageOutdoor() {
+    //         if (_userBrandingOutdoor) {
+    //             return _userBrandImageOutdoor
+    //         } else {
+    //             if (_userBrandingIndoor) {
+    //                 return _userBrandImageIndoor
+    //             } else {
+    //                 if (_corePluginBranding) {
+    //                     return QGroundControl.corePlugin.brandImageOutdoor
+    //                 } else {
+    //                     return _activeVehicle ? _activeVehicle.brandImageOutdoor : ""
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     // Small parameter download progress bar
     Rectangle {
