@@ -22,9 +22,8 @@ import QGroundControl.Controllers
 Rectangle {
     id:     _root
     width:  parent.width
-    height: ScreenTools.toolbarHeight
+    height: ScreenTools.toolbarHeight*1.1
     color:  qgcPal.toolbarBackground
-
     // color: Qt.rgba(0, 0, 0, 0) // 假设紫色半透明
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false

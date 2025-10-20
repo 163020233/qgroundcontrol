@@ -49,69 +49,70 @@ SettingsPage {
         }
     }
 
-    SettingsGroupLayout {
-        id:                 mavlink2SigningGroup
-        Layout.fillWidth:   true
-        heading:            qsTr("MAVLink 2 签名")
-        headingDescription: qsTr("签名密钥仅应通过安全链接发送到设备。")
-        visible:            _mavlink2SigningKey.visible
+    // SettingsGroupLayout {
+    //     id:                 mavlink2SigningGroup
+    //     Layout.fillWidth:   true
+    //     heading:            qsTr("MAVLink 2 签名")
+    //     headingDescription: qsTr("签名密钥仅应通过安全链接发送到设备。")
+    //     visible:            _mavlink2SigningKey.visible
+    //
+    //     property Fact _mavlink2SigningKey: _mavlinkSettings.mavlink2SigningKey
+    //
+    //     Connections {
+    //         target:             mavlink2SigningGroup._mavlink2SigningKey
+    //         onRawValueChanged:  sendToVehiclePrompt.visible = true
+    //     }
+    //
+    //     RowLayout {
+    //         spacing: ScreenTools.defaultFontPixelWidth
+    //
+    //         LabelledFactTextField {
+    //             Layout.fillWidth:           true
+    //             textFieldPreferredWidth:    ScreenTools.defaultFontPixelWidth * 32
+    //             label:                      qsTr("Key")
+    //             fact:                       mavlink2SigningGroup._mavlink2SigningKey
+    //         }
+    //
+    //         QGCButton {
+    //             text:       qsTr("发送到设备")
+    //             enabled:    _activeVehicle
+    //
+    //             onClicked: {
+    //                 sendToVehiclePrompt.visible = false
+    //                 _activeVehicle.sendSetupSigning()
+    //             }
+    //         }
+    //     }
+    //
+    //     QGCLabel {
+    //         id:                 sendToVehiclePrompt
+    //         Layout.fillWidth:   true
+    //         text:               qsTr("签名密钥已更改。如果需要，请发送到设备。")
+    //         visible:            false
+    //     }
+    // }
 
-        property Fact _mavlink2SigningKey: _mavlinkSettings.mavlink2SigningKey
-
-        Connections {
-            target:             mavlink2SigningGroup._mavlink2SigningKey
-            onRawValueChanged:  sendToVehiclePrompt.visible = true
-        }
-
-        RowLayout {
-            spacing: ScreenTools.defaultFontPixelWidth
-
-            LabelledFactTextField {
-                Layout.fillWidth:           true
-                textFieldPreferredWidth:    ScreenTools.defaultFontPixelWidth * 32
-                label:                      qsTr("Key")
-                fact:                       mavlink2SigningGroup._mavlink2SigningKey
-            }
-
-            QGCButton {
-                text:       qsTr("发送到设备")
-                enabled:    _activeVehicle
-
-                onClicked: {
-                    sendToVehiclePrompt.visible = false
-                    _activeVehicle.sendSetupSigning()
-                }
-            }
-        }
-
-        QGCLabel {
-            id:                 sendToVehiclePrompt
-            Layout.fillWidth:   true
-            text:               qsTr("签名密钥已更改。如果需要，请发送到设备。")
-            visible:            false
-        }
-    }
-
-    SettingsGroupLayout {
-        Layout.fillWidth:   true
-        heading:            qsTr("MAVLink 转发")
-
-        FactCheckBoxSlider {
-            Layout.fillWidth:   true
-            text:               qsTr("启用")
-            fact:               _mavlinkSettings.forwardMavlink
-            visible:            fact.visible
-        }
-
-        LabelledFactTextField {
-            Layout.fillWidth:           true
-            textFieldPreferredWidth:    ScreenTools.defaultFontPixelWidth * 20
-            label:                      qsTr("主机名")
-            fact:                       _mavlinkSettings.forwardMavlinkHostName
-            visible:                    fact.visible
-            enabled:                    _mavlinkSettings.forwardMavlink.rawValue
-        }
-    }
+    //涉及多段监控、RTK共享
+    // SettingsGroupLayout {
+    //     Layout.fillWidth:   true
+    //     heading:            qsTr("MAVLink 转发")
+    //
+    //     FactCheckBoxSlider {
+    //         Layout.fillWidth:   true
+    //         text:               qsTr("启用")
+    //         fact:               _mavlinkSettings.forwardMavlink
+    //         visible:            fact.visible
+    //     }
+    //
+    //     LabelledFactTextField {
+    //         Layout.fillWidth:           true
+    //         textFieldPreferredWidth:    ScreenTools.defaultFontPixelWidth * 20
+    //         label:                      qsTr("主机名")
+    //         fact:                       _mavlinkSettings.forwardMavlinkHostName
+    //         visible:                    fact.visible
+    //         enabled:                    _mavlinkSettings.forwardMavlink.rawValue
+    //     }
+    // }
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
@@ -126,14 +127,14 @@ SettingsPage {
             property Fact _telemetrySave: _mavlinkSettings.telemetrySave
         }
 
-        FactCheckBoxSlider {
-            Layout.fillWidth:   true
-            text:               qsTr("保存未解锁的日志")
-            fact:               _telemetrySaveNotArmed
-            visible:            fact.visible
-            enabled:            _mavlinkSettings.telemetrySave.rawValue
-            property Fact _telemetrySaveNotArmed: _mavlinkSettings.telemetrySaveNotArmed
-        }
+        // FactCheckBoxSlider {
+        //     Layout.fillWidth:   true
+        //     text:               qsTr("保存未解锁的日志")
+        //     fact:               _telemetrySaveNotArmed
+        //     visible:            fact.visible
+        //     enabled:            _mavlinkSettings.telemetrySave.rawValue
+        //     property Fact _telemetrySaveNotArmed: _mavlinkSettings.telemetrySaveNotArmed
+        // }
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
@@ -144,75 +145,75 @@ SettingsPage {
         }
     }
 
-    SettingsGroupLayout {
-        Layout.fillWidth:   true
-        heading:            qsTr("流速率（仅限 ArduPilot）")
-        visible:            _showAPMStreamRates
-
-        QGCCheckBoxSlider {
-            id:                 controllerByVehicleCheckBox
-            Layout.fillWidth:   true
-            text:               qsTr("由设备控制")
-            checked:            !_apmStartMavlinkStreams.rawValue
-            onClicked:          _apmStartMavlinkStreams.rawValue = !checked
-        }
-
-        LabelledFactComboBox {
-            Layout.fillWidth:   true
-            label:              qsTr("原始传感器")
-            fact:               _settingsManager.apmMavlinkStreamRateSettings.streamRateRawSensors
-            indexModel:         false
-            enabled:            !controllerByVehicleCheckBox.checked
-        }
-
-        LabelledFactComboBox {
-            Layout.fillWidth:   true
-            label:              qsTr("扩展状态")
-            fact:               _settingsManager.apmMavlinkStreamRateSettings.streamRateExtendedStatus
-            indexModel:         false
-            enabled:            !controllerByVehicleCheckBox.checked
-        }
-
-        LabelledFactComboBox {
-            Layout.fillWidth:   true
-            label:              qsTr("RC 通道")
-            fact:               _settingsManager.apmMavlinkStreamRateSettings.streamRateRCChannels
-            indexModel:         false
-            enabled:            !controllerByVehicleCheckBox.checked
-        }
-
-        LabelledFactComboBox {
-            Layout.fillWidth:   true
-            label:              qsTr("位置")
-            fact:               _settingsManager.apmMavlinkStreamRateSettings.streamRatePosition
-            indexModel:         false
-            enabled:            !controllerByVehicleCheckBox.checked
-        }
-
-        LabelledFactComboBox {
-            Layout.fillWidth:   true
-            label:              qsTr("额外 1")
-            fact:               _settingsManager.apmMavlinkStreamRateSettings.streamRateExtra1
-            indexModel:         false
-            enabled:            !controllerByVehicleCheckBox.checked
-        }
-
-        LabelledFactComboBox {
-            Layout.fillWidth:   true
-            label:              qsTr("额外 2")
-            fact:               _settingsManager.apmMavlinkStreamRateSettings.streamRateExtra2
-            indexModel:         false
-            enabled:            !controllerByVehicleCheckBox.checked
-        }
-
-        LabelledFactComboBox {
-            Layout.fillWidth:   true
-            label:              qsTr("额外 3")
-            fact:               _settingsManager.apmMavlinkStreamRateSettings.streamRateExtra3
-            indexModel:         false
-            enabled:            !controllerByVehicleCheckBox.checked
-        }
-    }
+    // SettingsGroupLayout {
+    //     Layout.fillWidth:   true
+    //     heading:            qsTr("流速率（仅限 ArduPilot）")
+    //     visible:            _showAPMStreamRates
+    //
+    //     QGCCheckBoxSlider {
+    //         id:                 controllerByVehicleCheckBox
+    //         Layout.fillWidth:   true
+    //         text:               qsTr("由设备控制")
+    //         checked:            !_apmStartMavlinkStreams.rawValue
+    //         onClicked:          _apmStartMavlinkStreams.rawValue = !checked
+    //     }
+    //
+    //     LabelledFactComboBox {
+    //         Layout.fillWidth:   true
+    //         label:              qsTr("原始传感器")
+    //         fact:               _settingsManager.apmMavlinkStreamRateSettings.streamRateRawSensors
+    //         indexModel:         false
+    //         enabled:            !controllerByVehicleCheckBox.checked
+    //     }
+    //
+    //     LabelledFactComboBox {
+    //         Layout.fillWidth:   true
+    //         label:              qsTr("扩展状态")
+    //         fact:               _settingsManager.apmMavlinkStreamRateSettings.streamRateExtendedStatus
+    //         indexModel:         false
+    //         enabled:            !controllerByVehicleCheckBox.checked
+    //     }
+    //
+    //     LabelledFactComboBox {
+    //         Layout.fillWidth:   true
+    //         label:              qsTr("RC 通道")
+    //         fact:               _settingsManager.apmMavlinkStreamRateSettings.streamRateRCChannels
+    //         indexModel:         false
+    //         enabled:            !controllerByVehicleCheckBox.checked
+    //     }
+    //
+    //     LabelledFactComboBox {
+    //         Layout.fillWidth:   true
+    //         label:              qsTr("位置")
+    //         fact:               _settingsManager.apmMavlinkStreamRateSettings.streamRatePosition
+    //         indexModel:         false
+    //         enabled:            !controllerByVehicleCheckBox.checked
+    //     }
+    //
+    //     LabelledFactComboBox {
+    //         Layout.fillWidth:   true
+    //         label:              qsTr("额外 1")
+    //         fact:               _settingsManager.apmMavlinkStreamRateSettings.streamRateExtra1
+    //         indexModel:         false
+    //         enabled:            !controllerByVehicleCheckBox.checked
+    //     }
+    //
+    //     LabelledFactComboBox {
+    //         Layout.fillWidth:   true
+    //         label:              qsTr("额外 2")
+    //         fact:               _settingsManager.apmMavlinkStreamRateSettings.streamRateExtra2
+    //         indexModel:         false
+    //         enabled:            !controllerByVehicleCheckBox.checked
+    //     }
+    //
+    //     LabelledFactComboBox {
+    //         Layout.fillWidth:   true
+    //         label:              qsTr("额外 3")
+    //         fact:               _settingsManager.apmMavlinkStreamRateSettings.streamRateExtra3
+    //         indexModel:         false
+    //         enabled:            !controllerByVehicleCheckBox.checked
+    //     }
+    // }
 
     SettingsGroupLayout {
         Layout.fillWidth:   true

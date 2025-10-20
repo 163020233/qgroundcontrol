@@ -27,12 +27,12 @@ ListModel {
         pageVisible: function() { return true }
     }
 
-    ListElement {
-        name: qsTr("计划视图")
-        url: "qrc:/qml/QGroundControl/AppSettings/PlanViewSettings.qml"
-        iconUrl: "qrc:/qmlimages/Plan.svg"
-        pageVisible: function() { return true }
-    }
+    // ListElement {
+    //     name: qsTr("计划视图")
+    //     url: "qrc:/qml/QGroundControl/AppSettings/PlanViewSettings.qml"
+    //     iconUrl: "qrc:/qmlimages/Plan.svg"
+    //     pageVisible: function() { return true }
+    // }
 
     ListElement {
         name: qsTr("视频")
@@ -40,12 +40,13 @@ ListModel {
         iconUrl: "qrc:/InstrumentValueIcons/camera.svg"
         pageVisible: function() { return QGroundControl.settingsManager.videoSettings.visible }
     }
-    // ListElement {
-    //     name: qsTr("Telemetry")
-    //     url: "qrc:/qml/QGroundControl/AppSettings/TelemetrySettings.qml"
-    //     iconUrl: "qrc:/InstrumentValueIcons/drone.svg"
-    //     pageVisible: function() { return true }
-    // }
+
+    ListElement {
+        name: qsTr("遥测日志")
+        url: "qrc:/qml/QGroundControl/AppSettings/TelemetrySettings.qml"
+        iconUrl: "qrc:/InstrumentValueIcons/drone.svg"
+        pageVisible: function() { return true }
+    }
 
     // ListElement {
     //     name: qsTr("ADSB Server")
@@ -69,7 +70,7 @@ ListModel {
     }
 
     // ListElement {
-    //     name: qsTr("PX4 Log Transfer")
+    //     name: qsTr("PX4 日志")
     //     url: "qrc:/qml/QGroundControl/AppSettings/PX4LogTransferSettings.qml"
     //     iconUrl: "qrc:/InstrumentValueIcons/inbox-download.svg"
     //     pageVisible: function() {
@@ -101,12 +102,12 @@ ListModel {
     //     pageVisible: function() { return true }
     // }
 
-    // ListElement {
-    //     name: qsTr("模拟链接")
-    //     url: "qrc:/qml/QGroundControl/AppSettings/MockLink.qml"
-    //     iconUrl: "qrc:/InstrumentValueIcons/drone.svg"
-    //     pageVisible: function() { return ScreenTools.isDebug }
-    // }
+    ListElement {
+        name: qsTr("模拟链接")
+        url: "qrc:/qml/QGroundControl/AppSettings/MockLink.qml"
+        iconUrl: "qrc:/InstrumentValueIcons/drone.svg"
+        pageVisible: function() { return ScreenTools.isDebug }
+    }
 
     // ListElement {
     //     name: qsTr("Debug")

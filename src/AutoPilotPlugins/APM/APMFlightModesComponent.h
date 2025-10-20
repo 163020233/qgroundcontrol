@@ -22,7 +22,7 @@ public:
 
     QString name() const final { return _name; }
     QString description() const final { return tr("Flight Modes Setup is used to configure the transmitter switches associated with Flight Modes."); }
-    QString iconResource() const final { return QStringLiteral("/qmlimages/FlightModesComponentIcon.png"); }
+    QString iconResource() const final { return QStringLiteral("/qmlimages/FlightModesComponentIcon.svg"); }
     bool requiresSetup() const final { return true; }
     bool setupComplete() const final { return true; }
     QUrl setupSource() const final { return QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/AutoPilotPlugins/APM/APMFlightModesComponent.qml")); }

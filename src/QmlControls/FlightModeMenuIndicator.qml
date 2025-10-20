@@ -46,7 +46,7 @@ RowLayout {
             fillMode:   Image.PreserveAspectFit
             mipmap:     true
             color:      qgcPal.text
-            source:     "/qmlimages/FlightModesComponentIcon.png"
+            source:     "/qmlimages/FlightModesComponentIcon.svg"
             Layout.alignment:   Qt.AlignVCenter
         }
 

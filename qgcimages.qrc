@@ -87,8 +87,7 @@
         <file alias="Disarmed.svg">src/UI/toolbar/Images/Disarmed.svg</file>
         <file alias="Disconnect.svg">src/UI/toolbar/Images/Disconnect.svg</file>
         <file alias="FirmwareUpgradeIcon.png">src/Vehicle/VehicleSetup/FirmwareUpgradeIcon.png</file>
-        <file alias="FollowComponentIcon.png">src/AutoPilotPlugins/Common/Images/FlightModesComponentIcon.png</file>
-        <file alias="FlightModesComponentIcon.png">src/AutoPilotPlugins/Common/Images/FlightModesComponentIcon.png</file>
+        <file alias="FlightModesComponentIcon.svg">src/AutoPilotPlugins/Common/Images/FlightModesComponentIcon.svg</file>
         <file alias="FloatingWindow.svg">src/AnalyzeView/FloatingWindow.svg</file>
         <file alias="Frames/BlueROV1.png">src/AutoPilotPlugins/APM/Images/bluerov-frame.png</file>
         <file alias="Frames/SimpleROV-3.png">src/AutoPilotPlugins/APM/Images/simple3-frame.png</file>
@@ -189,6 +188,7 @@
         <file alias="ForwardingSupportIcon.svg">src/AutoPilotPlugins/APM/Images/ForwardingSupportIcon.svg</file>
         <file alias="ForwardingSupportIconGreen.svg">src/AutoPilotPlugins/APM/Images/ForwardingSupportIconGreen.svg</file>
         <file alias="subMenuButtonImage.png">resources/CogWheels.png</file>
+        <file alias="CogWheels.png">resources/CogWheels.png</file>
         <file alias="subVehicleArrowOpaque.png">src/FlightMap/Images/sub.png</file>
         <file alias="TelemRSSI.svg">src/UI/toolbar/Images/TelemRSSI.svg</file>
         <file alias="TrackingIcon.svg">src/UI/toolbar/Images/TrackingIcon.svg</file>
