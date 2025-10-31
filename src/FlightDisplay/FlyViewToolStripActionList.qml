@@ -58,7 +58,7 @@ ToolStripActionList {
         ToolStripAction {
             id: planViewAction
             //text: qsTr("计划航线")
-            text:       qsTr("计划航线")
+            text:       qsTr("任务")
             iconSource: "/qmlimages/Plan.svg"
 
             onTriggered: {

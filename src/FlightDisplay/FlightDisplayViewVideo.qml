@@ -43,6 +43,7 @@ Item {
     property bool   _isMode_FIT_HEIGHT: _fitMode === 1
     property bool   _isMode_FILL:       _fitMode === 2
     property bool   _isMode_NO_CROP:    _fitMode === 3
+    property bool _isFullScreen: _fullItem ? _fullItem.pipState.state === _fullItem.pipState.fullState : false
 
     function getWidth() {
         return videoBackground.getWidth()
@@ -53,32 +54,73 @@ Item {
 
     property double _thermalHeightFactor: 0.85 //-- TODO
 
-        Image {
-            id:             noVideo
-            anchors.fill:   parent
-            source:         "/res/NoVideoBackground.jpg"
-            fillMode:       Image.PreserveAspectCrop
-            visible:        !(QGroundControl.videoManager.decoding)
+    //无视频时的背景（NoVideoBackground.jpg）
+    // 无视频时的背景
+    Rectangle {
+        id:             noVideo
+        anchors.fill:   parent
+        visible:        !(QGroundControl.videoManager.decoding)
 
-            Rectangle {
-                anchors.centerIn:   parent
-                width:              noVideoLabel.contentWidth + ScreenTools.defaultFontPixelHeight
-                height:             noVideoLabel.contentHeight + ScreenTools.defaultFontPixelHeight
-                radius:             ScreenTools.defaultFontPixelWidth / 2
-                color:              "black"
-                opacity:            0.5
-            }
-
-            QGCLabel {
-                id:                 noVideoLabel
-                text:               QGroundControl.settingsManager.videoSettings.streamEnabled.rawValue ? qsTr("等待视频") : qsTr("视频已禁用")
-                font.bold:          true
-                color:              "white"
-                font.pointSize:     useSmallFont ? ScreenTools.smallFontPointSize : ScreenTools.largeFontPointSize
-                anchors.centerIn:   parent
-            }
+        // 使用渐变代替纯色
+        gradient: Gradient {
+            GradientStop { position: 0; color: Qt.rgba(0, 0, 0, 0.7) }   // 顶部更深
+            GradientStop { position: 1; color: Qt.rgba(0, 0, 0, 0.4) }   // 底部更浅
         }
 
+        MouseArea { anchors.fill: parent; acceptedButtons: Qt.NoButton; hoverEnabled: false }
+
+        Rectangle {
+            anchors.centerIn:   parent
+            width:              noVideoLabel.contentWidth + ScreenTools.defaultFontPixelHeight
+            height:             noVideoLabel.contentHeight + ScreenTools.defaultFontPixelHeight
+            radius:             ScreenTools.defaultFontPixelWidth / 2
+            color:              Qt.rgba(0, 0, 0, 0.5)
+        }
+
+        QGCLabel {
+            id:                 noVideoLabel
+            text:               QGroundControl.settingsManager.videoSettings.streamEnabled.rawValue
+                ? qsTr("等待视频")
+                : qsTr("视频已禁用")
+            font.bold:          true
+            color:              "white"
+            font.pointSize:     useSmallFont
+                ? ScreenTools.smallFontPointSize
+                : ScreenTools.largeFontPointSize
+            anchors.centerIn:   parent
+        }
+    }
+
+    //     Image {
+    //         id:             noVideo
+    //         anchors.fill:   parent
+    //         source:         "/res/NoVideoBackground.jpg"
+    //         fillMode:       Image.PreserveAspectCrop
+    //         visible:        !(QGroundControl.videoManager.decoding)
+    //
+    //         // 关键：不接收鼠标事件
+    //         MouseArea { anchors.fill: parent; acceptedButtons: Qt.NoButton; hoverEnabled: false }
+    //
+    //         Rectangle {
+    //             anchors.centerIn:   parent
+    //             width:              noVideoLabel.contentWidth + ScreenTools.defaultFontPixelHeight
+    //             height:             noVideoLabel.contentHeight + ScreenTools.defaultFontPixelHeight
+    //             radius:             ScreenTools.defaultFontPixelWidth / 2
+    //             color:              "black"
+    //             opacity:            0.5
+    //         }
+    //
+    //         QGCLabel {
+    //             id:                 noVideoLabel
+    //             text:               QGroundControl.settingsManager.videoSettings.streamEnabled.rawValue ? qsTr("等待视频") : qsTr("视频已禁用")
+    //             font.bold:          true
+    //             color:              "white"
+    //             font.pointSize:     useSmallFont ? ScreenTools.smallFontPointSize : ScreenTools.largeFontPointSize
+    //             anchors.centerIn:   parent
+    //         }
+    //     }
+
+        //视频背景容器（videoBackground）
     Rectangle {
         id:             videoBackground
         anchors.fill:   parent
@@ -161,6 +203,7 @@ Item {
                 }
             }
         }
+        //负责加载 QGCVideoBackground（视频播放渲染）
         Loader {
             // GStreamer is causing crashes on Lenovo laptop OpenGL Intel drivers. In order to workaround this
             // we don't load a QGCVideoBackground object when video is disabled. This prevents any video rendering
@@ -174,7 +217,7 @@ Item {
             property bool videoDisabled: QGroundControl.settingsManager.videoSettings.videoSource.rawValue === QGroundControl.settingsManager.videoSettings.disabledVideoSource
         }
 
-        //-- Thermal Image
+        //-- Thermal Image 热成像叠加视频
         Item {
             id:                 thermalItem
             width:              height * QGroundControl.videoManager.thermalAspectRatio
@@ -212,7 +255,7 @@ Item {
                 opacity:        _camera ? (_camera.thermalMode === MavlinkCameraControl.THERMAL_BLEND ? _camera.thermalOpacity / 100 : 1.0) : 0
             }
         }
-        //-- Zoom
+        //-- Zoom缩放手势
         PinchArea {
             id:             pinchZoom
             enabled:        _hasZoom
@@ -234,6 +277,123 @@ Item {
             property int zoom: 0
         }
     }
+
+    // // ---------- 工具栏层（新加） ----------
+    // Rectangle {
+    //     id: toolBar
+    //     width: parent.width
+    //     height: 60
+    //     anchors.top: parent.top
+    //     color: Qt.rgba(0, 0, 0, 0.3)
+    //     z: 9999
+    //
+    //     // 🔹 条件：主界面是视频页面 + 视频页面状态是 PiP 才显示
+    //     visible: _fullItem === item1 && item1.pipState.state === item1.pipState.pipState
+    //
+    //     Row {
+    //         anchors.verticalCenter: parent.verticalCenter
+    //         anchors.right: parent.right
+    //         anchors.rightMargin: 20
+    //         spacing: 20
+    //
+    //         Rectangle {
+    //             width: 40; height: 40; color: "transparent"
+    //             Image { anchors.fill: parent; source: "qrc:/res/CogWheels.png"; fillMode: Image.PreserveAspectFit }
+    //             MouseArea { anchors.fill: parent; onClicked: console.log("设置按钮点击") }
+    //         }
+    //
+    //         Rectangle {
+    //             width: 40; height: 40; color: "transparent"
+    //             Image { anchors.fill: parent; source: "qrc:/res/Gripper.svg"; fillMode: Image.PreserveAspectFit }
+    //             MouseArea { anchors.fill: parent; onClicked: console.log("拍照按钮点击") }
+    //         }
+    //     }
+    //
+    //     // 🔹 打印状态变化日志
+    //     Connections {
+    //         target: item1.pipState
+    //         onStateChanged: {
+    //             const s = item1.pipState.state
+    //             if (s === item1.pipState.fullState) {
+    //                 console.log("当前状态：全屏")
+    //             } else if (s === item1.pipState.pipState) {
+    //                 console.log("当前状态：PiP")
+    //             } else if (s === item1.pipState.windowState) {
+    //                 console.log("当前状态：窗口")
+    //             }
+    //             console.log("当前主界面:", _fullItem === item1 ? "视频页面" : "其他页面")
+    //             console.log("工具栏是否显示:", toolBar.visible)
+    //         }
+    //     }
+    //
+    //     // 🔹 监听主界面切换（_fullItem 改变）
+    //     Connections {
+    //         target: root   // 或者你的外层对象，取决于 _fullItem 的定义
+    //         onFullItemChanged: {
+    //             console.log("主界面切换:", _fullItem === item1 ? "视频页面" : "其他页面")
+    //             console.log("工具栏是否显示:", toolBar.visible)
+    //         }
+    //     }
+    // }
+
+
+
+    // Rectangle {
+    //     id: toolBar
+    //     width: parent.width
+    //     height: 60
+    //     anchors.top: parent.top
+    //     color: Qt.rgba(0, 0, 0, 0.3)
+    //     z: 9999   // 保证在背景之上
+    //
+    //     Row {
+    //         anchors.verticalCenter: parent.verticalCenter
+    //         anchors.right: parent.right
+    //         anchors.rightMargin: 20
+    //         spacing: 20
+    //
+    //         // 示例按钮：设置
+    //         Rectangle {
+    //             width: 40
+    //             height: 40
+    //             color: "transparent"
+    //
+    //             Image {
+    //                 anchors.fill: parent
+    //                 source: "qrc:/res/CogWheels.png"
+    //                 fillMode: Image.PreserveAspectFit
+    //             }
+    //
+    //             MouseArea {
+    //                 anchors.fill: parent
+    //                 hoverEnabled: true
+    //                 onClicked: console.log("✅ 点击设置按钮成功！")
+    //             }
+    //         }
+    //
+    //         // 示例按钮：拍照
+    //         Rectangle {
+    //             width: 40
+    //             height: 40
+    //             color: "transparent"
+    //
+    //             Image {
+    //                 anchors.fill: parent
+    //                 source: "qrc:/res/Gripper.svg"
+    //                 fillMode: Image.PreserveAspectFit
+    //             }
+    //
+    //             MouseArea {
+    //                 anchors.fill: parent
+    //                 hoverEnabled: true
+    //                 onClicked: console.log("📸 点击拍照按钮")
+    //             }
+    //         }
+    //
+    //         // 其他按钮可以按此模式添加
+    //     }
+    // }
+
     // // 相机控制（保持和主界面一样的位置：底部居中）
     // Loader {
     //     id: photoVideoControlLoader

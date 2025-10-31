@@ -20,7 +20,10 @@ import QGroundControl.AppSettings
 
 Rectangle {
     id:     settingsView
-    color:  qgcPal.window
+    // color:  qgcPal.window
+
+    color: Qt.rgba(0.2, 0.2, 0.2, 0.4)
+
     z:      QGroundControl.zOrderTopMost
 
     readonly property real _defaultTextHeight:  ScreenTools.defaultFontPixelHeight
@@ -140,5 +143,6 @@ Rectangle {
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
     }
+
 }
 
