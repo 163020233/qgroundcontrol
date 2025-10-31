@@ -29,6 +29,8 @@ ApplicationWindow {
     id:             mainWindow
     visible:        true
 
+    color: "transparent"  // 或者半透明背景
+
     property bool   _utmspSendActTrigger
     property bool   _utmspStartTelemetry
 
@@ -266,6 +268,8 @@ ApplicationWindow {
     background: Rectangle {
         anchors.fill:   parent
         color:          QGroundControl.globalPalette.window
+        opacity: 0.6
+        // color: Qt.rgba(0.5, 0.5, 0.5, 0.6)
     }
 
     FlyView {
@@ -543,6 +547,7 @@ ApplicationWindow {
             }
         }
 
+        //动态加载组件的容器
         Loader {
             id:             toolDrawerLoader
             anchors.left:   parent.left
@@ -732,7 +737,7 @@ ApplicationWindow {
                 height:                     width
                 radius:                     width / 2
                 color:                      QGroundControl.globalPalette.button
-                opacity:                    0.6
+                opacity:                    0.9
                 border.color:               QGroundControl.globalPalette.buttonText
                 visible:                    indicatorDrawerLoader.item && indicatorDrawerLoader.item.showExpand && !indicatorDrawer._expanded
 
