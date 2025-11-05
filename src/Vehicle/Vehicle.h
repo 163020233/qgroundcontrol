@@ -98,7 +98,9 @@ class Vehicle : public VehicleFactGroup
     Q_MOC_INCLUDE("RemoteIDManager.h")
     Q_MOC_INCLUDE("QGCCameraManager.h")
     Q_MOC_INCLUDE("Actuators.h")
+   //帮助生成元对象时能正确找到类型定义 找头文件。
 
+    // 友元函数
     friend class InitialConnectStateMachine;
     friend class VehicleLinkManager;
     friend class VehicleBatteryFactGroup;           // Allow VehicleBatteryFactGroup to call _addFactGroup
@@ -108,6 +110,7 @@ class Vehicle : public VehicleFactGroup
     friend class GimbalController;                  // Allow GimbalController to call _addFactGroup
 
 public:
+    // 正常连接无人机 构造函数 函数重载两个构造函数
     Vehicle(LinkInterface*          link,
             int                     vehicleId,
             int                     defaultComponentId,
@@ -119,6 +122,7 @@ public:
     static const MAV_AUTOPILOT    MAV_AUTOPILOT_TRACK = static_cast<MAV_AUTOPILOT>(-1);
     static const MAV_TYPE         MAV_TYPE_TRACK = static_cast<MAV_TYPE>(-1);
 
+    // 离线模式编辑任务
     // The following is used to create a disconnected Vehicle for use while offline editing.
     Vehicle(MAV_AUTOPILOT           firmwareType,
             MAV_TYPE                vehicleType,
@@ -132,6 +136,15 @@ public:
         CheckListFailed,
     };
     Q_ENUM(CheckList)
+
+
+    // 重点：属性系统，常用于QML 绑定、动画系统、UI 设计器。
+
+    // “我这个类中有一个只读属性 coordinate，
+    // 类型是 QGeoCoordinate，
+    // 可以通过函数 QGeoCoordinate coordinate() const; 读取，
+    // 并且它是常量，不会改变。”
+
 
     Q_PROPERTY(int                  id                          READ id                                                             CONSTANT)
     Q_PROPERTY(AutoPilotPlugin*     autopilotPlugin             MEMBER _autopilotPlugin                                             CONSTANT)

@@ -18,7 +18,7 @@ import QGroundControl.FlightMap
 Item {
     id:             control
     // 整体放大 1.5 倍
-    property real scaleFactor: 1.2
+    property real scaleFactor: 1.3
 
     implicitWidth:  (compassRadius * 2) + attitudeSpacing + attitudeSize
     implicitHeight: implicitWidth

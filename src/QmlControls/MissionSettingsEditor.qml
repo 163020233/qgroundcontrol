@@ -190,7 +190,8 @@ Rectangle {
                 anchors.left:   parent.left
                 anchors.right:  parent.right
                 text:           qsTr("设备信息")
-                visible:        !_waypointsOnlyMode
+                // visible:        !_waypointsOnlyMode
+                visible:false
                 checked:        false
             }
 

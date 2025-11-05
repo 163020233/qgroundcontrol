@@ -193,9 +193,19 @@ Item {
         property real leftEdgeCenterInset:  leftEdgeTopInset
     }
 
-    GripperMenu {
-        id: gripperOptions
-    }
+    // GripperMenu {
+    //     id: gripperOptions
+    // }
+
+    // 修改后（推荐）
+        Component {
+            id: gripperOptions
+            GripperMenu {
+                id: gripperMenuInstance
+                // 如果没有activeVehicle也能显示
+                visible: true
+            }
+        }
 
     VehicleWarnings {
         anchors.centerIn:   parent

@@ -72,8 +72,8 @@ Button {
 
             Image {
                 id:                         innerImageColorful
-                height:                     contentLayoutItem.height * 0.8
-                width:                      contentLayoutItem.width  * 0.8
+                height:                     contentLayoutItem.height * 0.3
+                width:                      contentLayoutItem.width  * 0.3
                 smooth:                     true
                 mipmap:                     true
                 fillMode:                   Image.PreserveAspectFit
@@ -87,8 +87,8 @@ Button {
 
             QGCColoredImage {
                 id:                         innerImage
-                height:                     contentLayoutItem.height * 0.8
-                width:                      contentLayoutItem.width  * 0.8
+                height:                     contentLayoutItem.height * 0.3
+                width:                      contentLayoutItem.width  * 0.3
                 smooth:                     true
                 mipmap:                     true
                 color:                      _currentContentColor
@@ -103,8 +103,8 @@ Button {
                 QGCColoredImage {
                     id:                         innerImageSecondColor
                     source:                     modelData.alternateIconSource
-                    height:                     contentLayoutItem.height * 0.8
-                    width:                      contentLayoutItem.width  * 0.8
+                    height:                     contentLayoutItem.height * 0.3
+                    width:                      contentLayoutItem.width  * 0.3
                     smooth:                     true
                     mipmap:                     true
                     color:                      _currentContentColorSecondary
@@ -124,11 +124,40 @@ Button {
                 color:                      "black"
                 anchors.horizontalCenter:   parent.horizontalCenter
                 font.bold:                  !innerImage.visible && !innerImageColorful.visible
-                font.pointSize: ScreenTools.smallFontPointSize * 1.5   // ⬅ 放大字体 30%
+                font.pointSize: ScreenTools.smallFontPointSize * 1.2   // ⬅ 放大字体 30%
                 opacity:                    !innerImage.visible ? 0.8 : 1.0
             }
         }
     }
+
+    background: Rectangle {
+        id: buttonBkRect
+        width:  innerImage.width * 2.5      // 圆的大小略大于图标
+        height: width                       // 保持正圆
+        radius: width / 2                   // 圆形
+        anchors.centerIn: parent            // 居中放置
+
+        color: (control.checked || control.pressed)
+            ? qgcPal.buttonHighlight
+            : ((control.enabled && control.hovered)
+                ? qgcPal.toolStripHoverColor
+                : Qt.rgba(0, 0, 0, 0.4))    // 默认浅灰半透明
+
+        border.width: 1
+        border.color: Qt.rgba(255, 255, 255, 0.4)
+        visible: innerImage.visible || innerImageColorful.visible
+    }
+
+
+    // background: Rectangle {
+    //     id: buttonBkRect
+    //     color: (control.checked || control.pressed) ?
+    //         qgcPal.buttonHighlight :
+    //         ((control.enabled && control.hovered) ?
+    //             qgcPal.toolStripHoverColor :
+    //             Qt.rgba(0, 0, 0, 0.5))   // 默认透明
+    //     anchors.fill: parent
+    // }
 
     // background: Rectangle {
     //     id:             buttonBkRect
@@ -137,14 +166,4 @@ Button {
     //                         ((control.enabled && control.hovered) ? qgcPal.toolStripHoverColor : qgcPal.toolbarBackground)
     //     anchors.fill:   parent
     // }
-    background: Rectangle {
-        id: buttonBkRect
-        color: (control.checked || control.pressed) ?
-            qgcPal.buttonHighlight :
-            ((control.enabled && control.hovered) ?
-                qgcPal.toolStripHoverColor :
-                Qt.rgba(0, 0, 0, 0))   // 默认透明
-        anchors.fill: parent
-    }
-
 }

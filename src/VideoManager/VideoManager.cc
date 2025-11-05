@@ -72,8 +72,12 @@ VideoManager *VideoManager::instance()
 
 void VideoManager::registerQmlTypes()
 {
-    (void) qmlRegisterUncreatableType<VideoManager>("QGroundControl.VideoManager", 1, 0, "VideoManager", "Reference only");
-    (void) qmlRegisterUncreatableType<VideoReceiver>("QGroundControl", 1, 0, "VideoReceiver","Reference only");
+    //“将 C++ 类 VideoManager 注册到 QML 模块 QGroundControl.VideoManager（版本 1.0），
+    // 在 QML 中类型名为 VideoManager，但是 禁止直接创建实例，因为它仅供引用使用（Reference only）。”
+    // 把 VideoManager 暴露给 QML，只能用来引用已有对象，不能在 QML 里 new 它
+    (void)qmlRegisterUncreatableType<VideoManager>("QGroundControl.VideoManager", 1, 0, "VideoManager",
+                                                   "Reference only");
+    (void)qmlRegisterUncreatableType<VideoReceiver>("QGroundControl", 1, 0, "VideoReceiver","Reference only");
 #ifndef QGC_GST_STREAMING
     (void) qmlRegisterType<VideoItemStub>("org.freedesktop.gstreamer.Qt6GLVideoItem", 1, 0, "GstGLQt6VideoItem");
 #endif

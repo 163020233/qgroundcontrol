@@ -228,6 +228,66 @@ Item {
         }
 
 
+
+        // 释放牵引线按钮
+        // QGCToolBarButton {
+        //     id: releaseButton
+        //     width: 48
+        //     height: 48
+        //     anchors.top: mainButton.top
+        //     anchors.right: mainButton.right
+        //     anchors.rightMargin: mapHolder.expanded ? 176 : 0
+        //     icon.source: "/res/GripperGrab.svg"
+        //
+        //     Behavior on anchors.rightMargin {
+        //         NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
+        //     }
+        //     Behavior on opacity {
+        //         NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
+        //     }
+        //
+        //     opacity: (mapHolder.expanded && !mapControl.pipMode) ? 1 : 0
+        //     enabled: mapHolder.expanded && !mapControl.pipMode
+        //
+        //     onClicked: {
+        //         pwmLoader.active = !pwmLoader.active
+        //     }
+        // }
+        //
+        // // Loader 加载 PWM 控制模块
+        // Loader {
+        //     id: pwmLoader
+        //     anchors.top: releaseButton.bottom
+        //     anchors.right: releaseButton.right
+        //     source: "PwmControlPanel.qml"
+        //     active: false
+        //     z: 1000
+        // }
+
+        // // 释放牵引线按钮
+        // QGCToolBarButton {
+        //     id: releaseButton
+        //     width: 48
+        //     height: 48
+        //     anchors.top: mainButton.top
+        //     anchors.right: mainButton.right
+        //     anchors.rightMargin: mapHolder.expanded ? 176 : 0
+        //     icon.source: "/res/GripperGrab.svg"
+        //     onClicked: {
+        //         pwmLoader.active = !pwmLoader.active
+        //     }
+        // }
+        //
+        // // Loader 加载 PWM 控制模块
+        // Loader {
+        //     id: pwmLoader
+        //     anchors.top: releaseButton.bottom
+        //     anchors.right: releaseButton.right
+        //     source: "PwmControlPanel.qml"
+        //     active: false
+        //     z: 1000
+        // }
+
         // // 定位按钮，放右边中间
         // QGCToolBarButton {
         //     width: 48

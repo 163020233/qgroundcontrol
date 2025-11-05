@@ -22,7 +22,8 @@ Rectangle {
     width:      ScreenTools.defaultFontPixelWidth * 35
     height:     mainLayout.height + (_margins * 2)
     radius:     ScreenTools.defaultFontPixelWidth / 2
-    color:      qgcPal.window
+    // color:      qgcPal.window
+    color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.6)
     visible:    _utmspEnabled === true ? utmspSliderTrigger: false
 
     property var    guidedController
@@ -113,14 +114,21 @@ Rectangle {
             Layout.fillWidth:   true
             spacing:            ScreenTools.defaultFontPixelWidth
 
-            SliderSwitch {
-                id:                 slider
-                confirmText:        ScreenTools.isMobile ? qsTr("滑动确认") : qsTr("滑动或按住空格键")
-                Layout.fillWidth:   true
-                enabled: _utmspEnabled === true? utmspSliderTrigger : true
-                opacity: if(_utmspEnabled){utmspSliderTrigger === true ? 1 : 0.5} else{1}
+            QGCButton {
+                id: slider
+                text: qsTr("确认执行")
 
-                onAccept: {
+                Layout.fillWidth: true
+                enabled: _utmspEnabled === true ? utmspSliderTrigger : true
+                // opacity: if(_utmspEnabled){utmspSliderTrigger === true ? 1 : 0.5} else{1}
+                // 背景半透明
+                background: Rectangle {
+                    color: Qt.rgba(qgcPal.button.r, qgcPal.button.g, qgcPal.button.b,
+                                   _utmspEnabled ? (utmspSliderTrigger ? 0.8 : 0.4) : 0.8)
+                    radius: 8
+                }
+
+                onClicked: {
                     _root.visible = false
                     var sliderOutputValue = 0
                     if (guidedValueSlider.visible) {
@@ -139,6 +147,33 @@ Rectangle {
                     UTMSPStateStorage.currentStateIndex = 3
                 }
             }
+
+            // SliderSwitch {
+            //     id:                 slider
+            //     confirmText:        ScreenTools.isMobile ? qsTr("滑动确认") : qsTr("滑动或按住空格键")
+            //     Layout.fillWidth:   true
+            //     enabled: _utmspEnabled === true? utmspSliderTrigger : true
+            //     opacity: if(_utmspEnabled){utmspSliderTrigger === true ? 1 : 0.5} else{1}
+
+            //     onAccept: {
+            //         _root.visible = false
+            //         var sliderOutputValue = 0
+            //         if (guidedValueSlider.visible) {
+            //             sliderOutputValue = guidedValueSlider.getOutputValue()
+            //             guidedValueSlider.visible = false
+            //         }
+            //         hideTrigger = false
+            //         guidedController.executeAction(_root.action, _root.actionData, sliderOutputValue, _root.optionChecked)
+            //         if (mapIndicator) {
+            //             mapIndicator.actionConfirmed()
+            //             mapIndicator = undefined
+            //         }
+
+            //         UTMSPStateStorage.indicatorOnMissionStatus = true
+            //         UTMSPStateStorage.currentNotificationIndex = 7
+            //         UTMSPStateStorage.currentStateIndex = 3
+            //     }
+            // }
 
             Rectangle {
                 height: slider.height * 0.75

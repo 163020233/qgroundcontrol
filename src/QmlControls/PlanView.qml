@@ -329,6 +329,7 @@ Item {
     PlanViewToolBar {
         id:                     planToolBar
         planMasterController:   _planMasterController
+        color:"transparent"
     }
 
     Item {
@@ -575,7 +576,7 @@ Item {
                 id: toolStripActionList
                 model: [
                     ToolStripAction {
-                        text:                   qsTr("文件")
+                        text:                   qsTr("任务")
                         enabled:                !_planMasterController.syncInProgress
                         visible:                true
                         showAlternateIcon:      _planMasterController.dirty
@@ -602,22 +603,22 @@ Item {
                         visible:            toolStrip._isRallyLayer || toolStrip._isMissionLayer || toolStrip._isUtmspLayer
                         checkable:          true
                     },
-                    ToolStripAction {
-                        text:               _missionController.isROIActive ? qsTr("取消ROI") : qsTr("ROI")
-                        iconSource:         "/qmlimages/MapAddMission.svg"
-                        enabled:            !_missionController.onlyInsertTakeoffValid
-                        visible:            toolStrip._isMissionLayer && _planMasterController.controllerVehicle.roiModeSupported
-                        checkable:          !_missionController.isROIActive
-                        onCheckedChanged:   _addROIOnClick = checked
-                        onTriggered: {
-                            if (_missionController.isROIActive) {
-                                toolStrip.allAddClickBoolsOff()
-                                insertCancelROIAfterCurrent()
-                            }
-                        }
-                        property bool myAddROIOnClick: _addROIOnClick
-                        onMyAddROIOnClickChanged: checked = _addROIOnClick
-                    },
+                    // ToolStripAction {
+                    //     text:               _missionController.isROIActive ? qsTr("取消ROI") : qsTr("ROI")
+                    //     iconSource:         "/qmlimages/MapAddMission.svg"
+                    //     enabled:            !_missionController.onlyInsertTakeoffValid
+                    //     visible:            toolStrip._isMissionLayer && _planMasterController.controllerVehicle.roiModeSupported
+                    //     checkable:          !_missionController.isROIActive
+                    //     onCheckedChanged:   _addROIOnClick = checked
+                    //     onTriggered: {
+                    //         if (_missionController.isROIActive) {
+                    //             toolStrip.allAddClickBoolsOff()
+                    //             insertCancelROIAfterCurrent()
+                    //         }
+                    //     }
+                    //     property bool myAddROIOnClick: _addROIOnClick
+                    //     onMyAddROIOnClickChanged: checked = _addROIOnClick
+                    // },
                     ToolStripAction {
                         text:               _singleComplexItem ? _missionController.complexMissionItemNames[0] : qsTr("模式")
                         iconSource:         "/qmlimages/MapDrawShape.svg"

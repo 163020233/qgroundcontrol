@@ -34,6 +34,7 @@
         <file alias="LockClosed.svg">resources/LockClosed.svg</file>
         <file alias="LockOpen.svg">resources/LockOpen.svg</file>
         <file alias="notile.png">resources/notile.png</file>
+        <file alias="CogWheels.png">resources/CogWheels.png</file>
         <file alias="NoVideoBackground.jpg">resources/NoVideoBackground.jpg</file>
         <file alias="NoVideoBackground1.jpg">resources/NoVideoBackground1.jpg</file>
         <file alias="Pause.svg">resources/Pause.svg</file>
@@ -68,7 +69,7 @@
         <file alias="Gripper.svg">resources/Gripper.svg</file>
         <file alias="GripperRelease.svg">resources/GripperRelease.svg</file>
         <file alias="GripperGrab.svg">resources/GripperGrab.svg</file>
-        <file alias="qgroundcontrol.ico">resources/icons/qgroundcontrol.ico</file>
+<!--        <file alias="qgroundcontrol.ico">resources/icons/qgroundcontrol.ico</file>-->
     </qresource>
     <qresource prefix="/res/firmware">
         <file alias="3drradio.png">resources/firmware/3drradio.png</file>

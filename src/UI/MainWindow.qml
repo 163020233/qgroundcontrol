@@ -28,9 +28,9 @@ import QGroundControl.UTMSP
 ApplicationWindow {
     id:             mainWindow
     visible:        true
-
-    color: "transparent"  // 或者半透明背景
-
+    // color: Qt.rgba(0,0,0,1)
+    // color: "transparent"  // 或者半透明背景
+    // color: Qt.rgba(0.4, 0.4, 0.4, 0.1)
     property bool   _utmspSendActTrigger
     property bool   _utmspStartTelemetry
 
@@ -162,7 +162,7 @@ ApplicationWindow {
     }
 
     function showSettingsTool(settingsPage = "") {
-        showTool(qsTr("系统设置"), "qrc:/qml/QGroundControl/Controls/AppSettings.qml", "/res/QGCLogoWhite")
+        showTool(qsTr("系统设置"), "qrc:/qml/QGroundControl/Controls/AppSettings.qml", "/res/gear-black.svg")
         if (settingsPage !== "") {
             toolDrawerLoader.item.showSettingsPage(settingsPage)
         }
@@ -515,7 +515,9 @@ ApplicationWindow {
             anchors.right:  parent.right
             anchors.top:    parent.top
             height:         ScreenTools.toolbarHeight
-            color:          qgcPal.toolbarBackground
+            // color:          qgcPal.toolbarBackground
+            // color: Qt.rgba(0.2, 0.2, 0.2, 0.4)
+            color: Qt.rgba(0, 0, 0, 0) // 假设紫色半透明
 
             RowLayout {
                 id:                 toolDrawerToolbarLayout

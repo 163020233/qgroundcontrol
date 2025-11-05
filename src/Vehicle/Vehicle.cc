@@ -119,7 +119,11 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _terrainFactGroup             (this)
     , _terrainProtocolHandler       (new TerrainProtocolHandler(this, &_terrainFactGroup, this))
 {
-    connect(JoystickManager::instance(), &JoystickManager::activeJoystickChanged, this, &Vehicle::_loadJoystickSettings);
+
+    // “当 JoystickManager 的单例对象的 activeJoystickChanged 信号被触发时，
+    // 让当前 Vehicle 对象调用 _loadJoystickSettings() 槽函数。”
+    //注册一个监听器：每当摇杆管理器的活动摇杆发生变化时，我的 Vehicle 对象就会重新加载摇杆设置
+    connect(JoystickManager::instance(), &JoystickManager::activeJoystickChanged, this,&Vehicle::_loadJoystickSettings);
     connect(MultiVehicleManager::instance(), &MultiVehicleManager::activeVehicleChanged, this, &Vehicle::_activeVehicleChanged);
 
     qCDebug(VehicleLog) << "Link started with Mavlink " << (MAVLinkProtocol::instance()->getCurrentVersion() >= 200 ? "V2" : "V1");

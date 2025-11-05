@@ -14,7 +14,7 @@ import QGroundControl.Vehicle
 import QGroundControl.FlightMap
 
 QGCPopupDialog {
-    title: "Select one action"
+    title: "选择操作"
     property var  acceptFunction:     null
     buttons:  Dialog.Cancel
 
@@ -34,9 +34,9 @@ QGCPopupDialog {
     RowLayout {
         QGCColumnButton {
             id: grabButton
-            text:                   "Grab"
+            text:                   "抓取"
             iconSource:             "/res/GripperGrab.svg"
-            font.pointSize:         ScreenTools.defaultFontPointSize * 3.5
+            font.pointSize:         ScreenTools.defaultFontPointSize * 2.5
             backRadius:             width / 40
             heightFactor:           0.75
             Layout.preferredHeight: releaseButton.height
@@ -50,9 +50,9 @@ QGCPopupDialog {
 
         QGCColumnButton {
             id: releaseButton
-            text:                   "Release"
+            text:                   "释放"
             iconSource:             "/res/GripperRelease.svg"
-            font.pointSize:         ScreenTools.defaultFontPointSize * 3.5
+            font.pointSize:         ScreenTools.defaultFontPointSize * 2.5
             backRadius:             width / 40
             heightFactor:           0.75
             Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 27

@@ -23,8 +23,10 @@ Rectangle {
     id:     _root
     width:  parent.width
     height: ScreenTools.toolbarHeight*1.1
-    color:  qgcPal.toolbarBackground
-    // color: Qt.rgba(0, 0, 0, 0) // 假设紫色半透明
+    // color:  qgcPal.toolbarBackground
+    color: Qt.rgba(0, 0, 0, 0) // 顶部菜单栏透明
+    // color:"transparent"
+
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
     property color  _mainStatusBGColor: qgcPal.brandingPurple
@@ -45,14 +47,48 @@ Rectangle {
         visible:        qgcPal.globalTheme === QGCPalette.Light
     }
 
-    Rectangle {
+    // Rectangle {
+    //     anchors.fill: viewButtonRow
+    //     anchors.rightMargin: -20  // 向右延伸 20 像素
+    //     gradient: Gradient {
+    //         orientation: Gradient.Horizontal
+    //         GradientStop { position: 0;                                     color: _mainStatusBGColor}
+    //         GradientStop { position: currentButton.x + currentButton.width; color: _mainStatusBGColor }
+    //         GradientStop { position: 1;                                     color:  _mainStatusBGColor }
+    //     }
+    // }
+
+    Canvas {
+        id: trapezoidBackground
         anchors.fill: viewButtonRow
-        
-        gradient: Gradient {
-            orientation: Gradient.Horizontal
-            GradientStop { position: 0;                                     color: _mainStatusBGColor }
-            GradientStop { position: currentButton.x + currentButton.width; color: _mainStatusBGColor }
-            GradientStop { position: 1;                                     color: _root.color }
+        anchors.rightMargin: -20   // 向右延伸一点
+        onPaint: {
+            var ctx = getContext("2d")
+            ctx.clearRect(0, 0, width, height)
+
+            // 创建横向渐变
+            var gradient = ctx.createLinearGradient(0, 0, width, 0)
+            gradient.addColorStop(0, _mainStatusBGColor)
+            gradient.addColorStop(
+                Math.min(1, (currentButton.x + currentButton.width) / width),
+                _mainStatusBGColor
+            )
+            gradient.addColorStop(1, Qt.lighter(_mainStatusBGColor, 1.4))  // 右侧更亮一些
+            // 或者：gradient.addColorStop(1, "rgba(255,255,255,0.1)") // 渐隐
+            //         GradientStop { position: 0;                                     color: _mainStatusBGColor}
+            //         GradientStop { position: currentButton.x + currentButton.width; color: _mainStatusBGColor }
+            //         GradientStop { position: 1;                                     color:  _mainStatusBGColor }
+
+            ctx.fillStyle = gradient
+
+            // 绘制梯形：上边与下边不平行
+            ctx.beginPath()
+            ctx.moveTo(0, 0)              // 左上角
+            ctx.lineTo(width - 20, 0)     // 右上角（向左缩一点）
+            ctx.lineTo(width, height)     // 右下角（斜线边）
+            ctx.lineTo(0, height)         // 左下角
+            ctx.closePath()
+            ctx.fill()
         }
     }
 

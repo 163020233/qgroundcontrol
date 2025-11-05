@@ -33,7 +33,7 @@ class VehicleLinkManager : public QObject
     Q_PROPERTY(bool         communicationLostEnabled    READ communicationLostEnabled   WRITE setCommunicationLostEnabled   NOTIFY communicationLostEnabledChanged)
     Q_PROPERTY(bool         autoDisconnect              MEMBER _autoDisconnect                                              NOTIFY autoDisconnectChanged)
 
-    friend class Vehicle;
+    friend class Vehicle; // 友元类Vehicle可以访问这个VehicleLinkManager的所有私有成员private
     friend class VehicleLinkManagerTest;
 
 public:

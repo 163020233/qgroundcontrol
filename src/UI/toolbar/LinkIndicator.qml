@@ -25,6 +25,9 @@ Item {
     property bool showIndicator: false
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
+    //定义一个 QML 属性 _rgLinkNames：
+    // 如果有活动车辆对象 _activeVehicle，就把它的 vehicleLinkManager.linkNames 赋值给 _rgLinkNames；
+    // 如果没有活动车辆，就用一个空数组。”
     property var    _rgLinkNames:       _activeVehicle ? _activeVehicle.vehicleLinkManager.linkNames : [ ]
     property var    _rgLinkStatus:      _activeVehicle ? _activeVehicle.vehicleLinkManager.linkStatuses : [ ]
     property string _primaryLinkName:   _activeVehicle ? _activeVehicle.vehicleLinkManager.primaryLinkName : ""
