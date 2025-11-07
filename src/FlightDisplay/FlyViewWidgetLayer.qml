@@ -31,7 +31,7 @@ import QGroundControl.Vehicle
 // This is the ui overlay layer for the widgets/tools for Fly View
 Item {
     id: _root
-
+    visible: false
     property var    parentToolInsets
     property var    totalToolInsets:        _totalToolInsets
     property var    mapControl

@@ -55,6 +55,7 @@ ToolStripActionList {
         FlyViewAdditionalActionsButton { },
         // GuidedCenterMapButton {},
         GuidedActionGripper { },
+        GuideActionStartMission { },
         ToolStripAction {
             id: planViewAction
             //text: qsTr("计划航线")

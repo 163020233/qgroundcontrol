@@ -29,7 +29,7 @@ ApplicationWindow {
     id:             mainWindow
     visible:        true
     // color: Qt.rgba(0,0,0,1)
-    // color: "transparent"  // 或者半透明背景
+    color: "transparent"  // 或者半透明背景
     // color: Qt.rgba(0.4, 0.4, 0.4, 0.1)
     property bool   _utmspSendActTrigger
     property bool   _utmspStartTelemetry
@@ -118,7 +118,7 @@ ApplicationWindow {
     }
 
     function showPlanView() {
-        flyView.visible = false
+        flyView.visible = true
         planView.visible = true
     }
 

@@ -72,7 +72,7 @@ Rectangle {
             visible:            missionItem.isTakeoffItem && missionItem.wizardMode // Hack special case for takeoff item
 
             QGCLabel {
-                text:               qsTr("Move '%1' %2 to the %3 location. %4")
+                text:               qsTr("将『%1』%2 移动到『%3』位置。%4")
                 .arg(_controllerVehicle.vtol ? qsTr("T") : qsTr("T"))
                 .arg(_controllerVehicle.vtol ? qsTr("转换方向") : qsTr("起飞"))
                 .arg(_controllerVehicle.vtol ? qsTr("期望") : qsTr("爬升"))

@@ -16,7 +16,8 @@ import QGroundControl.Palette
 Rectangle {
     id:             _root
     height:         _currentItem ? (editorLoader.y + editorLoader.height + _innerMargin) : (topRowLayout.y + topRowLayout.height + _margin)
-    color:          _currentItem ? qgcPal.missionItemEditor : qgcPal.windowShade
+    // color:          _currentItem ? qgcPal.missionItemEditor : qgcPal.windowShade
+    color: Qt.rgba(0.2, 0.2, 0.2, 0.6)
     radius:         _radius
     opacity:        _currentItem ? 1.0 : 0.7
     border.width:   _readyForSave ? 0 : 2

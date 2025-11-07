@@ -22,7 +22,7 @@ import QGroundControl.Controllers
 Rectangle {
     id:     _root
     width:  parent.width
-    height: ScreenTools.toolbarHeight * 1.2
+    height: ScreenTools.toolbarHeight * 1.1
     // color:  qgcPal.toolbarBackground
     // color: "transparent"
     // color: Qt.rgba(0.2, 0.2, 0.2, 0.4)
@@ -57,10 +57,10 @@ Rectangle {
             text:           "<"
         }
 
-        QGCLabel {
-            text:           qsTr("退出")
-            font.pointSize: ScreenTools.largeFontPointSize
-        }
+        // QGCLabel {
+        //     text:           qsTr("退出")
+        //     font.pointSize: ScreenTools.largeFontPointSize
+        // }
     }
 
     QGCMouseArea {

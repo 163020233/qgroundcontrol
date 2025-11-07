@@ -21,8 +21,8 @@ import QGroundControl.AppSettings
 Rectangle {
     id:     settingsView
     // color:  qgcPal.window
-
-    color: Qt.rgba(0.2, 0.2, 0.2, 0.4)
+    color: "transparent"
+    // color: Qt.rgba(0.2, 0.2, 0.2, 0.4)
 
     z:      QGroundControl.zOrderTopMost
 
