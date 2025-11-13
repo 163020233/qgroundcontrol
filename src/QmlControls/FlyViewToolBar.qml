@@ -23,9 +23,12 @@ Rectangle {
     id:     _root
     width:  parent.width
     height: ScreenTools.toolbarHeight*1.1
-    // color:  qgcPal.toolbarBackground
-    color: Qt.rgba(0, 0, 0, 0) // 顶部菜单栏透明
-    // color:"transparent"
+    color:  qgcPal.toolbarBackground
+    // color: Qt.rgba(0, 0, 0, 0) // 顶部菜单栏透明
+
+
+    // 🔹 自定义属性，绑定 Plan 页的 MainStatusIndicator
+    // property var mainStatusLabelLogic: null
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
@@ -55,6 +58,36 @@ Rectangle {
     //         GradientStop { position: 0;                                     color: _mainStatusBGColor}
     //         GradientStop { position: currentButton.x + currentButton.width; color: _mainStatusBGColor }
     //         GradientStop { position: 1;                                     color:  _mainStatusBGColor }
+    //     }
+    // }
+
+
+    // Canvas {
+    //     id: planToolBarCanvas
+    //     anchors.fill: parent
+    //
+    //     onPaint: {
+    //         var ctx = getContext("2d")
+    //         ctx.clearRect(0, 0, width, height)
+    //
+    //         // 🔹 安全读取颜色
+    //         var color = planMainStatus
+    //             && planMainStatus._mainStatusBGColor
+    //             ? planMainStatus._mainStatusBGColor
+    //             : "#C0C0C0"  // 默认浅灰色
+    //
+    //         var gradient = ctx.createLinearGradient(0, 0, width, 0)
+    //         gradient.addColorStop(0, color)
+    //         gradient.addColorStop(1, Qt.lighter(color, 1.4))
+    //         ctx.fillStyle = gradient
+    //
+    //         ctx.beginPath()
+    //         ctx.moveTo(0, 0)
+    //         ctx.lineTo(width - 20, 0)
+    //         ctx.lineTo(width, height)
+    //         ctx.lineTo(0, height)
+    //         ctx.closePath()
+    //         ctx.fill()
     //     }
     // }
 

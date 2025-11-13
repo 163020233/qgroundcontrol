@@ -118,10 +118,11 @@ ApplicationWindow {
     }
 
     function showPlanView() {
-        flyView.visible = true
+        flyView.visible = false
         planView.visible = true
     }
-
+    //PlanView	PlanMasterController (flyView: false)	编辑任务
+    // FlyVie  PlanMasterController (flyView: true) 显示任务执行状态
     function showFlyView() {
         flyView.visible = true
         planView.visible = false

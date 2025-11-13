@@ -13,7 +13,7 @@ import QGroundControl.UTMSP
 // Toolbar for Plan View
 Item {
     width: missionStats.width + _margins
-
+    visible:false
     property var    planMasterController
 
     property var    _planMasterController:      planMasterController
@@ -123,113 +123,116 @@ Item {
             }
         }
 
-        GridLayout {
-            columns:                8
-            rowSpacing:             _rowSpacing
-            columnSpacing:          _labelToValueSpacing
+        // === 当前航点 ===
+        Rectangle {
+            radius: 6
+            color: Qt.rgba(0.2, 0.2, 0.2, 0.4)
+            Layout.fillHeight: true
+            Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 38
+            anchors.verticalCenter: parent.verticalCenter
+            // border.color: Qt.rgba(1, 1, 1, 0)
+            anchors.margins: 6
 
-            QGCLabel {
-                text:               qsTr("当前航点")
-                Layout.columnSpan:  8
-                font.pointSize:     ScreenTools.smallFontPointSize
-            }
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 6
+                spacing: 2
 
-            QGCLabel { text: qsTr("高度差:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _altDifferenceText
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _mediumValueWidth
-            }
+                QGCLabel {
+                    text: qsTr("当前航点")
+                    font.bold: true
+                    color: "white"
+                    font.pointSize: ScreenTools.defaultFontPointSize * 0.9
+                }
 
-            Item { width: 1; height: 1 }
+                RowLayout {
+                    spacing: ScreenTools.defaultFontPixelWidth
+                    QGCLabel { text: qsTr("高度差:"); color: "#DDDDDD"; font.pointSize: _dataFontSize }
+                    QGCLabel { text: _altDifferenceText; color: "white"; font.pointSize: _dataFontSize }
 
-            QGCLabel { text: qsTr("方位:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _azimuthText
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _smallValueWidth
-            }
+                    QGCLabel { text: qsTr("方位:"); color: "#DDDDDD"; font.pointSize: _dataFontSize }
+                    QGCLabel { text: _azimuthText; color: "white"; font.pointSize: _dataFontSize }
 
-            Item { width: 1; height: 1 }
+                    QGCLabel { text: qsTr("距离:"); color: "#DDDDDD"; font.pointSize: _dataFontSize }
+                    QGCLabel { text: _distanceText; color: "white"; font.pointSize: _dataFontSize }
+                }
 
-            QGCLabel { text: qsTr("距离前一个航点:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _distanceText
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _largeValueWidth
-            }
+                RowLayout {
+                    spacing: ScreenTools.defaultFontPixelWidth
+                    QGCLabel { text: qsTr("坡度:"); color: "#DDDDDD"; font.pointSize: _dataFontSize }
+                    QGCLabel { text: _gradientText; color: "white"; font.pointSize: _dataFontSize }
 
-            QGCLabel { text: qsTr("坡度:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _gradientText
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _mediumValueWidth
-            }
-
-            Item { width: 1; height: 1 }
-
-            QGCLabel { text: qsTr("航向:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _headingText
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _smallValueWidth
+                    QGCLabel { text: qsTr("航向:"); color: "#DDDDDD"; font.pointSize: _dataFontSize }
+                    QGCLabel { text: _headingText; color: "white"; font.pointSize: _dataFontSize }
+                }
             }
         }
 
-        GridLayout {
-            columns:                5
-            rowSpacing:             _rowSpacing
-            columnSpacing:          _labelToValueSpacing
+        // === 总任务 ===
+        Rectangle {
+            radius: 6
+            color: Qt.rgba(0.2, 0.2, 0.2, 0.4)
+            Layout.fillHeight: true
+            Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 32
+            // border.color: Qt.rgba(1, 1, 1, 0)
+            anchors.margins: 4
 
-            QGCLabel {
-                text:               qsTr("总距离")
-                Layout.columnSpan:  5
-                font.pointSize:     ScreenTools.smallFontPointSize
-            }
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 6
+                spacing: 2
 
-            QGCLabel { text: qsTr("距离:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _missionPlannedDistanceText
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _largeValueWidth
-            }
+                QGCLabel {
+                    text: qsTr("任务总览")
+                    font.bold: true
+                    color: "white"
+                    font.pointSize: ScreenTools.defaultFontPointSize * 0.9
+                }
 
-            Item { width: 1; height: 1 }
+                RowLayout {
+                    spacing: ScreenTools.defaultFontPixelWidth
+                    QGCLabel { text: qsTr("总距离:"); color: "#DDDDDD"; font.pointSize: _dataFontSize }
+                    QGCLabel { text: _missionPlannedDistanceText; color: "white"; font.pointSize: _dataFontSize }
 
-            QGCLabel { text: qsTr("最大遥测距离:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _missionMaxTelemetryText
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _largeValueWidth
-            }
+                    QGCLabel { text: qsTr("最大遥测:"); color: "#DDDDDD"; font.pointSize: _dataFontSize }
+                    QGCLabel { text: _missionMaxTelemetryText; color: "white"; font.pointSize: _dataFontSize }
 
-            QGCLabel { text: qsTr("时间:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   getMissionTime()
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _largeValueWidth
-            }
-        }
-
-        GridLayout {
-            columns:                3
-            rowSpacing:             _rowSpacing
-            columnSpacing:          _labelToValueSpacing
-            visible:                _batteryInfoAvailable
-
-            QGCLabel {
-                text:               qsTr("电池")
-                Layout.columnSpan:  3
-                font.pointSize:     ScreenTools.smallFontPointSize
-            }
-
-            QGCLabel { text: qsTr("电池要求:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _batteriesRequiredText
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _mediumValueWidth
+                    QGCLabel { text: qsTr("时间:"); color: "#DDDDDD"; font.pointSize: _dataFontSize }
+                    QGCLabel { text: getMissionTime(); color: "white"; font.pointSize: _dataFontSize }
+                }
             }
         }
+
+        // === 电池 ===
+        Rectangle {
+            radius: 6
+            color: Qt.rgba(0.2, 0.2, 0.2, 0.5)
+            Layout.fillHeight: true
+            Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 20
+            // border.color: Qt.rgba(1, 1, 1, 0)
+            visible: _batteryInfoAvailable
+            anchors.margins: 4
+
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.margins: 6
+                spacing: 2
+
+                QGCLabel {
+                    text: qsTr("电池状态")
+                    font.bold: true
+                    color: "white"
+                    font.pointSize: ScreenTools.defaultFontPointSize * 0.9
+                }
+
+                RowLayout {
+                    spacing: ScreenTools.defaultFontPixelWidth
+                    QGCLabel { text: qsTr("需求:"); color: "#DDDDDD"; font.pointSize: _dataFontSize }
+                    QGCLabel { text: _batteriesRequiredText; color: "white"; font.pointSize: _dataFontSize }
+                }
+            }
+        }
+        Item { Layout.fillWidth: true } // 填充剩余空间
     }
 }
 

@@ -43,6 +43,7 @@ qt_add_qml_module(FlightDisplayModule
         GuidedValueSlider.qml
         GuideUnlock.qml
         GuideLock.qml
+        GuideActionStartMission.qml
 #        GuidedsetHomeTitle.qml
 #        GuidedCenterMapButton.qml
         MultiRotorChecklist.qml

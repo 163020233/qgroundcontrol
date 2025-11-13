@@ -242,6 +242,19 @@ RowLayout {
                         }
                     }
                 }
+
+                // 断开连接按钮
+                QGCButton {
+                    text: qsTr("返回")
+                    enabled: true
+                    visible: planView.visible
+                    onClicked: {
+                        if (mainWindow.allowViewSwitch()) {
+                            mainWindow.showIndicatorDrawer()
+                            mainWindow.showFlyView()
+                        }
+                    }
+                }
             }
 
             SettingsGroupLayout {

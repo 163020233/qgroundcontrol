@@ -187,7 +187,9 @@ qt_add_qml_module(QGroundControlControlsModule
         MissionItemStatus.qml
         MissionSettingsEditor.qml
         PlanEditToolbar.qml
-        PlanToolBarIndicators.qml
+#        PlanToolBarIndicators.qml
+        PlanMainStatusIndicator.qml
+
         PlanView.qml
         RallyPointEditorHeader.qml
         RallyPointItemEditor.qml

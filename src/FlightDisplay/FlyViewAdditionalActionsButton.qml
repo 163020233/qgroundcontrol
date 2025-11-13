@@ -19,8 +19,9 @@ import QGroundControl.Controllers
 ToolStripAction {
     id:         action
     text:       qsTr("操作")
+    visible:false
     iconSource: "qrc:/qmlimages/HamburgerThin.svg"
-    visible:    _additionalActions.anyActionAvailable || _mavlinkActions.anyActionAvailable || _customActions.anyActionAvailable
+    // visible:    _additionalActions.anyActionAvailable || _mavlinkActions.anyActionAvailable || _customActions.anyActionAvailable
     enabled:    true
 
     property var _guidedController: globals.guidedControllerFlyView
