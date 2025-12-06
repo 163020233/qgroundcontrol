@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/qml">
+        <file alias="BoyingLinkSettings.qml">src/UI/AppSettings/BoyingLinkSettings.qml</file>
         <file alias="BluetoothSettings.qml">src/UI/AppSettings/BluetoothSettings.qml</file>
         <file alias="SerialSettings.qml">src/UI/AppSettings/SerialSettings.qml</file>
         <file alias="TcpSettings.qml">src/UI/AppSettings/TcpSettings.qml</file>

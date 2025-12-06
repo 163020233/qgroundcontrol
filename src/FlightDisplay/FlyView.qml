@@ -313,6 +313,7 @@ Item {
             pipView:    _pipView
         }
 
+        // 视频 ↔ 地图”切换的核心实现
         PipView {
             id:                     _pipView
             anchors.left:           parent.left

@@ -22,7 +22,6 @@ Rectangle {
     id:     settingsView
     // color:  qgcPal.window
     color: "transparent"
-    // color: Qt.rgba(0.2, 0.2, 0.2, 0.4)
 
     z:      QGroundControl.zOrderTopMost
 

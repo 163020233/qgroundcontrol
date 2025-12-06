@@ -606,11 +606,15 @@ Item {
         // }
         //-----------------------------------------------------------
         // Left tool strip
+
         Rectangle {
             id: collapsibleToolStrip
-            width: panelCollapsed ? 0 : 80   // 收起/展开宽度
+            width: panelCollapsed ? 0 : 50   // 收起/展开宽度
             height: parent.height
-            color: Qt.rgba(0.1, 0.1, 0.1, 0.7)
+            color: Qt.rgba(qgcPal.windowShade.r,
+                qgcPal.windowShade.g,
+                qgcPal.windowShade.b,
+                0.5)   // 0.5 表示透明度 50%
             radius: 6
             clip: false  // ✅ 关键，收起时裁剪内容
 
@@ -632,7 +636,7 @@ Item {
                 z: QGroundControl.zOrderWidgets
                 maxHeight: parent.height - toolStrip.y
 
-                x: collapsibleToolStrip.panelCollapsed ? -80 : 0  // 左滑隐藏
+                x: collapsibleToolStrip.panelCollapsed ? -50 : 0  // 左滑隐藏
                 opacity: collapsibleToolStrip.panelCollapsed ? 0 : 1
 
                 Behavior on x { NumberAnimation { duration: 300; easing.type: Easing.InOutQuad } }
@@ -650,6 +654,7 @@ Item {
                 property bool _isMissionLayer: _editingLayer == _layerMission
                 property bool _isUtmspLayer: _editingLayer == _layerUTMSP
 
+
                 ToolStripActionList {
                     id: toolStripActionList
                     model: [
@@ -660,7 +665,18 @@ Item {
                             showAlternateIcon: _planMasterController.dirty
                             iconSource: "/qmlimages/MapSync.svg"
                             alternateIconSource: "/qmlimages/MapSyncChanged.svg"
-                            dropPanelComponent: syncDropPanel
+                            // dropPanelComponent: syncDropPanel
+
+                            // 初始不显示 dropPanel
+                            property bool panelVisible: false
+                            // dropPanelComponent 绑定条件显示
+                            dropPanelComponent: panelVisible ? syncDropPanel : undefined
+
+                            onTriggered: {
+                                // 点击按钮切换下拉面板显示状态
+                                panelVisible = !panelVisible
+                            }
+
                         },
                         ToolStripAction {
                             text: qsTr("起飞")
@@ -750,14 +766,14 @@ Item {
         // ===========================
         Rectangle {
             id: toggleButtons
-            width: 20
-            height: 60
+            width: 15
+            height: 50
             radius: 4
-            color: Qt.rgba(0.2, 0.2, 0.2, 0.7)
+            color: Qt.rgba(0.2, 0.2, 0.2, 0.6)
             border.color: "#555"
             anchors.verticalCenter: collapsibleToolStrip.verticalCenter
             anchors.left: collapsibleToolStrip.right
-
+            z:10
             Text {
                 anchors.centerIn: parent
                 text: collapsibleToolStrip.panelCollapsed ? ">" : "<"

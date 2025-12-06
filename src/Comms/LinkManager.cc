@@ -53,6 +53,11 @@
 #include <QtCore/QTimer>
 #include <QtQml/qqml.h>
 
+// ★★★ 新增 BoyingLink 头文件 ★★★
+#include "BoyingLink.h"
+#include "BoyingLinkConfiguration.h"
+
+
 QGC_LOGGING_CATEGORY(LinkManagerLog, "qgc.comms.linkmanager")
 QGC_LOGGING_CATEGORY(LinkManagerVerboseLog, "qgc.comms.linkmanager:verbose")
 
@@ -99,7 +104,46 @@ void LinkManager::registerQmlTypes()
 void LinkManager::init()
 {
     _autoConnectSettings = SettingsManager::instance()->autoConnectSettings();
+    // =============================================================
+    // ★★★ Boying SDK 自动挂载逻辑 (仅 Android) ★★★
+    // =============================================================
+#ifdef Q_OS_ANDROID
+    const QString boyingLinkName = QStringLiteral("Boying SDK Bridge");
+    bool boyingExists = false;
 
+    // 1. 遍历检查是否已经存在 (防止热重载或逻辑错误导致重复)
+    for (int i = 0; i < _rgLinkConfigs.count(); i++) {
+        if (_rgLinkConfigs[i]->type() == LinkConfiguration::TypeBoying) {
+            boyingExists = true;
+            qCDebug(LinkManagerLog) << "Boying SDK Link already exists.";
+            break;
+        }
+    }
+
+    // 2. 不存在则创建
+    if (!boyingExists) {
+        qCDebug(LinkManagerLog) << "Auto-creating Boying SDK Link...";
+
+        // 创建配置对象
+        // 注意：这里使用 raw pointer 创建，addConfiguration 会接管它
+        BoyingLinkConfiguration* pConfig = new BoyingLinkConfiguration(boyingLinkName);
+
+        // 关键设置：
+        // Dynamic=true: 不保存到磁盘 (每次启动由代码创建)
+        // AutoConnect=true: 告诉 QGC 这个链路应该自动连接
+        pConfig->setDynamic(true);
+        pConfig->setAutoConnect(true);
+
+        // 3. 添加到 LinkManager 的管理列表
+        // addConfiguration 会把 raw pointer 包装成 SharedLinkConfigurationPtr
+        SharedLinkConfigurationPtr sharedConfig = addConfiguration(pConfig);
+
+        // 4. 立即触发连接
+        // 这会调用 BoyingLink::_connect() -> 启动 JNI 线程
+        createConnectedLink(sharedConfig);
+    }
+#endif
+    // =============================================================
     if (!qgcApp()->runningUnitTests()) {
         (void) connect(_portListTimer, &QTimer::timeout, this, &LinkManager::_updateAutoConnectLinks);
         _portListTimer->start(_autoconnectUpdateTimerMSecs); // timeout must be long enough to get past bootloader on second pass
@@ -144,6 +188,12 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr &config)
     case LinkConfiguration::TypeLogReplay:
         link = std::make_shared<LogReplayLink>(config);
         break;
+
+    case LinkConfiguration::TypeBoying:
+        // 使用 std::make_shared 创建实例
+        link = std::make_shared<BoyingLink>(config);
+        break;
+
 #ifdef QT_DEBUG
     case LinkConfiguration::TypeMock:
         link = std::make_shared<MockLink>(config);
@@ -350,6 +400,13 @@ void LinkManager::loadLinkConfigurationList()
                 link = new BluetoothConfiguration(name);
                 break;
 #endif
+            // =============================================================
+            // ★★★ 修改 4: 加载 Boying 配置 ★★★
+            // =============================================================
+            case LinkConfiguration::TypeBoying:
+                link = new BoyingLinkConfiguration(name);
+                break;
+            // =============================================================
             case LinkConfiguration::TypeLogReplay:
                 link = new LogReplayConfiguration(name);
                 break;
@@ -567,6 +624,7 @@ QStringList LinkManager::linkTypeStrings() const
     list += tr("AirLink");
 #endif
     list += tr("Log Replay");
+    list += tr("BoyingLink");
 
     if (list.size() != static_cast<int>(LinkConfiguration::TypeLast)) {
         qCWarning(LinkManagerLog) << "Internal error";

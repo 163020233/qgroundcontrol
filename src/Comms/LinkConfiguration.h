@@ -89,6 +89,7 @@ public:
         AirLink,
 #endif
         TypeLogReplay,
+        TypeBoying,
         TypeLast        // Last type value (type >= TypeLast == invalid)
     };
     Q_ENUM(LinkType)

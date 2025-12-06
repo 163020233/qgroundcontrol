@@ -13,7 +13,9 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_
 
 CPMAddPackage(
     NAME libevents
-    GITHUB_REPOSITORY mavlink/libevents
+    # GITHUB_REPOSITORY mavlink/libevents
+
+    SOURCE_DIR "D:/work/temp/libevents"
     GIT_TAG main
     SOURCE_SUBDIR libs/cpp
 )
