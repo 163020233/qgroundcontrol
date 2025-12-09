@@ -1,208 +1,211 @@
+/****************************************************************************
+ *   BoyingLink.cc
+ *   Implementation of Boying SDK Link for QGroundControl (Hybrid Java Architecture)
+ ****************************************************************************/
+
 #include "BoyingLink.h"
 #include <QDebug>
-#include <QFile>
+#include <QDateTime>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-// QGC 自带 MAVLink 库
+
+// MAVLink 解析库
 #include <mavlink.h>
 
 #ifdef Q_OS_ANDROID
 #include <QJniEnvironment>
 #include <QJniObject>
+#include <jni.h>
 #endif
 
 // =========================================================
-// BoyingWorker 实现
+// JNI 全局变量与回调实现
+// =========================================================
+
+#ifdef Q_OS_ANDROID
+// 全局 Worker 指针，用于 JNI 回调
+static BoyingWorker* s_worker = nullptr;
+static QMutex s_sdkMutex;
+static bool s_isSdkInitialized = false;
+
+extern "C" {
+    // 对应 Java 类: org.qjkj.gcs.QGCConnectionManager
+    // 方法: nativeOnDataReceived(byte[] data, int length)
+    JNIEXPORT void JNICALL
+    Java_org_qjkj_gcs_QGCConnectionManager_nativeOnDataReceived(JNIEnv *env, jclass, jbyteArray data, jint len) {
+        if (!s_worker) return;
+
+        // 1. 将 Java byte[] 拷贝到 C++ QByteArray
+        jbyte* buf = env->GetByteArrayElements(data, NULL);
+        QByteArray rawData((char*)buf, len);
+        env->ReleaseByteArrayElements(data, buf, JNI_ABORT);
+
+        // 2. 线程安全地交给 Worker 处理
+        // 使用 invokeMethod 将执行权切回 Worker 线程
+        QMetaObject::invokeMethod(s_worker, "onJavaDataReceived", Qt::QueuedConnection, Q_ARG(QByteArray, rawData));
+    }
+}
+#endif
+
+// =========================================================
+// BoyingWorker 实现 (跑在子线程)
 // =========================================================
 
 void BoyingWorker::init()
 {
+#ifdef Q_OS_ANDROID
+    QMutexLocker locker(&s_sdkMutex);
+
     // 防止重复初始化
-    if (_udpSocket != nullptr) {
-        qDebug() << "BoyingWorker: Already initialized, skipping.";
+    if (s_isSdkInitialized) {
+        qDebug() << "Second instance detected! Aborting.";
         return;
     }
 
-#ifdef Q_OS_ANDROID
-    qDebug() << "BoyingWorker: Initializing UDP Mode...";
+    qDebug() << "BoyingWorker: Initializing Hybrid Link...";
+    s_worker = this; // 注册单例
 
-            // 1. JNI 初始化 (保持不变)
+    // 1. 初始化 Boying SDK (翻译官)
     _javaSdk = QJniObject("boying/sdk/BoyingSdk");
     if (!_javaSdk.isValid()) {
-        qCritical() << "❌ Java class not found!";
+        qCritical() << "BoyingSdk class not found!";
         return;
     }
-    _javaSdk.callMethod<jint>("InitSDKJava", "()I");
+
+    jint retInit = _javaSdk.callMethod<jint>("InitSDKJava", "()I");
+    if (retInit != 0) {
+        qCritical() << "SDK Init failed:" << retInit;
+        return;
+    }
     _javaSdk.callMethod<jint>("StartSDKJava", "()I");
 
-            // 2. 初始化 UDP 网络
-    if (_initUdpSocket()) {
-        qDebug() << "UDP Socket Bound Successfully!";
-    } else {
-        qCritical() << "❌ UDP Bind Failed!";
+    // 2. 初始化 硬件连接 (通过 QGCConnectionManager)
+    qDebug() << " Attempting to call QGCConnectionManager.initConnection()...";
+
+    QJniObject::callStaticMethod<void>(
+        "org/qjkj/gcs/QGCConnectionManager", // 类名
+        "initConnection",                    // 方法名
+        "()V"                                // 签名
+    );
+
+    // ★★★ 新增：JNI 异常检查 (照妖镜) ★★★
+    QJniEnvironment env;
+    if (env.checkAndClearExceptions()) {
+        qCritical() << "JNI CALL FAILED! ";
+        qCritical() << "Possible reasons:";
+        qCritical() << "1. Java file path is wrong (must match package structure)";
+        qCritical() << "2. Class name or Method name typo";
+        return; // 不要设置 s_isSdkInitialized = true
     }
+
+    s_isSdkInitialized = true;
+    qDebug() << "✅ Hybrid Link Initialized!";
 #endif
 }
 
-bool BoyingWorker::_initUdpSocket()
-{
-    _udpSocket = new QUdpSocket(this);
-
-            // 1. 设置发送目标 (系统服务在监听 14552)
-    _targetIp = QHostAddress::Broadcast; // 多了个 l
-    _targetPort = 14552;
-
-            // 2. 绑定本地端口 (改为 14550，最有可能被转发服务认可的端口)
-    quint16 localPort = 14550;
-
-    qDebug() << "BoyingLink: Binding UDP to" << localPort << "Targeting:" << _targetPort;
-
-            // 3. 尝试绑定
-            // ShareAddress 和 ReuseAddressHint 很重要，防止端口占用冲突
-    if (_udpSocket->bind(QHostAddress::Any, localPort, QAbstractSocket::ShareAddress | QAbstractSocket::ReuseAddressHint)) {
-
-        connect(_udpSocket, &QUdpSocket::readyRead, this, &BoyingWorker::_onUdpReadyRead);
-
-                // =========================================================
-                // ★★★ 修正部分开始 ★★★
-                // =========================================================
-
-        // 1. 必须先创建定时器对象！(你漏了这句)
-        _keepAliveTimer = new QTimer(this);
-
-                // 2. 连接定时器信号
-        connect(_keepAliveTimer, &QTimer::timeout, this, [=](){
-            if (_udpSocket) {
-                // --- 构造标准 MAVLink 心跳包 ---
-                mavlink_message_t msg;
-                uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
-
-                        // ID=255(GCS), Type=GCS
-                mavlink_msg_heartbeat_pack(255, 0, &msg,
-                                           MAV_TYPE_GCS,
-                                           MAV_AUTOPILOT_INVALID,
-                                           MAV_MODE_MANUAL_ARMED,
-                                           0, MAV_STATE_ACTIVE);
-
-                uint16_t len = mavlink_msg_to_send_buffer(buffer, &msg);
-                QByteArray heartbeat((char*)buffer, len);
-
-                        // --- 发送给 14552 ---
-                        // qDebug() << "Sending Heartbeat..."; // 调试时可打开
-                _udpSocket->writeDatagram(heartbeat, _targetIp, _targetPort);
-
-                qint64 bytesSent = _udpSocket->writeDatagram(heartbeat, _targetIp, _targetPort);
-
-                if (bytesSent == -1) {
-                    qCritical() << "TX Fail:" << _udpSocket->errorString();
-                } else {
-                    // 每秒打印一次，确认心跳正在跳动
-                    qDebug() << "TX Heartbeat ->" << _targetIp.toString() << ":" << _targetPort;
-                }
-            }
-        });
-
-                // 3. 必须启动定时器！(你也漏了这句)
-        _keepAliveTimer->start(1000); // 1000毫秒 = 1秒发一次
-
-        // =========================================================
-        // ★★★ 修正部分结束 ★★★
-        // =========================================================
-
-        return true;
-    }
-
-    qCritical() << "UDP Error:" << _udpSocket->errorString();
-    return false;
-}
-// ★★★ 接收逻辑：UDP -> SDK -> QGC ★★★
-void BoyingWorker::_onUdpReadyRead()
+// ★★★ 接收逻辑：Java硬件层 -> JNI -> 这里 -> SDK解析 -> MAVLink ★★★
+void BoyingWorker::onJavaDataReceived(const QByteArray& rawData)
 {
 #ifdef Q_OS_ANDROID
-    while (_udpSocket->hasPendingDatagrams()) {
-        QByteArray datagram;
-        datagram.resize(int(_udpSocket->pendingDatagramSize()));
+    if (rawData.isEmpty()) return;
 
-        QHostAddress sender;
-        quint16 senderPort;
+    // 1. 喂给 Boying SDK 进行解析 (GetJsonByByteJava)
+    QJniEnvironment env;
+    jbyteArray jData = env->NewByteArray(rawData.size());
+    env->SetByteArrayRegion(jData, 0, rawData.size(), reinterpret_cast<const  jbyte*>(rawData.data()));
 
-        // 读取 UDP 数据包
-        _udpSocket->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
+    // 调用 JNI
+    QJniObject jJsonStr = _javaSdk.callObjectMethod(
+        "GetJsonByByteJava",
+        "([BI)Ljava/lang/String;",
+        jData,
+        (jint)rawData.size()
+    );
+    env->DeleteLocalRef(jData);
 
-        // 如果需要过滤来源 IP，可以在这里加判断
-        // if (sender != _targetIp) continue;
-
-                // --- 下面的逻辑和串口版完全一样 ---
-                // 1. 喂给 JNI
-        QJniEnvironment env;
-        jbyteArray jData = env->NewByteArray(datagram.size());
-        env->SetByteArrayRegion(jData, 0, datagram.size(), reinterpret_cast<jbyte*>(datagram.data()));
-
-        QJniObject jJsonArray = _javaSdk.callObjectMethod(
-            "onReceive",
-            "([BI)Lcom/alibaba/fastjson/JSONArray;",
-            jData,
-            (jint)datagram.size()
-            );
-        env->DeleteLocalRef(jData);
-
-                // 2. 处理 JSON
-        if (jJsonArray.isValid()) {
-            QString jsonStr = jJsonArray.toString();
-            if (!jsonStr.isEmpty()) {
-                _processJsonData(jsonStr); // 这个函数和之前一样，不用改
-            }
+    // 2. 处理解析结果
+    if (jJsonStr.isValid()) {
+        QString jsonString = jJsonStr.toString();
+        if (!jsonString.isEmpty()) {
+            // qDebug() << "RX JSON:" << jsonString; // 调试可开
+            _processJsonData(jsonString);
         }
     }
 #endif
 }
 
-// 将 SDK 的 JSON 转成 MAVLink
+// ★★★ 协议翻译核心: JSON -> MAVLink ★★★
 void BoyingWorker::_processJsonData(const QString& jsonStr)
 {
-    // 这里你需要根据厂商具体的 JSON 格式来写
-    // 举例：[{"byType":0, "custom_mode":2}, {"byType":9, "roll":...}]
     QJsonDocument doc = QJsonDocument::fromJson(jsonStr.toUtf8());
+    if (!doc.isObject()) return;
 
-    if (doc.isArray()) {
-        QJsonArray arr = doc.array();
-        for (const auto& val : arr) {
-            QJsonObject obj = val.toObject();
-            int type = obj.value("byType").toInt();
+    QJsonObject root = doc.object();
+    if (!root.contains("msg")) return;
 
-            mavlink_message_t msg;
-            uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
-            bool send = false;
+    QJsonArray msgArray = root.value("msg").toArray();
 
-            // --- 映射逻辑 ---
-            if (type == 0) { // 心跳
-                int customMode = obj.value("custom_mode").toInt();
-                // 查表转换...
-                uint32_t px4Mode = 0;
-                if(customMode == 2) px4Mode = 196608;
-                // ...
-                mavlink_msg_heartbeat_pack(1, 1, &msg, 2, 12, 1, px4Mode, 4);
-                send = true;
-            }
-            else if (type == 9) { // 姿态
-                // ...
-                send = true;
-            }
+    for (const auto& val : msgArray) {
+        QJsonObject obj = val.toObject();
+        int type = obj.value("byType").toInt();
 
-            if (send) {
-                uint16_t len = mavlink_msg_to_send_buffer(buffer, &msg);
-                emit dataReceived(QByteArray((char*)buffer, len));
-            }
+        mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        bool send = false;
+
+        // --- 1. 心跳包 (Type 0) ---
+        if (type == 0) {
+            int customMode = obj.value("custom_mode").toInt();
+            uint32_t px4Mode = 0; // Manual
+            if (customMode == 2) px4Mode = 196608; // AltCtl
+            if (customMode == 3) px4Mode = 262144; // PosCtl
+            if (customMode == 4) px4Mode = 67108864; // Auto
+
+            mavlink_msg_heartbeat_pack(1, 1, &msg,
+                MAV_TYPE_QUADROTOR, MAV_AUTOPILOT_PX4,
+                MAV_MODE_FLAG_CUSTOM_MODE_ENABLED, px4Mode, MAV_STATE_ACTIVE);
+            send = true;
+        }
+
+        // --- 2. 姿态 (Type 9) ---
+        else if (type == 9) {
+            float roll = obj.value("roll").toDouble();
+            float pitch = obj.value("pitch").toDouble();
+            float yaw = obj.value("yaw").toDouble();
+            mavlink_msg_attitude_pack(1, 1, &msg, 0, roll, pitch, yaw, 0, 0, 0);
+            send = true;
+        }
+
+        // --- 3. GPS (Type 3) ---
+        else if (type == 3) {
+            int lat = obj.value("lat").toInt();
+            int lon = obj.value("lon").toInt();
+            int alt = obj.value("alt").toInt();
+            int fix = obj.value("fixType").toInt();
+            int sat = obj.value("count").toInt();
+
+            // 使用强制类型转换适配 v2.0
+            mavlink_msg_gps_raw_int_pack(
+                1, 1, &msg, 0, (uint8_t)fix, (int32_t)lat, (int32_t)lon, (int32_t)alt,
+                0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, (uint8_t)sat,
+                0,0,0,0,0,0 // v2.0 新增字段置0
+            );
+            send = true;
+        }
+
+        if (send) {
+            uint16_t len = mavlink_msg_to_send_buffer(buffer, &msg);
+            emit dataReceived(QByteArray((char*)buffer, len));
         }
     }
 }
 
-// ★★★ 发送逻辑：QGC -> SDK -> 硬件 ★★★
+// ★★★ 发送逻辑: QGC -> JSON -> SDK -> Java硬件层 ★★★
 void BoyingWorker::sendData(const QByteArray bytes)
 {
 #ifdef Q_OS_ANDROID
-    if (!_udpSocket) return;
+    if (!_javaSdk.isValid()) return;
 
     mavlink_message_t msg;
     mavlink_status_t status;
@@ -219,57 +222,63 @@ void BoyingWorker::sendData(const QByteArray bytes)
                     mavlink_msg_command_long_decode(&msg, &cmd);
 
                     if (cmd.command == MAV_CMD_NAV_TAKEOFF) {
-                        jsonCmd = "{\"byCommand\":\"TakeOff\", \"alt\":5.0}";
+                        jsonCmd = QString("{\"byCommand\":\"TakeOff\", \"alt\":%1}").arg(cmd.param7 > 0 ? cmd.param7 : 5.0);
                     }
                     else if (cmd.command == MAV_CMD_COMPONENT_ARM_DISARM) {
-                        jsonCmd = (cmd.param1 == 1) ? "{\"byCommand\":\"DisArm\"}" : "{\"byCommand\":\"Arm\"}";
+                        jsonCmd = QString("{\"byCommand\":\"%1\"}").arg(cmd.param1 == 1 ? "DisArm" : "Arm"); // 注意厂商可能反逻辑
                     }
                     break;
                 }
             }
 
+            // 2. JSON -> SDK编码 -> Java发送
             if (!jsonCmd.isEmpty()) {
-                // 调用 JNI 编码
                 QJniObject jStr = QJniObject::fromString(jsonCmd);
+
+                // 编码
                 QJniObject jBytesObj = _javaSdk.callObjectMethod(
                     "GetByteByJsonJava",
                     "(Ljava/lang/String;)[B",
                     jStr.object<jstring>()
-                    );
+                );
 
                 if (jBytesObj.isValid()) {
                     jbyteArray jBytes = jBytesObj.object<jbyteArray>();
                     QJniEnvironment env;
                     jsize len = env->GetArrayLength(jBytes);
-                    QByteArray finalBytes;
-                    finalBytes.resize(len);
-                    env->GetByteArrayRegion(jBytes, 0, len, reinterpret_cast<jbyte*>(finalBytes.data()));
 
-                    // ★★★ 核心区别：写入 UDP 而不是串口 ★★★
-                    _udpSocket->writeDatagram(finalBytes, _targetIp, _targetPort);
+                    // 这里的技巧：不需要转回 C++ QByteArray 再转回 Java
+                    // 直接把 jByteArray 传给 QGCConnectionManager
+
+                    QJniObject::callStaticMethod<void>(
+                        "org/qjkj/gcs/QGCConnectionManager",
+                        "sendData",
+                        "([B)V",
+                        jBytes // 直接传
+                    );
                 }
             }
-#endif
         }
     }
+#endif
 }
 
 void BoyingWorker::cleanup()
 {
-    if (_udpSocket) {
-        _udpSocket->close();
-        delete _udpSocket;
-        _udpSocket = nullptr;
-    }
 #ifdef Q_OS_ANDROID
-    if (_javaSdk.isValid()) {
-        _javaSdk.callMethod<jint>("StopSDKJava", "()I");
+    QMutexLocker locker(&s_sdkMutex);
+    if (s_isSdkInitialized) {
+        if (_javaSdk.isValid()) {
+            _javaSdk.callMethod<jint>("StopSDKJava", "()I");
+        }
+        s_isSdkInitialized = false;
+        s_worker = nullptr; // 清空指针
     }
 #endif
 }
 
 // =========================================================
-// BoyingLink (主线程) - 这部分基本不用动
+// BoyingLink (主线程部分，保持不变)
 // =========================================================
 
 BoyingLink::BoyingLink(SharedLinkConfigurationPtr& config)
@@ -303,7 +312,6 @@ bool BoyingLink::_connect(void)
     connect(this, &BoyingLink::_workerCleanup, _worker, &BoyingWorker::cleanup);
     connect(_worker, &BoyingWorker::dataReceived, this, &BoyingLink::_onWorkerData);
 
-    // 线程清理
     connect(_thread, &QThread::finished, _worker, &QObject::deleteLater);
     connect(_thread, &QThread::finished, _thread, &QObject::deleteLater);
 

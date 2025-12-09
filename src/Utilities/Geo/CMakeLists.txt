@@ -12,7 +12,7 @@ CPMAddPackage(
     NAME geographiclib
     VERSION 2.5
     GITHUB_REPOSITORY geographiclib/geographiclib
-#    SOURCE_DIR "D:/work/temp/geographiclib-2.5/geographiclib-2.5"
+    # SOURCE_DIR "D:/work/temp/geographiclib-2.5/geographiclib-2.5"
     GIT_TAG r2.5
     OPTIONS
         "BUILD_BOTH_LIBS OFF"

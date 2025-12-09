@@ -88,7 +88,7 @@ PX4FirmwarePlugin::PX4FirmwarePlugin()
         { _posCtlFlightMode     , PX4CustomMode::POSCTL_POSCTL     , true ,  false},
         { _orbitFlightMode      , PX4CustomMode::POSCTL_ORBIT      , true,  true },
         { _holdFlightMode       , PX4CustomMode::AUTO_LOITER       , true ,  true },
-        { _missionFlightMode    , PX4CustomMode::AUTO_MISSION      , false ,  true },
+        { _missionFlightMode    , PX4CustomMode::AUTO_MISSION      , true ,  true },
         { _rtlFlightMode        , PX4CustomMode::AUTO_RTL          , true ,  true },
         { _landingFlightMode    , PX4CustomMode::AUTO_LAND         , false,  true },
         { _preclandFlightMode   , PX4CustomMode::AUTO_PRECLAND     , false ,  true },

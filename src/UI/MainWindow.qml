@@ -163,6 +163,8 @@ ApplicationWindow {
     }
 
     function showSettingsTool(settingsPage = "") {
+        flyView.visible = true
+        planView.visible = false
         showTool(qsTr("系统设置"), "qrc:/qml/QGroundControl/Controls/AppSettings.qml", "/res/gear-black.svg")
         if (settingsPage !== "") {
             toolDrawerLoader.item.showSettingsPage(settingsPage)
@@ -201,7 +203,7 @@ ApplicationWindow {
     }
 
     // Check for things which should prevent the app from closing
-    //  Returns true if it is OK to close
+    //  Returns true if it is OK to
     readonly property int _skipUnsavedMissionCheckMask: 0x01
     readonly property int _skipPendingParameterWritesCheckMask: 0x02
     readonly property int _skipActiveConnectionsCheckMask: 0x04
@@ -287,6 +289,7 @@ ApplicationWindow {
     //
     // }
 
+    // 默认初始界面为fly模式
     PlanView {
         id:             planView
         anchors.fill:   parent
@@ -493,16 +496,30 @@ ApplicationWindow {
         }
     }
 
+    // 系统设置背景页面
     Rectangle {
         id:             toolDrawer
-        anchors.fill:   parent
-        visible:        false
-        color:          qgcPal.window
+        // anchors.fill:   parent
+        // visible:        false
+        // color:          qgcPal.window
+        // color: Qt.rgba(0, 0, 0, 0.8) // 假设紫色半透明
+
+        width: parent.width * 0.5       // 半屏宽度
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right     // 贴右边
+        visible: false
+        color: Qt.rgba(qgcPal.windowShade.r,qgcPal.windowShade.g,qgcPal.windowShade.b,0.9)
 
         property var backIcon
         property string toolTitle
         property alias toolSource:  toolDrawerLoader.source
         property var toolIcon
+
+        x: toolDrawer.visible ? parent.width - width : parent.width
+        Behavior on x {
+            NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
+        }
 
         onVisibleChanged: {
             if (!toolDrawer.visible) {

@@ -109,38 +109,36 @@ void LinkManager::init()
     // =============================================================
 #ifdef Q_OS_ANDROID
     const QString boyingLinkName = QStringLiteral("Boying SDK Bridge");
-    bool boyingExists = false;
+    SharedLinkConfigurationPtr boyingConfig = nullptr;
 
-    // 1. 遍历检查是否已经存在 (防止热重载或逻辑错误导致重复)
+    // 1. 查找现有的配置
     for (int i = 0; i < _rgLinkConfigs.count(); i++) {
         if (_rgLinkConfigs[i]->type() == LinkConfiguration::TypeBoying) {
-            boyingExists = true;
-            qCDebug(LinkManagerLog) << "Boying SDK Link already exists.";
+            boyingConfig = _rgLinkConfigs[i];
+            qCDebug(LinkManagerLog) << "Found existing Boying SDK Config";
             break;
         }
     }
 
-    // 2. 不存在则创建
-    if (!boyingExists) {
-        qCDebug(LinkManagerLog) << "Auto-creating Boying SDK Link...";
-
-        // 创建配置对象
-        // 注意：这里使用 raw pointer 创建，addConfiguration 会接管它
+    // 2. 如果没找到，创建一个新的
+    if (!boyingConfig) {
+        qCDebug(LinkManagerLog) << "Creating new Boying SDK Config";
         BoyingLinkConfiguration* pConfig = new BoyingLinkConfiguration(boyingLinkName);
+        pConfig->setDynamic(true);      // 不保存到磁盘 (建议)
+        pConfig->setAutoConnect(true);  // 标记为自动连接
+        boyingConfig = addConfiguration(pConfig);
+    }
 
-        // 关键设置：
-        // Dynamic=true: 不保存到磁盘 (每次启动由代码创建)
-        // AutoConnect=true: 告诉 QGC 这个链路应该自动连接
-        pConfig->setDynamic(true);
-        pConfig->setAutoConnect(true);
+    // 3. ★★★ 关键优化：无论新旧，只要没连上，就强制连接 ★★★
+    // 检查是否已经连接
+    bool alreadyConnected = false;
+    if (boyingConfig->link()) {
+        alreadyConnected = boyingConfig->link()->isConnected();
+    }
 
-        // 3. 添加到 LinkManager 的管理列表
-        // addConfiguration 会把 raw pointer 包装成 SharedLinkConfigurationPtr
-        SharedLinkConfigurationPtr sharedConfig = addConfiguration(pConfig);
-
-        // 4. 立即触发连接
-        // 这会调用 BoyingLink::_connect() -> 启动 JNI 线程
-        createConnectedLink(sharedConfig);
+    if (!alreadyConnected) {
+        qCDebug(LinkManagerLog) << "Force connecting Boying SDK Link...";
+        createConnectedLink(boyingConfig);
     }
 #endif
     // =============================================================
@@ -338,7 +336,9 @@ void LinkManager::saveLinkConfigurationList()
         if (linkConfig->isDynamic()) {
             continue;
         }
-
+        if (linkConfig->type() == LinkConfiguration::TypeBoying) {
+            continue;
+        }
         const QString root = LinkConfiguration::settingsRoot() + QStringLiteral("/Link%1").arg(trueCount++);
         settings.setValue(root + "/name", linkConfig->name());
         settings.setValue(root + "/type", linkConfig->type());
