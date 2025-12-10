@@ -63,10 +63,9 @@ LinkConfiguration::LinkType BoyingLinkConfiguration::type(void) const
 }
 
 // 7. 返回设置页面的 QML 文件名
-QString BoyingLinkConfiguration::settingsURL(void) const
+QString BoyingLinkConfiguration::settingsURL() const
 {
-    qDebug() << " QGC 正在请求 Boying 设置页面 URL"; // 加这一行
-    return "BoyingLinkSettings.qml";
+    return QStringLiteral("qrc:/qml/BoyingSettings.qml");
 }
 
 // 8. 返回设置页面在左侧列表中显示的标题

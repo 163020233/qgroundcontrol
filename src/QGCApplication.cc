@@ -71,6 +71,8 @@
 #include "Vehicle.h"
 #include "VehicleComponent.h"
 #include "VideoManager.h"
+#include "BoyingLinkConfiguration.h"
+
 
 #ifndef QGC_DISABLE_MAVLINK_INSPECTOR
 #include "MAVLinkInspectorController.h"
@@ -363,6 +365,7 @@ void QGCApplication::init()
     // 必须在注册之后再加载 QML
     engine.load(QUrl(QStringLiteral("qrc:/qml/QGroundControl/MainWindow/MainWindow.qml")));
     // 加载你的主 QML 文件，这里可以是 TelemetryValuesBar.qml 的路径
+    qmlRegisterType<BoyingLinkConfiguration>("QGroundControl", 1, 0, "BoyingLinkConfiguration");
 
     qDebug() << "posMgr instance:" << posMgr;
 
