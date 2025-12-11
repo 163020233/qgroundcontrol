@@ -137,6 +137,8 @@ void BoyingWorker::onJavaDataReceived(const QByteArray& rawData)
 {
 #ifdef Q_OS_ANDROID
     if (rawData.isEmpty()) return;
+    // 打印长度，如果是少量数据可以打印 toHex()
+    qDebug() << "🔵 [RX RAW] Len:" << rawData.size() << "Bytes:" << rawData.toHex();
 
     QJniEnvironment env;
     jbyteArray jData = env->NewByteArray(rawData.size());
@@ -152,15 +154,26 @@ void BoyingWorker::onJavaDataReceived(const QByteArray& rawData)
 
     if (jJsonStr.isValid()) {
         QString jsonString = jJsonStr.toString();
+
         if (!jsonString.isEmpty()) {
+            // =========================================================
+            // ★★★ 打印点 2: 确认 SDK 解析成功 (业务数据检查) ★★★
+            // =========================================================
+            qDebug() << "[RX JSON]" << jsonString;
+
             _processJsonData(jsonString);
+        } else {
+            qWarning() << "[RX Error] SDK returned Empty String (Parse Failed?)";
         }
+    } else {
+        qCritical() << "RX Error] JNI Call GetJsonByByteJava returned NULL";
     }
 #endif
 }
 
 void BoyingWorker::_processJsonData(const QString& jsonStr)
 {
+
     QJsonDocument doc = QJsonDocument::fromJson(jsonStr.toUtf8());
     if (!doc.isObject()) return;
 
@@ -459,23 +472,10 @@ void BoyingWorker::sendData(const QByteArray bytes)
                 if (jBytesObj.isValid()) {
                     jbyteArray jBytes = jBytesObj.object<jbyteArray>();
 
-                    // ★★★ 增加这段检查日志 ★★★
-                    QJniEnvironment env;
-                    jsize len = env->GetArrayLength(jBytes);
-                    if (len > 0) {
-                        qDebug() << "🟢 [C++] SDK Encoded Bytes Length:" << len;
-
-
                     QJniObject::callStaticMethod<void>(
                         "org/qjkj/gcs/QGCConnectionManager",
                         "sendData", "([B)V", jBytes
                     );
-                } else {
-                        qCritical() << "🔴 [C++] SDK returned EMPTY bytes! JSON format might be wrong.";
-                    }
-                } else {
-                    qCritical() << "🔴 [C++] JNI Call GetByteByJsonJava Failed!";
-                }
                     success = true;
                 }
 
@@ -489,7 +489,7 @@ void BoyingWorker::sendData(const QByteArray bytes)
                         255, 0, msg.sysid, msg.compid);
                      uint16_t ackLen = mavlink_msg_to_send_buffer(ackBuf, &ackMsg);
                      emit dataReceived(QByteArray((char*)ackBuf, ackLen));
-                     qDebug() << "✅ ACK Sent for Command:" << cmd_ack_id;
+                     qDebug() << " ACK Sent for Command:" << cmd_ack_id;
                 }
             }
         }
