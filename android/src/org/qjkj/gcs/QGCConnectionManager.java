@@ -1,118 +1,116 @@
 package org.qjkj.gcs;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import androidx.annotation.NonNull; // 需要引入这个
 
-// 引入搬运过来的 Util 类
+// 引入 Boying
+import boying.sdk.BoyingSdk;
+
+// 引入 硬件驱动
 import com.test.sdk.rc.MKUtil;
 import com.test.sdk.rc.SkydroidRcConnectUtil;
 import com.test.sdk.rc.SkydroidRcSdkUtil;
-// 引入 Qt 的原生辅助类来获取 Context
-import org.qtproject.qt.android.QtNative;
-// 需要引入这个包用来获取 Context (Qt6 环境下)
-// 如果上面这行报错，试试 import org.qtproject.qt.android.QtApplication;
+import com.test.sdk.rc.RcSkyDataManager; // 引入管理器
+import com.skydroid.rcsdk.RCSDKManager;
+import com.skydroid.rcsdk.SDKManagerCallBack;
+import com.skydroid.rcsdk.common.error.SkyException;
 
 public class QGCConnectionManager {
     private static final String TAG = "QGCConnection";
 
-    // ---------------------------------------------------------
-    // 1. JNI 接口：Java -> C++
-    // ---------------------------------------------------------
     public static native void nativeOnDataReceived(byte[] data, int length);
 
-    // ---------------------------------------------------------
-    // 2. C++ 调用接口：初始化连接
-    // ---------------------------------------------------------
-
+    // =========================================================
+    // ★★★ 关键点：定义一个全局强引用监听器 ★★★
+    // =========================================================
+    // 为什么必须定义成成员变量？
+    // 因为 RcSkyDataManager 内部使用 WeakReference (弱引用) 来存储监听器。
+    // 如果你直接在 initConnection 里 new 一个匿名对象传进去，
+    // Java 垃圾回收器 (GC) 会在几秒钟后把它回收掉，导致数据接收突然中断！
+    private static RcSkyDataManager.OnGetRcSkyDataListener mSkydroidListener = new RcSkyDataManager.OnGetRcSkyDataListener() {
+        @Override
+        public boolean onGetRcSkyData(@NonNull byte[] datas) {
+            if (datas != null && datas.length > 0) {
+                // 透传给 C++
+                nativeOnDataReceived(datas, datas.length);
+            }
+            return false; // 返回 false，让其他监听器也能收到数据
+        }
+    };
 
     public static void initConnection() {
-        Log.i(TAG, " Java: initConnection CALLED! Starting Hardware...");
+        Log.i(TAG, "🔥🔥🔥 Java: initConnection CALLED! 🔥🔥🔥");
 
-        Handler handler = new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message msg) {
-                // ---------------------------------------------------------
-                // ★★★ 修改 1：打印所有状态，包括错误码 ★★★
-                // ---------------------------------------------------------
-                if (msg.what == 0) {
-                    Log.i(TAG, "✅ Hardware Connected Success!");
-                } else {
-                    // 如果看到 1700，说明 SDK 服务没启动
-                    // 如果看到 800，说明连接断开
-                    Log.e(TAG, "❌ Connection Error/Status Code: " + msg.what);
-                }
+        Context context = QGCActivity.getActivity();
+        if (context == null) return;
 
-                // 打印收到的数据类型，辅助调试
-                if (msg.obj != null) {
-                    // Log.d(TAG, "MSG OBJ Type: " + msg.obj.getClass().getName());
+        // 1. 初始化 Boying SDK (略...)
+        try {
+            BoyingSdk.getInstance().initSdk();
+            BoyingSdk.getInstance().startSdk();
+        } catch (Exception e) {}
+
+        // 2. 初始化硬件
+        if (MKUtil.isUnirc7() || MKUtil.isUnirc7Pro()) {
+            // 思翼逻辑 (略...)
+            MKUtil.getInstance().connect(handler);
+        }
+        else if (SkydroidRcConnectUtil.isSkydroidRc()) {
+            Log.i(TAG, "👉 Detected Skydroid Remote");
+
+            // (A) 初始化 RCSDK
+            try {
+                RCSDKManager.INSTANCE.initSDK(context, new SDKManagerCallBack() {
+                    @Override public void onRcConnectFail(SkyException e) {}
+                    @Override public void onRcConnected() {}
+                    @Override public void onRcDisconnect() {}
+                });
+            } catch (Throwable t) {}
+
+            // (B) 绑定服务
+            try {
+                if (!SkydroidRcSdkUtil.getInstance().isConnected()) {
+                    SkydroidRcSdkUtil.getInstance().connect(context);
                 }
-            }
-        };
+            } catch (Exception e) {}
+
+            // (C) ★★★ 注册监听器 (替代修改源码) ★★★
+            // 只要注册了，RcSkyDataManager 收到数据就会回调 mSkydroidListener
+            RcSkyDataManager.getInstance().addOnGetRcSkyDataListener(mSkydroidListener);
+            Log.i(TAG, "✅ Registered Skydroid Data Listener");
+
+            // (D) 启动连接
+            SkydroidRcConnectUtil.getInstance().connect(handler);
+        }
+    }
+
+    // ---------------------------------------------------------
+    // 发送数据
+    // ---------------------------------------------------------
+    public static void sendData(byte[] data) {
+        if (data == null || data.length == 0) return;
 
         try {
             if (MKUtil.isUnirc7() || MKUtil.isUnirc7Pro()) {
-                Log.i(TAG, "Detected Siyi Remote, Connecting MKUtil...");
-                MKUtil.getInstance().connect(handler);
+                MKUtil.getInstance().sendRawData(data);
             }
             else if (SkydroidRcConnectUtil.isSkydroidRc()) {
-                Log.i(TAG, "Detected Skydroid Remote...");
-
-                // ---------------------------------------------------------
-                // ★★★ 修改 2：补全云卓后台服务连接 (缺了这步会报 1700) ★★★
-                // ---------------------------------------------------------
-                // 尝试获取 Activity Context，如果失败可能需要调整
-                // 这里的 Context 必须传，否则 Skydroid SDK 崩或者连不上
-                try {
-                    // 尝试连接后台服务
-                    if (!SkydroidRcSdkUtil.getInstance().isConnected()) {
-                        Log.i(TAG, "Binding Skydroid Service...");
-                        // 注意：Qt6 获取 Context 的方式可能不同，通常是 QtNative.activity()
-                        // 或者在这个静态方法里很难拿到，先试试传 null 或者反射获取
-                        // 如果这里报错，先把这行注释掉，先看 Handler 报什么错
-//                         SkydroidRcSdkUtil.getInstance().connect(QtNative.activity());
-                        SkydroidRcSdkUtil.getInstance().connect(QGCActivity.getActivity());
-                    }
-                } catch (Throwable t) {
-                    Log.e(TAG, "Bind Service Warning: " + t.toString());
-                }
-
-                // 连接串口
-                SkydroidRcConnectUtil.getInstance().connect(handler);
-            }
-            else {
-                Log.w(TAG, "Unknown Device, forcing MKUtil connect...");
-                MKUtil.getInstance().connect(handler);
+                // ★★★ 直接调用管理器的发送方法 ★★★
+                // 不需要改 SkydroidRcSdkUtil 源码，因为管理器是公开的
+                RcSkyDataManager.getInstance().sendRcSkyData(data);
             }
         } catch (Exception e) {
-            Log.e(TAG, "❌ Connection Exception: " + e.toString());
-            e.printStackTrace();
+            Log.e(TAG, "Send Error: " + e.toString());
         }
     }
 
-    // ---------------------------------------------------------
-    // 3. C++ 调用接口：发送数据 (C++ -> Java -> 串口)
-    // ---------------------------------------------------------
-    public static void sendData(byte[] data) {
-
-        if (data == null || data.length == 0) return;
-
-        // ★ 关键：如果是 Skydroid 机型，也务必走 Skydroid 下行接口 ★
-        try {
-            if (SkydroidRcConnectUtil.isSkydroidRc() && SkydroidRcConnectUtil.getInstance() != null) {
-                SkydroidRcConnectUtil.getInstance().sendDataToDevice(data);
-                Log.d(TAG, "Sent data via SkydroidRcConnectUtil, len=" + data.length);
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Send Data via Skydroid Failed: " + e.toString());
-        }
-
-        // MKUtil 发送（保留）
-        try {
-            MKUtil.getInstance().sendRawData(data);
-        } catch (Exception e) {
-            Log.e(TAG, "Send Data via MKUtil Failed: " + e.toString());
-        }
-    }
+    // 没什么用的 Handler，仅用于保活
+    private static Handler handler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {}
+    };
 }

@@ -16,7 +16,7 @@
 #include "BoyingLinkConfiguration.h"
 #include <QThread>
 #include <QMutex>
-
+#include <QTimer> // 别忘了这个
 #ifdef Q_OS_ANDROID
 #include <QJniObject>
 #endif
@@ -39,6 +39,8 @@ public slots:
 
 private:
     void _processJsonData(const QString& jsonStr);
+    // ★★★ 2. 在这里补上定义 ★★★
+    QTimer* _heartbeatTimer;
 
 #ifdef Q_OS_ANDROID
     QJniObject _javaSdk;

@@ -12,7 +12,7 @@
 
 // MAVLink 解析库
 #include <mavlink.h>
-
+#include <QPointer> // ★★★ 必须加 ★★★
 #ifdef Q_OS_ANDROID
 #include <QJniEnvironment>
 #include <QJniObject>
@@ -25,24 +25,31 @@
 
 #ifdef Q_OS_ANDROID
 // 全局 Worker 指针，用于 JNI 回调
-static BoyingWorker* s_worker = nullptr;
-static QMutex s_sdkMutex;
+// static BoyingWorker* s_worker = nullptr;
 static bool s_isSdkInitialized = false;
+static QMutex s_workerMutex; // ★ 新增互斥锁
+static QPointer<BoyingWorker> s_worker; // ★★★ 使用 QPointer ★★★
 
 extern "C" {
-    // 对应 Java 类: org.qjkj.gcs.QGCConnectionManager
-    // 方法: nativeOnDataReceived(byte[] data, int length)
     JNIEXPORT void JNICALL
     Java_org_qjkj_gcs_QGCConnectionManager_nativeOnDataReceived(JNIEnv *env, jclass, jbyteArray data, jint len) {
-        if (!s_worker) return;
 
-        // 1. 将 Java byte[] 拷贝到 C++ QByteArray
+        QMutexLocker locker(&s_workerMutex);
+
+        // ★★★ QPointer 检查：如果对象已销毁，s_worker 会自动变为 null，绝对安全 ★★★
+        if (s_worker.isNull()) {
+            // qDebug() << "JNI: Worker is dead, ignoring data.";
+            return;
+        }
+
         jbyte* buf = env->GetByteArrayElements(data, NULL);
+        if (!buf) return;
+
         QByteArray rawData((char*)buf, len);
         env->ReleaseByteArrayElements(data, buf, JNI_ABORT);
 
-        // 2. 线程安全地交给 Worker 处理
-        QMetaObject::invokeMethod(s_worker, "onJavaDataReceived", Qt::QueuedConnection, Q_ARG(QByteArray, rawData));
+        // 使用 s_worker.data() 获取原始指针
+        QMetaObject::invokeMethod(s_worker.data(), "onJavaDataReceived", Qt::QueuedConnection, Q_ARG(QByteArray, rawData));
     }
 }
 #endif
@@ -103,15 +110,23 @@ QString unescapeUnicode(const QString& str) {
 void BoyingWorker::init()
 {
 #ifdef Q_OS_ANDROID
-    QMutexLocker locker(&s_sdkMutex);
+    // 1. 【第一阶段加锁】：检查状态 & 注册指针
+    {
+        QMutexLocker locker(&s_workerMutex);
 
-    if (s_isSdkInitialized) {
-        qDebug() << "Second instance detected! Aborting.";
-        return;
-    }
+        if (s_isSdkInitialized) {
+            qDebug() << "Second instance detected! Aborting.";
+            return;
+        }
+
+        // QPointer 可以直接赋值原生指针
+        s_worker = this;
+    } // <--- 出了大括号，锁自动释放！防止死锁！
 
     qDebug() << "BoyingWorker: Initializing Hybrid Link...";
-    s_worker = this;
+
+    // 2. 【无锁阶段】：执行耗时的 JNI 操作
+    // 此时如果有数据回调进来，nativeOnDataReceived 可以获取到锁，也能用到 s_worker
 
     _javaSdk = QJniObject("boying/sdk/BoyingSdk");
     if (!_javaSdk.isValid()) {
@@ -128,7 +143,12 @@ void BoyingWorker::init()
         "()V"
     );
 
-    s_isSdkInitialized = true;
+    // 3. 【第二阶段加锁】：更新初始化标记
+    {
+        QMutexLocker locker(&s_workerMutex);
+        s_isSdkInitialized = true;
+    }
+
     qDebug() << "✅ Hybrid Link Initialized!";
 #endif
 }
@@ -500,19 +520,43 @@ void BoyingWorker::sendData(const QByteArray bytes)
 void BoyingWorker::cleanup()
 {
 #ifdef Q_OS_ANDROID
-    QMutexLocker locker(&s_sdkMutex);
-    if (s_isSdkInitialized) {
-        if (_javaSdk.isValid()) {
-            _javaSdk.callMethod<jint>("StopSDKJava", "()I");
+    // 1. 先停止 Java 业务 (耗时操作，放在锁外面，防止死锁)
+    // 只要 SDK 对象有效就尝试停止，不需要依赖 s_isSdkInitialized 标志
+    if (_javaSdk.isValid()) {
+        // 增加 JNI 异常检查，防止停止时 Java 抛异常导致 C++ 崩溃
+        QJniEnvironment env;
+        _javaSdk.callMethod<jint>("StopSDKJava", "()I");
+
+        // 如果停止过程中 Java 报错，清除异常继续执行，不要崩
+        if (env.checkAndClearExceptions()) {
+            qWarning() << "BoyingWorker: Exception ignored during StopSDKJava";
         }
-        s_isSdkInitialized = false;
-        s_worker = nullptr;
     }
+
+    // 2. ★★★ 加锁切断回调 ★★★
+    // 这一步是防止崩溃的核心
+    {
+        QMutexLocker locker(&s_workerMutex);
+
+        // QPointer 的标准清空方式 (或者 s_worker = nullptr 也可以)
+        s_worker.clear();
+
+        s_isSdkInitialized = false;
+    }
+
+    // 3. 清理定时器
+    if (_heartbeatTimer) {
+        _heartbeatTimer->stop();
+        delete _heartbeatTimer;
+        _heartbeatTimer = nullptr;
+    }
+
+    qDebug() << "BoyingWorker: Cleanup finished.";
 #endif
 }
-
 BoyingLink::BoyingLink(SharedLinkConfigurationPtr& config) : LinkInterface(config), _is_connected(false), _thread(nullptr), _worker(nullptr) {}
 BoyingLink::~BoyingLink() { disconnect(); }
+
 bool BoyingLink::isConnected(void) const { return _is_connected; }
 
 bool BoyingLink::_connect(void) {
@@ -533,10 +577,32 @@ bool BoyingLink::_connect(void) {
     return true;
 }
 
-void BoyingLink::disconnect(void) {
-    if (_worker) emit _workerCleanup();
-    if (_thread) { _thread->quit(); _thread->wait(); _thread = nullptr; _worker = nullptr; }
-    if (_is_connected) { _is_connected = false; emit disconnected(); }
+void BoyingLink::disconnect(void)
+{
+    if (_worker) {
+        // 1. 通知 Worker 清理资源 (JNI stop)
+        emit _workerCleanup();
+    }
+
+    if (_thread) {
+        // 2. 告诉线程退出
+        _thread->quit();
+
+        // 3. ★★★ 必须等待线程完全停止！否则会崩！★★★
+        // 给它 2 秒钟时间退出，如果超时强行杀掉
+        if (!_thread->wait(2000)) {
+            _thread->terminate();
+        }
+
+        delete _thread;
+        _thread = nullptr;
+        _worker = nullptr; // Worker 会被线程的 deleteLater 自动删除
+    }
+
+    if (_is_connected) {
+        _is_connected = false;
+        emit disconnected();
+    }
 }
 
 void BoyingLink::_writeBytes(const QByteArray& bytes) { if (_is_connected) emit _workerSend(bytes); }
