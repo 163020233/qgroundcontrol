@@ -24,6 +24,8 @@
 // =========================================================
 
 #ifdef Q_OS_ANDROID
+QJniObject _javaSdkManager;
+QJniObject _javaSdkInternal;
 // 全局 Worker 指针，用于 JNI 回调
 // static BoyingWorker* s_worker = nullptr;
 static bool s_isSdkInitialized = false;
@@ -110,7 +112,7 @@ QString unescapeUnicode(const QString& str) {
 void BoyingWorker::init()
 {
 #ifdef Q_OS_ANDROID
-    // 1. 【第一阶段加锁】：检查状态 & 注册指针
+    // 1️⃣ 第一阶段加锁：检查状态 & 注册 Worker
     {
         QMutexLocker locker(&s_workerMutex);
 
@@ -119,31 +121,44 @@ void BoyingWorker::init()
             return;
         }
 
-        // QPointer 可以直接赋值原生指针
-        s_worker = this;
-    } // <--- 出了大括号，锁自动释放！防止死锁！
+        s_worker = this; // QPointer 自动管理
+    }
 
     qDebug() << "BoyingWorker: Initializing Hybrid Link...";
 
-    // 2. 【无锁阶段】：执行耗时的 JNI 操作
-    // 此时如果有数据回调进来，nativeOnDataReceived 可以获取到锁，也能用到 s_worker
+    // 2️⃣ 无锁阶段：获取 Manager 和内部 SDK
+    QJniObject manager = QJniObject::callStaticObjectMethod(
+        "boying/sdk/BoyingSdkManager",
+        "getInstance",
+        "()Lboying/sdk/BoyingSdkManager;"
+    );
 
-    _javaSdk = QJniObject("boying/sdk/BoyingSdk");
-    if (!_javaSdk.isValid()) {
-        qCritical() << "BoyingSdk class not found!";
+    if (!manager.isValid()) {
+        qCritical() << "BoyingSdkManager.getInstance() failed";
         return;
     }
 
-    jint retInit = _javaSdk.callMethod<jint>("InitSDKJava", "()I");
-    _javaSdk.callMethod<jint>("StartSDKJava", "()I");
+    _javaSdkManager = manager;
 
+    // 获取内部 SDK 对象
+    _javaSdkInternal = manager.callObjectMethod("rawSdk", "()Lboying/sdk/BoyingSdk;");
+    if (!_javaSdkInternal.isValid()) {
+        qCritical() << "rawSdk() returned NULL";
+        return;
+    }
+
+    // 调用 Manager init/start
+    _javaSdkManager.callMethod<void>("initSdk", "()V");
+    _javaSdkManager.callMethod<void>("startSdk", "()V");
+
+    // 仍然保留原来的 QGCConnectionManager 初始化
     QJniObject::callStaticMethod<void>(
         "org/qjkj/gcs/QGCConnectionManager",
         "initConnection",
         "()V"
     );
 
-    // 3. 【第二阶段加锁】：更新初始化标记
+    // 3️⃣ 第二阶段加锁：更新初始化标记
     {
         QMutexLocker locker(&s_workerMutex);
         s_isSdkInitialized = true;
@@ -157,39 +172,41 @@ void BoyingWorker::onJavaDataReceived(const QByteArray& rawData)
 {
 #ifdef Q_OS_ANDROID
     if (rawData.isEmpty()) return;
-    // 打印长度，如果是少量数据可以打印 toHex()
-    qDebug() << "🔵 [RX RAW] Len:" << rawData.size() << "Bytes:" << rawData.toHex();
+
+    for (const auto &val : msgArray) {
+        qDebug() << ">> byType:" << val.toObject().value("byType").toInt()
+                 << ", full:" << QString(QJsonDocument(val.toObject()).toJson(QJsonDocument::Compact));
+    }
 
     QJniEnvironment env;
     jbyteArray jData = env->NewByteArray(rawData.size());
-    env->SetByteArrayRegion(jData, 0, rawData.size(), reinterpret_cast<const  jbyte*>(rawData.data()));
+    env->SetByteArrayRegion(jData, 0, rawData.size(), reinterpret_cast<const jbyte*>(rawData.data()));
 
-    QJniObject jJsonStr = _javaSdk.callObjectMethod(
-        "GetJsonByByteJava",
+    // ⚠️ 使用内部 SDK 调用 JNI 方法，而不是 Manager
+    QJniObject jJsonStr = _javaSdkInternal.callObjectMethod(
+        "GetJsonByByteJava",     // 方法在 BoyingSdk.java
         "([BI)Ljava/lang/String;",
         jData,
         (jint)rawData.size()
     );
+
     env->DeleteLocalRef(jData);
 
     if (jJsonStr.isValid()) {
         QString jsonString = jJsonStr.toString();
-
         if (!jsonString.isEmpty()) {
-            // =========================================================
-            // ★★★ 打印点 2: 确认 SDK 解析成功 (业务数据检查) ★★★
-            // =========================================================
             qDebug() << "[RX JSON]" << jsonString;
-
             _processJsonData(jsonString);
         } else {
-            qWarning() << "[RX Error] SDK returned Empty String (Parse Failed?)";
+            qWarning() << "[RX Error] SDK returned empty string";
         }
     } else {
-        qCritical() << "RX Error] JNI Call GetJsonByByteJava returned NULL";
+        qCritical() << "[RX Error] GetJsonByByteJava returned NULL";
     }
 #endif
 }
+
+
 
 void BoyingWorker::_processJsonData(const QString& jsonStr)
 {
@@ -388,7 +405,7 @@ void BoyingWorker::_processJsonData(const QString& jsonStr)
 void BoyingWorker::sendData(const QByteArray bytes)
 {
 #ifdef Q_OS_ANDROID
-    if (!_javaSdk.isValid()) return;
+    if (!_javaSdkManager.isValid()) return;
 
     mavlink_message_t msg;
     mavlink_status_t status;
@@ -483,9 +500,14 @@ void BoyingWorker::sendData(const QByteArray bytes)
             // 发送给 JNI 并 回复 ACK
             if (!jsonCmd.isEmpty()) {
                 qDebug() << "TX JSON:" << jsonCmd;
+
                 QJniObject jStr = QJniObject::fromString(jsonCmd);
-                QJniObject jBytesObj = _javaSdk.callObjectMethod(
-                    "GetByteByJsonJava", "(Ljava/lang/String;)[B", jStr.object<jstring>()
+
+                // ⚠️ 改为使用内部 SDK 调用 GetByteByJsonJava
+                QJniObject jBytesObj = _javaSdkInternal.callObjectMethod(
+                    "GetByteByJsonJava",      // 在 BoyingSdk.java 中
+                    "(Ljava/lang/String;)[B",
+                    jStr.object<jstring>()
                 );
 
                 bool success = false;
@@ -499,19 +521,21 @@ void BoyingWorker::sendData(const QByteArray bytes)
                     success = true;
                 }
 
-                // ★★★ 核心修复：发送 ACK ★★★
+                // ★★★ 发送 ACK ★★★
                 if (success && cmd_ack_id != 0) {
-                     mavlink_message_t ackMsg;
-                     uint8_t ackBuf[MAVLINK_MAX_PACKET_LEN];
-                     mavlink_msg_command_ack_pack(
+                    mavlink_message_t ackMsg;
+                    uint8_t ackBuf[MAVLINK_MAX_PACKET_LEN];
+                    mavlink_msg_command_ack_pack(
                         1, 1, &ackMsg,
                         cmd_ack_id, MAV_RESULT_ACCEPTED,
-                        255, 0, msg.sysid, msg.compid);
-                     uint16_t ackLen = mavlink_msg_to_send_buffer(ackBuf, &ackMsg);
-                     emit dataReceived(QByteArray((char*)ackBuf, ackLen));
-                     qDebug() << " ACK Sent for Command:" << cmd_ack_id;
+                        255, 0, msg.sysid, msg.compid
+                    );
+                    uint16_t ackLen = mavlink_msg_to_send_buffer(ackBuf, &ackMsg);
+                    emit dataReceived(QByteArray((char*)ackBuf, ackLen));
+                    qDebug() << " ACK Sent for Command:" << cmd_ack_id;
                 }
             }
+
         }
     }
 #endif
@@ -520,31 +544,21 @@ void BoyingWorker::sendData(const QByteArray bytes)
 void BoyingWorker::cleanup()
 {
 #ifdef Q_OS_ANDROID
-    // 1. 先停止 Java 业务 (耗时操作，放在锁外面，防止死锁)
-    // 只要 SDK 对象有效就尝试停止，不需要依赖 s_isSdkInitialized 标志
-    if (_javaSdk.isValid()) {
-        // 增加 JNI 异常检查，防止停止时 Java 抛异常导致 C++ 崩溃
-        QJniEnvironment env;
-        _javaSdk.callMethod<jint>("StopSDKJava", "()I");
-
-        // 如果停止过程中 Java 报错，清除异常继续执行，不要崩
-        if (env.checkAndClearExceptions()) {
-            qWarning() << "BoyingWorker: Exception ignored during StopSDKJava";
-        }
+    // 1️⃣ 停止 SDK (Manager 调用 stop)
+    if (_javaSdkManager.isValid()) {
+        _javaSdkManager.callMethod<void>("stopSdk", "()V");
     }
 
-    // 2. ★★★ 加锁切断回调 ★★★
-    // 这一步是防止崩溃的核心
+    // 2️⃣ 清空对象 & 切断回调
     {
         QMutexLocker locker(&s_workerMutex);
-
-        // QPointer 的标准清空方式 (或者 s_worker = nullptr 也可以)
         s_worker.clear();
-
+        _javaSdkManager = QJniObject();
+        _javaSdkInternal = QJniObject();
         s_isSdkInitialized = false;
     }
 
-    // 3. 清理定时器
+    // 3️⃣ 清理定时器
     if (_heartbeatTimer) {
         _heartbeatTimer->stop();
         delete _heartbeatTimer;
@@ -605,5 +619,5 @@ void BoyingLink::disconnect(void)
     }
 }
 
-void BoyingLink::_writeBytes(const QByteArray& bytes) { if (_is_connected) emit _workerSend(bytes); }
+void BoyingLink::_writeBytes(const QByteArray& bytes) { if (_is_connected) qDebug() << "[_writeBytes] len=" << bytes.size() << "bytes=" << bytes.toHex(); emit _workerSend(bytes); }
 void BoyingLink::_onWorkerData(QByteArray data) { emit bytesReceived(this, data); }
