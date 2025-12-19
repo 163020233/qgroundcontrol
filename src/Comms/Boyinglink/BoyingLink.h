@@ -17,6 +17,7 @@
 #include <QThread>
 #include <QMutex>
 #include <QTimer> // 别忘了这个
+#include <QDateTime> // 引入时间库
 #ifdef Q_OS_ANDROID
 #include <QJniObject>
 #endif
@@ -32,8 +33,8 @@ public slots:
     void cleanup();
 
     // ★★★ 新增：供 JNI 回调的槽函数 ★★★
-    void onJavaDataReceived(const QByteArray& rawData);
-
+    // void onJavaDataReceived(const QByteArray& rawData);
+    void onJsonReceived(const QString& jsonStr);
     signals:
         void dataReceived(QByteArray data);
 
