@@ -31,7 +31,6 @@ public slots:
     void init();
     void sendData(const QByteArray bytes);
     void cleanup();
-
     // ★★★ 新增：供 JNI 回调的槽函数 ★★★
     // void onJavaDataReceived(const QByteArray& rawData);
     void onJsonReceived(const QString& jsonStr);

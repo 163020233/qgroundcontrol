@@ -1,12 +1,12 @@
 //
-// Created by Administrator on 25-11-26.
+// Created by LT on 25-11-26.
 //
 
 #include "BoyingLinkConfiguration.h"
 
 //Boying 配置
 // 1. 构造函数
-// ★★★ 修正：必须初始化 _highLatency，否则它是个随机值 ★★★
+//  必须初始化 _highLatency，否则它是个随机值 
 BoyingLinkConfiguration::BoyingLinkConfiguration(const QString& name)
     : LinkConfiguration(name)
     , _highLatency(false)  // 默认关闭高延迟模式
@@ -14,7 +14,7 @@ BoyingLinkConfiguration::BoyingLinkConfiguration(const QString& name)
 }
 
 // 2. 拷贝构造函数
-// ★★★ 修正：当克隆对象时，也要拷贝 _highLatency 的值 ★★★
+//  当克隆对象时，也要拷贝 _highLatency 的值 
 BoyingLinkConfiguration::BoyingLinkConfiguration(const BoyingLinkConfiguration* copy)
     : LinkConfiguration(copy)
     , _highLatency(copy->_highLatency)
@@ -26,7 +26,7 @@ void BoyingLinkConfiguration::copyFrom(const LinkConfiguration* source)
 {
     LinkConfiguration::copyFrom(source);
 
-    // ★★★ 修正：尝试将源对象转为 Boying 类型，并复制属性 ★★★
+    //  尝试将源对象转为 Boying 类型，并复制属性 
     const BoyingLinkConfiguration* boyingSource = qobject_cast<const BoyingLinkConfiguration*>(source);
     if (boyingSource) {
         setHighLatency(boyingSource->isHighLatency());
@@ -38,7 +38,7 @@ void BoyingLinkConfiguration::saveSettings(QSettings& settings, const QString& r
 {
     settings.beginGroup(root);
 
-    // ★★★ 修正：保存你的配置项 ★★★
+    //  保存你的配置项 
     // 这里的字符串 "HighLatency" 就是存在磁盘里的 Key
     settings.setValue("HighLatency", _highLatency);
 
@@ -50,7 +50,7 @@ void BoyingLinkConfiguration::loadSettings(QSettings& settings, const QString& r
 {
     settings.beginGroup(root);
 
-    // ★★★ 修正：读取配置项，如果读不到则默认为 false ★★★
+    //  读取配置项，如果读不到则默认为 false 
     _highLatency = settings.value("HighLatency", false).toBool();
 
     settings.endGroup();

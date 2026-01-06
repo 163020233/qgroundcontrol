@@ -22,6 +22,12 @@ import com.skydroid.rcsdk.common.error.SkyException;
 
 public class QGCConnectionManager {
     private static final String TAG = "QGCConnection";
+
+    private static boolean isInitialized = false;
+
+    // 声明一个新的 Native 回调，用于回传结果
+//     public static native void nativeOnCmdResult(int mavCmdId, int sdkResult);
+
     private static boolean isRunning = false; // 控制心跳线程
     private static final Object sendLock = new Object(); // 发送锁
 
@@ -86,6 +92,11 @@ public class QGCConnectionManager {
     }
 
     public static void initConnection() {
+
+       if (isInitialized) {
+            Log.w(TAG, "警告：检测到重复初始化请求，已拦截！");
+            return;
+        }
         Log.i(TAG, "Java: initConnection CALLED! ");
         Log.i(TAG, "init called from", new Throwable("init trace"));
 
@@ -127,44 +138,45 @@ public class QGCConnectionManager {
             RcSkyDataManager.getInstance().addOnGetRcSkyDataListener(mSkydroidListener);
             Log.i(TAG, "Registered Skydroid Data Listener");
 
-            // (D) 启动连接
-            SkydroidRcConnectUtil.getInstance().connect(handler);
+//             // (D) 启动连接
+             SkydroidRcConnectUtil.getInstance().connect(handler);
+             isInitialized = true;
         }
 
        // 4. 启动心跳线程
-        startSdkHeartbeatLoop();
+//         startSdkHeartbeatLoop();
     }
 
  // ---------------------------------------------------------
-    private static void startSdkHeartbeatLoop() {
-        if (isRunning) return;
-        isRunning = true;
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(TAG, "SDK Heartbeat Loop Started");
-                while (isRunning) {
-                    try {
-                        // 1. 获取 SDK 内部数据 (GetByteCommandJava)
-                        // 注意：这里使用文档规定的方法名
-                        byte[] bytes = BoyingSdk.getInstance().getSdkData();
-
-                        // 2. 如果有数据，发给云卓硬件
-                        if (bytes != null && bytes.length > 0) {
-                            sendToHardwareSafe(bytes);
-                        }
-
-                        // 3. 休眠 50ms (20Hz)
-                        Thread.sleep(50);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                Log.i(TAG, "SDK Heartbeat Loop Stopped");
-            }
-        }).start();
-    }
+//     private static void startSdkHeartbeatLoop() {
+//         if (isRunning) return;
+//         isRunning = true;
+//
+//         new Thread(new Runnable() {
+//             @Override
+//             public void run() {
+//                 Log.i(TAG, "SDK Heartbeat Loop Started");
+//                 while (isRunning) {
+//                     try {
+//                         // 1. 获取 SDK 内部数据 (GetByteCommandJava)
+//                         // 注意：这里使用文档规定的方法名
+//                         byte[] bytes = BoyingSdk.getInstance().getSdkData();
+//
+//                         // 2. 如果有数据，发给云卓硬件
+//                         if (bytes != null && bytes.length > 0) {
+//                             sendToHardwareSafe(bytes);
+//                         }
+//
+//                         // 3. 休眠 50ms (20Hz)
+//                         Thread.sleep(100);
+//                     } catch (Exception e) {
+//                         e.printStackTrace();
+//                     }
+//                 }
+//                 Log.i(TAG, "SDK Heartbeat Loop Stopped");
+//             }
+//         }).start();
+//     }
 
     // ---------------------------------------------------------
     // 发送数据
@@ -198,37 +210,25 @@ public class QGCConnectionManager {
             Log.e(TAG, "SendCmd Error: " + e.toString());
             e.printStackTrace();
         }
-//         try {
-//             if (MKUtil.isUnirc7() || MKUtil.isUnirc7Pro()) {
-//                 MKUtil.getInstance().sendRawData(data);
-//             }
-//             else if (SkydroidRcConnectUtil.isSkydroidRc()) {
-//                 // ★★★ 直接调用管理器的发送方法 ★★★
-//                 // 不需要改 SkydroidRcSdkUtil 源码，因为管理器是公开的
-//                 RcSkyDataManager.getInstance().sendRcSkyData(data);
-//             }
-//         } catch (Exception e) {
-//             Log.e(TAG, "Send Error: " + e.toString());
-//         }
     }
 
-    private static void sendToHardwareSafe(byte[] data) {
-        synchronized (sendLock) {
-            try {
-                if (MKUtil.isUnirc7() || MKUtil.isUnirc7Pro()) {
-                    MKUtil.getInstance().sendRawData(data);
-                }
-                else if (SkydroidRcConnectUtil.isSkydroidRc()) {
-                    SkydroidRcConnectUtil.getInstance().sendDataToDevice(data);
-                }
-                else {
-                    MKUtil.getInstance().sendRawData(data);
-                }
-            } catch (Exception e) {
-                // Log.e(TAG, "HW Send Fail: " + e.toString());
-            }
-        }
-    }
+//     private static void sendToHardwareSafe(byte[] data) {
+//         synchronized (sendLock) {
+//             try {
+//                 if (MKUtil.isUnirc7() || MKUtil.isUnirc7Pro()) {
+//                     MKUtil.getInstance().sendRawData(data);
+//                 }
+//                 else if (SkydroidRcConnectUtil.isSkydroidRc()) {
+//                     SkydroidRcConnectUtil.getInstance().sendDataToDevice(data);
+//                 }
+//                 else {
+//                     MKUtil.getInstance().sendRawData(data);
+//                 }
+//             } catch (Exception e) {
+//                 // Log.e(TAG, "HW Send Fail: " + e.toString());
+//             }
+//         }
+//     }
 
     // ---------------------------------------------------------
     // 7. 停止连接与释放资源

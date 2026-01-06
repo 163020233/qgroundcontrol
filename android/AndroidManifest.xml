@@ -1,15 +1,7 @@
 <?xml version="1.0"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.qjkj.gcs"
-    android:installLocation="auto"
-    android:versionCode="-- %%INSERT_VERSION_CODE%% --"
-    android:versionName="-- %%INSERT_VERSION_NAME%% --">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.qjkj.gcs" android:installLocation="auto" android:versionCode="-- %%INSERT_VERSION_CODE%% --" android:versionName="-- %%INSERT_VERSION_NAME%% --">
 
-    <supports-screens
-        android:anyDensity="true"
-        android:largeScreens="true"
-        android:normalScreens="true"
-        android:smallScreens="true" />
+    <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
 
     <!-- 必需 -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -17,7 +9,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <!-- 可选（如果需要后台持续定位才加） -->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 

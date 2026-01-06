@@ -40,16 +40,19 @@ extern "C" {
 
         // 1. 将 Java String 转换为 C++ QString
         const char *nativeString = env->GetStringUTFChars(jsonStr, nullptr);
-        QString qJsonStr = QString::fromUtf8(nativeString);
 
-        // 2. 释放 JNI 字符串引用 (重要！防止内存泄漏)
-        env->ReleaseStringUTFChars(jsonStr, nativeString);
+        if (nativeString) {
+            QString qJsonStr = QString::fromUtf8(nativeString);
 
-        // 3. 线程安全地交给 Worker 处理
-        QMetaObject::invokeMethod(s_worker,
-                                  "onJsonReceived",        // 调用下面实现的槽函数
-                                  Qt::QueuedConnection,
-                                  Q_ARG(QString, qJsonStr));
+            // 2. 释放 JNI 字符串引用 (重要！防止内存泄漏)
+            env->ReleaseStringUTFChars(jsonStr, nativeString);
+
+            // 3. 线程安全地交给 Worker 处理
+            QMetaObject::invokeMethod(s_worker,
+                                      "onJsonReceived",        // 调用下面实现的槽函数
+                                      Qt::QueuedConnection,
+                                      Q_ARG(QString, qJsonStr));
+        }
     }
 }
 
@@ -266,46 +269,41 @@ void BoyingWorker::_processJsonData(const QString& jsonStr)
         bool send = false;
 
         if (type == 0) {
-            int customMode = obj.value("custom_mode").toInt();
-            int baseMode = obj.value("base_mode").toInt();
-            int sysStatus = obj.value("system_status").toInt();
+            int customMode = obj.value("custom_mode").toInt(); // 解锁状态
+            int baseMode = obj.value("base_mode").toInt(); // 基础模式
+            int sysStatus = obj.value("system_status").toInt(); // 系统状态与解锁状态无关
 
             // --- A. 模式映射 ---
             uint32_t px4Mode = 65536; // 默认 Manual
-            switch (customMode) {
-                case 0:  px4Mode = 65536;    break; // Manual
-                case 2:  px4Mode = 131072;   break; // Altitude
-                case 3:  px4Mode = 262144;   break; // 自主作业 -> 映射为 Position (定点) 比较安全
-                case 5:  px4Mode = 262144;   break; // Position
-                case 6:  px4Mode = 84148224; break; // RTL
-                case 9:  px4Mode = 50593792; break; // Land
-                case 17: px4Mode = 83886080; break; // Loiter
-                default: px4Mode = 65536;    break;
-            }
+            // switch (customMode) {
+            //     case 0:  px4Mode = 65536;    break; // Manual
+            //     case 2:  px4Mode = 131072;   break; // Altitude
+            //     case 3:  px4Mode = 67371008;   break; // 自主作业 -> 映射为 Position (定点) 比较安全
+            //     case 5:  px4Mode = 196608;   break; // Position位置保持模式
+            //     case 6:  px4Mode = 84148224; break; // RTL
+            //     case 17: px4Mode = 458752; break; // Loiter
+            //     default: px4Mode = 65536;    break;
+            // }
 
-            // --- B. 解锁状态映射 ---
+            // --- B. 解锁状态 (控制 QGC 顶栏变红/变绿) ---
+            // 仅仅代表电机是否启动/允许启动
             bool isArmed = (baseMode & 128) == 128;
             uint8_t mavBaseMode = MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
             if (isArmed) mavBaseMode |= MAV_MODE_FLAG_SAFETY_ARMED;
 
-            // --- C. 系统状态映射 (核心修改) ---
-            // 厂商定义: 3=未准备, 4=已起飞, 5=有故障
-            uint8_t mavState = MAV_STATE_STANDBY; // 默认待机
+            // --- C. ★★★ 飞行状态映射 (修改点) ★★★ ---
+            // 厂商定义: 3=地面(Standby), 4=空中(Active), 5=故障(Critical)
+            // 逻辑: 直接透传厂商的状态，不再和解锁状态绑定
 
-            if (sysStatus == 5) {
-                mavState = MAV_STATE_CRITICAL;      // 5 -> 严重故障 (红)
+            uint8_t mavState = MAV_STATE_STANDBY; // 默认为 3
+
+            switch (sysStatus) {
+                case 3: mavState = MAV_STATE_STANDBY;  break; // 在地面
+                case 4: mavState = MAV_STATE_ACTIVE;   break; // 在空中
+                case 5: mavState = MAV_STATE_CRITICAL; break; // 故障
+                default: mavState = MAV_STATE_STANDBY; break; // 其他情况
             }
-            else if (sysStatus == 4) {
-                mavState = MAV_STATE_ACTIVE;        // 4 -> 飞行中 (绿)
-            }
-            else if (sysStatus == 3) {
-                // ★★★ 3 -> 映射为 CALIBRATING (校准中/初始化中) ★★★
-                // 这样 QGC 会认为飞机"未就绪"，符合厂商定义的"未准备"
-                mavState = MAV_STATE_CALIBRATING;
-            }
-            else {
-                mavState = MAV_STATE_STANDBY;       // 其他情况视为待机
-            }
+
 
             // --- D. 发送心跳 ---
             mavlink_msg_heartbeat_pack(1, 1, &msg,
@@ -351,85 +349,120 @@ void BoyingWorker::_processJsonData(const QString& jsonStr)
              send = true;
         }
 
-        // =========================================================
-        // 3. GPS 基础数据 (Type 3)
+// =========================================================
+        // Type 3: GPS 数据 (根据文档精确解析)
         // =========================================================
         else if (type == 3) {
-            int fixType = obj.value("fixType").toInt();
-            int sat = obj.value("count").toInt();
-            int eph = obj.value("eph").toInt();
-            int epv = obj.value("epv").toInt();
+            int fixTypeRaw = obj.value("fixType").toInt();
+            int satCount = obj.value("count").toInt();
+            int lat = obj.value("lat").toInt(); // WGS84 1E7
+            int lon = obj.value("lon").toInt(); // WGS84 1E7
+            int alt = obj.value("alt").toInt(); // mm
 
-            uint8_t mavFix = 0;
-            switch(fixType) {
-                case 2: mavFix = 2; break; // 2D
-                case 3: mavFix = 3; break; // 3D
-                case 4: mavFix = 3; break; // 3D
-                case 5: mavFix = 6; break; // RTK FIXED
-                case 6: mavFix = 5; break; // RTK FLOAT
-                default: mavFix = 0; break;
+            // 文档: eph/epv 单位 m*100 (即厘米 cm)
+            int ephCm = obj.value("eph").toInt();
+            int epvCm = obj.value("epv").toInt();
+            int vel = obj.value("vel").toInt(); // cm/s
+            int cog = obj.value("cog").toInt(); // cdeg
+
+            // 1. 映射 Fix Type (关键!)
+            // SDK: 0:NO GPS, 1:NO FIX, 2:2D, 3:3D, 4:3D, 5:RTK, 6:FLOAT
+            uint8_t mavFix = GPS_FIX_TYPE_NO_GPS;
+            switch (fixTypeRaw) {
+                case 1: mavFix = GPS_FIX_TYPE_NO_FIX; break;
+                case 2: mavFix = GPS_FIX_TYPE_2D_FIX; break;
+                case 3: mavFix = GPS_FIX_TYPE_3D_FIX; break;
+                case 4: mavFix = GPS_FIX_TYPE_3D_FIX; break; // 4也是3D
+                case 5: mavFix = GPS_FIX_TYPE_RTK_FIXED; break; // SDK 5 = RTK Fixed
+                case 6: mavFix = GPS_FIX_TYPE_RTK_FLOAT; break; // SDK 6 = FLOAT
+                default: mavFix = GPS_FIX_TYPE_NO_GPS; break;
             }
 
-            // 只有有效才发送，避免覆盖 Type 12
-            if (mavFix >= 2) {
-                mavlink_gps_raw_int_t gps;
-                memset(&gps, 0, sizeof(gps));
-                gps.fix_type = mavFix;
-                gps.lat = obj.value("lat").toInt();
-                gps.lon = obj.value("lon").toInt();
-                gps.alt = obj.value("alt").toInt();
-                gps.eph = (eph == 0) ? 0xFFFF : (uint16_t)eph;
-                gps.epv = (epv == 0) ? 0xFFFF : (uint16_t)epv;
-                gps.vel = 0xFFFF;
-                gps.cog = 0xFFFF;
-                gps.satellites_visible = (uint8_t)sat;
+            // 2. 单位转换 (cm -> mm) 用于 MAVLink v2 的 h_acc/v_acc
+            // 处理无效值 (通常 9999 代表无效)
+            uint32_t h_acc_mm = (ephCm > 9000 || ephCm <= 0) ? 0 : (uint32_t)(ephCm * 10);
+            uint32_t v_acc_mm = (epvCm > 9000 || epvCm <= 0) ? 0 : (uint32_t)(epvCm * 10);
 
-                mavlink_msg_gps_raw_int_encode(1, 1, &msg, &gps);
-                send = true;
-            }
+            // 兼容旧版 eph (cm)
+            uint16_t legacy_eph = (uint16_t)(h_acc_mm / 10);
+            uint16_t legacy_epv = (uint16_t)(v_acc_mm / 10);
+
+            // 3. 打包发送
+            mavlink_msg_gps_raw_int_pack(1, 1, &msg,
+                QDateTime::currentMSecsSinceEpoch() * 1000, // time_usec
+                mavFix,
+                lat,
+                lon,
+                alt,
+                legacy_eph,
+                legacy_epv,
+                (uint16_t)vel,
+                (uint16_t)cog,
+                (uint8_t)satCount,
+                alt,        // alt_ellipsoid (未知时填海拔)
+                h_acc_mm,   // h_acc (mm)
+                v_acc_mm,   // v_acc (mm)
+                0,          // vel_acc
+                0,          // hdg_acc
+                0           // yaw
+            );
+            send = true;
         }
 
         // =========================================================
-        // 4. RTK GPS 数据 (Type 4)
+        // Type 4: RTK 数据 (作为副 GPS 发送，可选)
         // =========================================================
         else if (type == 4) {
-             // ... (如果你需要处理 GPS2，可以在这里添加 mavlink_msg_gps_2_raw_encode) ...
+            // 如果你想在 QGC 看到 RTK 状态，可以把它发为 GPS2
+            // 这里逻辑和 Type 3 几乎一样，只是 Message ID 不同
+            // ... (如果不需要可以不写，通常 Type 3 已经包含了融合后的 RTK 状态)
         }
 
         // =========================================================
-        // 5. 系统状态 (Type 5)
+        // Type 5: 系统状态 (电压与传感器)
         // =========================================================
         else if (type == 5) {
-            int voltageRaw = obj.value("voltage_battery").toInt();
-            int voltageMv = voltageRaw * 10;
-            if (voltageMv < 1000) voltageMv = 22200;
+
+            int voltageCv = obj.value("voltage_battery").toInt();
+            uint16_t voltageMv = (uint16_t)(voltageCv * 10);
 
             int remain = obj.value("battery_remaining").toInt();
-            if (remain < 0) remain = 50;
-            int load = obj.value("load").toInt();
+            if (remain > 100) remain = -1;   // -1 = 未知
 
-            qint64 healthBits = (qint64)obj.value("onboard_control_sensors_health").toDouble();
-            uint32_t mavSensors = 0;
-            if ((healthBits >> 0) & 1) mavSensors |= MAV_SYS_STATUS_SENSOR_3D_GYRO;
-            if ((healthBits >> 1) & 1) mavSensors |= MAV_SYS_STATUS_SENSOR_3D_ACCEL;
-            if ((healthBits >> 2) & 1) mavSensors |= MAV_SYS_STATUS_SENSOR_3D_MAG;
-            if ((healthBits >> 5) & 1) mavSensors |= MAV_SYS_STATUS_SENSOR_GPS;
+            uint32_t sensorsPresent =
+                (uint32_t)obj.value("onboard_control_sensors_present").toDouble();
 
-            mavSensors |= MAV_SYS_STATUS_SENSOR_ABSOLUTE_PRESSURE;
-            mavSensors |= MAV_SYS_STATUS_AHRS;
-            mavSensors |= MAV_SYS_STATUS_SENSOR_BATTERY;
+            uint32_t sensorsEnabled =
+                (uint32_t)obj.value("onboard_control_sensors_enabled").toDouble();
 
-            mavlink_sys_status_t sys;
-            memset(&sys, 0, sizeof(sys));
-            sys.onboard_control_sensors_present = mavSensors;
-            sys.onboard_control_sensors_enabled = mavSensors;
-            sys.onboard_control_sensors_health  = mavSensors;
-            sys.voltage_battery = (uint16_t)voltageMv;
-            sys.current_battery = -1;
-            sys.battery_remaining = (int8_t)remain;
-            sys.load = (uint16_t)(load * 10);
+            uint32_t sensorsHealth =
+                (uint32_t)obj.value("onboard_control_sensors_health").toDouble();
 
-            mavlink_msg_sys_status_encode(1, 1, &msg, &sys);
+                    // 如果飞控没填，才兜底
+            if (sensorsPresent == 0) {
+                sensorsPresent |= MAV_SYS_STATUS_SENSOR_3D_GYRO |
+                                  MAV_SYS_STATUS_SENSOR_3D_ACCEL |
+                                  MAV_SYS_STATUS_AHRS;
+            }
+
+            if (sensorsEnabled == 0)
+                sensorsEnabled = sensorsPresent;
+
+            if (sensorsHealth == 0)
+                sensorsHealth = sensorsPresent;
+
+            mavlink_msg_sys_status_pack(
+                1, 1, &msg,
+                sensorsPresent,
+                sensorsEnabled,
+                sensorsHealth,
+                0,              // load（可以以后再接）
+                voltageMv,
+                -1,             // current
+                (int8_t)remain,
+                0,0,0,0,0,0,0,0,0
+                );
+
             send = true;
         }
 
@@ -459,82 +492,205 @@ void BoyingWorker::_processJsonData(const QString& jsonStr)
         }
 
         // =========================================================
-        // 7. 震动数据 (Type 7) -> VIBRATION
+        // Type 7: 震动数据 (VIBRATION) - 修正版
+        // 日志: {"vibration_x":0.003933, "vibration_y":0.003890, "vibrationZ":0.003578, "clipping_0":0...}
         // =========================================================
         else if (type == 7) {
+            // 1. 解析三轴震动 (直接取值，没值默认为0)
             float vibX = (float)obj.value("vibration_x").toDouble();
             float vibY = (float)obj.value("vibration_y").toDouble();
-            float vibZ = (float)obj.value("vibrationZ").toDouble();
+            float vibZ = (float)obj.value("vibrationZ").toDouble(); // 注意厂家拼写是大写Z
+
+            // 2. 解析 Clipping (震动削顶计数，用于判断震动是否过大)
+            uint32_t clip0 = (uint32_t)obj.value("clipping_0").toInt();
+            uint32_t clip1 = (uint32_t)obj.value("clipping_1").toInt();
+            uint32_t clip2 = (uint32_t)obj.value("clipping_2").toInt();
+
+            // 3. 解析时间戳
+            uint64_t time_usec = (uint64_t)obj.value("time_usec").toDouble();
+            if (time_usec == 0) {
+                time_usec = QDateTime::currentMSecsSinceEpoch() * 1000;
+            }
 
             mavlink_msg_vibration_pack(1, 1, &msg,
-                0, // time_usec
-                vibX, vibY, vibZ,
-                0, 0, 0 // clipping
+                time_usec,
+                vibX,
+                vibY,
+                vibZ,
+                clip0,
+                clip1,
+                clip2
             );
             send = true;
         }
 
         // =========================================================
-        // 8. HUD 数据 (Type 8)
+        // Type 8: HUD 数据 (VFR_HUD)
+        // 协议: airspeed(m/s), groundspeed(m/s), alt(m), climb(m/s), throttle(%)
         // =========================================================
         else if (type == 8) {
+            float airSpeed = (float)obj.value("airspeed").toDouble();
+            float groundSpeed = (float)obj.value("groundspeed").toDouble();
+            float alt = (float)obj.value("alt").toDouble();
+            float climb = (float)obj.value("climb").toDouble();
+            int throttle = obj.value("throttle").toInt();
+
+            // heading (航向) 协议里没写，但 VFR_HUD 需要。
+            // 我们可以给 0，或者看 JSON 里有没有隐藏的 heading 字段
+            int16_t heading = 0;
+            if (obj.contains("heading")) heading = (int16_t)obj.value("heading").toInt();
+
             mavlink_msg_vfr_hud_pack(1, 1, &msg,
-                (float)obj.value("airspeed").toDouble(),
-                (float)obj.value("groundspeed").toDouble(),
-                0,
-                (uint16_t)obj.value("throttle").toInt(),
-                (float)obj.value("alt").toDouble(),
-                (float)obj.value("climb").toDouble());
+                airSpeed,
+                groundSpeed,
+                heading,
+                throttle,
+                alt,
+                climb);
             send = true;
         }
-
         // =========================================================
-        // 9. 姿态 (Type 9)
+        // Type 9: 姿态数据 (ATTITUDE)
+        // 协议: roll, pitch, yaw (rad), speeds (rad/s)
         // =========================================================
         else if (type == 9) {
             float roll = (float)obj.value("roll").toDouble();
             float pitch = (float)obj.value("pitch").toDouble();
             float yaw = (float)obj.value("yaw").toDouble();
 
-            mavlink_msg_attitude_pack(1, 1, &msg, 0, roll, pitch, yaw, 0, 0, 0);
+            float rollspeed = (float)obj.value("rollspeed").toDouble();
+            float pitchspeed = (float)obj.value("pitchspeed").toDouble();
+            float yawspeed = (float)obj.value("yawspeed").toDouble();
+
+            mavlink_msg_attitude_pack(1, 1, &msg,
+                QDateTime::currentMSecsSinceEpoch(),
+                roll, pitch, yaw,
+                rollspeed, pitchspeed, yawspeed);
             send = true;
         }
 
         // =========================================================
-        // 10. 定位数据 (Type 12)
+        // Type 12: 定位数据 (GLOBAL_POSITION_INT)
+        // 协议: lat/lon(*1E7), alt(mm), vx/vy/vz(m/s*100 -> cm/s)
         // =========================================================
         else if (type == 12) {
             int32_t lat = obj.value("lat").toInt();
             int32_t lon = obj.value("lon").toInt();
-            int32_t alt = obj.value("alt").toInt();
+            int32_t alt = obj.value("alt").toInt(); // 海拔 (mm)
+
+            // 协议未提及 relative_alt (相对高度)，但之前的日志里有。
+            // 如果 JSON 里没有 relative_alt，QGC 的高度会显示海拔（可能很大）。
+            // 建议：如果有 relative_alt 就用，没有就用 alt。
+            int32_t relative_alt = alt;
+            if (obj.contains("relative_alt")) {
+                relative_alt = obj.value("relative_alt").toInt();
+            }
+
+            // 速度: 协议说是 m/s*100 = cm/s
+            // MAVLink vx/vy/vz 也是 cm/s，所以直接透传，不需要转换
             int16_t vx = (int16_t)obj.value("vx").toInt();
-            int16_t vy = (int16_t)obj.value("vy").toInt();
+            int16_t vy = (int16_t)obj.value("vy").toInt(); // 注意: 你的描述里 vx 写了两次，这里应该是 vy
             int16_t vz = (int16_t)obj.value("vz").toInt();
-            uint16_t hdg = (uint16_t)obj.value("hdg").toInt();
+
+            // 航向: 协议未提及，但之前的日志有 hdg (cdeg)
+            uint16_t hdg = 0;
+            if (obj.contains("hdg")) hdg = (uint16_t)obj.value("hdg").toInt();
 
             mavlink_msg_global_position_int_pack(1, 1, &msg,
                 QDateTime::currentMSecsSinceEpoch(),
-                lat, lon, alt, alt, vx, vy, vz, hdg);
+                lat, lon,
+                alt,
+                relative_alt,
+                vx, vy, vz,
+                hdg);
             send = true;
         }
 
         // =========================================================
-        // 11. 文本消息 (Type 20)
+        // Type 13: 雷达数据 (DISTANCE_SENSOR)
+        // 协议: distance (float, 单位米)
+        // =========================================================
+        else if (type == 13) {
+            float distM = (float)obj.value("distance").toDouble();
+
+            // MAVLink 单位是 cm，所以要 * 100
+            uint16_t distCm = (uint16_t)(distM * 100);
+
+            // 只有有效距离才发送 (比如大于0)
+            if (distCm > 0) {
+                mavlink_msg_distance_sensor_pack(1, 1, &msg,
+                    0, // time_boot_ms
+                    0, // min_distance
+                    10000, // max_dis需要调整
+                    distCm,
+                    MAV_DISTANCE_SENSOR_RADAR, // 传感器类型：雷达
+                    0, // id
+                    MAV_SENSOR_ROTATION_PITCH_270, // 方向：向下 (270度)
+                    0, 0, 0, 0,0);
+                send = true;
+            }
+        }
+
+        // =========================================================
+        // Type 14: 植保作业数据 (映射为自定义命名变量)
+        // =========================================================
+        else if (type == 14) {
+            // 提取关键数据
+            int timeSec = obj.value("command1").toInt(); // 飞行时间
+            float flowRate = (float)obj.value("command4").toDouble(); // 流速
+            float volume = (float)obj.value("command5").toDouble(); // 用药量
+
+            // 定义一个 lambda 方便发送
+            auto sendNamedFloat = [&](const char* name, float val) {
+                mavlink_message_t nMsg;
+                // 注意：name 最多10个字符
+                mavlink_msg_named_value_float_pack(1, 1, &nMsg,
+                    QDateTime::currentMSecsSinceEpoch(),
+                    name,
+                    val);
+                uint16_t len = mavlink_msg_to_send_buffer(buffer, &nMsg);
+                emit dataReceived(QByteArray((char*)buffer, len));
+            };
+
+            // 发送数据 (QGC "Analyze" -> "MAVLink Inspector" -> NAMED_VALUE_FLOAT 可见)
+            sendNamedFloat("SprayTime", (float)timeSec);
+            sendNamedFloat("SprayFlow", flowRate);
+            sendNamedFloat("SprayVol", volume);
+
+            // 这里不需要 send=true，因为我们已经在 lambda 里 emit 了
+        }
+
+        // =========================================================
+        // Type 20: 文本信息 (STATUSTEXT)
+        // 协议: severity(int), text(byte[])
         // =========================================================
         else if (type == 20) {
             int severity = obj.value("severity").toInt();
+
+            // 这里的 severity 映射可能的，直接用。
+
+            // 解析 text 数组
+            // 之前的日志显示 text 是一个 int 数组: [92, 117, 53, ...]
             QJsonArray textArr = obj.value("text").toArray();
+            QByteArray rawBytes;
+            for(const auto& item : textArr) {
+                rawBytes.append((char)item.toInt());
+            }
 
-            QString rawStr = "";
-            for(int i=0; i<textArr.size(); i++) rawStr.append(QChar(textArr[i].toInt()));
-            QString decodedStr = unescapeUnicode(rawStr);
+            // 如果是 Unicode 转义符 (如 \u5929)，需要解码；如果是 UTF8，直接用
+            // 之前的 unescapeUnicode 函数可以保留，以防万一
+            QString decodedStr = unescapeUnicode(QString::fromUtf8(rawBytes));
 
+            // 截断到 50 字节
             char textBuf[50] = {0};
-            QByteArray utf8Bytes = decodedStr.toUtf8();
-            int len = qMin((int)utf8Bytes.size(), 49);
-            memcpy(textBuf, utf8Bytes.constData(), len);
+            QByteArray finalBytes = decodedStr.toUtf8();
+            int len = qMin((int)finalBytes.size(), 49);
+            memcpy(textBuf, finalBytes.constData(), len);
 
-            mavlink_msg_statustext_pack(1, 1, &msg, (uint8_t)severity, textBuf, 0, 0);
+            mavlink_msg_statustext_pack(1, 1, &msg,
+                (uint8_t)severity,
+                textBuf,
+                0, 0);
             send = true;
         }
 
@@ -617,14 +773,37 @@ void BoyingWorker::_processJsonData(const QString& jsonStr)
         }
 
         // =========================================================
-        // 15. 距离传感器 (Type 26) -> DISTANCE_SENSOR
+        // Type 26: 测距传感器/雷达 (DISTANCE_SENSOR)
+        // 日志: {"diatance":4000, "status":0, "type":0 ...}
         // =========================================================
         else if (type == 26) {
-            int dist = obj.value("diatance").toInt(); // 注意拼写是 diatance
-            if (dist > 0) {
+            // 1. 获取距离 (注意厂家拼写错误: diatance)
+            // 通常这种整数值的单位是 毫米(mm)
+            int distRaw = obj.value("diatance").toInt();
+
+            // 2. MAVLink 需要 厘米(cm)
+            uint16_t distCm = (uint16_t)(distRaw / 10);
+
+            // 3. 确定方向
+            // 这里的 "type":0 可能是方向？
+            // 暂时假设它是向下指的 (用于定高)，即 ROTATION_PITCH_270
+            // 如果是前视避障雷达，改为 ROTATION_NONE
+            uint8_t orientation = MAV_SENSOR_ROTATION_PITCH_270;
+
+            // 4. 发送 MAVLink 包
+            // 只有距离有效时才发 (比如 < 40米 且 > 0.1米)
+            // 假设 4000mm (4米) 是有效值
+            if (distCm > 0 && distCm < 10000) {
                 mavlink_msg_distance_sensor_pack(1, 1, &msg,
-                    0, 0, 10000, dist, MAV_DISTANCE_SENSOR_LASER, 0,
-                    MAV_SENSOR_ROTATION_PITCH_270, 0, 0, 0, 0,0);
+                    0,      // time_boot_ms
+                    10,     // min_distance (cm)
+                    10000,  // max_distance (cm) - 假设最大100米
+                    distCm, // current_distance (cm)
+                    MAV_DISTANCE_SENSOR_LASER, // 类型：激光/雷达
+                    0,      // id
+                    orientation, // 方向
+                    255,    // covariance (未知)
+                    0, 0, 0, 0); // FOV (未知)
                 send = true;
             }
         }
@@ -736,6 +915,27 @@ void BoyingWorker::sendData(const QByteArray bytes)
 
             if (command != 0) {
                 cmd_ack_id = command;
+
+                // --- [新增] 专门处理 280 (STATUSTEXT) 请求 ---
+                // MAV_CMD_REQUEST_MESSAGE = 512
+                if (command == 512 && (int)param1 == 280) {
+                    mavlink_message_t txtMsg;
+                    uint8_t txtBuf[MAVLINK_MAX_PACKET_LEN];
+
+                    // 构造一条 "Ready" 消息
+                    // severity=6 (INFO), text="System Ready"
+                    char text[] = "System Ready";
+                    mavlink_msg_statustext_pack(
+                        1, 1, &txtMsg,
+                        MAV_SEVERITY_INFO,
+                        text,
+                        0, 0); // id, chunk_seq
+
+                    uint16_t txtLen = mavlink_msg_to_send_buffer(txtBuf, &txtMsg);
+                    emit dataReceived(QByteArray((char*)txtBuf, txtLen));
+
+                    qDebug() << ">>> [自动回复] 发送了 STATUSTEXT 给 QGC";
+                }
 
                 // --- A. 起飞 (TakeOff) ---
                 if (command == MAV_CMD_NAV_TAKEOFF) {
@@ -982,5 +1182,15 @@ void BoyingLink::disconnect(void)
     }
 }
 
-void BoyingLink::_writeBytes(const QByteArray& bytes) { if (_is_connected) emit _workerSend(bytes); }
+void BoyingLink::_writeBytes(const QByteArray& bytes)
+{
+    // ★★★ 加这行日志 ★★★
+    qDebug() << "[BoyingLink] QGC trying to send bytes, len:" << bytes.length();
+
+    if (_is_connected) {
+        emit _workerSend(bytes);
+    } else {
+        qWarning() << "[BoyingLink] Dropped bytes because link is disconnected";
+    }
+}
 void BoyingLink::_onWorkerData(QByteArray data) { emit bytesReceived(this, data); }

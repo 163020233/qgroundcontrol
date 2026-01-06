@@ -131,15 +131,15 @@ void LinkManager::init()
 
     // 3. ★★★ 关键优化：无论新旧，只要没连上，就强制连接 ★★★
     // 检查是否已经连接
-    bool alreadyConnected = false;
-    if (boyingConfig->link()) {
-        alreadyConnected = boyingConfig->link()->isConnected();
-    }
-
-    if (!alreadyConnected) {
-        qCDebug(LinkManagerLog) << "Force connecting Boying SDK Link...";
-        createConnectedLink(boyingConfig);
-    }
+    // bool alreadyConnected = false;
+    // if (boyingConfig->link()) {
+    //     alreadyConnected = boyingConfig->link()->isConnected();
+    // }
+    //
+    // if (!alreadyConnected) {
+    //     qCDebug(LinkManagerLog) << "Force connecting Boying SDK Link...";
+    //     createConnectedLink(boyingConfig);
+    // }
 #endif
     // =============================================================
     if (!qgcApp()->runningUnitTests()) {
