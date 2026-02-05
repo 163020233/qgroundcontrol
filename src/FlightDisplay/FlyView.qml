@@ -79,10 +79,18 @@ Item {
         id:                     _toolInsets
         leftEdgeBottomInset:    _pipView.leftEdgeBottomInset
         bottomEdgeLeftInset:    _pipView.bottomEdgeLeftInset
+
+        // --- 新增这一行，告诉系统顶部有顶栏高度的缩进 ---
+        topEdgeCenterInset:     toolbar.height
     }
 
     FlyViewToolBar {
         id:         toolbar
+        z:         1000  // 或者写个 100
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+
         visible:    !QGroundControl.videoManager.fullScreen
     }
 
@@ -92,12 +100,13 @@ Item {
 
     Item {
         id:                 mapHolder
-        anchors.top:        toolbar.bottom
+        // 修改这里：不要对齐到 toolbar.bottom，要直接对齐到 parent.top
+        anchors.top:        parent.top   // 地图顶点直到屏幕最上方
         anchors.bottom:     parent.bottom
         anchors.left:       parent.left
         anchors.right:      parent.right
-        // 控制展开状态
-        property bool expanded: false
+
+
 
         FlyViewMap {
             id:                     mapControl
@@ -111,202 +120,6 @@ Item {
 
         }
 
-        // // 临时设置点位
-        // Component.onCompleted: {
-        //     _root.homePoint = QtPositioning.coordinate(30.813901,104.096312)
-        //     mapControl.center = _root.homePoint
-        //     mapControl.zoomLevel = 18
-        // }
-
-        // --- PositionSource 定义在按钮上方，保证按钮能找到 ---
-        PositionSource {
-            id: gcsPositionSource
-            active: false
-            updateInterval: 1000
-
-            onPositionChanged: {
-                if (position.coordinate.isValid) {
-                    mapControl.center = position.coordinate
-                    mapControl.zoomLevel = 18
-                    console.log("地图居中到 GCS 定位:", position.coordinate)
-                    stop()   // 获取到一次就停掉
-                }
-            }
-        }
-        // 主按钮（右上角）
-        QGCToolBarButton {
-            id: mainButton
-            width: 48
-            height: 48
-            anchors.top: parent.top
-            anchors.topMargin: 16
-            anchors.right: parent.right
-            anchors.rightMargin: 16
-            z: 1000
-
-            // 默认收起状态图标
-            property string collapsedIcon: "/res/buttonLeft_position.svg"
-            // 展开状态图标
-            property string expandedIcon: "/res/buttonRight_position.svg"
-
-            icon.source: collapsedIcon
-            // 淡入淡出动画
-            Behavior on opacity {
-                NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
-            }
-            opacity: !mapControl.pipMode ? 1 : 0
-            enabled: !mapControl.pipMode
-
-            onClicked: {
-                mapHolder.expanded = !mapHolder.expanded
-                icon.source = mapHolder.expanded ? expandedIcon : collapsedIcon
-                console.log("主按钮点击，expanded状态:", mapHolder.expanded)
-            }
-        }
-
-        // GCS 定位按钮
-        QGCToolBarButton {
-            id: gcsButton
-            width: 48
-            height: 48
-            anchors.top: mainButton.top
-            anchors.right: mainButton.right
-            anchors.rightMargin: mapHolder.expanded ? 120 : 0
-            icon.source: "/res/QGCLogoFull.png"
-            z: 1000
-
-            Behavior on anchors.rightMargin {
-                NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
-            }
-            Behavior on opacity {
-                NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
-            }
-
-            opacity: (mapHolder.expanded && !mapControl.pipMode) ? 1 : 0
-            enabled: mapHolder.expanded && !mapControl.pipMode
-
-            onClicked: {
-                console.log("开始获取 GCS 定位...")
-                gcsPositionSource.stop()
-                gcsPositionSource.start()
-            }
-        }
-
-        // 飞控定位按钮
-        QGCToolBarButton {
-            id: locateButton
-            width: 48
-            height: 48
-            anchors.top: mainButton.top
-            anchors.right: mainButton.right
-            anchors.rightMargin: mapHolder.expanded ? 64 : 0
-            icon.source: "/res/vehi.png"
-            z: 1000
-
-            Behavior on anchors.rightMargin {
-                NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
-            }
-            Behavior on opacity {
-                NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
-            }
-
-            opacity: (mapHolder.expanded && !mapControl.pipMode) ? 1 : 0
-            enabled: mapHolder.expanded && !mapControl.pipMode
-
-            onClicked: {
-                var vehicle = QGroundControl.multiVehicleManager.activeVehicle
-                if (vehicle && vehicle.coordinate && vehicle.coordinate.isValid) {
-                    mapControl.center = vehicle.coordinate
-                    mapControl.zoomLevel = 18
-                    console.log("地图居中到飞行器位置:", vehicle.coordinate)
-                } else {
-                    Qt.callLater(() => {
-                        console.log("飞行器位置未准备好")
-                    })
-                }
-            }
-        }
-
-
-
-        // 释放牵引线按钮
-        // QGCToolBarButton {
-        //     id: releaseButton
-        //     width: 48
-        //     height: 48
-        //     anchors.top: mainButton.top
-        //     anchors.right: mainButton.right
-        //     anchors.rightMargin: mapHolder.expanded ? 176 : 0
-        //     icon.source: "/res/GripperGrab.svg"
-        //
-        //     Behavior on anchors.rightMargin {
-        //         NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
-        //     }
-        //     Behavior on opacity {
-        //         NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
-        //     }
-        //
-        //     opacity: (mapHolder.expanded && !mapControl.pipMode) ? 1 : 0
-        //     enabled: mapHolder.expanded && !mapControl.pipMode
-        //
-        //     onClicked: {
-        //         pwmLoader.active = !pwmLoader.active
-        //     }
-        // }
-        //
-        // // Loader 加载 PWM 控制模块
-        // Loader {
-        //     id: pwmLoader
-        //     anchors.top: releaseButton.bottom
-        //     anchors.right: releaseButton.right
-        //     source: "PwmControlPanel.qml"
-        //     active: false
-        //     z: 1000
-        // }
-
-        // // 释放牵引线按钮
-        // QGCToolBarButton {
-        //     id: releaseButton
-        //     width: 48
-        //     height: 48
-        //     anchors.top: mainButton.top
-        //     anchors.right: mainButton.right
-        //     anchors.rightMargin: mapHolder.expanded ? 176 : 0
-        //     icon.source: "/res/GripperGrab.svg"
-        //     onClicked: {
-        //         pwmLoader.active = !pwmLoader.active
-        //     }
-        // }
-        //
-        // // Loader 加载 PWM 控制模块
-        // Loader {
-        //     id: pwmLoader
-        //     anchors.top: releaseButton.bottom
-        //     anchors.right: releaseButton.right
-        //     source: "PwmControlPanel.qml"
-        //     active: false
-        //     z: 1000
-        // }
-
-        // // 定位按钮，放右边中间
-        // QGCToolBarButton {
-        //     width: 48
-        //     height: 48
-        //     anchors.verticalCenter: parent.verticalCenter
-        //     anchors.right: parent.right
-        //     anchors.rightMargin: 16
-        //     icon.source: "/res/locate.svg"
-        //
-        //     onClicked: {
-        //         if (mapControl.gcsPosition && mapControl.gcsPosition.isValid) {
-        //             mapControl.center = mapControl.gcsPosition
-        //             mapControl.zoomLevel = 18
-        //             console.log("地图居中到 GCS 位置")
-        //         } else {
-        //             console.log("GCS 位置未准备好")
-        //         }
-        //     }
-        // }
 
         FlyViewVideo {
             id:         videoControl
@@ -332,11 +145,19 @@ Item {
 
         FlyViewWidgetLayer {
             id:                     widgetLayer
+            // 1. 恢复到 parent.top，保证它能撑开高度
             anchors.top:            parent.top
+
+            // 2. 【核心优化】使用边距把图标挤下去
+            // 这样背景依然是全屏的，但内部图标的起点变成了顶栏下方
+            anchors.topMargin:      toolbar.height
+
             anchors.bottom:         parent.bottom
             anchors.left:           parent.left
             anchors.right:          guidedValueSlider.visible ? guidedValueSlider.left : parent.right
-            z:                      _fullItemZorder + 2 // we need to add one extra layer for map 3d viewer (normally was 1)
+
+            // 确保 Z 轴足够高，能看到图标
+            z:                      _fullItemZorder + 2
             parentToolInsets:       _toolInsets
             mapControl:             _mapControl
             visible:                !QGroundControl.videoManager.fullScreen
@@ -346,8 +167,9 @@ Item {
 
         FlyViewCustomLayer {
             id:                 customOverlay
+            // 让它填充 widgetLayer，这样它也会自动带上那部分 topMargin
             anchors.fill:       widgetLayer
-            z:                  _fullItemZorder + 2
+            z:                  widgetLayer.z + 1
             parentToolInsets:   widgetLayer.totalToolInsets
             mapControl:         _mapControl
             visible:            !QGroundControl.videoManager.fullScreen
@@ -375,7 +197,7 @@ Item {
         GuidedValueSlider {
             id:                 guidedValueSlider
             anchors.right:      parent.right
-            anchors.top:        parent.top
+            anchors.top:        parent.bottom
             anchors.bottom:     parent.bottom
             z:                  QGroundControl.zOrderTopMost
             visible:            false

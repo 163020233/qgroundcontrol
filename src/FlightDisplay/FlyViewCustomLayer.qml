@@ -1,55 +1,76 @@
-/****************************************************************************
- *
- * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
- *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
- *
- ****************************************************************************/
-
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Dialogs
 import QtQuick.Layouts
-
-import QtLocation
 import QtPositioning
-import QtQuick.Window
-import QtQml.Models
 
 import QGroundControl
-import QGroundControl.Controllers
 import QGroundControl.Controls
-import QGroundControl.FactSystem
-import QGroundControl.FlightDisplay
-import QGroundControl.FlightMap
-import QGroundControl.Palette
 import QGroundControl.ScreenTools
-import QGroundControl.Vehicle
+import QGroundControl.Palette
 
-// To implement a custom overlay copy this code to your own control in your custom code source. Then override the
-// FlyViewCustomLayer.qml resource with your own qml. See the custom example and documentation for details.
 Item {
     id: _root
 
-    property var parentToolInsets               // These insets tell you what screen real estate is available for positioning the controls in your overlay
-    property var totalToolInsets:   _toolInsets // These are the insets for your custom overlay additions
+    property var parentToolInsets
+    property var totalToolInsets:   _toolInsets
     property var mapControl
 
-    // since this file is a placeholder for the custom layer in a standard build, we will just pass through the parent insets
-    QGCToolInsets {
-        id:                     _toolInsets
-        leftEdgeTopInset:       parentToolInsets.leftEdgeTopInset
-        leftEdgeCenterInset:    parentToolInsets.leftEdgeCenterInset
-        leftEdgeBottomInset:    parentToolInsets.leftEdgeBottomInset
-        rightEdgeTopInset:      parentToolInsets.rightEdgeTopInset
-        rightEdgeCenterInset:   parentToolInsets.rightEdgeCenterInset
-        rightEdgeBottomInset:   parentToolInsets.rightEdgeBottomInset
-        topEdgeLeftInset:       parentToolInsets.topEdgeLeftInset
-        topEdgeCenterInset:     parentToolInsets.topEdgeCenterInset
-        topEdgeRightInset:      parentToolInsets.topEdgeRightInset
-        bottomEdgeLeftInset:    parentToolInsets.bottomEdgeLeftInset
-        bottomEdgeCenterInset:  parentToolInsets.bottomEdgeCenterInset
-        bottomEdgeRightInset:   parentToolInsets.bottomEdgeRightInset
+    // 1. 搬过来的私有变量：控制展开状态
+    property bool toolsExpanded: false
+
+    QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
+
+    // 2. 搬过来的定位源
+    PositionSource {
+        id: gcsPositionSource
+        active: false
+        updateInterval: 1000
+        onPositionChanged: {
+            if (position.coordinate.isValid && mapControl) {
+                mapControl.center = position.coordinate
+                mapControl.zoomLevel = 18
+                stop()
+            }
+        }
+    }
+
+    // 3. 搬过来的按钮布局
+    // 逻辑：我们要把按钮放在右上角，但要避开 QGC 的 TopToolbar (topEdgeRightInset)
+    Column {
+        anchors.top:        parent.top
+        anchors.right:      parent.right
+        // 关键布局逻辑：利用 Insets 自动避让顶部栏
+        anchors.topMargin:  parentToolInsets.topEdgeRightInset + ScreenTools.defaultFontPixelHeight
+        anchors.rightMargin: ScreenTools.defaultFontPixelWidth
+        spacing:            ScreenTools.defaultFontPixelHeight / 2
+
+        // 主切换按钮
+        QGCToolBarButton {
+            id: mainButton
+            icon.source: toolsExpanded ? "/res/buttonRight_position.svg" : "/res/buttonLeft_position.svg"
+            onClicked: toolsExpanded = !toolsExpanded
+        }
+
+        // 飞控定位按钮 (带动画显示)
+        QGCToolBarButton {
+            visible:    toolsExpanded
+            opacity:    toolsExpanded ? 1 : 0
+            icon.source: "/res/vehi.png"
+            Behavior on opacity { NumberAnimation { duration: 250 } }
+            onClicked: {
+                if (globals.activeVehicle && globals.activeVehicle.coordinate.isValid) {
+                    mapControl.center = globals.activeVehicle.coordinate
+                }
+            }
+        }
+
+        // GCS定位按钮
+        QGCToolBarButton {
+            visible:    toolsExpanded
+            opacity:    toolsExpanded ? 1 : 0
+            icon.source: "/res/QGCLogoFull.png"
+            Behavior on opacity { NumberAnimation { duration: 250 } }
+            onClicked: gcsPositionSource.start()
+        }
     }
 }

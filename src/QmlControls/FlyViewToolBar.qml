@@ -23,9 +23,12 @@ Rectangle {
     id:     _root
     width:  parent.width
     height: ScreenTools.toolbarHeight*1.1
-    color:  qgcPal.toolbarBackground
-    // color: Qt.rgba(0, 0, 0, 0) // 顶部菜单栏透明
-
+    //color:  qgcPal.toolbarBackground
+    // 逻辑：借用系统主题的 R/G/B 颜色，但强行覆盖 Alpha 为 0.7
+    color: Qt.rgba(qgcPal.toolbarBackground.r,
+        qgcPal.toolbarBackground.g,
+        qgcPal.toolbarBackground.b,
+        0.9)//这个亮度合适
 
     // 🔹 自定义属性，绑定 Plan 页的 MainStatusIndicator
     // property var mainStatusLabelLogic: null
@@ -45,7 +48,7 @@ Rectangle {
         anchors.left:   parent.left
         anchors.right:  parent.right
         anchors.bottom: parent.bottom
-        height:         1
+        height:         0
         color:          "black"
         visible:        qgcPal.globalTheme === QGCPalette.Light
     }
