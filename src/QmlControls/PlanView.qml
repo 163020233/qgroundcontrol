@@ -609,14 +609,15 @@ Item {
 
         Rectangle {
             id: collapsibleToolStrip
-            width: panelCollapsed ? 0 : 50   // 收起/展开宽度
-            height: parent.height
-            color: Qt.rgba(qgcPal.windowShade.r,
-                qgcPal.windowShade.g,
-                qgcPal.windowShade.b,
-                0.5)   // 0.5 表示透明度 50%
-            radius: 6
-            clip: false  // ✅ 关键，收起时裁剪内容
+            // --- 1. 动态宽度逻辑：使用 ScreenTools 代替固定数字 ---
+            // 定义一个基础单位，通常 6-8 倍的字符宽度比较适合放图标
+            readonly property real expandedWidth: ScreenTools.defaultFontPixelWidth * 8
+
+            width:              panelCollapsed ? 0 : expandedWidth
+            height:             parent.height
+            color:              "transparent"
+            radius:             6
+            clip:               false // 允许内部的切换按钮突出到矩形外面
 
 
             property bool panelCollapsed: false
@@ -746,6 +747,19 @@ Item {
                             enabled: true
                             visible: true
                             dropPanelComponent: centerMapDropPanel
+                        },
+                        // --- 新增：返回飞行界面按钮 ---
+                        ToolStripAction {
+                            id:                 backToFlyAction
+                            text:               qsTr("飞行") // 或者叫“返回”
+                            iconSource:         "/qmlimages/PaperPlane.svg" // 使用 QGC 标准的飞机图标
+
+                            onTriggered: {
+                                // 核心逻辑：调用全局函数切换视图
+                                if (mainWindow.allowViewSwitch()) {
+                                    mainWindow.showFlyView()
+                                }
+                            }
                         }
                     ]
                 }

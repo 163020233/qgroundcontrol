@@ -81,17 +81,40 @@ Item {
         bottomEdgeLeftInset:    _pipView.bottomEdgeLeftInset
 
         // --- 新增这一行，告诉系统顶部有顶栏高度的缩进 ---
-        topEdgeCenterInset:     toolbar.height
+        topEdgeCenterInset:     toolbartoolbar.height
     }
+
+    // src/FlightDisplay/FlyView.qml
 
     FlyViewToolBar {
         id:         toolbar
-        z:         1000  // 或者写个 100
-        anchors.top: parent.top
-        anchors.left: parent.left
+        z:          1000
+        anchors.left:  parent.left
         anchors.right: parent.right
 
-        visible:    !QGroundControl.videoManager.fullScreen
+        // --- 【核心动画逻辑：向上滑出 + 淡出】 ---
+        anchors.top:   parent.top
+
+        // 逻辑：当面板打开时，间距变为负的高度，使其“藏”到屏幕上方
+        anchors.topMargin: (toolDrawer.visible || QGroundControl.videoManager.fullScreen) ? -height : 0
+
+        // 透明度随位置同步变化
+        opacity:           (toolDrawer.visible || QGroundControl.videoManager.fullScreen) ? 0 : 1
+
+        // 只有在没完全滑出时才占用点击事件
+        visible:           opacity > 0
+
+        // 定义平滑的过渡动画
+        Behavior on anchors.topMargin {
+            NumberAnimation {
+                duration: 500 // 增加时长，降低速度
+                easing.type: Easing.OutQuad // 使用平滑曲线
+            }
+        }
+        Behavior on opacity {
+            NumberAnimation { duration: 500 }
+        }
+        // --------------------------------------
     }
 
     Component.onCompleted: {

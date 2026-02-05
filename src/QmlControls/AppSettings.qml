@@ -21,9 +21,19 @@ import QGroundControl.AppSettings
 Rectangle {
     id:     settingsView
     // color:  qgcPal.window
-    color: "transparent"
+    // color: "transparent"
+    // --- 核心修改：统一工业暗色半透明风格 ---
+    // 使用 0.9 的透明度，既能看到背后的地图，又能保证设置项文字的绝对清晰
+    // color: Qt.rgba(0, 0, 0, 0.3)
+
+    // 如果你想让它更有“磨砂玻璃”的质感，可以微调为：
+    color: Qt.rgba(0.05, 0.05, 0.05, 0.3)
 
     z:      QGroundControl.zOrderTopMost
+
+    // 建议：强制关掉边框
+    border.width: 0
+    // z:      QGroundControl.zOrderTopMost
 
     readonly property real _defaultTextHeight:  ScreenTools.defaultFontPixelHeight
     readonly property real _defaultTextWidth:   ScreenTools.defaultFontPixelWidth

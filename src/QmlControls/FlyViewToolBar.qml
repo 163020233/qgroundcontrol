@@ -25,10 +25,7 @@ Rectangle {
     height: ScreenTools.toolbarHeight*1.1
     //color:  qgcPal.toolbarBackground
     // 逻辑：借用系统主题的 R/G/B 颜色，但强行覆盖 Alpha 为 0.7
-    color: Qt.rgba(qgcPal.toolbarBackground.r,
-        qgcPal.toolbarBackground.g,
-        qgcPal.toolbarBackground.b,
-        0.9)//这个亮度合适
+    color: Qt.rgba(0, 0, 0, 0.9)
 
     // 🔹 自定义属性，绑定 Plan 页的 MainStatusIndicator
     // property var mainStatusLabelLogic: null
@@ -248,49 +245,100 @@ Rectangle {
     }
 
     // Large parameter download progress bar
+    // 深度定制版参数同步显示器
     Rectangle {
         id:             largeProgressBar
-        anchors.bottom: parent.bottom
-        anchors.left:   parent.left
-        anchors.right:  parent.right
-        height:         parent.height
-        color:          qgcPal.window
+        anchors.fill:   parent
+        color:          "#E6000000" // 90% 透明度的纯黑
         visible:        _showLargeProgress
 
         property bool _initialDownloadComplete: _activeVehicle ? _activeVehicle.initialConnectComplete : true
         property bool _userHide:                false
-        property bool _showLargeProgress:       !_initialDownloadComplete && !_userHide && qgcPal.globalTheme === QGCPalette.Light
+        // 移除了主题限制，确保暗色模式也能看到
+        property bool _showLargeProgress:       !_initialDownloadComplete && !_userHide
 
-        Connections {
-            target:                 QGroundControl.multiVehicleManager
-            function onActiveVehicleChanged(activeVehicle) { largeProgressBar._userHide = false }
-        }
-
+        // 背景进度（深绿色）
         Rectangle {
-            anchors.top:    parent.top
-            anchors.bottom: parent.bottom
+            anchors.fill:   parent
             width:          _activeVehicle ? _activeVehicle.loadProgress * parent.width : 0
             color:          qgcPal.colorGreen
+            opacity:        0.2 // 淡淡的绿色铺满背景
         }
 
-        QGCLabel {
-            anchors.centerIn:   parent
-            text:               qsTr("下载中")
-            font.pointSize:     ScreenTools.largeFontPointSize
+        // 底部高亮进度条（亮绿色）
+        Rectangle {
+            anchors.bottom: parent.bottom
+            height:         3 // 只有 3 像素高
+            width:          _activeVehicle ? _activeVehicle.loadProgress * parent.width : 0
+            color:          qgcPal.colorGreen
+            Behavior on width { NumberAnimation { duration: 500 } }
         }
 
-        QGCLabel {
-            anchors.margins:    _margin
-            anchors.right:      parent.right
-            anchors.bottom:     parent.bottom
-            text:               qsTr("点击任意位置隐藏")
+        RowLayout {
+            anchors.centerIn: parent
+            spacing: ScreenTools.defaultFontPixelWidth
 
-            property real _margin: ScreenTools.defaultFontPixelWidth / 2
+            // 增加一个小转圈动画，显得系统没死机
+            BusyIndicator {
+                width: 20; height: 20
+                running: largeProgressBar.visible
+            }
+
+            QGCLabel {
+                text: qsTr("系统参数同步中 %1%").arg(Math.round(_activeVehicle ? _activeVehicle.loadProgress * 100 : 0))
+                font.bold: true
+                color: "white"
+            }
         }
 
         MouseArea {
-            anchors.fill:   parent
-            onClicked:      largeProgressBar._userHide = true
+            anchors.fill: parent
+            onClicked:    largeProgressBar._userHide = true
         }
     }
+    // Rectangle {
+    //     id:             largeProgressBar
+    //     anchors.bottom: parent.bottom
+    //     anchors.left:   parent.left
+    //     anchors.right:  parent.right
+    //     height:         parent.height
+    //     color:          qgcPal.window
+    //     visible:        _showLargeProgress
+    //
+    //     property bool _initialDownloadComplete: _activeVehicle ? _activeVehicle.initialConnectComplete : true
+    //     property bool _userHide:                false
+    //     property bool _showLargeProgress:       !_initialDownloadComplete && !_userHide && qgcPal.globalTheme === QGCPalette.Light
+    //
+    //     Connections {
+    //         target:                 QGroundControl.multiVehicleManager
+    //         function onActiveVehicleChanged(activeVehicle) { largeProgressBar._userHide = false }
+    //     }
+    //
+    //     Rectangle {
+    //         anchors.top:    parent.top
+    //         anchors.bottom: parent.bottom
+    //         width:          _activeVehicle ? _activeVehicle.loadProgress * parent.width : 0
+    //         color:          qgcPal.colorGreen
+    //     }
+    //
+    //     QGCLabel {
+    //         anchors.centerIn:   parent
+    //         text:               qsTr("下载中")
+    //         font.pointSize:     ScreenTools.largeFontPointSize
+    //     }
+    //
+    //     QGCLabel {
+    //         anchors.margins:    _margin
+    //         anchors.right:      parent.right
+    //         anchors.bottom:     parent.bottom
+    //         text:               qsTr("点击任意位置隐藏")
+    //
+    //         property real _margin: ScreenTools.defaultFontPixelWidth / 2
+    //     }
+    //
+    //     MouseArea {
+    //         anchors.fill:   parent
+    //         onClicked:      largeProgressBar._userHide = true
+    //     }
+    // }
 }

@@ -504,7 +504,7 @@ ApplicationWindow {
         // color:          qgcPal.window
         // color: Qt.rgba(0, 0, 0, 0.8) // 假设紫色半透明
 
-        width: parent.width * 0.5       // 半屏宽度
+        width: parent.width * 0.75       // 半屏宽度
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.right: parent.right     // 贴右边
