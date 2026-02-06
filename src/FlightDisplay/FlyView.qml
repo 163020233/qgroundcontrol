@@ -190,10 +190,19 @@ Item {
 
         FlyViewCustomLayer {
             id:                 customOverlay
-            // 让它填充 widgetLayer，这样它也会自动带上那部分 topMargin
-            anchors.fill:       widgetLayer
+
+            // --- 【核心修改】 ---
+            // 不要填充 widgetLayer，改为填充 parent (即整个 FlyView)
+            // 这样无论左边怎么变，你的这个层都是全屏不动的
+            anchors.fill:       parent
+
+            // 确保它依然在 UI 层级之上
             z:                  widgetLayer.z + 1
+
+            // 依然要把 widgetLayer 的 Insets 传进去
+            // 这样你内部的按钮依然可以知道左边被占用了多少像素
             parentToolInsets:   widgetLayer.totalToolInsets
+
             mapControl:         _mapControl
             visible:            !QGroundControl.videoManager.fullScreen
         }
