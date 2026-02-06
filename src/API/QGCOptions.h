@@ -99,69 +99,84 @@ public:
 
     /// Should QGC hide its settings menu and colapse it into one single menu (Settings and Vehicle Setup)?
     /// @return true if QGC should consolidate both menus into one.
+    ///  是否把“系统设置”和“飞机设置”合并成一个菜单，减少操作员查找路径
     virtual bool combineSettingsAndSetup() const { return false; }
 
     /// Main ToolBar Multiplier.
     /// @return Factor to use when computing toolbar height
+    ///  顶栏高度倍数（可以把顶栏变宽或变窄）。
     virtual double toolbarHeightMultiplier() const { return 1.0; }
 
     /// Enable Plan View Selector (Mission, Fence or Rally)
-    /// @return True or false
+    /// @return True or false是否允许切换“航线/围栏/集结点”
     virtual bool enablePlanViewSelector() const { return true; }
 
     /// Should the mission status indicator (Plan View) be shown?
-    /// @return Yes or no
+    /// @return Yes or no是否在规划页面底部显示任务概览（距离、时间等）。
     virtual bool showMissionStatus() const { return true; }
 
     /// Provides an optional, custom preflight checklist
+    /// 指定自定义的“起飞前检查清单”路径。
     virtual QUrl preFlightChecklistUrl() const { return QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/FlightDisplay/PreFlightCheckList.qml")); }
 
-    /// Allows replacing the toolbar Light Theme color
+    /// Allows replacing the toolbar Light Theme color自定义顶栏在亮色和暗色模式下的背景颜色。
     virtual QColor toolbarBackgroundLight() const { return QColorConstants::White; }
 
     /// Allows replacing the toolbar Dark Theme color
     virtual QColor toolbarBackgroundDark() const { return QColorConstants::Black; }
 
-    /// By returning false you can hide the following sensor calibration pages
-    virtual bool showSensorCalibrationAccel() const { return true; }
-    virtual bool showSensorCalibrationAirspeed() const { return true; }
-    virtual bool showSensorCalibrationCompass() const { return true; }
-    virtual bool showSensorCalibrationGyro() const { return true; }
-    virtual bool showSensorCalibrationLevel() const { return true; }
 
+    /// By returning false you can hide the following sensor calibration pages
+    ///加速度计校准
+    virtual bool showSensorCalibrationAccel() const { return true; }
+    ///陀螺仪校准。
+    virtual bool showSensorCalibrationAirspeed() const { return true; }
+    ///指南针校准
+    virtual bool showSensorCalibrationCompass() const { return true; }
+    ///水平面校准
+    virtual bool showSensorCalibrationGyro() const { return true; }
+    ///水平面校准
+    virtual bool showSensorCalibrationLevel() const { return true; }
+    ///空速计校准
     /// @return false: custom build has automatically enabled a specific joystick
     virtual bool allowJoystickSelection() const { return true; }
-
+    //是否检查固件版本
     virtual bool checkFirmwareVersion() const { return true; }
 
     /// @return true: vehicle connection is disabled
     virtual bool disableVehicleConnection() const { return false; }
 
     /// @return true: Guided actions will be disabled is there is no RC RSSI
+    /// 是否要求必须有遥控器信号才允许通过地面站点“起飞”。
     virtual bool guidedActionsRequireRCRSSI() const { return false; }
 
     /// @return true: Only allow waypoints and complex items in Plan
+    ///是否限制只能放置普通航点，隐藏“测绘扫描”等复杂任务。
     virtual bool missionWaypointsOnly() const { return false; }
 
-    /// @return false: multi vehicle support is disabled
+    /// @return false: multi vehicle support is disabled: 是否允许同时连接多架飞机。
     virtual bool multiVehicleEnabled() const { return true; }
 
     virtual bool sensorsHaveFixedOrientation() const { return false; }
-
+    // 固件升级页面
     virtual bool showFirmwareUpgrade() const { return true; }
+    ///是否允许使用海拔高度
     virtual bool showMissionAbsoluteAltitude() const { return true; }
+    ///是否显示离线地图的导入和导出功能。
     virtual bool showOfflineMapExport() const { return true; }
     virtual bool showOfflineMapImport() const { return true; }
     virtual bool showPX4LogTransferOptions() const { return true; }
     virtual bool showSimpleMissionStart() const { return false; }
 
+    /// 是否允许通过 WiFi 进行校准（默认只有 USB 才允许）
     virtual bool wifiReliableForCalibration() const { return false; }
 
     /// Desktop builds save the main application size and position on close (and restore it on open)
     virtual bool enableSaveMainWindowPosition() const { return true; }
-
+    ///: 预设的测绘扫描参数清单
     virtual QStringList surveyBuiltInPresetNames() const { return QStringList(); } ///< Built in presets cannot be deleted
 
+    ///强制使用移动端的预览式文件选择框。
 #if defined (Q_OS_ANDROID) || defined(Q_OS_IOS)
     virtual bool useMobileFileDialog() const { return true; }
 #else
@@ -171,8 +186,11 @@ public:
     /// If returned QString in non-empty it means that firmware upgrade will run in a mode which only
     /// supports downloading a single firmware file from the URL. It also supports custom install through
     /// the Advanced options.
+    ///
+    /// : 指定一个唯一的固件下载地址。
     virtual QString firmwareUpgradeSingleURL() const { return QString(); }
 
+    /// 手动设置屏幕像素密度（解决某些安卓平板文字太小的问题）。
     /// Device specific pixel ratio/density (for when Qt doesn't properly read it from the hardware)
     virtual float devicePixelRatio() const { return 0.0f; }
     virtual float devicePixelDensity() const { return 0.0f; }
@@ -180,6 +198,7 @@ public:
     virtual const QGCFlyViewOptions *flyViewOptions() const { return _defaultFlyViewOptions; }
 
 signals:
+    ///是否允许用户手动选择手柄
     void allowJoystickSelectionChanged(bool allow);
     void devicePixelDensityChanged();
     void devicePixelRatioChanged();
