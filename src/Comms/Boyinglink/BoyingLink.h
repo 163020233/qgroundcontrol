@@ -16,12 +16,25 @@
 #include "BoyingLinkConfiguration.h"
 #include <QThread>
 #include <QMutex>
-#include <QTimer> // 别忘了这个
-#include <QDateTime> // 引入时间库
+#include <QTimer>
+#include <QDateTime>
 #include <mavlink.h>
 #ifdef Q_OS_ANDROID
 #include <QJniObject>
 #endif
+
+struct VibrationData {
+    float x;
+    float y;
+    float z;
+    int clip[3];
+};
+struct RangefinderData {
+    float distance;   // 米
+    int status;
+    int type;
+};
+
 
 class BoyingWorker : public QObject {
     Q_OBJECT
@@ -61,6 +74,27 @@ private:
     uint32_t _lastArduMode    = 0; // 对应映射后的 2, 5, 6 等
     uint8_t  _lastMavState    = MAV_STATE_STANDBY;
 
+    // --- [新增] 专门负责发送 UI 实时数据的辅助函数 ---
+    /**
+     * @brief 发送 NAMED_VALUE_FLOAT 消息，用于驱动 QGC 仪表盘实时显示
+     * @param name  数据的名称，注意：MAVLink 限制长度最多 10 个字符 (例如 "SprayFlow")
+     * @param value 具体的数值
+     */
+    void sendNamedValue(const char* name, float value);
+    void handleModePacket(const QJsonObject& obj);      // Type 0, 29
+    void handleStaticInfoPacket(const QJsonObject& obj);// Type 2
+    void handleGPSPacket(const QJsonObject& obj);       // Type 3, 4, 12
+    void handleBatteryPacket(const QJsonObject& obj);   // Type 5
+    void handleRawSensorPacket(const QJsonObject& obj); // Type 6
+    void handleVibrationPacket(const QJsonObject& obj); // Type 7
+    void handleHUDPacket(const QJsonObject& obj);       // Type 8
+    void handleAttitudePacket(const QJsonObject& obj);  // Type 9
+    void handleVersionPacket(const QJsonObject& obj);   // Type 11
+    void handlePayloadPacket(const QJsonObject& obj);   // Type 14, 24, 13, 26
+    void handleServoPacket(const QJsonObject& obj);     // Type 21
+    void handleRCChannelsPacket(const QJsonObject& obj);// Type 22, 25
+    void handleTimePacket(const QJsonObject& obj);      // Type 23
+    void handleTextPacket(const QJsonObject& obj);      // Type 20
 #ifdef Q_OS_ANDROID
     QJniObject _javaSdk;
 #endif

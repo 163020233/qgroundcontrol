@@ -16,12 +16,10 @@ Item {
     property var totalToolInsets:   _toolInsets
     property var mapControl
 
-    // 控制展开状态
     property bool toolsExpanded: false
 
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
-    // 定位源逻辑
     PositionSource {
         id: gcsPositionSource
         active: false
@@ -43,112 +41,139 @@ Item {
         anchors.right:      parent.right
         anchors.rightMargin: ScreenTools.defaultFontPixelWidth
 
-        // --- 【同步滑出逻辑】 ---
         anchors.top:        parent.top
-
-        // 逻辑：当面板打开时，缩回到上方。高度加上 10 像素的偏移
         anchors.topMargin:  toolDrawer.visible ? -height : (ScreenTools.defaultFontPixelHeight * 0.5)
 
         opacity:            toolDrawer.visible ? 0 : 1
         visible:            opacity > 0
 
-        Behavior on anchors.topMargin {
-            NumberAnimation { duration: 500; easing.type: Easing.OutQuad  }
-        }
-        Behavior on opacity {
-            NumberAnimation { duration: 500 }
-        }
-        // ----------------------
-
         layoutDirection:    Qt.RightToLeft
-        spacing:            ScreenTools.defaultFontPixelWidth
+        spacing:            ScreenTools.defaultFontPixelWidth * 1.2 // 稍微加大间距，容纳圆形背景
         z:                  1000
 
+        Behavior on anchors.topMargin { NumberAnimation { duration: 500; easing.type: Easing.OutQuad  } }
+        Behavior on opacity { NumberAnimation { duration: 500 } }
+
+        // --- 统一样式属性定义 ---
+        readonly property real btnSize: ScreenTools.defaultFontPixelHeight * 2.6 // 统一圆圈大小
+
         // 1. [主开关]
-        QGCToolBarButton {
-            id: mainButton
-            icon.source: toolsExpanded ? "/res/buttonRight_position.svg" : "/res/buttonLeft_position.svg"
-            onClicked: toolsExpanded = !toolsExpanded
+        Rectangle {
+            width: controlRow.btnSize; height: width; radius: width / 2
+            color: toolsExpanded ? Qt.rgba(0.2, 0.2, 0.2, 0.8) : Qt.rgba(0.1, 0.1, 0.1, 0.6) // 展开和收起时底色微调
+            border.color: Qt.rgba(1, 1, 1, 0.2); border.width: 1
+
+            QGCToolBarButton {
+                anchors.centerIn: parent
+                icon.source: toolsExpanded ? "/res/buttonRight_position.svg" : "/res/buttonLeft_position.svg"
+                onClicked: toolsExpanded = !toolsExpanded
+            }
         }
 
-        // --- 以下为从 ToolStripActionList 搬过来的工业功能 ---
-
         // 2. [设置] 系统设置按钮
-        QGCToolBarButton {
+        Rectangle {
+            width: controlRow.btnSize; height: width; radius: width / 2
+            color: Qt.rgba(0.15, 0.15, 0.15, 0.7) // 灰度透明背景
+            border.color: Qt.rgba(1, 1, 1, 0.1); border.width: 1
             visible:    toolsExpanded
             opacity:    toolsExpanded ? 1 : 0
-            icon.source: "/res/gear-black.svg"
             Behavior on opacity { NumberAnimation { duration: 200 } }
-            onClicked: {
-                if(mainWindow.allowViewSwitch()) {
-                    mainWindow.showSettingsTool() // 触发 MainRootWindow 的侧滑逻辑
-                }
+
+            QGCToolBarButton {
+                anchors.centerIn: parent
+                icon.source: "/res/gear-black.svg"
+                onClicked: if(mainWindow.allowViewSwitch()) mainWindow.showSettingsTool()
             }
         }
 
         // 3. [任务] 计划视图
-        QGCToolBarButton {
+        Rectangle {
+            width: controlRow.btnSize; height: width; radius: width / 2
+            color: Qt.rgba(0.15, 0.15, 0.15, 0.7)
             visible:    toolsExpanded
             opacity:    toolsExpanded ? 1 : 0
-            icon.source: "/qmlimages/Plan.svg"
             Behavior on opacity { NumberAnimation { duration: 200 } }
-            onClicked: {
-                if (mainWindow.allowViewSwitch()) {
-                    mainWindow.showPlanView() // 切换到 PlanView.qml
-                }
+
+            QGCToolBarButton {
+                anchors.centerIn: parent
+                icon.source: "/qmlimages/Plan.svg"
+                onClicked: if (mainWindow.allowViewSwitch()) mainWindow.showPlanView()
             }
         }
 
         // 4. [3D] 视图切换
-        QGCToolBarButton {
+        Rectangle {
+            width: controlRow.btnSize; height: width; radius: width / 2
+            color: Qt.rgba(0.15, 0.15, 0.15, 0.7)
             visible:    toolsExpanded
             opacity:    toolsExpanded ? 1 : 0
-            // 根据 viewer3DWindow 状态切换图标
-            icon.source: (viewer3DWindow && viewer3DWindow.isOpen) ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Viewer3D/City3DMapIcon.svg"
             Behavior on opacity { NumberAnimation { duration: 200 } }
-            onClicked: {
-                if(viewer3DWindow.isOpen) viewer3DWindow.close()
-                else viewer3DWindow.open()
-            }
-        }
 
-        // 5. [GCS] 居中地面站
-        QGCToolBarButton {
-            visible:    toolsExpanded
-            opacity:    toolsExpanded ? 1 : 0
-            icon.source: "/res/QGCLogoFull.png"
-            Behavior on opacity { NumberAnimation { duration: 200 } }
-            onClicked: gcsPositionSource.start()
-        }
-
-        // 6. [飞机] 居中飞机位置
-        QGCToolBarButton {
-            visible:    toolsExpanded
-            opacity:    toolsExpanded ? 1 : 0
-            icon.source: "/res/vehi.png"
-            Behavior on opacity { NumberAnimation { duration: 200 } }
-            onClicked: {
-                if (globals.activeVehicle && globals.activeVehicle.coordinate.isValid) {
-                    mapControl.center = globals.activeVehicle.coordinate
+            QGCToolBarButton {
+                anchors.centerIn: parent
+                icon.source: (viewer3DWindow && viewer3DWindow.isOpen) ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Viewer3D/City3DMapIcon.svg"
+                onClicked: {
+                    if(viewer3DWindow.isOpen) viewer3DWindow.close()
+                    else viewer3DWindow.open()
                 }
             }
         }
 
-        // 7. [载荷] 抛投控制 (示例：设置舵机9)
-        QGCToolBarButton {
+        // 5. [GCS] 居中地面站
+        Rectangle {
+            width: controlRow.btnSize; height: width; radius: width / 2
+            color: Qt.rgba(0.15, 0.15, 0.15, 0.7)
             visible:    toolsExpanded
             opacity:    toolsExpanded ? 1 : 0
-            icon.source: "/res/GripperGrab.svg"
             Behavior on opacity { NumberAnimation { duration: 200 } }
-            onClicked: {
-                if (globals.activeVehicle) {
-                    globals.activeVehicle.sendCommand(
-                        globals.activeVehicle.defaultComponentId,
-                        MAVLink.MAV_CMD_DO_SET_SERVO,
-                        true,
-                        9,    // 舵机号
-                        2000  // 释放值
-                    )
+
+            QGCToolBarButton {
+                anchors.centerIn: parent
+                icon.source: "/res/QGCLogoFull.png"
+                onClicked: gcsPositionSource.start()
+            }
+        }
+
+        // 6. [飞机] 居中飞机位置
+        Rectangle {
+            width: controlRow.btnSize; height: width; radius: width / 2
+            color: Qt.rgba(0.15, 0.15, 0.15, 0.7)
+            visible:    toolsExpanded
+            opacity:    toolsExpanded ? 1 : 0
+            Behavior on opacity { NumberAnimation { duration: 200 } }
+
+            QGCToolBarButton {
+                anchors.centerIn: parent
+                icon.source: "/res/vehi.png"
+                onClicked: {
+                    if (globals.activeVehicle && globals.activeVehicle.coordinate.isValid) {
+                        mapControl.center = globals.activeVehicle.coordinate
+                    }
+                }
+            }
+        }
+
+        // 7. [载荷] 抛投控制
+        Rectangle {
+            width: controlRow.btnSize; height: width; radius: width / 2
+            color: Qt.rgba(0.3, 0.1, 0.1, 0.8) // 动作按钮稍微带点暗红色，提醒功能
+            visible:    toolsExpanded
+            opacity:    toolsExpanded ? 1 : 0
+            border.color: Qt.rgba(1, 0, 0, 0.3)
+            Behavior on opacity { NumberAnimation { duration: 200 } }
+
+            QGCToolBarButton {
+                anchors.centerIn: parent
+                icon.source: "/res/GripperGrab.svg"
+                onClicked: {
+                    if (globals.activeVehicle) {
+                        globals.activeVehicle.sendCommand(
+                            globals.activeVehicle.defaultComponentId,
+                            MAVLink.MAV_CMD_DO_SET_SERVO,
+                            true,
+                            9, 2000
+                        )
+                    }
                 }
             }
         }

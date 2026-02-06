@@ -39,6 +39,7 @@ QGCPopupDialog {
 
         QGCLabel {
             text: qsTr("仪表盘显示需要连接设备。")
+            color: "white" // 强制提示也变白
         }
     }
 
@@ -63,18 +64,39 @@ QGCPopupDialog {
                 factValueGrid.InitialFacts()  // 初始化 checkedFacts
             }
             Column {
-                spacing: 4
+                spacing: 8
                 Repeater {
                     model: factValueChinese.length
 
                     CheckBox {
-                        text: factValueChinese[index]
+                        id: cb
+                        // --- 1. 【关键】清空自带文字，解决重影模糊 ---
+                        text: ""
 
-                        // ✅ 单向绑定（从 C++ -> QML）
                         checked: factValueGrid.checkedFacts.indexOf(factValueEnglish[index]) !== -1
 
+                        // --- 2. 【核心】使用感知型标签 ---
+                        QGCLabel {
+                            text:           factValueChinese[index]
+
+                            // 逻辑：不再写死 "white"，改用系统调色板
+                            // 它会随室外/室内模式自动切换黑/白
+                            color:          qgcPal.text
+
+                            // 增强清晰度：选中时加粗，未选中时正常
+                            font.bold:      cb.checked
+
+                            // 布局对齐
+                            anchors.left:   parent.left
+                            anchors.leftMargin: 45
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            // --- 3. 【渲染优化】强制原生渲染，消除边缘虚化 ---
+                            renderType: Text.NativeRendering
+                        }
+
                         onClicked: {
-                            // ✅ 用 onClicked，而不是 onCheckedChanged
+                            // --- 保持你原本的所有逻辑不变 ---
                             let updated = factValueGrid.checkedFacts.slice()
                             let factName = factValueEnglish[index]
                             let groupName = (factName === "lon" || factName === "lat") ? "gps" : "vehicle"
@@ -92,7 +114,6 @@ QGCPopupDialog {
                                 updated = updated.filter(f => f !== factName)
                                 factValueGrid.removeFact(factName)
                             }
-
                             factValueGrid.setCheckedFacts(updated)
                         }
                     }
@@ -100,9 +121,6 @@ QGCPopupDialog {
             }
         }
     }
-
-
-
 
     // RowLayout {
     //     visible:false

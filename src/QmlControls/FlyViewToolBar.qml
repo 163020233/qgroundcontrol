@@ -25,7 +25,7 @@ Rectangle {
     height: ScreenTools.toolbarHeight*1.1
     //color:  qgcPal.toolbarBackground
     // 逻辑：借用系统主题的 R/G/B 颜色，但强行覆盖 Alpha 为 0.7
-    color: Qt.rgba(0, 0, 0, 0.9)
+    color: Qt.rgba(0, 0, 0, 0.5)
 
     // 🔹 自定义属性，绑定 Plan 页的 MainStatusIndicator
     // property var mainStatusLabelLogic: null

@@ -26,6 +26,23 @@ Rectangle {
     color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.6)
     visible:    _utmspEnabled === true ? utmspSliderTrigger: false
 
+    // --------------------------------------------------------
+    // 【核心修改：整体下移逻辑】
+    // --------------------------------------------------------
+    // 1. 确保它水平居中
+    anchors.horizontalCenter: parent.horizontalCenter
+
+    // 2. 将它的顶部锁定在父容器顶部
+    anchors.top:              parent.top
+
+    // 3. 设置向下偏移的边距
+    // 建议数值：toolbar.height(顶栏) + 120(避开图标区)
+    // 如果觉得还不够下，就把 120 调大
+    anchors.topMargin:        ScreenTools.toolbarHeight + 5
+    // --------------------------------------------------------
+
+    z:          QGroundControl.zOrderTopMost
+
     property var    guidedController
     property var    guidedValueSlider
     property string title                                       // Currently unused
