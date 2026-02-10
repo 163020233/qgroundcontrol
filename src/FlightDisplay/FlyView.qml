@@ -223,6 +223,11 @@ Item {
             id:                 guidedActionsController
             missionController:  _missionController
             guidedValueSlider:     _guidedValueSlider
+            Component.onCompleted: {
+                // 强制让解锁、上锁、降落等动作，都使用你自定义的 GuidedActionConfirm
+                guidedActionsController.confirmDialog = widgetLayer.findChild("GuidedActionConfirm")
+                // 或者直接通过 ID 绑定
+            }
         }
 
         //-- Guided value slider (e.g. altitude)

@@ -22,7 +22,7 @@ import QGroundControl.Controllers
 Rectangle {
     id:     _root
     width:  parent.width
-    height: ScreenTools.toolbarHeight*1.1
+    height: ScreenTools.toolbarHeight * 0.8
     //color:  qgcPal.toolbarBackground
     // 逻辑：借用系统主题的 R/G/B 颜色，但强行覆盖 Alpha 为 0.7
     color: Qt.rgba(0, 0, 0, 0.5)

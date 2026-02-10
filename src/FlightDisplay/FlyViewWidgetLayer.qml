@@ -99,11 +99,24 @@ Item {
 
     FlyViewBottomRightRowLayout {
         id:                 bottomRightRowLayout
-        anchors.margins:    _layoutMargin
+
+        // --- 【核心修改：绝对坐标计算】 ---
+        // 1. 禁用水平锚点
+        anchors.horizontalCenter: undefined
+        anchors.right:            undefined // 必须删掉右锚点，否则它会跟着右边界缩进
+
+        // 2. 强制计算 X 坐标：确保它也在屏幕中轴线上
+        x: (mainWindow.width - width) / 2
+        // ------------------------------
+
         anchors.bottom:     parent.bottom
-        anchors.right:      parent.right
+        anchors.bottomMargin: _margins * 5
+        // -----------------------------
+
         spacing:            _layoutSpacing
 
+        // 【关键修改 2：把 Inset 设为固定值】
+        // 这样 QGC 无论怎么计算缩进，都不会影响到这个组件的位置
         property real bottomEdgeRightInset:     height + _layoutMargin
         property real bottomEdgeCenterInset:    bottomEdgeRightInset
         property real rightEdgeBottomInset:     width + _layoutMargin
@@ -117,9 +130,19 @@ Item {
 
     GuidedActionConfirm {
         anchors.margins:            _toolsMargin
+
+        // 1. 禁用水平锚点
+        anchors.horizontalCenter: undefined
+
+        // 2. 强制计算 X 坐标：(整个屏幕宽度 - 确认框宽度) / 2
+        // 这样无论 widgetLayer 怎么缩放，确认框永远在屏幕正中心
+        x: (mainWindow.width - width) / 2
+        // ------------------------------
+
         anchors.top:                parent.top
-        anchors.horizontalCenter:   parent.horizontalCenter
+        anchors.topMargin:          ScreenTools.toolbarHeight + 30  、
         z:                          QGroundControl.zOrderTopMost
+
         guidedController:           _guidedController
         guidedValueSlider:          _guidedValueSlider
         utmspSliderTrigger:         utmspActTrigger

@@ -17,8 +17,7 @@ import QGroundControl.FlightMap
 
 Item {
     id:             control
-    // 整体放大 1.5 倍
-    property real scaleFactor: 1.3
+    property real scaleFactor: 1.2 // 稍微缩小一点，显得更精致
 
     implicitWidth:  (compassRadius * 2) + attitudeSpacing + attitudeSize
     implicitHeight: implicitWidth
@@ -37,6 +36,9 @@ Item {
 
     property real _totalAttitudeSize: attitudeSize + attitudeSpacing
 
+    // --------------------------------------------------------
+    // 1. 姿态指示器优化 (横滚)
+    // --------------------------------------------------------
     IntegratedAttitudeIndicator {
         id:                     rollIndicator
         x:                      -_totalAttitudeSize
@@ -44,8 +46,11 @@ Item {
         compassRadius:          control.compassRadius
         attitudeSize:           control.attitudeSize * scaleFactor
         attitudeSpacing:        control.attitudeSpacing * scaleFactor
+        // 降低亮度，实现 HUD 效果
+        opacity:                0.8
     }
 
+    // 2. 姿态指示器优化 (俯仰)
     IntegratedAttitudeIndicator {
         x:                      -_totalAttitudeSize
         attitudeAngleDegrees:   vehicle ? vehicle.pitch.rawValue : 0
@@ -54,21 +59,35 @@ Item {
         attitudeSpacing:        control.attitudeSpacing * scaleFactor
         transformOrigin:        Item.Center
         rotation:               90
+        opacity:                0.8
     }
 
+    // --------------------------------------------------------
+    // 3. 核心罗盘背景逻辑 (改为半透明玻璃质感)
+    // --------------------------------------------------------
     Rectangle {
         y:      _totalAttitudeSize
         width:  compassRadius * 2
         height: width
         radius: width / 2
-        color:  qgcPal.window
-        // 透明度设置为 0.5，原来是 qgcPal.window 的颜色
-        // color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+
+        // 【核心修改：去白增透】
+        // 使用深黑色调 + 0.4 透明度
+        color:  Qt.rgba(0, 0, 0, 0.4)
+
+        // 增加一个淡淡的白边，定义出轮廓
+        border.color: Qt.rgba(1, 1, 1, 0.2)
+        border.width: 1
+
         QGCCompassWidget {
             size:                       parent.width - compassBorder
             vehicle:                    control.vehicle
             usedByMultipleVehicleList:  control.usedByMultipleVehicleList
             anchors.centerIn:           parent
+
+            // 【核心修改：压制内部白度】
+            // 让内部的罗盘刻度不再是刺眼的纯白，而是半透明灰白
+            opacity: 0.7
         }
     }
 }

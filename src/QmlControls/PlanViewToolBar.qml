@@ -22,7 +22,7 @@ import QGroundControl.Controllers
 Rectangle {
     id:     _root
     width:  parent.width
-    height: ScreenTools.toolbarHeight * 1.1
+    height: ScreenTools.toolbarHeight * 0.8
     // color:  qgcPal.toolbarBackground
     // color: "transparent"
     // color: Qt.rgba(0.2, 0.2, 0.2, 0.4)

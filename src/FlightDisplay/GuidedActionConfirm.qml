@@ -27,7 +27,7 @@ Rectangle {
     visible:    _utmspEnabled === true ? utmspSliderTrigger: false
 
     // --------------------------------------------------------
-    // 【核心修改：整体下移逻辑】
+    // 修改：整体下移逻辑】
     // --------------------------------------------------------
     // 1. 确保它水平居中
     anchors.horizontalCenter: parent.horizontalCenter
