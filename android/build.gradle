@@ -32,12 +32,12 @@ dependencies {
 
 def getTimestampStr() { return new Date().format('yyyyMMddHHmmss') }
 
-android.applicationVariants.all { variant ->
-    variant.outputs.all { output ->
-        def timestamp = new Date().format('yyyyMMdd')
-        outputFileName = "QJKJApp-${variant.name}-${variant.versionName}-${timestamp}.apk"
-    }
-}
+// android.applicationVariants.all { variant ->
+//     variant.outputs.all { output ->
+//         def timestamp = new Date().format('yyyyMMdd')
+//         outputFileName = "QJKJApp-${variant.name}-${variant.versionName}-${timestamp}.apk"
+//     }
+// }
 
 android {
     /*******************************************************

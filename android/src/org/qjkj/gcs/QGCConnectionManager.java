@@ -183,32 +183,52 @@ public class QGCConnectionManager {
     // ---------------------------------------------------------
     public static void sendData(String jsonCmd) {
 
-         Log.w(TAG, "[1] Java sendCmdFromCpp CALLED! Cmd: " + jsonCmd);
-         if (jsonCmd == null || jsonCmd.isEmpty()) {
-                Log.e(TAG, "❌ Error: jsonCmd is empty!");
-                return;
-            }
+        Log.w(TAG, "[1] Java sendCmdFromCpp CALLED! Cmd: " + jsonCmd);
+
+        if (jsonCmd == null || jsonCmd.isEmpty()) {
+            Log.e(TAG, "Error: jsonCmd is empty!");
+            return;
+        }
 
         try {
-//
-//             // 1. 将字符串解析为 FastJSON 对象
-//             // (因为 BoyingSdk.sendCmd 需要 JSONObject 参数)
-            JSONObject cmdObj = JSONObject.parseObject(jsonCmd);
-//              Log.d(TAG, "[2] JSON Parsed: " + (cmdObj != null ? cmdObj.toString() : "null"));
 
-            // 2. 调用 SDK 公开方法获取二进制
+            JSONObject cmdObj = JSONObject.parseObject(jsonCmd);
+
+            Log.w(TAG, "[2] Parsed JSONObject: " + cmdObj.toJSONString());
+
             int result = BoyingSdk.getInstance().sendNewCmd(cmdObj);
 
-            // 3. 发送 (走统一的安全发送通道)
-            if (result == 0)
-            {
-                String hint = "测试ok" + result;
-                Log.d(TAG, hint);
+            Log.w(TAG, "[3] SDK sendNewCmd result = " + result);
+
+            if (result == 0) {
+                Log.d(TAG, "SDK accepted command");
+            } else {
+                Log.e(TAG, "SDK rejected command, code=" + result);
             }
 
         } catch (Exception e) {
-            Log.e(TAG, "SendCmd Error: " + e.toString());
-            e.printStackTrace();
+            Log.e(TAG, "SendCmd Error: ", e);
+        }
+    }
+
+    // ★★★ 给 JNI / C++ 用的版本 ★★★
+    public static int sendDataWithResult(String jsonCmd) {
+
+        Log.w(TAG, "[JNI] sendDataWithResult Cmd: " + jsonCmd);
+
+        if (jsonCmd == null || jsonCmd.isEmpty()) {
+            return -1;
+        }
+
+        try {
+            JSONObject cmdObj = JSONObject.parseObject(jsonCmd);
+            int result = BoyingSdk.getInstance().sendNewCmd(cmdObj);
+            Log.w(TAG, "[JNI] SDK result = " + result);
+            return result;
+
+        } catch (Exception e) {
+            Log.e(TAG, "sendDataWithResult error", e);
+            return -2;
         }
     }
 

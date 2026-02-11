@@ -140,7 +140,7 @@ Item {
         // ------------------------------
 
         anchors.top:                parent.top
-        anchors.topMargin:          ScreenTools.toolbarHeight + 30  、
+        anchors.topMargin:          ScreenTools.toolbarHeight + 30
         z:                          QGroundControl.zOrderTopMost
 
         guidedController:           _guidedController
