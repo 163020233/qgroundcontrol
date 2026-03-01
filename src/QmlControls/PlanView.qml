@@ -775,7 +775,7 @@ Item {
                         // --- 新增：返回飞行界面按钮 ---
                         ToolStripAction {
                             id:                 backToFlyAction
-                            text:               qsTr("飞行") // 或者叫“返回”
+                            text:               qsTr("主界面") // 或者叫“返回”
                             iconSource:         "/qmlimages/PaperPlane.svg" // 使用 QGC 标准的飞机图标
 
                             onTriggered: {
@@ -800,30 +800,30 @@ Item {
 
         }
         // ===========================
-        // 👉 展开/收起按钮
+        // 展开/收起按钮(暂时先隐藏)
         // ===========================
-        Rectangle {
-            id: toggleButtons
-            width: 15
-            height: 50
-            radius: 4
-            color: Qt.rgba(0.2, 0.2, 0.2, 0.6)
-            border.color: "#555"
-            anchors.verticalCenter: collapsibleToolStrip.verticalCenter
-            anchors.left: collapsibleToolStrip.right
-            z:10
-            Text {
-                anchors.centerIn: parent
-                text: collapsibleToolStrip.panelCollapsed ? ">" : "<"
-                color: "white"
-                font.pixelSize: 16
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: collapsibleToolStrip.panelCollapsed = !collapsibleToolStrip.panelCollapsed
-            }
-        }
+        // Rectangle {
+        //     id: toggleButtons
+        //     width: 15
+        //     height: 50
+        //     radius: 4
+        //     color: Qt.rgba(0.2, 0.2, 0.2, 0.6)
+        //     border.color: "#555"
+        //     anchors.verticalCenter: collapsibleToolStrip.verticalCenter
+        //     anchors.left: collapsibleToolStrip.right
+        //     z:10
+        //     Text {
+        //         anchors.centerIn: parent
+        //         text: collapsibleToolStrip.panelCollapsed ? ">" : "<"
+        //         color: "white"
+        //         font.pixelSize: 16
+        //     }
+        //
+        //     MouseArea {
+        //         anchors.fill: parent
+        //         onClicked: collapsibleToolStrip.panelCollapsed = !collapsibleToolStrip.panelCollapsed
+        //     }
+        // }
 
 
         Rectangle {
@@ -894,8 +894,10 @@ Item {
                     radius: 4
                     color: Qt.rgba(0.2, 0.2, 0.2, 0.8)
                     border.color: "#666"
-                    anchors.verticalCenter: rightPanelContainer.verticalCenter
-                    anchors.right: rightPanelContainer.left
+                    anchors.top:    parent.top
+                    anchors.topMargin: ScreenTools.defaultFontPixelHeight * 2 // 距离顶栏下方一段距离
+
+                    anchors.right:  rightPanelContainer.left
                     anchors.margins: 4
                     z: 999   // 保证永远在最上层
 
@@ -1053,7 +1055,7 @@ Item {
         //     anchors.fill:           rightPanel
         //     anchors.top: parent.top
         //     anchors.bottom: parent.bottom
-        //     anchors.right: parent.right   // ✅ 紧贴右侧
+        //     anchors.right: parent.right   // 紧贴右侧
         //     width: ScreenTools.defaultFontPixelHeight * 12   // 你可根据需要调整宽度
         //     DeadMouseArea {
         //         anchors.fill:   parent
@@ -1354,7 +1356,7 @@ Item {
                 Layout.fillWidth:   true
                 text:               qsTr("创建计划")
                 showSpacer:         false
-                checked:            false        // ✅ 默认折叠（不展开）
+                checked:            false        // 默认折叠（不展开）
             }
 
             GridLayout {
@@ -1424,7 +1426,7 @@ Item {
                 id:                 storageSection
                 Layout.fillWidth:   true
                 text:               qsTr("存储计划")
-                checked:            false        // ✅ 默认折叠（不展开）
+                checked:            false        // 默认折叠（不展开）
             }
 
             GridLayout {
@@ -1492,7 +1494,7 @@ Item {
                 id:                 vehicleSection
                 Layout.fillWidth:   true
                 text:               qsTr("管理计划")
-                checked:            false        // ✅ 默认折叠（不展开）
+                checked:            false        // 默认折叠（不展开）
             }
 
             RowLayout {

@@ -278,16 +278,50 @@ Rectangle {
             anchors.centerIn: parent
             spacing: ScreenTools.defaultFontPixelWidth
 
-            // 增加一个小转圈动画，显得系统没死机
+            // 增加一个小转圈动画
             BusyIndicator {
-                width: 20; height: 20
+                id:      syncIndicator
                 running: largeProgressBar.visible
+
+                Layout.preferredWidth:  ScreenTools.defaultFontPixelHeight * 1.5
+                Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 1.5
+                Layout.alignment:       Qt.AlignVCenter
+                padding: 0
+
+                // --- 增加圆圈亮度 ---
+                contentItem: Item {
+                    // 定义旋转动画
+                    RotationAnimation on rotation {
+                        from: 0; to: 360; duration: 1000; loops: Animation.Infinite; running: syncIndicator.running
+                    }
+
+                    Repeater {
+                        model: 8
+                        Rectangle {
+                            anchors.centerIn: parent
+                            width:  parent.width * 0.20 // 圆点粗细
+                            height: width
+                            radius: width / 2
+
+                            color:  "white"
+
+                            opacity: (index + 1) / 8
+
+                            transform: [
+                                Translate { y: -syncIndicator.height * 0.4 },
+                                Rotation { angle: index / 8 * 360 }
+                            ]
+                        }
+                    }
+                }
+                // --------------------------------------
             }
 
             QGCLabel {
                 text: qsTr("系统参数同步中 %1%").arg(Math.round(_activeVehicle ? _activeVehicle.loadProgress * 100 : 0))
                 font.bold: true
                 color: "white"
+                verticalAlignment: Text.AlignVCenter
             }
         }
 

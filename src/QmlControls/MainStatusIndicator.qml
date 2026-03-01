@@ -245,7 +245,7 @@ RowLayout {
 
                 // 断开连接按钮
                 QGCButton {
-                    text: qsTr("返回")
+                    text: qsTr("返回主界面")
                     enabled: true
                     visible: planView.visible
                     onClicked: {
