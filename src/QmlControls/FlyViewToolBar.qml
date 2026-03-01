@@ -91,40 +91,41 @@ Rectangle {
     //     }
     // }
 
+    // 关键：在这里引用 MainStatusIndicator 里的颜色
+    property color _dynamicColor: mainStatusIndicator.currentStatusColor
+
     Canvas {
         id: trapezoidBackground
         anchors.fill: viewButtonRow
-        anchors.rightMargin: -20   // 向右延伸一点
+
+        // --- 【核心修改 2】：监听颜色变化并重绘 ---
         onPaint: {
             var ctx = getContext("2d")
             ctx.clearRect(0, 0, width, height)
 
-            // 创建横向渐变
+            // 使用我们刚才定义的动态颜色
+            var color = _root._dynamicColor
+
             var gradient = ctx.createLinearGradient(0, 0, width, 0)
-            gradient.addColorStop(0, _mainStatusBGColor)
-            gradient.addColorStop(
-                Math.min(1, (currentButton.x + currentButton.width) / width),
-                _mainStatusBGColor
-            )
-            gradient.addColorStop(1, Qt.lighter(_mainStatusBGColor, 1.4))  // 右侧更亮一些
-            // 或者：gradient.addColorStop(1, "rgba(255,255,255,0.1)") // 渐隐
-            //         GradientStop { position: 0;                                     color: _mainStatusBGColor}
-            //         GradientStop { position: currentButton.x + currentButton.width; color: _mainStatusBGColor }
-            //         GradientStop { position: 1;                                     color:  _mainStatusBGColor }
+            gradient.addColorStop(0, color)
+            gradient.addColorStop(1, Qt.rgba(0,0,0,0.5)) // 右侧渐变到背景色
 
             ctx.fillStyle = gradient
-
-            // 绘制梯形：上边与下边不平行
             ctx.beginPath()
-            ctx.moveTo(0, 0)              // 左上角
-            ctx.lineTo(width - 20, 0)     // 右上角（向左缩一点）
-            ctx.lineTo(width, height)     // 右下角（斜线边）
-            ctx.lineTo(0, height)         // 左下角
+            ctx.moveTo(0, 0)
+            ctx.lineTo(width - 20, 0)
+            ctx.lineTo(width, height)
+            ctx.lineTo(0, height)
             ctx.closePath()
             ctx.fill()
         }
-    }
 
+        // 当颜色改变时，手动触发重绘
+        Connections {
+            target: _root
+            function on_DynamicColorChanged() { trapezoidBackground.requestPaint() }
+        }
+    }
     RowLayout {
         id:                     viewButtonRow
         anchors.bottomMargin:   1

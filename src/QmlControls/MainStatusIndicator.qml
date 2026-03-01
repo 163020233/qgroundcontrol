@@ -34,6 +34,42 @@ RowLayout {
         mainWindow.showIndicatorDrawer(overallStatusComponent, control)
     }
 
+    readonly property color currentStatusColor: {
+        if (!_activeVehicle) return "#333333" // 未连接：深灰
+        if (_communicationLost) return "#FF0000" // 丢失：红
+
+        if (_activeVehicle.armed) {
+            if (_healthAndArmingChecksSupported) {
+                if (!_activeVehicle.healthAndArmingCheckReport.canArm) return "#FF0000" // 故障：红
+                if (_activeVehicle.healthAndArmingCheckReport.hasWarningsOrErrors) return "#FFFF00" // 警告：黄
+            }
+            return "#00FF00" // 已解锁：绿
+        } else {
+            // 未解锁状态下的准备情况
+            if (_healthAndArmingChecksSupported) {
+                if (!_activeVehicle.healthAndArmingCheckReport.canArm) return "#FF0000"
+                return (_activeVehicle.healthAndArmingCheckReport.hasWarningsOrErrors) ? "#FFFF00" : "#00FF00"
+            }
+            return (_activeVehicle.allSensorsHealthy) ? "#00FF00" : "#FFFF00"
+        }
+    }
+
+    function mainStatusText() {
+        if (!_activeVehicle) return mainStatusLabel._disconnectedText
+        if (_communicationLost) return mainStatusLabel._commLostText
+
+        if (_activeVehicle.armed) {
+            if (_activeVehicle.flying) return mainStatusLabel._flyingText
+            if (_activeVehicle.landing) return mainStatusLabel._landingText
+            return mainStatusLabel._armedText
+        } else {
+            if (_healthAndArmingChecksSupported && !_activeVehicle.healthAndArmingCheckReport.canArm)
+                return mainStatusLabel._notReadyToFlyText
+            return mainStatusLabel._readyToFlyText
+        }
+    }
+
+
     QGCLabel {
         id:                 mainStatusLabel
         // 主菜单栏
@@ -51,78 +87,6 @@ RowLayout {
         property string _flyingText:        qsTr("正在飞行")
         property string _landingText:       qsTr("正在降落")
 
-        function mainStatusText() {
-            // 默认初始颜色为浅灰
-            _mainStatusBGColor = "#C0C0C0"  // light gray
-
-            if (_activeVehicle) {
-
-                // 通讯丢失
-                if (_communicationLost) {
-                    _mainStatusBGColor = "#FF0000"  // red
-                    return mainStatusLabel._commLostText
-                }
-
-                // 已解锁状态
-                if (_activeVehicle.armed) {
-                    _mainStatusBGColor = "#00FF00"  // green
-
-                    // 支持健康检查的警告覆盖
-                    if (_healthAndArmingChecksSupported) {
-                        if (!_activeVehicle.healthAndArmingCheckReport.canArm) {
-                            _mainStatusBGColor = "#FF0000"  // red
-                        } else if (_activeVehicle.healthAndArmingCheckReport.hasWarningsOrErrors) {
-                            _mainStatusBGColor = "#FFFF00"  // yellow
-                        }
-                    }
-
-                    // 飞行状态覆盖文本
-                    if (_activeVehicle.flying) {
-                        return mainStatusLabel._flyingText
-                    } else if (_activeVehicle.landing) {
-                        return mainStatusLabel._landingText
-                    } else {
-                        return mainStatusLabel._armedText
-                    }
-
-                } else { // 未解锁状态
-                    if (_healthAndArmingChecksSupported) {
-                        if (!_activeVehicle.healthAndArmingCheckReport.canArm) {
-                            _mainStatusBGColor = "#FF0000"  // red
-                            return mainStatusLabel._notReadyToFlyText
-                        } else if (_activeVehicle.healthAndArmingCheckReport.hasWarningsOrErrors) {
-                            _mainStatusBGColor = "#FFFF00"  // yellow
-                            return mainStatusLabel._readyToFlyText
-                        } else {
-                            _mainStatusBGColor = "#00FF00"  // green
-                            return mainStatusLabel._readyToFlyText
-                        }
-                    } else if (_activeVehicle.readyToFlyAvailable) {
-                        if (_activeVehicle.readyToFly) {
-                            _mainStatusBGColor = "#00FF00"  // green
-                            return mainStatusLabel._readyToFlyText
-                        } else {
-                            _mainStatusBGColor = "#FFFF00"  // yellow
-                            return mainStatusLabel._notReadyToFlyText
-                        }
-                    } else {
-                        // 默认判断：传感器健康 && 飞控初始化完成
-                        if (_activeVehicle.allSensorsHealthy && _activeVehicle.autopilotPlugin.setupComplete) {
-                            _mainStatusBGColor = "#00FF00"  // green
-                            return mainStatusLabel._readyToFlyText
-                        } else {
-                            _mainStatusBGColor = "#FFFF00"  // yellow
-                            return mainStatusLabel._notReadyToFlyText
-                        }
-                    }
-                }
-
-            } else {
-                // 未连接
-                _mainStatusBGColor = "#333333"  // deep gray
-                return mainStatusLabel._disconnectedText
-            }
-        }
 
 
         QGCColoredImage {
