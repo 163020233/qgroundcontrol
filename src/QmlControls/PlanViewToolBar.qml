@@ -22,11 +22,12 @@ import QGroundControl.Controllers
 Rectangle {
     id:     _root
     width:  parent.width
-    height: ScreenTools.toolbarHeight * 0.8
+    height: ScreenTools.toolbarHeight * 0.6
     // color:  qgcPal.toolbarBackground
     // color: "transparent"
     // color: Qt.rgba(0.2, 0.2, 0.2, 0.4)
-    color: "transparent"  // 或者半透明背景
+    //color: "transparent"  // 或者半透明背景
+    color: Qt.rgba(0, 0, 0, 0.5)
 
     property var    planMasterController
 

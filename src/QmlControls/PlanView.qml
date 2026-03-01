@@ -336,15 +336,21 @@ Item {
     //     id: mainStatusLabelInPlan
     // }
 
+    // FlyViewToolBar {
+    //     id: planToolBar
+    //     anchors.top: parent.top
+    //     width: parent.width
+    //     height: ScreenTools.toolbarHeight * 0.8
+    //     z: 10
+    //     // mainStatusLabelLogic: mainStatusLabelInPlan
+    // }
     FlyViewToolBar {
-        id: planToolBar
-        anchors.top: parent.top
-        width: parent.width
-        height: ScreenTools.toolbarHeight * 1.1
-        z: 10
-        // mainStatusLabelLogic: mainStatusLabelInPlan
+        id:         planToolBar
+        z:          1000
+        anchors.left:  parent.left
+        anchors.right: parent.right
+        // --------------------------------------
     }
-
     //
     // SelectableControl {
     //     id: planInstrument
@@ -365,7 +371,13 @@ Item {
         id: panel
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.top: planToolBar.bottom
+        //anchors.top: planToolBar.bottom
+        //anchors.bottom: parent.bottom
+
+        // --- 核心修改：让地图钻到顶栏后面 ---
+        anchors.top:    parent.top    // 👈 修改这里，从 planToolBar.bottom 改为 parent.top
+        // ----------------------------------
+
         anchors.bottom: parent.bottom
 
         FlightMap {
@@ -379,12 +391,23 @@ Item {
             zoomLevel: QGroundControl.flightMapZoom
             center: QGroundControl.flightMapPosition
 
+            // 修改第二个参数 (y坐标起点)
+            property rect centerViewport: Qt.rect(
+                _leftToolWidth + _margin,
+                // --- 增加视口偏移量，确保地图内容显示在屏幕中心偏下的位置 ---
+                planToolBar.height + (ScreenTools.defaultFontPixelHeight * 3),
+                editorMap.width - _leftToolWidth - _rightToolWidth - (_margin * 2),
+                // 减去对应的高度
+                height - _margin - planToolBar.height - (ScreenTools.defaultFontPixelHeight * 4)
+            )
+
             // This is the center rectangle of the map which is not obscured by tools
-            property rect centerViewport: Qt.rect(_leftToolWidth + _margin, _margin, editorMap.width - _leftToolWidth - _rightToolWidth - (_margin * 2), (terrainStatus.visible ? terrainStatus.y : height - _margin) - _margin)
+            //property rect centerViewport: Qt.rect(_leftToolWidth + _margin, _margin, editorMap.width - _leftToolWidth - _rightToolWidth - (_margin * 2), (terrainStatus.visible ? terrainStatus.y : height - _margin) - _margin)
 
             property real _leftToolWidth: toolStrip.x + toolStrip.width
             property real _rightToolWidth: rightPanel.width + rightPanel.anchors.rightMargin
             property real _nonInteractiveOpacity: 0.5
+
 
             // Initial map position duplicates Fly view position
             Component.onCompleted: editorMap.center = QGroundControl.flightMapPosition
@@ -636,6 +659,7 @@ Item {
                 color: "transparent"
                 z: QGroundControl.zOrderWidgets
                 maxHeight: parent.height - toolStrip.y
+                anchors.topMargin:  planToolBar.height + (ScreenTools.defaultFontPixelHeight * 0.3)
 
                 x: collapsibleToolStrip.panelCollapsed ? -50 : 0  // 左滑隐藏
                 opacity: collapsibleToolStrip.panelCollapsed ? 0 : 1
@@ -800,27 +824,19 @@ Item {
                 onClicked: collapsibleToolStrip.panelCollapsed = !collapsibleToolStrip.panelCollapsed
             }
         }
-        //-----------------------------------------------------------
-        // Right pane for mission editing controls
+
+
         Rectangle {
             id:                 rightPanel
             height:             parent.height
             width:              _rightPanelWidth
-            color:              "transparent"
+            color: "transparent"
+            opacity:            layerTabBar.visible ? 0.2 : 0
             anchors.bottom:     parent.bottom
             anchors.right:      parent.right
-            anchors.rightMargin: 0    // ✅ 取消右边距
+            anchors.rightMargin: _toolsMargin
         }
-        // Rectangle {
-        //     id:                 rightPanel
-        //     height:             parent.height
-        //     width:              _rightPanelWidth
-        //     color: "transparent"
-        //     opacity:            layerTabBar.visible ? 0.2 : 0
-        //     anchors.bottom:     parent.bottom
-        //     anchors.right:      parent.right
-        //     anchors.rightMargin: _toolsMargin
-        // }
+
         //-------------------------------------------------------
         // Right Panel Controls
         Item {
@@ -836,9 +852,18 @@ Item {
 
             Item {
                 id: rightPanelContainer
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right
+                // anchors.top: parent.top
+                // anchors.bottom: parent.bottom
+                // anchors.right: parent.right
+
+                anchors.top:        parent.top
+                // 顶栏高度 + 03倍字符高度)
+                anchors.topMargin:  planToolBar.height + (ScreenTools.defaultFontPixelHeight * 0.3)
+
+                anchors.bottom:     parent.bottom
+                anchors.right:      parent.right
+
+
                 property bool panelCollapsed: true
 
                 //panelCollapsed:折叠状态 条件1为30px
@@ -851,7 +876,7 @@ Item {
                     }
                 }
 
-                // ✅ 背景透明覆盖层
+                //  背景透明覆盖层
                 Rectangle {
                     anchors.fill: parent
                     color: "transparent"   // 或 Qt.rgba(0, 0, 0, 0.2) 半透明
