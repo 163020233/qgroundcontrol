@@ -1,22 +1,21 @@
 /****************************************************************************
- *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
- *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
- *
  ****************************************************************************/
 
 import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import QGroundControl
 import QGroundControl.ScreenTools
 import QGroundControl.Toolbar
+import QGroundControl.Palette
 
 //-------------------------------------------------------------------------
 //-- Toolbar Indicators
 Row {
     id:                 indicatorRow
+    // ★ 保留源码的锚点逻辑：靠右对齐
     anchors.top:        parent.top
     anchors.bottom:     parent.bottom
     anchors.right:      parent.right
@@ -27,71 +26,74 @@ Row {
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
     property real _toolIndicatorMargins:    ScreenTools.defaultFontPixelHeight * 0.64
 
+    QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
+
+    // 1. App Indicators
     Repeater {
         id:     appRepeater
         model:  QGroundControl.corePlugin.toolBarIndicators
         Loader {
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
+            // ★ 核心修复：禁止使用 anchors，改为直接设置高度
+            height:             parent.height
             source:             modelData
-            visible:            item.showIndicator
+            // 恢复显隐逻辑
+            visible:            item && item.showIndicator
         }
     }
 
+    // 2. Vehicle Indicators
     Repeater {
         id:     toolIndicatorsRepeater
         model:  _activeVehicle ? _activeVehicle.toolIndicators : []
-
         Loader {
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
+            height:             parent.height
             source:             modelData
-            visible:            item.showIndicator
+            visible:            item && item.showIndicator
         }
     }
 
+    // 3. Mode Indicators
     Repeater {
         model: _activeVehicle ? _activeVehicle.modeIndicators : []
         Loader {
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
+            height:             parent.height
             source:             modelData
-            visible:            item.showIndicator
+            visible:            item && item.showIndicator
         }
     }
 
     // ========================================================
-    // ★★★ 工业级定制：在这里插入你的“返回飞行主界面”图标 ★★★
+    // ★★★ 你的自定义返回图标 (保持在这个 Row 的最末尾) ★★★
     // ========================================================
     Item {
         id:                 homeButtonContainer
-        anchors.top:        parent.top
-        anchors.bottom:     parent.bottom
+        // ★ 核心修复：禁止使用 anchors，改为直接设置高度
+        height:             parent.height
 
-        visible:            _activeVehicle && !mainWindow.isFlyView
-
+        visible:            _activeVehicle && planView.visible
+        // 动态宽度：不显示时不占位
         width:              visible ? (height + ScreenTools.defaultFontPixelWidth * 2) : 0
 
-        // --- 分割线 (实现在图标左侧) ---
+        // --- 分割线 ---
         Rectangle {
             anchors.left:           parent.left
             anchors.verticalCenter: parent.verticalCenter
-            height:                 parent.height  // 线条高度为工具栏的 40%
+            height:                 parent.height
             width:                  1
-            color:                  "white"
-            opacity:                0.2 // 半透明遮罩，显得高级
+            color:                  qgcPal.text
+            opacity:                0.2
             visible:                parent.visible
         }
 
-        // --- 图标内容 ---
+        // --- 图标 ---
         QGCColoredImage {
+            id:                             homeIcon
             anchors.centerIn:               parent
             anchors.horizontalCenterOffset: ScreenTools.defaultFontPixelWidth * 0.5
             width:                          parent.height
             height:                         width
             source:                         "/qmlimages/PaperPlane.svg"
             fillMode:                       Image.PreserveAspectFit
-            // 关键：图标颜色绑定到主题文字颜色
             color:                          qgcPal.text
         }
 
