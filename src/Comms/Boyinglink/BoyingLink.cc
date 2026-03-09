@@ -944,7 +944,7 @@ void BoyingLink::disconnect(void)
 void BoyingLink::_writeBytes(const QByteArray& bytes)
 {
     //  加这行日志
-    qDebug() << "[BoyingLink] QGC trying to send bytes, len:" << bytes.length();
+    // qDebug() << "[BoyingLink] QGC trying to send bytes, len:" << bytes.length();
 
     if (_is_connected) {
         emit _workerSend(bytes);

@@ -97,30 +97,32 @@ Item {
         property real rightEdgeCenterInset: rightEdgeTopInset
     }
 
-    FlyViewBottomRightRowLayout {
-        id:                 bottomRightRowLayout
 
-        // --- 【核心修改：绝对坐标计算】 ---
-        // 1. 禁用水平锚点
-        anchors.horizontalCenter: undefined
-        anchors.right:            undefined // 必须删掉右锚点，否则它会跟着右边界缩进
-
-        // 2. 强制计算 X 坐标：确保它也在屏幕中轴线上
-        x: (mainWindow.width - width) / 2
-        // ------------------------------
-
-        anchors.bottom:     parent.bottom
-        anchors.bottomMargin: _margins * 5
-        // -----------------------------
-
-        spacing:            _layoutSpacing
-
-        // 【关键修改 2：把 Inset 设为固定值】
-        // 这样 QGC 无论怎么计算缩进，都不会影响到这个组件的位置
-        property real bottomEdgeRightInset:     height + _layoutMargin
-        property real bottomEdgeCenterInset:    bottomEdgeRightInset
-        property real rightEdgeBottomInset:     width + _layoutMargin
-    }
+    // 调用仪表盘的逻辑代码
+    // FlyViewBottomRightRowLayout {
+    //     id:                 bottomRightRowLayout
+    //
+    //     // --- 【核心修改：绝对坐标计算】 ---
+    //     // 1. 禁用水平锚点
+    //     anchors.horizontalCenter: undefined
+    //     anchors.right:            undefined // 必须删掉右锚点，否则它会跟着右边界缩进
+    //
+    //     // 2. 强制计算 X 坐标：确保它也在屏幕中轴线上
+    //     x: (mainWindow.width - width) / 2
+    //     // ------------------------------
+    //
+    //     anchors.bottom:     parent.bottom
+    //     anchors.bottomMargin: _margins * 5
+    //     // -----------------------------
+    //
+    //     spacing:            _layoutSpacing
+    //
+    //     // 【关键修改 2：把 Inset 设为固定值】
+    //     // 这样 QGC 无论怎么计算缩进，都不会影响到这个组件的位置
+    //     property real bottomEdgeRightInset:     height + _layoutMargin
+    //     property real bottomEdgeCenterInset:    bottomEdgeRightInset
+    //     property real rightEdgeBottomInset:     width + _layoutMargin
+    // }
 
     FlyViewMissionCompleteDialog {
         missionController:      _missionController

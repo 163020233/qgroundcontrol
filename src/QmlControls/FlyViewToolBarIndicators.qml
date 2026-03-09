@@ -38,7 +38,6 @@ Row {
         }
     }
 
-    // 顶部图标显示这个可以进行排列
     Repeater {
         id:     toolIndicatorsRepeater
         model:  _activeVehicle ? _activeVehicle.toolIndicators : []
@@ -58,6 +57,53 @@ Row {
             anchors.bottom:     parent.bottom
             source:             modelData
             visible:            item.showIndicator
+        }
+    }
+
+    // ========================================================
+    // ★★★ 工业级定制：在这里插入你的“返回飞行主界面”图标 ★★★
+    // ========================================================
+    Item {
+        id:                 homeButtonContainer
+        anchors.top:        parent.top
+        anchors.bottom:     parent.bottom
+
+        visible:            _activeVehicle && !mainWindow.isFlyView
+
+        width:              visible ? (height + ScreenTools.defaultFontPixelWidth * 2) : 0
+
+        // --- 分割线 (实现在图标左侧) ---
+        Rectangle {
+            anchors.left:           parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            height:                 parent.height  // 线条高度为工具栏的 40%
+            width:                  1
+            color:                  "white"
+            opacity:                0.2 // 半透明遮罩，显得高级
+            visible:                parent.visible
+        }
+
+        // --- 图标内容 ---
+        QGCColoredImage {
+            anchors.centerIn:               parent
+            anchors.horizontalCenterOffset: ScreenTools.defaultFontPixelWidth * 0.5
+            width:                          parent.height
+            height:                         width
+            source:                         "/qmlimages/PaperPlane.svg"
+            fillMode:                       Image.PreserveAspectFit
+            // 关键：图标颜色绑定到主题文字颜色
+            color:                          qgcPal.text
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onPressed:  homeIcon.opacity = 0.5
+            onReleased: homeIcon.opacity = 1.0
+            onClicked: {
+                if (mainWindow.allowViewSwitch()) {
+                    mainWindow.showFlyView()
+                }
+            }
         }
     }
 }

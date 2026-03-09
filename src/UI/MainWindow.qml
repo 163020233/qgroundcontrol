@@ -495,6 +495,87 @@ ApplicationWindow {
             }
         }
     }
+    // ========================================================
+    // ★★★ 工业级复刻：全局居中监控条 ★★★
+    // ========================================================
+    // ========================================================
+    // ★★★ 工业级适配：右下角监控组 (强制左数右盘 + 环境修复) ★★★
+    // ========================================================
+    FlyViewBottomRightRowLayout {
+        id:                 bottomRightRowLayout
+        anchors.right:      parent.right
+        anchors.bottom:     parent.bottom
+        // anchors.margins:    _layoutMargin
+
+
+        // --- 核心修改：位置调整 ---
+        anchors.rightMargin:    _layoutMargin
+        // 将这里的倍数（如 2.5）根据你的需求微调。数值越大，位置越靠上。
+        anchors.bottomMargin:   _layoutMargin * 2.5
+
+
+        // --- 布局顺序从左到右 ---
+        layoutDirection:    Qt.LeftToRight
+
+        spacing:            _layoutSpacing
+
+        // --- 补齐组件缺失的“生存环境”变量 ---
+        property real _toolsMargin: ScreenTools.defaultFontPixelHeight * 0.3
+        property var  qgcPal:       QGroundControl.globalPalette
+
+        // --- 核心修复 3：补齐原始布局依赖 ---
+        property real _layoutMargin:  ScreenTools.defaultFontPixelWidth
+        property real _layoutSpacing: ScreenTools.defaultFontPixelWidth
+        property var  _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+        property bool _showSingleVehicleUI: true
+        property var  factValueGrid:  ({ "telemetryBarSettingsGroup": "TelemetryBar" })
+
+        // --- 保持你之前的 Inset 逻辑 ---
+        property real bottomEdgeRightInset:     height + _layoutMargin
+        property real bottomEdgeCenterInset:    bottomEdgeRightInset
+        property real rightEdgeBottomInset:     width + _layoutMargin
+
+        // 跨页面显示
+        visible: _activeVehicle && (flyView.visible || planView.visible)
+        z:       QGroundControl.zOrderWidgets + 80
+    }
+
+    // FlyViewBottomRightRowLayout {
+    //     id:                 bottomRightRowLayout
+    //     z:                  QGroundControl.zOrderWidgets + 100
+    //
+    //     // --- 核心：完全复用你提供的绝对坐标计算逻辑 ---
+    //     anchors.horizontalCenter: undefined
+    //     anchors.right:            undefined
+    //
+    //     // 使用 parent.width 计算，确保在各种页面下都居中
+    //     x: (parent.width - width) / 2
+    //
+    //     anchors.bottom:         parent.bottom
+    //     anchors.bottomMargin:   _margins * 5
+    //     // ------------------------------------------
+    //
+    //     property real _margins:       ScreenTools.defaultFontPixelHeight * 0.5
+    //     property real _layoutSpacing: ScreenTools.defaultFontPixelWidth
+    //     property real _layoutMargin:  _margins
+    //
+    //     // 注入业务逻辑变量
+    //     property var  _activeVehicle:        QGroundControl.multiVehicleManager.activeVehicle
+    //     property bool _showSingleVehicleUI: true
+    //     property var  factValueGrid:         ({ "telemetryBarSettingsGroup": "TelemetryBar" })
+    //
+    //     // --- 核心：完全复用你提供的 Inset 固定值逻辑 ---
+    //     property real bottomEdgeRightInset:     height + _layoutMargin
+    //     property real bottomEdgeCenterInset:    bottomEdgeRightInset
+    //     property real rightEdgeBottomInset:     width + _layoutMargin
+    //
+    //     // 间距保持
+    //     spacing:            _layoutSpacing
+    //
+    //     // --- 跨页面显示逻辑 ---
+    //     // 只有连上飞机，且在飞行页面或规划页面才显示
+    //     visible:            _activeVehicle && (flyView.visible || planView.visible)
+    // }
 
     // 系统设置背景页面
     Rectangle {
@@ -851,4 +932,42 @@ ApplicationWindow {
          flightID:                   UTMSPStateStorage.flightID
          anchors.fill:               parent
     }
+
+    // ---------------------------------------------------------
+    // ========================================================
+    // ★★★ 全局全量监控组 (数值条 + 仪表盘) ★★★
+    // ========================================================
+    // ★★★ 全局仪表盘容器 (从 FlyView 提取) ★★★
+    // SelectableControl {
+    //     id:                     globalInstruments
+    //     z:                      QGroundControl.zOrderWidgets
+    //     selectionUIRightAnchor: true
+    //
+    //     // 绑定设置，确保用户改了仪表盘样式，全局都能同步变
+    //     selectedControl:        QGroundControl.settingsManager.flyViewSettings.instrumentQmlFile2
+    //
+    //     // 适配位置：靠右，且避开顶栏
+    //     anchors.right:          parent.right
+    //     anchors.top:            parent.top
+    //     anchors.topMargin:      mainWindow.header.height + ScreenTools.defaultFontPixelHeight
+    //     anchors.margins:        ScreenTools.defaultFontPixelWidth
+    //
+    //     // ★★★ 核心可见性逻辑 ★★★
+    //     // 连上飞机，且在【飞行】或【规划】页面显示
+    //     visible:                _activeVehicle && (mainWindow.isFlyView || mainWindow.isPlanView)
+    //
+    //     // 解决引用丢失问题：
+    //     // 如果在 FlyView，使用 FlyView 的任务控制器；如果在 PlanView，使用 PlanView 的
+    //     property var  missionController: {
+    //         if (mainWindow.isFlyView) return flyViewLoader.item._missionController
+    //         if (mainWindow.isPlanView) return planViewLoader.item._missionController
+    //         return null
+    //     }
+    //
+    //     // 这些属性如果报错，可以先给个默认值 0
+    //     property real extraInset:           0
+    //     property real extraValuesWidth:     0
+    //
+    //     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+    // }
 }
