@@ -498,22 +498,28 @@ ApplicationWindow {
     // ========================================================
     // ★★★ 工业级复刻：全局居中监控条 ★★★
     // ========================================================
-    // ========================================================
-    // ★★★ 工业级适配：右下角监控组 (强制左数右盘 + 环境修复) ★★★
-    // ========================================================
     FlyViewBottomRightRowLayout {
         id:                 bottomRightRowLayout
         anchors.right:      parent.right
         anchors.bottom:     parent.bottom
-        // anchors.margins:    _layoutMargin
-
-
-        // --- 核心修改：位置调整 ---
+        // ---位置调整 ---
         anchors.rightMargin:    _layoutMargin
-        // 将这里的倍数（如 2.5）根据你的需求微调。数值越大，位置越靠上。
+        // 数值越大，位置越靠上。
         anchors.bottomMargin:   _layoutMargin * 2.5
 
+        // 1. 必须连上飞机 (_activeVehicle)
+        // 2. 如果在飞行页面 (flyView.visible) -> 始终显示 (暂时不添加隐藏属性)
+        // 3. 如果在计划页面 (planView.visible) -> 只有当【编辑器收起】时才显示
+        visible: _activeVehicle && (
+            flyView.visible ||
+            (planView.visible && planView.isEditorCollapsed)
+        )
 
+        // 3. 视觉优化
+        opacity: visible ? 1.0 : 0.0
+        Behavior on opacity {
+            NumberAnimation { duration: 200 }
+        }
         // --- 布局顺序从左到右 ---
         layoutDirection:    Qt.LeftToRight
 
@@ -535,47 +541,8 @@ ApplicationWindow {
         property real bottomEdgeCenterInset:    bottomEdgeRightInset
         property real rightEdgeBottomInset:     width + _layoutMargin
 
-        // 跨页面显示
-        visible: _activeVehicle && (flyView.visible || planView.visible)
-        z:       QGroundControl.zOrderWidgets + 80
+        z:       QGroundControl.zOrderWidgets + 100
     }
-
-    // FlyViewBottomRightRowLayout {
-    //     id:                 bottomRightRowLayout
-    //     z:                  QGroundControl.zOrderWidgets + 100
-    //
-    //     // --- 核心：完全复用你提供的绝对坐标计算逻辑 ---
-    //     anchors.horizontalCenter: undefined
-    //     anchors.right:            undefined
-    //
-    //     // 使用 parent.width 计算，确保在各种页面下都居中
-    //     x: (parent.width - width) / 2
-    //
-    //     anchors.bottom:         parent.bottom
-    //     anchors.bottomMargin:   _margins * 5
-    //     // ------------------------------------------
-    //
-    //     property real _margins:       ScreenTools.defaultFontPixelHeight * 0.5
-    //     property real _layoutSpacing: ScreenTools.defaultFontPixelWidth
-    //     property real _layoutMargin:  _margins
-    //
-    //     // 注入业务逻辑变量
-    //     property var  _activeVehicle:        QGroundControl.multiVehicleManager.activeVehicle
-    //     property bool _showSingleVehicleUI: true
-    //     property var  factValueGrid:         ({ "telemetryBarSettingsGroup": "TelemetryBar" })
-    //
-    //     // --- 核心：完全复用你提供的 Inset 固定值逻辑 ---
-    //     property real bottomEdgeRightInset:     height + _layoutMargin
-    //     property real bottomEdgeCenterInset:    bottomEdgeRightInset
-    //     property real rightEdgeBottomInset:     width + _layoutMargin
-    //
-    //     // 间距保持
-    //     spacing:            _layoutSpacing
-    //
-    //     // --- 跨页面显示逻辑 ---
-    //     // 只有连上飞机，且在飞行页面或规划页面才显示
-    //     visible:            _activeVehicle && (flyView.visible || planView.visible)
-    // }
 
     // 系统设置背景页面
     Rectangle {
@@ -584,6 +551,7 @@ ApplicationWindow {
         // visible:        false
         // color:          qgcPal.window
         // color: Qt.rgba(0, 0, 0, 0.8) // 假设紫色半透明
+        z:1000
 
         width: parent.width * 0.75       // 半屏宽度
         anchors.top: parent.top

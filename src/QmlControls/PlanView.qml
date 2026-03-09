@@ -69,7 +69,8 @@ Item {
     readonly property int       _layerUTMSP:                4 // Additional Tab button when UTMSP is enabled
     readonly property string    _armedVehicleUploadPrompt:  qsTr("设备当前已启动。您是否要将计划上传到设备？")
 
-
+    // 添加右侧扩展折叠，状态属性（暴露给主界面）。右侧容器 id 是 rightPanelContainer
+    property alias isEditorCollapsed: rightPanelContainer.panelCollapsed
     function mapCenter() {
         var coordinate = editorMap.center
         coordinate.latitude  = coordinate.latitude.toFixed(_decimalPlaces)
@@ -192,7 +193,7 @@ Item {
                 waitingOnTerrainDataMessage(save)
                 return false
             }
-            return true
+            return true1
         }
 
         function upload() {
@@ -375,7 +376,7 @@ Item {
         //anchors.bottom: parent.bottom
 
         // --- 核心修改：让地图钻到顶栏后面 ---
-        anchors.top:    parent.top    // 👈 修改这里，从 planToolBar.bottom 改为 parent.top
+        anchors.top:    parent.top    // 修改这里，从 planToolBar.bottom 改为 parent.top
         // ----------------------------------
 
         anchors.bottom: parent.bottom
@@ -633,7 +634,6 @@ Item {
         Rectangle {
             id: collapsibleToolStrip
             // --- 1. 动态宽度逻辑：使用 ScreenTools 代替固定数字 ---
-            // 定义一个基础单位，通常 6-8 倍的字符宽度比较适合放图标
             readonly property real expandedWidth: ScreenTools.defaultFontPixelWidth * 8
 
             width:              panelCollapsed ? 0 : expandedWidth
