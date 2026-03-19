@@ -18,13 +18,15 @@ import com.test.sdk.rc.RcSkyDataManager; // 引入管理器
 import com.skydroid.rcsdk.RCSDKManager;
 import com.skydroid.rcsdk.SDKManagerCallBack;
 import com.skydroid.rcsdk.common.error.SkyException;
-
+import java.io.File;
 
 public class QGCConnectionManager {
     private static final String TAG = "QGCConnection";
 
     private static boolean isInitialized = false;
-
+    private static boolean isSiyi = false;
+    private static boolean isSkydroid = false;
+    private static boolean  isConnected = false;
     // 声明一个新的 Native 回调，用于回传结果
 //     public static native void nativeOnCmdResult(int mavCmdId, int sdkResult);
 
@@ -34,42 +36,23 @@ public class QGCConnectionManager {
     // ---------------------------------------------------------
     public static native void nativeOnJsonReceived(String jsonStr);
 
-    // 保留这个旧接口，防止 C++ 那边链接报错，但实际上不再调用它
-//     public static native void nativeOnDataReceived(byte[] data, int length);
+    private static final Handler handler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull android.os.Message msg) {
 
-    // =========================================================
-    // ★★★ 关键点：定义一个全局强引用监听器 ★★★
-    // =========================================================
-    // 为什么必须定义成成员变量？
-    // 因为 RcSkyDataManager 内部使用 WeakReference (弱引用) 来存储监听器。
-    // 如果你直接在 initConnection 里 new 一个匿名对象传进去，
-    // Java 垃圾回收器 (GC) 会在几秒钟后把它回收掉，导致数据接收突然中断！
-//     private static RcSkyDataManager.OnGetRcSkyDataListener mSkydroidListener = new RcSkyDataManager.OnGetRcSkyDataListener() {
-//         @Override
-//         public boolean onGetRcSkyData(@NonNull byte[] datas) {
-//             if (datas != null && datas.length > 0) {
-//                 // 透传给 C++
-//                 nativeOnDataReceived(datas, datas.length);
-//             }
-//             return false; // 返回 false，让其他监听器也能收到数据
-//         }
-//     };
+            if (msg.what == 0) Log.i(TAG, "物理链路已连接");
+        }
+    };
+
 
     private static RcSkyDataManager.OnGetRcSkyDataListener mSkydroidListener = new RcSkyDataManager.OnGetRcSkyDataListener() {
         @Override
         public boolean onGetRcSkyData(@NonNull byte[] datas) {
-            if (datas != null && datas.length > 0) {
+            // --- 逻辑归拢：直接调用我们写好的统一处理函数 ---
+            // 这样无论以后数据处理逻辑怎么变，你只需要改 onHardwareDataReceived 一个地方
+            onHardwareDataReceived(datas);
 
-               JSONArray jsonArray = BoyingSdk.getInstance().onReceive(datas, datas.length);
-
-                // 2. 如果解析出 JSON，转成字符串传给 C++
-                if (jsonArray != null && !jsonArray.isEmpty()) {
-                    String jsonStr = jsonArray.toJSONString();
-                    // 透传给 C++
-                    nativeOnJsonReceived(jsonStr);
-                }
-            }
-            return false; // 返回 false，让其他监听器也能收到数据
+            return false; // 返回 false 表示数据不被拦截，允许云卓 SDK 其他部分继续使用
         }
     };
 
@@ -103,18 +86,13 @@ public class QGCConnectionManager {
         Context context = QGCActivity.getActivity();
         if (context == null) return;
 
-        // 1. 初始化 Boying SDK (略...)
-        try {
-            BoyingSdk.getInstance().initSdk();
-            BoyingSdk.getInstance().startSdk();
-        } catch (Exception e) {}
+        BoyingSdk.getInstance().initSdk();
+        // 1. 初始化 Boying SDK
+
+        getConnectType();
 
         // 2. 初始化硬件
-        if (MKUtil.isUnirc7() || MKUtil.isUnirc7Pro()) {
-            // 思翼逻辑 (略...)
-            MKUtil.getInstance().connect(handler);
-        }
-        else if (SkydroidRcConnectUtil.isSkydroidRc()) {
+        if (isSkydroid) {
             Log.i(TAG, "Detected Skydroid Remote");
 
             // (A) 初始化 RCSDK
@@ -138,117 +116,73 @@ public class QGCConnectionManager {
             RcSkyDataManager.getInstance().addOnGetRcSkyDataListener(mSkydroidListener);
             Log.i(TAG, "Registered Skydroid Data Listener");
 
-//             // (D) 启动连接
-             SkydroidRcConnectUtil.getInstance().connect(handler);
-             isInitialized = true;
-        }
 
-       // 4. 启动心跳线程
-//         startSdkHeartbeatLoop();
-    }
+            if (!SkydroidRcConnectUtil.getInstance().isAlive()) {
 
- // ---------------------------------------------------------
-//     private static void startSdkHeartbeatLoop() {
-//         if (isRunning) return;
-//         isRunning = true;
-//
-//         new Thread(new Runnable() {
-//             @Override
-//             public void run() {
-//                 Log.i(TAG, "SDK Heartbeat Loop Started");
-//                 while (isRunning) {
-//                     try {
-//                         // 1. 获取 SDK 内部数据 (GetByteCommandJava)
-//                         // 注意：这里使用文档规定的方法名
-//                         byte[] bytes = BoyingSdk.getInstance().getSdkData();
-//
-//                         // 2. 如果有数据，发给云卓硬件
-//                         if (bytes != null && bytes.length > 0) {
-//                             sendToHardwareSafe(bytes);
-//                         }
-//
-//                         // 3. 休眠 50ms (20Hz)
-//                         Thread.sleep(100);
-//                     } catch (Exception e) {
-//                         e.printStackTrace();
-//                     }
-//                 }
-//                 Log.i(TAG, "SDK Heartbeat Loop Stopped");
-//             }
-//         }).start();
-//     }
+                 //  2. 再启动SDK
+                BoyingSdk.getInstance().startSdk();
 
-    // ---------------------------------------------------------
-    // 发送数据
-    // ---------------------------------------------------------
-    public static void sendData(String jsonCmd) {
+                //  4. 再连接遥控器
+                SkydroidRcConnectUtil.getInstance().connect(handler);
 
-        Log.w(TAG, "[1] Java sendCmdFromCpp CALLED! Cmd: " + jsonCmd);
-
-        if (jsonCmd == null || jsonCmd.isEmpty()) {
-            Log.e(TAG, "Error: jsonCmd is empty!");
-            return;
-        }
-
-        try {
-
-            JSONObject cmdObj = JSONObject.parseObject(jsonCmd);
-
-            Log.w(TAG, "[2] Parsed JSONObject: " + cmdObj.toJSONString());
-
-            int result = BoyingSdk.getInstance().sendNewCmd(cmdObj);
-
-            Log.w(TAG, "[3] SDK sendNewCmd result = " + result);
-
-            if (result == 0) {
-                Log.d(TAG, "SDK accepted command");
-            } else {
-                Log.e(TAG, "SDK rejected command, code=" + result);
+                isInitialized = true;
+                isConnected = true;
             }
+         }
+       else{
+             isInitialized = false;
+             isConnected = false;
+      }
+    }
 
-        } catch (Exception e) {
-            Log.e(TAG, "SendCmd Error: ", e);
+    private static void getConnectType() {
+        // 每次检测前先重置，确保干净
+        isSiyi = false;
+        isSkydroid = false;
+
+        // 使用 if-else 确保互斥：只能选其一
+        if (MKUtil.isUnirc7() || MKUtil.isUnirc7Pro()) {
+            isSiyi = true;
+            Log.i(TAG, ">>> 检测到硬件：思翼 (Siyi)");
+        }
+        else if (SkydroidRcConnectUtil.isSkydroidRc()) {
+            isSkydroid = true;
+            Log.i(TAG, ">>> 检测到硬件：云卓 (Skydroid)");
+        }
+        else {
+            Log.w(TAG, ">>> 未检测到专业遥控器，将使用通用通讯模式");
         }
     }
 
-    // ★★★ 给 JNI / C++ 用的版本 ★★★
+
     public static int sendDataWithResult(String jsonCmd) {
-
-        Log.w(TAG, "[JNI] sendDataWithResult Cmd: " + jsonCmd);
-
+        // 1. 基础判空
         if (jsonCmd == null || jsonCmd.isEmpty()) {
             return -1;
         }
 
-        try {
-            JSONObject cmdObj = JSONObject.parseObject(jsonCmd);
-            int result = BoyingSdk.getInstance().sendNewCmd(cmdObj);
-            Log.w(TAG, "[JNI] SDK result = " + result);
-            return result;
+        // 只有物理链路（云卓）是通的，才去调用博盈 SDK
+        if (SkydroidRcConnectUtil.getInstance().isConnected()) {
+            try {
+                JSONObject cmdObj = JSONObject.parseObject(jsonCmd);
 
-        } catch (Exception e) {
-            Log.e(TAG, "sendDataWithResult error", e);
-            return -2;
+                // 同步调用博盈 SDK
+                int result = BoyingSdk.getInstance().sendNewCmd(cmdObj);
+
+                Log.w(TAG, "[JNI] 指令发送成功: " + jsonCmd + " | 结果: " + result);
+                return result;
+            }
+            catch (Exception e) {
+                Log.e(TAG, "[JNI] 指令解析/发送异常", e);
+                return -2; // 解析异常
+            }
+        } else {
+            // 3. 链路未连接
+            Log.e(TAG, "[JNI] 指令发送失败：云卓遥控器未连接飞机");
+            return -1;
         }
     }
 
-//     private static void sendToHardwareSafe(byte[] data) {
-//         synchronized (sendLock) {
-//             try {
-//                 if (MKUtil.isUnirc7() || MKUtil.isUnirc7Pro()) {
-//                     MKUtil.getInstance().sendRawData(data);
-//                 }
-//                 else if (SkydroidRcConnectUtil.isSkydroidRc()) {
-//                     SkydroidRcConnectUtil.getInstance().sendDataToDevice(data);
-//                 }
-//                 else {
-//                     MKUtil.getInstance().sendRawData(data);
-//                 }
-//             } catch (Exception e) {
-//                 // Log.e(TAG, "HW Send Fail: " + e.toString());
-//             }
-//         }
-//     }
 
     // ---------------------------------------------------------
     // 7. 停止连接与释放资源
@@ -277,11 +211,4 @@ public class QGCConnectionManager {
             Log.e(TAG, "Hardware Disconnect Error: " + e.toString());
         }
     }
-
-
-    // 没什么用的 Handler，仅用于保活
-    private static Handler handler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {}
-    };
 }
