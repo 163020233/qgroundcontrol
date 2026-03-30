@@ -72,7 +72,7 @@
 #include "VehicleComponent.h"
 #include "VideoManager.h"
 #include "BoyingLinkConfiguration.h"
-
+#include "ShoutingManager.h"
 
 #ifndef QGC_DISABLE_MAVLINK_INSPECTOR
 #include "MAVLinkInspectorController.h"
@@ -349,12 +349,17 @@ void QGCApplication::init()
     // —— 新增注册 QGCPositionManager 单例 —— //
     // QGCPositionManager* posMgr = QGCPositionManager::instance();
     // qmlRegisterSingletonInstance<QGCPositionManager>("QGroundControl", 0, 0, "PositionManager", QGCPositionManager::instance());
+
     // 获取单例
     QGCPositionManager* posMgr = QGCPositionManager::instance();
+    // 定义喊话器单例
+    ShoutingManager* shoutingMgr = new ShoutingManager(this);
 
     // 注册 QML 单例，版本号 0.0，对应 QML 里 import QGroundControl
     qmlRegisterSingletonInstance<QGCPositionManager>(
         "QGroundControl", 0, 0, "PositionManager", posMgr);
+
+    qmlRegisterSingletonInstance<ShoutingManager>("QGroundControl", 1, 0, "ShoutingManager", shoutingMgr);
 
     qmlRegisterType<FactValueGrid>("QGroundControl", 1, 0, "FactValueGrid");
 

@@ -55,6 +55,8 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         VehicleModule
         VehicleSetupModule
         BoyingLinkLib
+        # --- 新增的模块库名称 ---
+        ShoutingModule
 )
 
 if(NOT QGC_DISABLE_APM_PLUGIN AND NOT QGC_DISABLE_APM_PLUGIN_FACTORY)
@@ -101,5 +103,7 @@ add_subdirectory(UTMSP)
 add_subdirectory(Vehicle)
 add_subdirectory(VideoManager)
 add_subdirectory(Viewer3D)
+# --- 新增模块目录 ---
+add_subdirectory(PayloadControls/Shouting)
 
 add_subdirectory(QtLocationPlugin)
