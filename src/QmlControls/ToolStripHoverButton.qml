@@ -121,7 +121,8 @@ Button {
                 id:                         innerText
                 text:                       control.text
                 // color:                      _currentContentColor
-                color:                      "black"
+                // color:                      "black"
+                color:                      _currentContentColor
                 anchors.horizontalCenter:   parent.horizontalCenter
                 font.bold:                  !innerImage.visible && !innerImageColorful.visible
                 font.pointSize: ScreenTools.smallFontPointSize * 1.2   // ⬅ 放大字体 30%

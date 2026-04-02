@@ -457,68 +457,98 @@ void ParameterManager::_ftpDownloadProgress(float progress)
         _initialRequestTimeoutTimer.stop();
     }
 }
-
 void ParameterManager::refreshAllParameters(uint8_t componentId)
 {
-    const SharedLinkInterfacePtr sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
-    if (!sharedLink) {
+    if (!_initialLoadComplete) {
+        int compId = _actualComponentId(componentId);
+
+        // 1. 注入 SYSID 参数 (QGC 插件加载的钥匙)
+        if (!_mapCompId2FactMap.contains(compId) || _mapCompId2FactMap[compId].isEmpty()) {
+            // 参数 1：系统 ID (必填)
+            Fact* f1 = new Fact(compId, "SYSID_THISMAV", FactMetaData::valueTypeUint8, this);
+            f1->setRawValue(1);
+            _mapCompId2FactMap[compId]["SYSID_THISMAV"] = f1;
+
+            // 参数 2：告诉 QGC 这是一个“多旋翼” (关键！否则它不知道加载哪套模式)
+            Fact* f2 = new Fact(compId, "MAV_TYPE", FactMetaData::valueTypeUint8, this);
+            f2->setRawValue(2); // 2 = Multirotor
+            _mapCompId2FactMap[compId]["MAV_TYPE"] = f2;
+        }
+
+        // 2. 【关键】清空所有等待下载的队列，否则 QGC 认为任务没完
+        _waitingReadParamIndexMap[compId].clear();
+        _waitingReadParamNameMap[compId].clear();
+        _paramCountMap[compId] = 1;
+        _totalParamCount = 1;
+
+        // 3. 强制关闭重试计时器
+        _initialRequestTimeoutTimer.stop();
+        _checkInitialLoadComplete();
         return;
     }
-
-    if (sharedLink->linkConfiguration()->isHighLatency() || _logReplay) {
-        // These links don't load params
-        _parametersReady = true;
-        _missingParameters = true;
-        _initialLoadComplete = true;
-        _waitingForDefaultComponent = false;
-        emit parametersReadyChanged(_parametersReady);
-        emit missingParametersChanged(_missingParameters);
-    }
-
-    if (!_initialLoadComplete) {
-        _initialRequestTimeoutTimer.start();
-    }
-
-    if (_tryftp && ((componentId == MAV_COMP_ID_ALL) || (componentId == MAV_COMP_ID_AUTOPILOT1))) {
-        FTPManager *const ftpManager = _vehicle->ftpManager();
-        (void) connect(ftpManager, &FTPManager::downloadComplete, this, &ParameterManager::_ftpDownloadComplete);
-        _waitingParamTimeoutTimer.stop();
-        if (ftpManager->download(MAV_COMP_ID_AUTOPILOT1,
-                                 QStringLiteral("@PARAM/param.pck"),
-                                 QStandardPaths::writableLocation(QStandardPaths::TempLocation),
-                                 QStringLiteral(""),
-                                 false /* No filesize check */)) {
-            (void) connect(ftpManager, &FTPManager::commandProgress, this, &ParameterManager::_ftpDownloadProgress);
-        } else {
-            qCWarning(ParameterManagerLog) << "ParameterManager::refreshallParameters FTPManager::download returned failure";
-            (void) disconnect(ftpManager, &FTPManager::downloadComplete, this, &ParameterManager::_ftpDownloadComplete);
-        }
-    } else {
-        // Reset index wait lists
-        for (int cid: _paramCountMap.keys()) {
-            // Add/Update all indices to the wait list, parameter index is 0-based
-            if ((componentId != MAV_COMP_ID_ALL) && (componentId != cid)) {
-                continue;
-            }
-            for (int waitingIndex = 0; waitingIndex < _paramCountMap[cid]; waitingIndex++) {
-                // This will add a new waiting index if needed and set the retry count for that index to 0
-                _waitingReadParamIndexMap[cid][waitingIndex] = 0;
-            }
-        }
-
-        mavlink_message_t msg{};
-        mavlink_msg_param_request_list_pack_chan(MAVLinkProtocol::instance()->getSystemId(),
-                                                 MAVLinkProtocol::getComponentId(),
-                                                 sharedLink->mavlinkChannel(),
-                                                 &msg,
-                                                 _vehicle->id(),
-                                                 componentId);
-        (void) _vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), msg);
-    }
-
-    const QString what = (componentId == MAV_COMP_ID_ALL) ? "MAV_COMP_ID_ALL" : QString::number(componentId);
-    qCDebug(ParameterManagerLog) << _logVehiclePrefix(-1) << "Request to refresh all parameters for component ID:" << what;
+    // ----------------------------
 }
+// void ParameterManager::refreshAllParameters(uint8_t componentId)
+// {
+//     const SharedLinkInterfacePtr sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
+//     if (!sharedLink) {
+//         return;
+//     }
+//
+//     if (sharedLink->linkConfiguration()->isHighLatency() || _logReplay) {
+//         // These links don't load params
+//         _parametersReady = true;
+//         _missingParameters = true;
+//         _initialLoadComplete = true;
+//         _waitingForDefaultComponent = false;
+//         emit parametersReadyChanged(_parametersReady);
+//         emit missingParametersChanged(_missingParameters);
+//     }
+//
+//     if (!_initialLoadComplete) {
+//         _initialRequestTimeoutTimer.start();
+//     }
+//
+//     if (_tryftp && ((componentId == MAV_COMP_ID_ALL) || (componentId == MAV_COMP_ID_AUTOPILOT1))) {
+//         FTPManager *const ftpManager = _vehicle->ftpManager();
+//         (void) connect(ftpManager, &FTPManager::downloadComplete, this, &ParameterManager::_ftpDownloadComplete);
+//         _waitingParamTimeoutTimer.stop();
+//         if (ftpManager->download(MAV_COMP_ID_AUTOPILOT1,
+//                                  QStringLiteral("@PARAM/param.pck"),
+//                                  QStandardPaths::writableLocation(QStandardPaths::TempLocation),
+//                                  QStringLiteral(""),
+//                                  false /* No filesize check */)) {
+//             (void) connect(ftpManager, &FTPManager::commandProgress, this, &ParameterManager::_ftpDownloadProgress);
+//         } else {
+//             qCWarning(ParameterManagerLog) << "ParameterManager::refreshallParameters FTPManager::download returned failure";
+//             (void) disconnect(ftpManager, &FTPManager::downloadComplete, this, &ParameterManager::_ftpDownloadComplete);
+//         }
+//     } else {
+//         // Reset index wait lists
+//         for (int cid: _paramCountMap.keys()) {
+//             // Add/Update all indices to the wait list, parameter index is 0-based
+//             if ((componentId != MAV_COMP_ID_ALL) && (componentId != cid)) {
+//                 continue;
+//             }
+//             for (int waitingIndex = 0; waitingIndex < _paramCountMap[cid]; waitingIndex++) {
+//                 // This will add a new waiting index if needed and set the retry count for that index to 0
+//                 _waitingReadParamIndexMap[cid][waitingIndex] = 0;
+//             }
+//         }
+//
+//         mavlink_message_t msg{};
+//         mavlink_msg_param_request_list_pack_chan(MAVLinkProtocol::instance()->getSystemId(),
+//                                                  MAVLinkProtocol::getComponentId(),
+//                                                  sharedLink->mavlinkChannel(),
+//                                                  &msg,
+//                                                  _vehicle->id(),
+//                                                  componentId);
+//         (void) _vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), msg);
+//     }
+//
+//     const QString what = (componentId == MAV_COMP_ID_ALL) ? "MAV_COMP_ID_ALL" : QString::number(componentId);
+//     qCDebug(ParameterManagerLog) << _logVehiclePrefix(-1) << "Request to refresh all parameters for component ID:" << what;
+// }
 
 int ParameterManager::_actualComponentId(int componentId) const
 {
@@ -1093,6 +1123,23 @@ FactMetaData::ValueType_t ParameterManager::mavTypeToFactType(MAV_PARAM_TYPE mav
 
 void ParameterManager::_checkInitialLoadComplete()
 {
+
+    if (!_initialLoadComplete) {
+
+        _initialLoadComplete = true;
+        _parametersReady = true;
+
+        // 停止超时计时器
+        _initialRequestTimeoutTimer.stop();
+        _setLoadProgress(1.0); // 瞬间拉满该模块的进度
+        // 必须发出这个信号，QGC 的 UI 才会从“等待中”变为“正常显示”
+        emit parametersReadyChanged(true);
+        emit missingParametersChanged(false);
+
+
+        return; // 直接返回，不再跑下面那些复杂的 map 检查
+    }
+
     if (_initialLoadComplete) {
         return;
     }

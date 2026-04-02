@@ -92,7 +92,7 @@ Row {
             anchors.horizontalCenterOffset: ScreenTools.defaultFontPixelWidth * 0.5
             width:                          parent.height
             height:                         width
-            source:                         "/qmlimages/PaperPlane.svg"
+            source:                         "/qmlimages/Home.svg"
             fillMode:                       Image.PreserveAspectFit
             color:                          qgcPal.text
         }

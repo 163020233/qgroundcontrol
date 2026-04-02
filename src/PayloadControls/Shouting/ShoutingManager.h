@@ -52,8 +52,19 @@ public:
 
     Q_INVOKABLE void refreshPlayList();    // 获取列表
     Q_INVOKABLE void playByPath(QString path); // V2.0.5 路径播放
-    Q_INVOKABLE void uploadMp3(QString localPath); // 上传文件
-    Q_INVOKABLE void deleteMp3(QString fileName);  // 删除文件
+
+
+
+    // --- MP3 播放控制接口 ---
+    Q_INVOKABLE void playIndex(int index);       // 按索引播放
+    Q_INVOKABLE void stopPlayer();              // 停止播放
+    Q_INVOKABLE void nextSong();                // 下一首
+    Q_INVOKABLE void previousSong();            // 上一首
+    Q_INVOKABLE void repeatPath(QString path);  // 路径循环播放 (V2.0.5)
+
+    // --- 文件管理接口 ---
+    Q_INVOKABLE void uploadMp3(QString localPath);
+    Q_INVOKABLE void deleteMp3(QString fileName);
 
     QVariantList playList() const { return _playList; }
     int currentVolume() const { return _currentVolume; }

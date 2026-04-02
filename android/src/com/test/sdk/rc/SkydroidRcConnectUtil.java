@@ -61,13 +61,23 @@ public class SkydroidRcConnectUtil  implements CommListener
      */
     private Handler connectHandler;
 
-    private boolean isConnected = false;
+    private volatile boolean isConnected = false;
 
     int SKYDROID_RC_EXP = 1700;
 
 
     private SkydroidRcConnectUtil()
     {
+    }
+
+    /**
+     * 是否已连接
+     *
+     * @return
+     */
+    public boolean isConnected()
+    {
+        return isConnected;
     }
 
 
@@ -118,11 +128,12 @@ public class SkydroidRcConnectUtil  implements CommListener
     @Override
     public void onConnectSuccess()
     {
-        Log.d(TAG, "连接成功");
+        Log.d(TAG, "SDK 连接成功");
+
 //         this.connectHandler = null;
         connectHandler.sendEmptyMessage(0);
         isConnected = true;
-        this.startWrite();
+//         this.startWrite();
         this.startWriteSdkData();
     }
 
@@ -393,15 +404,13 @@ public class SkydroidRcConnectUtil  implements CommListener
                 try
                 {
                     byte[] bytes = BoyingSdk.getInstance().getSdkData();
-                    // 2. ★★★ 先判空，再处理！★★★
                     if (bytes == null || bytes.length == 0)
                     {
-                        // 没数据就休息，不要往下走了
                         Thread.sleep(50); // 稍微休息一下，防止空转太快
                         continue;
                     }
+//                     Log.d("SEND 发送给飞控的数据",bytesToLogString(bytes));
 
-//                     Logs.d("发送给飞控的数据",bytesToLogString(bytes));
                     if (bytes == null || bytes.length == 0)
                     {
                         continue;

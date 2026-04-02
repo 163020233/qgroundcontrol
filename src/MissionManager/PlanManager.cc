@@ -130,45 +130,59 @@ void PlanManager::_writeMissionCount(void)
 
 void PlanManager::loadFromVehicle(void)
 {
-    if (_vehicle->isOfflineEditingVehicle()) {
-        return;
-    }
 
-    qCDebug(PlanManagerLog) << QStringLiteral("loadFromVehicle %1 read sequence").arg(_planTypeString());
+    // 发出信号：任务下载进度已改变（设为 false 代表结束）
+    emit inProgressChanged(false);
 
-    if (inProgress()) {
-        qCDebug(PlanManagerLog) << QStringLiteral("loadFromVehicle %1 called while transaction in progress").arg(_planTypeString());
-        return;
-    }
+    // 发出信号：新的任务项已可用（false 代表不是由用户手动触发的）
+    emit newMissionItemsAvailable(false);
 
-    _retryCount = 0;
-    _setTransactionInProgress(TransactionRead);
-    _connectToMavlink();
-    _requestList();
+    // 直接返回，不让它去发 MAVLink 请求，也不启动 5 秒计时器
+    return;
+    // --- 【通用绕过补丁：结束】 ---
+
+
+    // if (_vehicle->isOfflineEditingVehicle()) {
+    //     return;
+    // }
+
+    // qCDebug(PlanManagerLog) << QStringLiteral("loadFromVehicle %1 read sequence").arg(_planTypeString());
+
+    // if (inProgress()) {
+    //     qCDebug(PlanManagerLog) << QStringLiteral("loadFromVehicle %1 called while transaction in progress").arg(_planTypeString());
+    //     return;
+    // }
+
+    // _retryCount = 0;
+    // _setTransactionInProgress(TransactionRead);
+    // _connectToMavlink();
+    // _requestList();
 }
 
 /// Internal call to request list of mission items. May be called during a retry sequence.
 void PlanManager::_requestList(void)
 {
-    qCDebug(PlanManagerLog) << QStringLiteral("_requestList %1 _planType:_retryCount").arg(_planTypeString()) << _planType << _retryCount;
+    return;
 
-    _itemIndicesToRead.clear();
-    _clearMissionItems();
-
-    SharedLinkInterfacePtr  sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
-    if (sharedLink){
-        mavlink_message_t       message;
-        mavlink_msg_mission_request_list_pack_chan(MAVLinkProtocol::instance()->getSystemId(),
-                                                   MAVLinkProtocol::getComponentId(),
-                                                   sharedLink->mavlinkChannel(),
-                                                   &message,
-                                                   _vehicle->id(),
-                                                   MAV_COMP_ID_AUTOPILOT1,
-                                                   _planType);
-
-        _vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), message);
-    }
-    _startAckTimeout(AckMissionCount);
+    // qCDebug(PlanManagerLog) << QStringLiteral("_requestList %1 _planType:_retryCount").arg(_planTypeString()) << _planType << _retryCount;
+    //
+    // _itemIndicesToRead.clear();
+    // _clearMissionItems();
+    //
+    // SharedLinkInterfacePtr  sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
+    // if (sharedLink){
+    //     mavlink_message_t       message;
+    //     mavlink_msg_mission_request_list_pack_chan(MAVLinkProtocol::instance()->getSystemId(),
+    //                                                MAVLinkProtocol::getComponentId(),
+    //                                                sharedLink->mavlinkChannel(),
+    //                                                &message,
+    //                                                _vehicle->id(),
+    //                                                MAV_COMP_ID_AUTOPILOT1,
+    //                                                _planType);
+    //
+    //     _vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), message);
+    // }
+    // _startAckTimeout(AckMissionCount);
 }
 
 void PlanManager::_ackTimeout(void)

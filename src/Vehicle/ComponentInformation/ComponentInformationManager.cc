@@ -72,6 +72,22 @@ void ComponentInformationManager::advance()
 
 void ComponentInformationManager::requestAllComponentInformation(RequestAllCompleteFn requestAllCompletFn, void * requestAllCompleteFnData)
 {
+
+    // 1. 保存回调指针（虽然我们马上就要用它）速度更快
+    _requestAllCompleteFn       = requestAllCompletFn;
+    _requestAllCompleteFnData   = requestAllCompleteFnData;
+
+    // 2. 【核心动作】：不调用 start()，直接手动触发成功回调
+    // 这会让上层状态机（InitialConnectStateMachine）认为这一步已经瞬间跑完了
+    if (_requestAllCompleteFn) {
+        _requestAllCompleteFn(_requestAllCompleteFnData);
+    }
+
+    // 3. 通知 UI 进度已达到 100%
+    emit progressUpdate(0.99f);
+
+    return;
+
     _requestAllCompleteFn       = requestAllCompletFn;
     _requestAllCompleteFnData   = requestAllCompleteFnData;
     start();

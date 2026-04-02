@@ -34,7 +34,7 @@ class ShoutingController : public QObject {
     Q_OBJECT
 public:
     explicit ShoutingController(QObject *parent = nullptr);
-
+    void forceSyncPlayList(); // 强制同步逻辑
     // 静态成员声明
     static DevConfig PlayerConfig;
     // 在 public 下增加
@@ -46,6 +46,7 @@ public:
     void checkPermissionAndStart();
 
     void getPlayList();
+    void forceRefreshPlayerMode(); // 核心：强制刷新并重载列表
     void uploadFile(const QString& localPath);
     bool isConnected() const;
 
@@ -63,7 +64,10 @@ private slots:
     void onTcpData();
     void onHeartbeat();
 
+
 private:
+    // --- 在这里定义 ---
+    QByteArray  _tcpBuffer; // 用于暂存 TCP 接收到的原始字节流
     QTcpSocket* m_tcp   = nullptr;
     QUdpSocket* m_udp   = nullptr;
     QTimer*     m_timer = nullptr;

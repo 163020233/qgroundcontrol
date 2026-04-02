@@ -3,18 +3,35 @@
 #include <QDebug>
 #include <QJsonArray>
 
+#include "ShoutingManager.h"
+#include <QVariantMap>
+#include <QFileInfo>
+
 ShoutingManager::ShoutingManager(QObject *parent)
     : QObject(parent)
 {
     _controller = new ShoutingController(this);
 
     // 1. 基础信号 (没有参数，所以可以写空括号)
-    connect(_controller, &ShoutingController::connectionChanged, this, &ShoutingManager::connectedChanged);
+    connect(_controller, &ShoutingController::connectionChanged, this, [this](bool connected){
+      // 当底层发出连接改变信号时，通知 QML
+      emit connectedChanged();
+      if (!connected) {
+          _lastLog = "未连接成功：请检查链路";
+          emit lastLogChanged();
+        }
+    });
+
 
     // 2. 修正：播放列表信号 (必须带 QVariantList 参数)
-    connect(_controller, &ShoutingController::playListParsed, this, [this](QVariantList list) {
+    connect(_controller, &ShoutingController::playListParsed, this, [this](QVariantList list){
         _playList = list;          // 将收到的数据存入成员变量
-        emit playListChanged();     // 通知 QML 刷新列表
+        // 2. 【核心点】手动覆盖日志文字，否则它会一直显示“正在重载...”
+        _lastLog = QString("同步完成：发现 %1 个文件").arg(list.size());
+
+        // 3. 【最关键】发出通知信号，没有这两行，QML 就不会刷新界面
+        emit playListChanged();
+        emit lastLogChanged();
     });
 
     // 3. 修正：音量更新信号 (必须带 int 参数)
@@ -39,6 +56,7 @@ void ShoutingManager::connectToDevice(const QString& ip)
         // 如果传空，Controller 会在 connectToDevice 里处理（使用 PlayerConfig 的默认值）
         _controller->connectToDevice(ip);
     }
+
 }
 
 void ShoutingManager::startMic()
@@ -58,16 +76,10 @@ void ShoutingManager::stopMic()
 void ShoutingManager::sendAlarm(int index)
 {
     if (!_controller) return;
-
-    // 根据协议：1. 先切模式
+    _controller->sendCommand("model_change",{{"mode","one_key"}});
     QVariantMap p;
-    p["model"] = "one_key";
-    _controller->sendCommand("model_change", p);
-
-    // 2. 发送播放指令 (延时或紧跟发送)
-    QVariantMap p2;
-    p2["index"] = QString::number(index);
-    _controller->sendCommand("one_key", p2);
+    p["index"] = "/xmedia/onekey/alarm.mp3";
+    _controller->sendCommand("one_key",p);
 }
 
 void ShoutingManager::setVolume(int vol)
@@ -95,16 +107,12 @@ void ShoutingManager::_handleLogUpdate(QString msg)
     qInfo() << "[ShoutingLog]: " << msg;
 }
 
-#include "ShoutingManager.h"
-#include <QVariantMap>
-#include <QFileInfo>
-
-// ... 之前的构造函数和 connect 代码保持不变 ...
 
 // 1. 实现刷新播放列表
 void ShoutingManager::refreshPlayList() {
     if (_controller) {
-        _controller->sendCommand("get_play_list");
+        // _controller->sendCommand("get_play_list");
+        _controller->forceRefreshPlayerMode();
     }
 }
 
@@ -118,24 +126,24 @@ void ShoutingManager::playByPath(QString path) {
 }
 
 // 3. 实现上传文件
-void ShoutingManager::uploadMp3(QString localPath) {
-    if (_controller) {
-        // 去掉路径前缀，只保留文件名 (Android 系统路径处理)
-        _controller->uploadFile(localPath);
-    }
-}
+// void ShoutingManager::uploadMp3(QString localPath) {
+//     if (_controller) {
+//         // 去掉路径前缀，只保留文件名 (Android 系统路径处理)
+//         _controller->uploadFile(localPath);
+//     }
+// }
 
 // 4. 实现删除文件
-void ShoutingManager::deleteMp3(QString fileName) {
-    if (_controller) {
-        QVariantMap params;
-        params["name"] = fileName;
-        _controller->sendCommand("del_mp3_file", params);
-
-        // 删除后建议延迟刷新一下列表
-        QTimer::singleShot(500, this, &ShoutingManager::refreshPlayList);
-    }
-}
+// void ShoutingManager::deleteMp3(QString fileName) {
+//     if (_controller) {
+//         QVariantMap params;
+//         params["name"] = fileName;
+//         _controller->sendCommand("del_mp3_file", params);
+//
+//         // 删除后建议延迟刷新一下列表
+//         QTimer::singleShot(500, this, &ShoutingManager::refreshPlayList);
+//     }
+// }
 
 // 5. 实现设置音量 (Q_PROPERTY 的 WRITE 函数)
 void ShoutingManager::setCurrentVolume(int vol) {
@@ -148,4 +156,73 @@ void ShoutingManager::setCurrentVolume(int vol) {
         }
         emit currentVolumeChanged();
     }
+}
+
+// 1. 播放指定索引
+void ShoutingManager::playIndex(int index) {
+    if (_controller) {
+        QVariantMap p;
+        p["index"] = QString::number(index);
+        _controller->sendCommand("start_play", p);
+    }
+}
+
+// 2. 停止播放
+void ShoutingManager::stopPlayer() {
+    if (_controller) {
+        _controller->sendCommand("stop_play");
+    }
+}
+
+// 3. 下一首 / 上一首
+void ShoutingManager::nextSong() {
+    if (_controller) _controller->sendCommand("next_play");
+}
+
+void ShoutingManager::previousSong() {
+    if (_controller) _controller->sendCommand("pre_play");
+}
+
+// 4. 路径播放 (支持 V2.0.5 协议)
+void ShoutingManager::repeatPath(QString path) {
+    if (_controller) {
+        QVariantMap p;
+        p["index"] = path;
+        _controller->sendCommand("repeat_play", p);
+    }
+}
+
+// 5. 文件上传 (带自动刷新)
+void ShoutingManager::uploadMp3(QString localPath) {
+    if (_controller) {
+        _controller->uploadFile(localPath);
+        // 上传后延迟 1.5 秒刷新列表，给硬件写入时间
+        QTimer::singleShot(1500, this, &ShoutingManager::refreshPlayList);
+    }
+}
+
+// 6. 删除文件
+void ShoutingManager::deleteMp3(QString fileNameOrPath) {
+    if (!_controller) return;
+
+            // 1. 路径处理逻辑：
+            // 如果传进来的是 "/xmedia/mp3/disarm.mp3"
+            // 我们需要提取出最后一部分 "disarm.mp3"
+    QString nameOnly = fileNameOrPath;
+    if (nameOnly.contains("/")) {
+        nameOnly = nameOnly.section('/', -1);
+    }
+
+    qDebug() << "准备删除文件，原始路径:" << fileNameOrPath << " 提取文件名:" << nameOnly;
+
+            // 2. 构造指令
+    QVariantMap p;
+    p["name"] = nameOnly;
+    _controller->sendCommand("del_mp3_file", p);
+
+            // 3. 核心：协议要求删除后必须 reload 列表才会更新
+            // 延迟 1 秒执行强制刷新，给硬件物理删除预留时间
+    QTimer::singleShot(1000, _controller, &ShoutingController::forceRefreshPlayerMode);
+
+    _handleLogUpdate("正在请求删除文件: " + nameOnly);
 }

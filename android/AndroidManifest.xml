@@ -3,6 +3,13 @@
 
     <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
 
+    <!-- 必须添加：录制音频权限 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- 建议添加：修改音频设置（用于音量控制） -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!-- 必须添加：访问网络权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- 必需 -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>

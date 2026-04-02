@@ -365,5 +365,4 @@ public class SkydroidRcSdkUtil implements SDKManagerCallBack, CommListener, RcSk
         return isConnected;
     }
 
-
 }
