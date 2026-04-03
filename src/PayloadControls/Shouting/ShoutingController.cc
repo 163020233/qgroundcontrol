@@ -30,25 +30,51 @@ ShoutingController::ShoutingController(QObject *parent) : QObject(parent) {
         m_timer->stop(); // 停止心跳
     });
 
-    // 【新增：监听错误信号】
-    connect(m_tcp, &QTcpSocket::errorOccurred, this, [this](QAbstractSocket::SocketError socketError) {
-        QString errorMsg;
-        switch (socketError) {
-            case QAbstractSocket::RemoteHostClosedError:
-                errorMsg = "设备主动断开了连接"; break;
-            case QAbstractSocket::HostNotFoundError:
-                errorMsg = "找不到目标设备，请检查IP"; break;
-            case QAbstractSocket::ConnectionRefusedError:
-                errorMsg = "连接被拒绝，硬件可能未启动端口"; break;
-            default:
-                errorMsg = "通信错误: " + m_tcp->errorString();
-        }
-        emit logUpdate(errorMsg);       // 发送给 UI 显示
-        emit connectionChanged(false);  // 强制 UI 状态变红
-    });
+    connect(m_tcp, &QTcpSocket::connected,    this, &ShoutingController::_onSocketConnected);
+    connect(m_tcp, &QTcpSocket::errorOccurred,  this, &ShoutingController::_onSocketError);
+
 
     connect(m_tcp, &QTcpSocket::readyRead, this, &ShoutingController::onTcpData);
     connect(m_timer, &QTimer::timeout, this, &ShoutingController::onHeartbeat);
+}
+
+void ShoutingController::_onSocketError(QAbstractSocket::SocketError socketError) {
+    // 1. 过滤掉主动关闭导致的“伪错误”
+    if (socketError == QAbstractSocket::RemoteHostClosedError) return;
+
+    // 2. 翻译错误码
+    QString errorMsg;
+    switch (socketError) {
+        case QAbstractSocket::HostNotFoundError:
+            errorMsg = "找不到喊话器设备，请确认IP是否正确"; break;
+        case QAbstractSocket::ConnectionRefusedError:
+            errorMsg = "连接被拒绝，请确认设备已开机并在同一网络下"; break;
+        case QAbstractSocket::SocketTimeoutError:
+            errorMsg = "连接超时，网络环境不佳"; break;
+        default:
+            errorMsg = "通讯异常: " + m_tcp->errorString();
+    }
+
+    // 3. 执行状态收尾
+    m_timer->stop();                // 停止心跳
+    emit logUpdate(errorMsg);       // 通知UI
+    emit connectionChanged(false);  // 按钮变红
+}
+
+void ShoutingController::_onSocketConnected() {
+    emit logUpdate("成功连接到喊话器设备: " + m_ip);
+    emit connectionChanged(true);
+
+    // 启动心跳
+    m_timer->start(PlayerConfig.network.time_heart);
+
+    // --- 初始化音量配置 ---
+    QVariantMap p;
+    p["vol"] = "20";
+    sendCommand("cap_vol", p);
+    sendCommand("play_vol", p);
+
+    forceRefreshPlayerMode();
 }
 
 void ShoutingController::connectToDevice(const QString &ip) {
@@ -58,21 +84,13 @@ void ShoutingController::connectToDevice(const QString &ip) {
     // 使用配置中的端口和延迟
     m_tcp->connectToHost(m_ip, (quint16)PlayerConfig.network.tcp_port);
 
-    if (m_tcp->waitForConnected(PlayerConfig.network.time_delay)) {
-        emit logUpdate("成功连接到设备: " + m_ip);
-        emit connectionChanged(true);
-        m_timer->start(PlayerConfig.network.time_heart);
-        // --- 在这里加：初始化音量 ---
-        QVariantMap p;
-        p["vol"] = "20"; // 建议先设为 20，如果还大就改成 10
-        sendCommand("cap_vol", p);  // 限制麦克风采集增益
-        sendCommand("play_vol", p); // 限制喇叭输出音量
-
-        forceRefreshPlayerMode();
-    } else {
-        emit logUpdate("连接失败: " + m_tcp->errorString());
-        emit connectionChanged(false); // <--- 【必须
-    }
+    QTimer::singleShot(3000, this, [this](){
+        if (m_tcp->state() == QAbstractSocket::ConnectingState) {
+            m_tcp->abort();
+            emit logUpdate("连接超时：目标设备未响应");
+            emit connectionChanged(false);
+        }
+    });
 }
 
 void ShoutingController::sendCommand(const QString &cmd, QVariantMap params) {

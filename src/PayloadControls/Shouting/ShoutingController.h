@@ -49,8 +49,9 @@ public:
     void forceRefreshPlayerMode(); // 核心：强制刷新并重载列表
     void uploadFile(const QString& localPath);
     bool isConnected() const;
-
-    signals:
+    void _onSocketConnected();// 链接喊话器设备
+    void _onSocketError(QAbstractSocket::SocketError socketError);
+signals:
     void logUpdate(QString msg);
     void connectionChanged(bool connected);
     // 发送解析后的 JSON 数组 (播放列表)
