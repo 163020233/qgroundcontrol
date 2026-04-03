@@ -54,249 +54,220 @@ Item {
     // --- 喊话器精简管理面板 ---
     Rectangle {
         id:                 shoutingTaskModule
-        width:              280 // 固定宽度，更加小巧
-        height:             Math.min(parent.height * 0.7, 480) // 限制最高高度
 
-        // 居中逻辑
         x: shoutingPanelShow ? (parent.width - width) / 2 : parent.width
-        y: (parent.height - height) / 2
 
-        Behavior on x { NumberAnimation { duration: 400; easing.type: Easing.OutCubic } }
-        opacity:            shoutingPanelShow ? 1.0 : 0.0
-        Behavior on opacity { NumberAnimation { duration: 200 } }
+        // 2. 透明度：配合显隐增加淡入淡出
+        opacity: shoutingPanelShow ? 1.0 : 0.0
 
-        color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.95)
-        radius:             10
-        border.color:       Qt.rgba(1, 1, 1, 0.15)
-        visible:            globals.activeVehicle && (opacity > 0)
+        // 3. 动画：当 x 坐标变化时执行平滑滑动
+        Behavior on x {
+            NumberAnimation { duration: 500; easing.type: Easing.OutQuint }
+        }
+        // 动画：透明度平滑过渡
+        Behavior on opacity {
+            NumberAnimation { duration: 300 }
+        }
 
-        ColumnLayout {
-            anchors.fill:       parent
-            anchors.margins:    12
-            spacing:            8 // 紧凑间距
+        // 4. 可见性优化：只有在屏幕内或正在移动时才渲染，节省性能
+        visible: globals.activeVehicle && (shoutingPanelShow || opacity > 0)
+        // --------------------------------------------------------
 
-            // --- 1. 顶部标题与状态 ---
-            RowLayout {
-                Layout.fillWidth: true
-                QGCLabel { text: "远程喊话控制"; font.pointSize: 11; font.bold: true }
-                Item { Layout.fillWidth: true }
-                Rectangle {
-                    width: 8; height: 8; radius: 4
-                    color: ShoutingManager.connected ? "#00FF00" : "#666666"
-                }
-                QGCLabel {
-                    text: ShoutingManager.connected ? "在线" : "离线"
-                    font.pointSize: 9
-                    color: ShoutingManager.connected ? "#00FF00" : "gray"
-                }
+        // 1. 定义状态变量
+        property bool showFileList: false
+
+        // 2. 这里的宽度和位置不再写死，而是交给 States 处理
+        height:             Math.min(parent.height * 0.8, 520)
+        y:                  (parent.height - height) / 2
+
+        color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.98)
+        radius:             12
+        clip:               true
+
+        // --------------------------------------------------------
+        // 【核心优化：状态机模式】
+        // --------------------------------------------------------
+        states: [
+            State {
+                name: "collapsed"
+                when: !shoutingTaskModule.showFileList
+                PropertyChanges { target: shoutingTaskModule; width: 280 }
+                PropertyChanges { target: fileListArea; visible: false; Layout.preferredWidth: 0 }
+            },
+            State {
+                name: "expanded"
+                when: shoutingTaskModule.showFileList
+                PropertyChanges { target: shoutingTaskModule; width: 680 } // 展开后的总宽度
+                PropertyChanges { target: fileListArea; visible: true; Layout.preferredWidth: 380 }
             }
+        ]
 
-            // --- 2. 紧凑连接区 ---
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: 5
-                QGCTextField {
-                    id:             ipInput
-                    text:           "192.168.1.20"
-                    Layout.fillWidth: true
-                    font.pointSize: 9
-                    height:         25
-                    enabled:        !ShoutingManager.connected
+        // 定义切换状态时的平滑过渡
+        transitions: Transition {
+            // 这里包含了对 width 的动画处理，会与上面的 x 坐标动画完美叠加
+            NumberAnimation { properties: "width,Layout.preferredWidth"; duration: 400; easing.type: Easing.OutCubic }
+        }
+
+        RowLayout {
+            anchors.fill:       parent
+            anchors.margins:    15
+            spacing:            showFileList ? 15 : 0 // 展开时才有间距
+
+            // ======================== 左侧：控制面板 (固定宽度) ========================
+            ColumnLayout {
+                id:                 leftControlArea
+                Layout.preferredWidth: 250
+                Layout.fillHeight:     true
+
+                QGCLabel {
+                    text: "远程喊话控制"
+                    font.pointSize: 12
+                    font.bold: true
+                    Layout.alignment: Qt.AlignHCenter
                 }
-                QGCButton {
-                    // 动态文字：根据状态显示
-                    text: {
-                        if (ShoutingManager.connected) return "断开"
-                        return "连接"
+
+                // 连接信息状态
+                RowLayout {
+                    Layout.alignment: Qt.AlignHCenter
+                    Rectangle { width: 8; height: 8; radius: 4; color: ShoutingManager.connected ? "#00FF00" : "red" }
+                    QGCLabel { text: ShoutingManager.connected ? "设备已连接" : "未连接"; font.pointSize: 9 }
+                }
+
+                // IP连接
+                RowLayout {
+                    Layout.fillWidth: true
+                    QGCTextField { id: ipInput; text: "192.168.1.20"; Layout.fillWidth: true; enabled: !ShoutingManager.connected }
+                    QGCButton {
+                        text: ShoutingManager.connected ? "断开" : "连接"
+                        onClicked: ShoutingManager.connected ? ShoutingManager.disconnectDevice() : ShoutingManager.connectToDevice(ipInput.text)
                     }
+                }
 
-                    // 动态颜色：连上变灰，没连上变绿
-                    primary: !ShoutingManager.connected
+                // 音量控制
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    QGCLabel { text: "输出音量: " + Math.round(ShoutingManager.currentVolume); font.pointSize: 9 }
+                    QGCSlider { Layout.fillWidth: true; from: 0; to: 100; value: ShoutingManager.currentVolume; onMoved: ShoutingManager.currentVolume = value }
+                }
 
-                    onClicked: {
-                        if (ShoutingManager.connected) {
-                            ShoutingManager.disconnectDevice()
-                        } else {
-                            // 点击后先显示一条提示，防止用户以为没点到
-                            ShoutingManager.connectToDevice(ipInput.text)
+                // 喊话按钮
+                QGCButton {
+                    id: micBtn
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 45
+                    text: pressed ? "正在向无人机送话..." : "按住 实时喊话"
+                    enabled: ShoutingManager.connected
+                    onPressed: ShoutingManager.startMic()
+                    onReleased: ShoutingManager.stopMic()
+                }
+
+                // 功能网格
+                GridLayout {
+                    columns: 2
+                    Layout.fillWidth: true
+                    columnSpacing: 8
+                    rowSpacing: 8
+
+                    QGCButton {
+                        text:  "同步列表"
+                        Layout.fillWidth: true
+                        onClicked: {
+                            //  实时触发：修改变量即刻进入 "expanded" 状态
+                            shoutingTaskModule.showFileList = true
+                            ShoutingManager.refreshPlayList()
                         }
                     }
+                    QGCButton { text: "上传音频"; Layout.fillWidth: true; onClicked: filePicker.open() }
+                    QGCButton { text: "一键警报"; Layout.fillWidth: true; onClicked: ShoutingManager.sendAlarm() }
+                    QGCButton { text: "停止播放"; Layout.fillWidth: true; onClicked: ShoutingManager.stopPlayer() }
                 }
 
-                // 增加一个明显的错误文字提示
-                QGCLabel {
+                Item { Layout.fillHeight: true } // 弹簧，推到底部
+
+                QGCButton {
+                    text: "关闭面板"
                     Layout.fillWidth: true
-                    text: ShoutingManager.lastLog
-                    color: ShoutingManager.connected ? "#00FF00" : "#FF6666" // 错误时显示淡红色
-                    font.pointSize: 8
-                    horizontalAlignment: Text.AlignHCenter
-                    wrapMode: Text.WordWrap
+                    onClicked: {
+                        shoutingPanelShow = false
+                        showFileList = false
+                    }
                 }
             }
 
-            // --- 3. 音量与喊话 (并排显示省空间) ---
-            ColumnLayout {
-                Layout.fillWidth: true
-                spacing: 2
-                QGCLabel { text: "音量: " + Math.round(ShoutingManager.currentVolume); font.pointSize: 5 }
-                QGCSlider {
-                    Layout.fillWidth: true
-                    from: 1; to: 100
-                    value: ShoutingManager.currentVolume
-                    onMoved: ShoutingManager.currentVolume = value
-                }
-            }
-
-            // --- 4. 核心：按住喊话按钮 (缩小版) ---
-            QGCButton {
-                id:             micBtn
-                Layout.fillWidth: true
-                Layout.preferredHeight: 25 // 高度大幅度缩小
-                text:           pressed ? "正在送话..." : "按住 喊话"
-                enabled:        ShoutingManager.connected
-
-                background: Rectangle {
-                    radius: 6
-                    color:  micBtn.pressed ? "#AA3333" : (micBtn.enabled ? qgcPal.button : "#222222")
-                }
-                onPressed:      ShoutingManager.startMic()
-                onReleased:     ShoutingManager.stopMic()
-            }
-
-            // --- 5. 文件列表区 (高度自适应) ---
+            // ======================== 右侧：文件列表 (足够宽且动态出现) ========================
             Rectangle {
-                          id:             listBorder
-                          Layout.fillWidth: true
-                          Layout.fillHeight: true       // 尽量撑开
-                          Layout.minimumHeight: 20     // 【关键：确保组件不会因为挤压而消失】
-                          Layout.preferredHeight: 40    // 建议高度
+                id:                 fileListArea
+                Layout.fillHeight:  true
+                // 宽度由 states 里的 PropertyChanges 实时控制
+                color:              Qt.rgba(0, 0, 0, 0.2)
+                radius:             8
 
-                          color:          Qt.rgba(0, 0, 0, 0.2)
-                          radius:         6
-                          border.color:   Qt.rgba(1, 1, 1, 0.1)
-                          clip:           true
+                ColumnLayout {
+                    anchors.fill: parent
+                    anchors.margins: 12
 
-                          ListView {
-                              id:             fileListView
-                              anchors.fill:   parent
-                              anchors.margins: 2 // 留一点内边距
-                              model:          ShoutingManager.playList
-                              spacing:        4
+                    RowLayout {
+                        Layout.fillWidth: true
+                        QGCLabel { text: "音频列表"; font.bold: true }
+                        Item { Layout.fillWidth: true }
+                        QGCButton {
+                            text: "收起 >"
+                            onClicked: shoutingTaskModule.showFileList = false // 🔹 实时触发回缩
+                        }
+                    }
 
-                              // 滚动条保护
-                              ScrollBar.vertical: ScrollBar {
-                                  id: listScrollBar
-                                  policy: ScrollBar.AsNeeded
-                              }
+                    // 分割线
+                    Rectangle { Layout.fillWidth: true; height: 1; color: "white"; opacity: 0.1 }
 
-                              delegate: Rectangle {
-                                  // 如果滚动条显示，宽度自动缩减，防止遮挡
-                                  width:  fileListView.width - (listScrollBar.visible ? 12 : 5)
-                                  height: 25
-                                  color:  Qt.rgba(1, 1, 1, 0.05)
-                                  radius: 4
-                                  anchors.horizontalCenter: parent.horizontalCenter
+                    ListView {
+                        id:             fileListView
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        model:          ShoutingManager.playList
+                        spacing:        6
+                        clip:           true
+                        ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
 
-                                  RowLayout {
-                                      anchors.fill: parent
-                                      anchors.margins: 5
-                                      spacing: 5
+                        delegate: Rectangle {
+                            width:  fileListView.width - 15
+                            height: 40
+                            color:  Qt.rgba(1, 1, 1, 0.08)
+                            radius: 6
 
-                                      QGCLabel {
-                                          text: {
-                                              var n = modelData.name || ""
-                                              return n.substring(n.lastIndexOf('/') + 1)
-                                          }
-                                          Layout.fillWidth: true
-                                          font.pointSize: 9
-                                          elide: Text.ElideRight
-                                          color: "white"
-                                      }
+                            RowLayout {
+                                anchors.fill: parent
+                                anchors.margins: 10
 
-                                      QGCButton {
-                                          text: "播"
-                                          Layout.preferredWidth: 28
-                                          Layout.preferredHeight: 25
-                                          onClicked: ShoutingManager.repeatPath(modelData.name)
-                                      }
+                                QGCLabel {
+                                    text: modelData.name.substring(modelData.name.lastIndexOf('/') + 1)
+                                    Layout.fillWidth: true
+                                    elide: Text.ElideRight
+                                    font.pointSize: 9
+                                }
 
-                                      QGCButton {
-                                          text: "删"
-                                          Layout.preferredWidth: 28
-                                          Layout.preferredHeight: 25
-                                          onClicked: ShoutingManager.deleteMp3(modelData.name)
-                                      }
-                                  }
-                              }
-                          }
+                                QGCButton {
+                                    text: "播放"
+                                    Layout.preferredWidth: 45
+                                    Layout.preferredHeight: 26
+                                    onClicked: ShoutingManager.repeatPath(modelData.name)
+                                }
 
-                          // 列表为空时的提示
-                          QGCLabel {
-                              anchors.centerIn: parent
-                              text: "无文件或未连接"
-                              visible: fileListView.count === 0
-                              font.pointSize: 9
-                              color: "gray"
-                          }
-                      }
+                                QGCButton {
+                                    text: "删除"
+                                    Layout.preferredWidth: 45
+                                    Layout.preferredHeight: 26
+                                    onClicked: ShoutingManager.deleteMp3(modelData.name)
+                                }
+                            }
+                        }
+                    }
 
-            // --- 6. 底部功能组 (2x2 栅格) ---
-            GridLayout {
-                columns:        2
-                Layout.fillWidth: true
-                rowSpacing:     3    // 极小行距
-                columnSpacing:  3    // 极小列距
-
-                // 定义按钮的统一高度变量，方便修改
-                readonly property int btnHeight: 28
-
-                QGCButton {
-                    text: "同步列表" // 缩减文字长度
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: parent.btnHeight
-                    font.pointSize: 8  // 进一步缩小字体
-                    onClicked: ShoutingManager.refreshPlayList()
-                }
-
-                QGCButton {
-                    text: "上传音频"
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: parent.btnHeight
-                    font.pointSize: 8
-                    onClicked: filePicker.open()
-                }
-
-                QGCButton {
-                    text: "一键警报"
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: parent.btnHeight
-                    font.pointSize: 8
-                    primary: true
-                    onClicked: ShoutingManager.sendAlarm()
-                }
-
-                QGCButton {
-                    text: "停止播放"
-                    Layout.fillWidth: true
-                    Layout.preferredHeight: parent.btnHeight
-                    font.pointSize: 8
-                    onClicked: ShoutingManager.stopPlayer()
-                }
-            }
-
-            // 关闭按钮
-            QGCButton {
-                text:           "收起面板"
-                Layout.fillWidth: true
-                Layout.preferredHeight: 24 // 极致高度
-                font.pointSize: 8
-                onClicked:      shoutingPanelShow = false
-
-                // 这种超薄按钮建议去掉背景边框，或者用简单的线条
-                background: Rectangle {
-                    color:  parent.pressed ? "#444444" : "transparent"
-                    border.color: Qt.rgba(1,1,1,0.2)
-                    radius: 4
+                    QGCLabel {
+                        text: "暂无远程文件"
+                        visible: fileListView.count === 0
+                        Layout.alignment: Qt.AlignHCenter
+                        color: "gray"
+                    }
                 }
             }
         }

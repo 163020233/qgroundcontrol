@@ -337,6 +337,6 @@ void ShoutingController::forceRefreshPlayerMode() {
         sendCommand("get_play_list");
     });
 
-    emit logUpdate("正在重载设备文件系统...");
+    emit logUpdate("正在重载设备文件...");
 }
 

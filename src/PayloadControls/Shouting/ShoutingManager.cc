@@ -23,7 +23,7 @@ ShoutingManager::ShoutingManager(QObject *parent)
     });
 
 
-    // 2. 修正：播放列表信号 (必须带 QVariantList 参数)
+    // 2. 播放列表信号 (必须带 QVariantList 参数)
     connect(_controller, &ShoutingController::playListParsed, this, [this](QVariantList list){
         _playList = list;          // 将收到的数据存入成员变量
         // 2. 【核心点】手动覆盖日志文字，否则它会一直显示“正在重载...”
@@ -34,7 +34,7 @@ ShoutingManager::ShoutingManager(QObject *parent)
         emit lastLogChanged();
     });
 
-    // 3. 修正：音量更新信号 (必须带 int 参数)
+    // 3. 音量更新信号 (必须带 int 参数)
     connect(_controller, &ShoutingController::volumeUpdated, this, [this](int vol) {
         _currentVolume = vol;      // 更新音量成员变量
         emit currentVolumeChanged(); // 通知 QML 刷新滑动条
@@ -76,7 +76,7 @@ void ShoutingManager::stopMic()
 void ShoutingManager::sendAlarm(int index)
 {
     if (!_controller) return;
-    _controller->sendCommand("model_change",{{"mode","one_key"}});
+    _controller->sendCommand("model_change",{{"model","one_key"}});
     QVariantMap p;
     p["index"] = "/xmedia/onekey/alarm.mp3";
     _controller->sendCommand("one_key",p);
@@ -124,26 +124,6 @@ void ShoutingManager::playByPath(QString path) {
         _controller->sendCommand("repeat_play", params);
     }
 }
-
-// 3. 实现上传文件
-// void ShoutingManager::uploadMp3(QString localPath) {
-//     if (_controller) {
-//         // 去掉路径前缀，只保留文件名 (Android 系统路径处理)
-//         _controller->uploadFile(localPath);
-//     }
-// }
-
-// 4. 实现删除文件
-// void ShoutingManager::deleteMp3(QString fileName) {
-//     if (_controller) {
-//         QVariantMap params;
-//         params["name"] = fileName;
-//         _controller->sendCommand("del_mp3_file", params);
-//
-//         // 删除后建议延迟刷新一下列表
-//         QTimer::singleShot(500, this, &ShoutingManager::refreshPlayList);
-//     }
-// }
 
 // 5. 实现设置音量 (Q_PROPERTY 的 WRITE 函数)
 void ShoutingManager::setCurrentVolume(int vol) {
