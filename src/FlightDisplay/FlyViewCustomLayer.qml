@@ -8,7 +8,8 @@ import QGroundControl.Controls
 import QGroundControl.ScreenTools
 import QGroundControl.Palette
 import QGroundControl.Vehicle
-import QtQuick.Dialogs // 必须导入，用于弹出文件选择器
+import QGroundControl.FlightDisplay
+import QtQuick.Dialogs
 
 Item {
     id: _root
@@ -20,6 +21,7 @@ Item {
     // --- 状态控制变量 ---
     property bool toolsExpanded:    false
     property bool taskPanelShow:    false // 控制左侧任务面板是否显示
+    property alias planEditor:      _planEditor // 暴露给 FlyView 访问 addWaypointMode
 
     // --- 喊话器对外变量
     property bool shoutingPanelShow: false // 控制喊话器相关任务面板是否显示
@@ -272,72 +274,15 @@ Item {
             }
         }
     }
-    // --------------------------------------------------------
-    // 1. 【新增】左侧可收缩任务面板 (1/4 矩形)
-    // --------------------------------------------------------
-    Rectangle {
-        id:                 taskModule
-        anchors.verticalCenter: parent.verticalCenter
-
-        // 逻辑：X 坐标 = 官方左侧栏占用的宽度 + 10 像素
-        // 尺寸：宽度设为屏幕 1/4
-        width:              Math.min(parent.width / 4, 300)
-        height:             contentColumn.height + 40
-
-        // --- 核心动画逻辑：滑出效果 ---
-        // 展开时：避开左边栏；收起时：滑到屏幕左侧外面
-        x: taskPanelShow ? (parentToolInsets.leftEdgeCenterInset + 10) : -width
-
-        Behavior on x {
-            NumberAnimation { duration: 500; easing.type: Easing.OutQuint }
-        }
-
-        color:              Qt.rgba(0.1, 0.1, 0.1, 0.8)
-        radius:             8
-        border.color:       Qt.rgba(1, 1, 1, 0.2)
-        border.width:       1
-        visible:            globals.activeVehicle && !toolDrawer.visible
-
-        ColumnLayout {
-            id:             contentColumn
-            anchors.centerIn: parent
-            width:          parent.width - 20
-            spacing:        15
-
-            QGCLabel {
-                text: "作业模式"
-                font.bold: true
-                Layout.alignment: Qt.AlignHCenter
-                color: "white"
-            }
-
-            Rectangle { Layout.fillWidth: true; height: 1; color: "white"; opacity: 0.2 }
-
-            // 模式按钮 - 航线
-            QGCButton {
-                Layout.fillWidth: true
-                text: "自动航线作业"
-                onClicked: { taskPanelShow = false; mainWindow.showPlanView() }
-            }
-
-            // 模式按钮 - 环绕
-            QGCButton {
-                Layout.fillWidth: true
-                text: "定点环绕监控"
-                onClicked: {
-                    globals.activeVehicle.sendCommand(globals.activeVehicle.defaultComponentId, MAVLink.MAV_CMD_DO_ORBIT, true, 50, 10)
-                }
-            }
-
-            // 模式按钮 - 退出当前任务
-            QGCButton {
-                Layout.fillWidth: true
-                text: "结束当前任务"
-                onClicked: {
-                    globals.activeVehicle.sendCommand(globals.activeVehicle.defaultComponentId, MAVLink.MAV_CMD_MISSION_START, true, 0, 0)
-                }
-            }
-        }
+    // ============================================================
+    // ★ 任务规划编辑面板（替换原有的 taskModule）
+    // ============================================================
+    PlanEditorPanel {
+        id:                 _planEditor
+        panelOpen:          taskPanelShow
+        mapControl:         _root.mapControl
+        z:                  QGroundControl.zOrderWidgets + 50
+        onClosePanel:       taskPanelShow = false
     }
 
     // --------------------------------------------------------
@@ -370,18 +315,22 @@ Item {
             }
         }
 
-        // B. 【新增：任务面板开关】
+        // B. 【任务规划面板开关】
         Rectangle {
             width: controlRow.btnSize; height: width; radius: width / 2
-            color: taskPanelShow ? qgcPal.colorGreen : Qt.rgba(0.15, 0.15, 0.15, 0.7)
+            color: taskPanelShow ? "#2266DD" : Qt.rgba(0.15, 0.15, 0.15, 0.7)
             visible:    toolsExpanded
             opacity:    toolsExpanded ? 1 : 0
             Behavior on opacity { NumberAnimation { duration: 200 } }
+            Behavior on color   { ColorAnimation { duration: 150 } }
 
             QGCToolBarButton {
                 anchors.centerIn: parent
-                icon.source: "/qmlimages/Plan.svg" // 使用任务图标
-                onClicked: taskPanelShow = !taskPanelShow
+                icon.source: "/qmlimages/Plan.svg"
+                onClicked: {
+                    taskPanelShow = !taskPanelShow
+                    if (taskPanelShow) shoutingPanelShow = false
+                }
             }
         }
 

@@ -141,6 +141,70 @@ Item {
             mapName:                "FlightDisplayView"
             enabled:                !viewer3DWindow.isOpen
 
+            // ====================================================
+            // ★ 任务航点叠加层（放在地图内部保证生命周期安全）
+            // ====================================================
+            Item {
+                id:                     _missionOverlay
+                anchors.fill:           parent
+                z:                      QGroundControl.zOrderWaypointLines
+                visible:                customOverlay.taskPanelShow
+
+                // 航点标注
+                Repeater {
+                    model: _missionController ? _missionController.visualItems : null
+
+                    delegate: MissionItemMapVisual {
+                        map:            mapControl
+                        interactive:    customOverlay.taskPanelShow
+                        vehicle:        _activeVehicle
+                        onClicked: (sequenceNumber) => {
+                            if (_missionController) {
+                                _missionController.setCurrentPlanViewSeqNum(sequenceNumber, false)
+                            }
+                        }
+                    }
+                }
+
+                // 航点连线
+                MissionLineView {
+                    showSpecialVisual:  _missionController ? _missionController.isROIBeginCurrentItem : false
+                    model:              _missionController ? _missionController.simpleFlightPathSegments : null
+                }
+
+                // 方向箭头
+                MapItemView {
+                    model: customOverlay.taskPanelShow && _missionController ? _missionController.directionArrows : undefined
+                    delegate: MapLineArrow {
+                        fromCoord: object ? object.coordinate1 : undefined
+                        toCoord: object ? object.coordinate2 : undefined
+                        arrowPosition: 3
+                        z: QGroundControl.zOrderWaypointLines + 1
+                    }
+                }
+            }
+
+            // 地图点击添加航点（编辑模式）
+            MouseArea {
+                anchors.fill:           parent
+                enabled:                customOverlay.taskPanelShow && customOverlay.planEditor.addWaypointMode
+                visible:                enabled
+                z:                      QGroundControl.zOrderTopMost + 10
+                propagateComposedEvents: true
+                preventStealing:        false
+                cursorShape:            Qt.CrossCursor
+
+                onClicked: (mouse) => {
+                    if (_missionController && mapControl) {
+                        var coord = mapControl.toCoordinate(Qt.point(mouse.x, mouse.y), false)
+                        if (coord.isValid) {
+                            _missionController.insertSimpleMissionItem(coord,
+                                _missionController.currentPlanViewSeqNum + 1, true)
+                        }
+                    }
+                    mouse.accepted = false
+                }
+            }
         }
 
 
@@ -186,6 +250,7 @@ Item {
             visible:                !QGroundControl.videoManager.fullScreen
             utmspActTrigger:        utmspSendActTrigger
             isViewer3DOpen:         viewer3DWindow.isOpen
+            taskPanelShow:          customOverlay.taskPanelShow
         }
 
         FlyViewCustomLayer {
