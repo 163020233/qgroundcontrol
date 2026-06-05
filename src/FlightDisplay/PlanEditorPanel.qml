@@ -223,14 +223,23 @@ Rectangle {
                     width:              _missionListView.width
                     readOnly:           false
                     onClicked: (seqNum) => {
-                        if (_private.missionController) {
-                            _private.missionController.setCurrentPlanViewSeqNum(object.sequenceNumber, false)
+                        if (_missionController) {
+                            // 如果点击的是当前已选中的项，收起编辑器（-1 不存在任何项，全部收起）
+                            if (object.isCurrentItem) {
+                                _missionController.setCurrentPlanViewSeqNum(-1, true)
+                            } else {
+                                _missionController.setCurrentPlanViewSeqNum(object.sequenceNumber, false)
+                            }
                         }
                     }
                     onRemove: {
-                        if (_private.missionController) {
-                            _private.missionController.removeVisualItem(index)
-                        }
+                        // 启动任务不可删除
+                        if (object && object.sequenceNumber === 0) return
+                        Qt.callLater(function() {
+                            if (_missionController) {
+                                _missionController.removeVisualItem(index)
+                            }
+                        })
                     }
                 }
             }
