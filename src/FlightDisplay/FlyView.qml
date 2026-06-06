@@ -198,8 +198,8 @@ Item {
                     if (_missionController && mapControl) {
                         var coord = mapControl.toCoordinate(Qt.point(mouse.x, mouse.y), false)
                         if (coord.isValid) {
-                            // 固定插入在 index 1（起飞之后第一个），确保起飞永远在最前面
-                            _missionController.insertSimpleMissionItem(coord, 1, true)
+                            // -1 表示追加到末尾，确保顺序递增：起飞 → 航点1 → 航点2 → ...
+                            _missionController.insertSimpleMissionItem(coord, -1, true)
                         }
                     }
                     mouse.accepted = false
