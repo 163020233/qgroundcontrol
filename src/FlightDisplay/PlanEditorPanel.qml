@@ -47,8 +47,9 @@ Item {
     Rectangle {
         id:                     _leftBar
         anchors.top:            parent.top
-        anchors.topMargin:      ScreenTools.toolbarHeight
+        anchors.topMargin:      ScreenTools.toolbarHeight + ScreenTools.defaultFontPixelHeight * 3.5
         anchors.bottom:         parent.bottom
+        anchors.bottomMargin:   ScreenTools.defaultFontPixelHeight * 12
         anchors.left:           parent.left
 
         width:                  ScreenTools.defaultFontPixelWidth * 20
@@ -143,11 +144,12 @@ Item {
     Rectangle {
         id:                     _rightPanel
         anchors.top:            parent.top
-        anchors.topMargin:      ScreenTools.toolbarHeight
+        anchors.topMargin:      ScreenTools.toolbarHeight + ScreenTools.defaultFontPixelHeight * 3.5
         anchors.bottom:         parent.bottom
+        anchors.bottomMargin:   ScreenTools.defaultFontPixelHeight * 12
         anchors.right:          parent.right
 
-        width:                  Math.min(parent.width * 0.32, ScreenTools.defaultFontPixelWidth * 32)
+        width:                  Math.min(parent.width * 0.25, ScreenTools.defaultFontPixelWidth * 26)
         color:                  Qt.rgba(0.08, 0.08, 0.08, 0.9)
         z:                      QGroundControl.zOrderWidgets + 40
 
