@@ -101,6 +101,16 @@ Item {
                     onClicked: _planMasterController.saveToSelectedFile()
                     leftPadding: 4; rightPadding: 4
                 }
+                QGCButton { text: qsTr("开始任务"); Layout.fillWidth: true
+                    visible: _planMasterController && !_planMasterController.offline && _planMasterController.containsItems
+                    onClicked: {
+                        var guidedCtrl = globals.guidedControllerFlyView
+                        if (guidedCtrl) {
+                            guidedCtrl.confirmAction(guidedCtrl.actionStartMission)
+                        }
+                    }
+                    leftPadding: 4; rightPadding: 4
+                }
             }
 
             Rectangle { Layout.fillWidth: true; height: 1; color: Qt.rgba(1,1,1,0.1) }
