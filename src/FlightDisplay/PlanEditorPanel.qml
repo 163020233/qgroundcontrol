@@ -39,7 +39,7 @@ Item {
     property bool _rightPanelActive: false
 
     readonly property real _margin:      ScreenTools.defaultFontPixelHeight * 0.5
-    readonly property real _btnHeight:   ScreenTools.defaultFontPixelHeight * 2.4
+    readonly property real _btnHeight:   ScreenTools.defaultFontPixelHeight * 2
 
     anchors.fill: parent
 
@@ -47,9 +47,9 @@ Item {
     Rectangle {
         id:                     _leftBar
         anchors.top:            parent.top
-        anchors.topMargin:      ScreenTools.toolbarHeight + ScreenTools.defaultFontPixelHeight * 3.5
+        anchors.topMargin:      ScreenTools.toolbarHeight + ScreenTools.defaultFontPixelHeight * 3.9
         anchors.bottom:         parent.bottom
-        anchors.bottomMargin:   ScreenTools.defaultFontPixelHeight * 12
+        anchors.bottomMargin:   ScreenTools.defaultFontPixelHeight * 9
         anchors.left:           parent.left
 
         width:                  ScreenTools.defaultFontPixelWidth * 20
@@ -72,7 +72,7 @@ Item {
             RowLayout {
                 Layout.fillWidth: true
                 QGCLabel {
-                    text: qsTr("任务规划"); font.pointSize: ScreenTools.mediumFontPointSize; font.bold: true
+                    text: qsTr("任务规划"); font.pointSize: ScreenTools.mediumFontPointSize * 1; font.bold: true
                     color: "white"; Layout.alignment: Qt.AlignLeft
                 }
                 Item { Layout.fillWidth: true }
@@ -126,7 +126,7 @@ Item {
 
             Rectangle {
                 Layout.alignment: Qt.AlignHCenter
-                width: ScreenTools.defaultFontPixelHeight * 3; height: width; radius: width / 2
+                width: ScreenTools.defaultFontPixelHeight * 2; height: width; radius: width / 2
                 color: _addMouseArea.containsMouse ? "#3388FF" : "#2266DD"
                 border.color: Qt.rgba(1,1,1,0.3); border.width: 2
                 visible: _currentLayer == _layerMission
@@ -148,9 +148,9 @@ Item {
     Rectangle {
         id:                     _rightPanel
         anchors.top:            parent.top
-        anchors.topMargin:      ScreenTools.toolbarHeight + ScreenTools.defaultFontPixelHeight * 3.5
+        anchors.topMargin:      ScreenTools.toolbarHeight + ScreenTools.defaultFontPixelHeight * 3.9
         anchors.bottom:         parent.bottom
-        anchors.bottomMargin:   ScreenTools.defaultFontPixelHeight * 12
+        anchors.bottomMargin:   ScreenTools.defaultFontPixelHeight * 9
         anchors.right:          parent.right
 
         width:                  Math.min(parent.width * 0.25, ScreenTools.defaultFontPixelWidth * 26)
