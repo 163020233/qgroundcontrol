@@ -132,23 +132,10 @@ Item {
     }
 
     GuidedActionConfirm {
-        anchors.margins:            _toolsMargin
-
-        // 1. 禁用水平锚点
-        anchors.horizontalCenter: undefined
-
-        // 2. 强制计算 X 坐标：(整个屏幕宽度 - 确认框宽度) / 2
-        // 这样无论 widgetLayer 怎么缩放，确认框永远在屏幕正中心
-        x: (mainWindow.width - width) / 2
-        // ------------------------------
-
-        anchors.top:                parent.top
-        anchors.topMargin:          ScreenTools.toolbarHeight + 30
-        z:                          QGroundControl.zOrderTopMost
-
-        guidedController:           _guidedController
-        guidedValueSlider:          _guidedValueSlider
-        utmspSliderTrigger:         utmspActTrigger
+        z:                      QGroundControl.zOrderTopMost
+        guidedController:       _guidedController
+        guidedValueSlider:      _guidedValueSlider
+        utmspSliderTrigger:     utmspActTrigger
     }
 
     //-- Virtual Joystick

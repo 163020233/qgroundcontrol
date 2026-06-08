@@ -2,8 +2,8 @@
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
+ * GuidedActionConfirm.qml — 安卓风格确认面板
+ * 整体背景透明，圆角卡片 + 滑动确认
  *
  ****************************************************************************/
 
@@ -17,35 +17,21 @@ import QGroundControl.Controls
 import QGroundControl.Palette
 import QGroundControl.UTMSP
 
-Rectangle {
+Item {
     id:         _root
     width:      ScreenTools.defaultFontPixelWidth * 35
     height:     mainLayout.height + (_margins * 2)
-    radius:     ScreenTools.defaultFontPixelWidth / 2
-    // color:      qgcPal.window
-    color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.6)
     visible:    _utmspEnabled === true ? utmspSliderTrigger: false
 
-    // --------------------------------------------------------
-    // 修改：整体下移逻辑】
-    // --------------------------------------------------------
-    // 1. 确保它水平居中
-    anchors.horizontalCenter: parent.horizontalCenter
-
-    // 2. 将它的顶部锁定在父容器顶部
-    anchors.top:              parent.top
-
-    // 3. 设置向下偏移的边距
-    // 建议数值：toolbar.height(顶栏) + 120(避开图标区)
-    // 如果觉得还不够下，就把 120 调大
-    anchors.topMargin:        ScreenTools.toolbarHeight + 5
-    // --------------------------------------------------------
-
+    anchors.left: parent.left
+    anchors.leftMargin: 70
+    anchors.top: parent.top
+    anchors.topMargin:  _toolsMargin + parentToolInsets.topEdgeLeftInset
     z:          QGroundControl.zOrderTopMost
 
     property var    guidedController
     property var    guidedValueSlider
-    property string title                                       // Currently unused
+    property string title
     property alias  message:            messageText.text
     property int    action
     property var    actionData
@@ -57,30 +43,23 @@ Rectangle {
     property real _margins:         ScreenTools.defaultFontPixelWidth / 2
     property bool _emergencyAction: action === guidedController.actionEmergencyStop
 
-    // Properties of UTM adapter
     property bool   utmspSliderTrigger
-    property bool   _utmspEnabled:                       QGroundControl.utmspSupported
+    property bool   _utmspEnabled:  QGroundControl.utmspSupported
 
     Component.onCompleted: guidedController.confirmDialog = this
 
     onVisibleChanged: {
-        if (visible) {
-            slider.focus = true
-        }
+        if (visible) slider.focus = true
     }
 
     onHideTriggerChanged: {
-        if (hideTrigger) {
-            confirmCancelled()
-        }
+        if (hideTrigger) confirmCancelled()
     }
 
     function show(immediate) {
         if (immediate) {
             visible = true
         } else {
-            // We delay showing the confirmation for a small amount in order for any other state
-            // changes to propogate through the system. This way only the final state shows up.
             visibleTimer.restart()
         }
     }
@@ -105,113 +84,106 @@ Rectangle {
 
     QGCPalette { id: qgcPal }
 
-    ColumnLayout {
-        id:                 mainLayout
-        anchors.centerIn:   parent
-        width:              parent.width - (_margins * 2)
-        spacing:            _margins
+    // 背景半透明遮罩（整个屏幕）
+    Rectangle {
+        anchors.fill: parent
+        anchors.topMargin: -parent.topMargin - 500
+        anchors.leftMargin: -parent.leftMargin - 500
+        anchors.rightMargin: -500
+        anchors.bottomMargin: -500
+        color: Qt.rgba(0, 0, 0, 0.5)
+        z: -1
+    }
 
-        QGCLabel {
-            id:                     messageText
-            Layout.fillWidth:       true
-            horizontalAlignment:    Text.AlignHCenter
-            wrapMode:               Text.WordWrap
-            font.pointSize:         ScreenTools.defaultFontPointSize
-            font.bold:              true
-        }
+    // 确认卡片
+    Rectangle {
+        id:                     _card
+        anchors.centerIn:       parent
+        width:                  parent.width
+        height:                 parent.height
+        radius:                 ScreenTools.defaultFontPixelWidth * 0.8
+        color:                  Qt.rgba(0.1, 0.1, 0.1, 0.85)
+        border.color:           Qt.rgba(1, 1, 1, 0.1)
+        border.width:           1
 
-        QGCCheckBox {
-            id:                 optionCheckBox
-            Layout.alignment:   Qt.AlignHCenter
-            text:               ""
-            visible:            text !== ""
-        }
+        ColumnLayout {
+            id:                 mainLayout
+            anchors.centerIn:   parent
+            width:              parent.width - (_margins * 2)
+            spacing:            _margins
 
-        RowLayout {
-            Layout.fillWidth:   true
-            spacing:            ScreenTools.defaultFontPixelWidth
-
-            // QGCButton {
-            //     id: slider
-            //     text: qsTr("确认执行")
-            //
-            //     Layout.fillWidth: true
-            //     enabled: _utmspEnabled === true ? utmspSliderTrigger : true
-            //     // opacity: if(_utmspEnabled){utmspSliderTrigger === true ? 1 : 0.5} else{1}
-            //     // 背景半透明
-            //     background: Rectangle {
-            //         color: Qt.rgba(qgcPal.button.r, qgcPal.button.g, qgcPal.button.b,
-            //                        _utmspEnabled ? (utmspSliderTrigger ? 0.8 : 0.4) : 0.8)
-            //         radius: 8
-            //     }
-            //
-            //     onClicked: {
-            //         _root.visible = false
-            //         var sliderOutputValue = 0
-            //         if (guidedValueSlider.visible) {
-            //             sliderOutputValue = guidedValueSlider.getOutputValue()
-            //             guidedValueSlider.visible = false
-            //         }
-            //         hideTrigger = false
-            //         guidedController.executeAction(_root.action, _root.actionData, sliderOutputValue, _root.optionChecked)
-            //         if (mapIndicator) {
-            //             mapIndicator.actionConfirmed()
-            //             mapIndicator = undefined
-            //         }
-            //
-            //         UTMSPStateStorage.indicatorOnMissionStatus = true
-            //         UTMSPStateStorage.currentNotificationIndex = 7
-            //         UTMSPStateStorage.currentStateIndex = 3
-            //     }
-            // }
-
-            SliderSwitch {
-                id:                 slider
-                confirmText:        ScreenTools.isMobile ? qsTr("滑动确认") : qsTr("滑动或按住空格键")
-                Layout.fillWidth:   true
-                enabled: _utmspEnabled === true? utmspSliderTrigger : true
-                opacity: if(_utmspEnabled){utmspSliderTrigger === true ? 1 : 0.5} else{1}
-
-                onAccept: {
-                    _root.visible = false
-                    var sliderOutputValue = 0
-                    if (guidedValueSlider.visible) {
-                        sliderOutputValue = guidedValueSlider.getOutputValue()
-                        guidedValueSlider.visible = false
-                    }
-                    hideTrigger = false
-                    guidedController.executeAction(_root.action, _root.actionData, sliderOutputValue, _root.optionChecked)
-                    if (mapIndicator) {
-                        mapIndicator.actionConfirmed()
-                        mapIndicator = undefined
-                    }
-
-                    UTMSPStateStorage.indicatorOnMissionStatus = true
-                    UTMSPStateStorage.currentNotificationIndex = 7
-                    UTMSPStateStorage.currentStateIndex = 3
-                }
+            // 标题/提示文字
+            QGCLabel {
+                id:                     messageText
+                Layout.fillWidth:       true
+                horizontalAlignment:    Text.AlignHCenter
+                wrapMode:               Text.WordWrap
+                font.pointSize:         ScreenTools.defaultFontPointSize
+                font.bold:              true
+                color:                  "white"
             }
 
-            Rectangle {
-                height: slider.height * 0.75
-                width:  height
-                radius: height / 2
-                color:  qgcPal.primaryButton
+            // 复选框
+            QGCCheckBox {
+                id:                 optionCheckBox
+                Layout.alignment:   Qt.AlignHCenter
+                text:               ""
+                visible:            text !== ""
+            }
 
-                QGCColoredImage {
-                    anchors.margins:    parent.height / 4
-                    anchors.fill:       parent
-                    source:             "/res/XDelete.svg"
-                    fillMode:           Image.PreserveAspectFit
-                    color:              qgcPal.text
+            // 滑动确认 + 取消
+            RowLayout {
+                Layout.fillWidth:   true
+                spacing:            ScreenTools.defaultFontPixelWidth
+
+                // 滑动确认
+                SliderSwitch {
+                    id:                 slider
+                    confirmText:        ScreenTools.isMobile ? qsTr("滑动确认") : qsTr("滑动")
+                    Layout.fillWidth:   true
+                    enabled:            _utmspEnabled === true ? utmspSliderTrigger : true
+                    opacity:            if(_utmspEnabled) { utmspSliderTrigger === true ? 1 : 0.5 } else { 1 }
+
+                    onAccept: {
+                        _root.visible = false
+                        var sliderOutputValue = 0
+                        if (guidedValueSlider.visible) {
+                            sliderOutputValue = guidedValueSlider.getOutputValue()
+                            guidedValueSlider.visible = false
+                        }
+                        hideTrigger = false
+                        guidedController.executeAction(_root.action, _root.actionData, sliderOutputValue, _root.optionChecked)
+                        if (mapIndicator) {
+                            mapIndicator.actionConfirmed()
+                            mapIndicator = undefined
+                        }
+                        UTMSPStateStorage.indicatorOnMissionStatus = true
+                        UTMSPStateStorage.currentNotificationIndex = 7
+                        UTMSPStateStorage.currentStateIndex = 3
+                    }
                 }
 
-                QGCMouseArea {
-                    fillItem:   parent
-                    onClicked:  confirmCancelled()
+                // 取消按钮
+                Rectangle {
+                    height: slider.height * 0.75
+                    width:  height
+                    radius: height / 2
+                    color:  Qt.rgba(1, 1, 1, 0.15)
+
+                    QGCColoredImage {
+                        anchors.margins:    parent.height / 4
+                        anchors.fill:       parent
+                        source:             "/res/XDelete.svg"
+                        fillMode:           Image.PreserveAspectFit
+                        color:              "white"
+                    }
+
+                    QGCMouseArea {
+                        fillItem:   parent
+                        onClicked:  confirmCancelled()
+                    }
                 }
             }
         }
     }
 }
-
