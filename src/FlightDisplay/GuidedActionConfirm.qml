@@ -168,7 +168,7 @@ Item {
                     height: slider.height * 0.75
                     width:  height
                     radius: height / 2
-                    color:  Qt.rgba(1, 1, 1, 0.15)
+                    color:  qgcPal.primaryButton
 
                     QGCColoredImage {
                         anchors.margins:    parent.height / 4
