@@ -53,7 +53,7 @@ Item {
         anchors.left:           parent.left
 
         width:                  ScreenTools.defaultFontPixelWidth * 20
-        color:                  Qt.rgba(0.08, 0.08, 0.08, 0.93)
+        color:                  Qt.rgba(0.08, 0.08, 0.08, 0.7)
         z:                      QGroundControl.zOrderWidgets + 40
 
         anchors.leftMargin:     panelOpen ? 0 : -width - 20
@@ -134,7 +134,11 @@ Item {
                 QGCLabel { anchors.centerIn: parent; text: "+"; font.pointSize: ScreenTools.largeFontPointSize * 1.3; font.bold: true; color: "white" }
                 QGCMouseArea {
                     id: _addMouseArea; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor
-                    onClicked: _root.addWaypointMode = !_root.addWaypointMode
+                    onClicked: {
+                        _currentLayer = _layerMission
+                        _rightPanelActive = true
+                        _root.addWaypointMode = !_root.addWaypointMode
+                    }
                 }
             }
         }
@@ -150,7 +154,7 @@ Item {
         anchors.right:          parent.right
 
         width:                  Math.min(parent.width * 0.25, ScreenTools.defaultFontPixelWidth * 26)
-        color:                  Qt.rgba(0.08, 0.08, 0.08, 0.9)
+        color:                  Qt.rgba(0.08, 0.08, 0.08, 0.7)
         z:                      QGroundControl.zOrderWidgets + 40
 
         clip:                   true
