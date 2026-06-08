@@ -382,34 +382,34 @@ Item {
         }
 
         // 7. [载荷] 抛投控制
-        Rectangle {
-            width: controlRow.btnSize;
-            height: width; radius: width / 2
-            color: Qt.rgba(0.3, 0.1, 0.1, 0.8) // 动作按钮稍微带点暗红色，提醒功能
-            visible:    toolsExpanded
-            opacity:    toolsExpanded ? 1 : 0
-            border.color: Qt.rgba(1, 0, 0, 0.3)
-            Behavior on opacity { NumberAnimation { duration: 200 } }
-
-            QGCToolBarButton {
-                anchors.centerIn: parent
-                icon.source: "/res/GripperGrab.svg"
-                onClicked: {
-                    if (globals.activeVehicle) {
-                        globals.activeVehicle.sendCommand(
-                            globals.activeVehicle.defaultComponentId,
-                            MAVLink.MAV_CMD_DO_SET_SERVO,
-                            true,
-                            9, 2000
-                        )
-                    }
-                }
-            }
-        }
+        // Rectangle {
+        //     width: controlRow.btnSize;
+        //     height: width; radius: width / 2
+        //     color: Qt.rgba(0.15, 0.15, 0.15, 0.7)
+        //     visible:    toolsExpanded
+        //     opacity:    toolsExpanded ? 1 : 0
+        //     border.color: Qt.rgba(1, 0, 0, 0.3)
+        //     Behavior on opacity { NumberAnimation { duration: 200 } }
+        //
+        //     QGCToolBarButton {
+        //         anchors.centerIn: parent
+        //         icon.source: "/res/GripperGrab.svg"
+        //         onClicked: {
+        //             if (globals.activeVehicle) {
+        //                 globals.activeVehicle.sendCommand(
+        //                     globals.activeVehicle.defaultComponentId,
+        //                     MAVLink.MAV_CMD_DO_SET_SERVO,
+        //                     true,
+        //                     9, 2000
+        //                 )
+        //             }
+        //         }
+        //     }
+        // }
         // 8. [载荷] 喊话控制
         Rectangle {
             width:          controlRow.btnSize;
-            height: width; radius: width / 2
+              height: width; radius: width / 2
             // 逻辑：如果面板打开，颜色变绿提示正在操作
             color:          shoutingPanelShow ? Qt.rgba(0.1, 0.5, 0.1, 0.8) : Qt.rgba(0.15, 0.15, 0.15, 0.7)
             visible:        toolsExpanded
